@@ -11,7 +11,7 @@ class Doctor {
       this.rating = rating;
       this.numberOfReviews = numberOfReviews;
       this.admissionType = admissionType;
-      this.photoPath = photoPath; // Путь к фотографии в папке public/images
+      this.photoPath = photoPath;
     }
   }
   
