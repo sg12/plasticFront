@@ -16,21 +16,26 @@ const FilterDoctor = () => {
   });
 
   // POPUP
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isFilterPopupOpen, setIsFilterPopupOpen] = useState(false);
+  const [isSortPopupOpen, setIsSortPopupOpen] = useState(false);
 
-  const togglePopup = () => {
-    setIsPopupOpen((prevState) => !prevState);
+  const toggleFilterPopup = () => {
+    setIsFilterPopupOpen((prevState) => !prevState);
+  };
+
+  const toggleSortPopup = () => {
+    setIsSortPopupOpen((prevState) => !prevState);
   };
 
   useEffect(() => {
     const popupFilter = document.getElementById("popupFilter");
-    popupFilter.style.display = isPopupOpen ? "block" : "none";
-  }, [isPopupOpen]);
+    popupFilter.style.display = isFilterPopupOpen ? "block" : "none";
+  }, [isFilterPopupOpen]);
 
   useEffect(() => {
     const popupSort = document.getElementById("popupSort");
-    popupSort.style.display = isPopupOpen ? "block" : "none";
-  }, [isPopupOpen]);
+    popupSort.style.display = isSortPopupOpen ? "block" : "none";
+  }, [isSortPopupOpen]);
   // END POPUP
 
   // Чистка фильтров
@@ -45,7 +50,7 @@ const FilterDoctor = () => {
       admissionType: "",
       filteredDoctors: doctorsData,
     });
-    togglePopup();
+    toggleFilterPopup();
   };
   // END Чистка фильтров
 
@@ -114,7 +119,7 @@ const FilterDoctor = () => {
 
   const applyFilter = () => {
     filterDoctors();
-    togglePopup();
+    toggleFilterPopup();
   };
 
   const commonOptions = {
@@ -148,13 +153,27 @@ const FilterDoctor = () => {
       <div className="filter__container container">
         <b>Количество врачей: {filter.filteredDoctors.length}</b>
         <h2 className="filter__title title-h2">Рейтинг хирургов</h2>
-        <div className="filter__button">
-          <button type="button" onClick={togglePopup}>
+        <div className="filter__buttons filter-buttons">
+          <button
+            className="filter-buttons__button"
+            type="button"
+            onClick={toggleFilterPopup}
+          >
             Фильтр
           </button>
-          <button type="button">Дата</button>
-          <button type="button" onClick={togglePopup}>Сортировка</button>
-          <button type="button">Показать на карте</button>
+          <button className="filter-buttons__button" type="button">
+            Дата
+          </button>
+          <button
+            className="filter-buttons__button"
+            type="button"
+            onClick={toggleSortPopup}
+          >
+            Сортировка
+          </button>
+          <button className="filter-buttons__button" type="button">
+            Показать на карте
+          </button>
         </div>
         <div className="filter__popup popup-content" id="popupFilter">
           {Object.keys(commonOptions).map((key) => (
@@ -192,9 +211,16 @@ const FilterDoctor = () => {
             Сбросить фильтры
           </button>
         </div>
-        <div className="filter__popup popup-content" id="popupSort">
-          <input type="text" name="" id="" />
-        </div>
+        <select
+          size={3}
+          className="filter__popup popup-content"
+          id="popupSort"
+          onChange={(e) => console.log("Выбранная опция:", e.target.value)}
+        >
+          <option value="High rating">Высокий рейтинг</option>
+          <option value="Low rating">Низкий рейтинг</option>
+          <option value="Lots of reviews">Много отзывов</option>
+        </select>
         <div className="filter__cards">
           {filter.filteredDoctors.map((doctor) => (
             <div className="filter__cards cards-doctor" key={doctor.id}>
