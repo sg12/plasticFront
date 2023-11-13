@@ -1,0 +1,103 @@
+@font-face {
+	font-family: "Bahnschrift";
+	src: local("Bahnschrift-Regular"),
+		url("../../assets/fonts/Bahnschrift-Regular.woff2") format("woff2"),
+		url("../../assets/fonts/Bahnschrift-Regular.woff") format("woff"),
+        url("../../assets/fonts/Bahnschrift-Regular.ttf") format("ttf");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+	font-family: "Bahnschrift";
+	src: local("Bahnschrift-Bold"),
+		url("../../assets/fonts/Bahnschrift-Bold.woff2") format("woff2"),
+		url("../../assets/fonts/Bahnschrift-Bold.woff") format("woff"),
+        url("../../assets/fonts/Bahnschrift-Bold.ttf") format("ttf");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+	font-family: "Raleway";
+	src: local("Raleway-Regular"),
+		url("../../assets/fonts/Raleway-Regular.woff2") format("woff2"),
+		url("../../assets/fonts/Raleway-Regular.woff") format("woff"),
+        url("../../assets/fonts/Raleway-Regular.ttf") format("ttf");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+	font-family: "Raleway";
+	src: local("Raleway-Bold"),
+		url("../../assets/fonts/Raleway-Bold.woff2") format("woff2"),
+		url("../../assets/fonts/Raleway-Bold.woff") format("woff"),
+        url("../../assets/fonts/Raleway-Bold.ttf") format("ttf");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+.filter {
+    padding: 60px 0;
+
+	&__title {
+		margin-bottom: 30px;
+        font-family: Raleway;
+        font-size: 40.851px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+	}
+
+    &__buttons {
+    }
+
+    &__popup {
+    }
+
+    &__cards {
+    }
+
+    &__info {
+    }
+}
+
+.title {
+
+    &-h2 {
+    }
+}
+.filter-buttons {
+    &__button {
+    }
+}
+.popup {
+
+    &-content {
+    }
+}
+.cards {
+
+    &-doctor {
+    }
+}
+.card {
+
+    &__img {
+    }
+}
+.info {
+
+    &__up {
+    }
+
+    &__down {
+    }
+}
+.filter_info {
+}
