@@ -233,9 +233,8 @@ const FilterDoctor = () => {
           id="popupSort"
           onChange={(e) => console.log("Выбранная опция:", e.target.value)}
         >
-          <option value="High rating">Высокий рейтинг</option>
-          <option value="Low rating">Низкий рейтинг</option>
-          <option value="Lots of reviews">Много отзывов</option>
+          <option value="Rating">Рейтинг</option>
+          <option value="Reviews">По количеству отзывов</option>
         </select>
         <div className="filter__cards">
           {filter.filteredDoctors
