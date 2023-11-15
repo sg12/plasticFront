@@ -1,13 +1,15 @@
 import 'normalize.css'
 import './App.scss'
 
-import Articles from '../articles/Articles'
+import FilterDoctor from '../filterDoctor/FilterDoctor'
+// import Articles from '../articles/Articles'
 
 function App() {
 
 	return (
 		<>
-			<Articles />
+			<FilterDoctor />
+			{/* <Articles /> */}
 		</>
 	)
 }
