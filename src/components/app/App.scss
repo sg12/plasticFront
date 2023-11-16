@@ -1,6 +1,7 @@
 @font-face {
 	font-family: 'Raleway';
-	src: url('../../assets/fonts/raleway/Raleway-Bold.woff2') format('woff2'),
+	src: local('Raleway'),
+		url('../../assets/fonts/raleway/Raleway-Bold.woff2') format('woff2'),
 		url('../../assets/fonts/raleway/Raleway-Bold.woff') format('woff'),
 		url('../../assets/fonts/raleway/Raleway-Bold.ttf') format('truetype');
 	font-weight: 700;
@@ -10,7 +11,8 @@
 
 @font-face {
 	font-family: 'Raleway';
-	src: url('../../assets/fonts/raleway/Raleway-Regular.woff2') format('woff2'),
+	src: local('Raleway'),
+		url('../../assets/fonts/raleway/Raleway-Regular.woff2') format('woff2'),
 		url('../../assets/fonts/raleway/Raleway-Regular.woff') format('woff'),
 		url('../../assets/fonts/raleway/Raleway-Regular.ttf') format('truetype');
 	font-weight: 400;
@@ -20,7 +22,8 @@
 
 @font-face {
 	font-family: 'Roboto';
-	src: url('../../assets/fonts/roboto/Roboto-Bold.woff2') format('woff2'),
+	src: local('Roboto'),
+		url('../../assets/fonts/roboto/Roboto-Bold.woff2') format('woff2'),
 		url('../../assets/fonts/roboto/Roboto-Bold.woff') format('woff'),
 		url('../../assets/fonts/roboto/Roboto-Bold.ttf') format('truetype');
 	font-weight: 700;
@@ -30,7 +33,8 @@
 
 @font-face {
 	font-family: 'Roboto';
-	src: url('../../assets/fonts/roboto/Roboto-Regular.woff2') format('woff2'),
+	src: local('Roboto'),
+		url('../../assets/fonts/roboto/Roboto-Regular.woff2') format('woff2'),
 		url('../../assets/fonts/roboto/Roboto-Regular.woff') format('woff'),
 		url('../../assets/fonts/roboto/Roboto-Regular.ttf') format('truetype');
 	font-weight: 400;
