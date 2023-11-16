@@ -7,6 +7,8 @@ import "./FilterDoctor.scss";
 const FilterDoctor = () => {
   const [displayedDoctors, setDisplayedDoctors] = useState(2);
   const [allDoctorsDisplayed, setAllDoctorsDisplayed] = useState(false);
+  const [sortOrder, setSortOrder] = useState("desc");
+  const [sortReviews, setSortReviews] = useState("desc")
 
   const [filter, setFilter] = useState({
     experience: "",
@@ -21,6 +23,19 @@ const FilterDoctor = () => {
 
   const displayMoreDoctors = () => {
     setDisplayedDoctors(displayedDoctors + 3);
+    if (displayedDoctors + 3 >= filter.filteredDoctors.length) {
+      setAllDoctorsDisplayed(true);
+    }
+  };
+
+  const toggleSortOrder = () => {
+    setSortOrder((prevOrder) => (prevOrder === "desc" ? "asc" : "desc"));
+    sortDoctors(filter.filteredDoctors);
+  };
+
+  const toggleSortReviews = () => {
+    setSortReviews((prevReviews) => (prevReviews === "desc" ? "asc" : "desc"));
+    sortDoctorsReviews(filter.filteredDoctors);
   };
 
   // POPUP
@@ -37,13 +52,18 @@ const FilterDoctor = () => {
 
   useEffect(() => {
     const popupFilter = document.getElementById("popupFilter");
-    popupFilter.style.display = isFilterPopupOpen ? "block" : "none";
+    if (popupFilter) {
+      popupFilter.style.display = isFilterPopupOpen ? "block" : "none";
+    }
   }, [isFilterPopupOpen]);
 
   useEffect(() => {
     const popupSort = document.getElementById("popupSort");
-    popupSort.style.display = isSortPopupOpen ? "block" : "none";
+    if (popupSort) {
+      popupSort.style.display = isSortPopupOpen ? "block" : "none";
+    }
   }, [isSortPopupOpen]);
+
   // END POPUP
 
   // Чистка фильтров
@@ -116,6 +136,35 @@ const FilterDoctor = () => {
       filteredDoctors: filteredDoctors,
     }));
   };
+
+  const sortDoctors = (doctors) => {
+    const sortedDoctors = [...doctors];
+    if (sortOrder === "desc") {
+      sortedDoctors.sort((a, b) => b.rating - a.rating);
+    } else {
+      sortedDoctors.sort((a, b) => a.rating - b.rating);
+    }
+
+    setFilter((prevFilter) => ({
+      ...prevFilter,
+      filteredDoctors: sortedDoctors,
+    }));
+  };
+
+  const sortDoctorsReviews = (doctors) => {
+    const sortedDoctorsReviews = [...doctors];
+    if (sortReviews === "desc") {
+      sortedDoctorsReviews.sort((a, b) => b.numberOfReviews - a.numberOfReviews);
+    } else {
+      sortedDoctorsReviews.sort((a, b) => a.numberOfReviews - b.numberOfReviews);
+    }
+
+    setFilter((prevFilter) => ({
+      ...prevFilter,
+      filteredDoctors: sortedDoctorsReviews,
+    }));
+  };
+
   // END Параметры фильтрация
 
   const handleFilterChange = (e, key) => {
@@ -126,7 +175,13 @@ const FilterDoctor = () => {
   };
 
   const applyFilter = () => {
-    filterDoctors();
+    const filteredDoctors = filterDoctors();
+    const sortedDoctors = sortDoctors(filteredDoctors);
+
+    setFilter((prevFilter) => ({
+      ...prevFilter,
+      filteredDoctors: sortedDoctors,
+    }));
     toggleFilterPopup();
   };
 
@@ -189,16 +244,16 @@ const FilterDoctor = () => {
               {key === "experience"
                 ? "Стаж:"
                 : key === "gender"
-                ? "Пол:"
-                : key === "category"
-                ? "Категория:"
-                : key === "academicDegree"
-                ? "Ученая степень:"
-                : key === "rating"
-                ? "Оценка:"
-                : key === "numberOfReviews"
-                ? "Количество отзывов:"
-                : "Тип приёма"}
+                  ? "Пол:"
+                  : key === "category"
+                    ? "Категория:"
+                    : key === "academicDegree"
+                      ? "Ученая степень:"
+                      : key === "rating"
+                        ? "Оценка:"
+                        : key === "numberOfReviews"
+                          ? "Количество отзывов:"
+                          : "Тип приёма"}
               <select
                 placeholder="Все"
                 value={filter[key]}
@@ -227,15 +282,35 @@ const FilterDoctor = () => {
             Сбросить фильтры
           </button>
         </div>
-        <select
-          size={3}
+        <div
           className="filter__popup popup-content"
           id="popupSort"
           onChange={(e) => console.log("Выбранная опция:", e.target.value)}
         >
-          <option value="Rating">Рейтинг</option>
-          <option value="Reviews">По количеству отзывов</option>
-        </select>
+          <button onClick={toggleSortOrder}>
+            По рейтингу {sortOrder === "desc" ?
+              <svg width="16" height="28" viewBox="0 0 16 28" fill="none">
+                <path d="M7.44963 27.3216C7.84016 27.7121 8.47332 27.7121 8.86385 27.3216L15.2278 20.9576C15.6183 20.5671 15.6183 19.9339 15.2278 19.5434C14.8373 19.1529 14.2041 19.1529 13.8136 19.5434L8.15674 25.2002L2.49988 19.5434C2.10936 19.1529 1.4762 19.1529 1.08567 19.5434C0.695147 19.9339 0.695147 20.5671 1.08567 20.9576L7.44963 27.3216ZM7.15674 0.108429L7.15674 26.6145L9.15674 26.6145L9.15674 0.108429L7.15674 0.108429Z" fill="#3066BE" />
+              </svg>
+              :
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="28" viewBox="0 0 16 28" fill="none">
+                <path d="M8.78972 0.294011C8.39988 -0.0971974 7.76671 -0.0983072 7.3755 0.291532L1.0004 6.64433C0.60919 7.03417 0.60808 7.66733 0.997919 8.05854C1.38776 8.44975 2.02092 8.45086 2.41213 8.06102L8.07889 2.41409L13.7258 8.08085C14.1157 8.47206 14.7488 8.47317 15.14 8.08333C15.5312 7.69349 15.5324 7.06032 15.1425 6.66912L8.78972 0.294011ZM9.03491 27.5076L9.08137 1.00163L7.08137 0.998124L7.03491 27.5041L9.03491 27.5076Z" fill="#3066BE" />
+              </svg>
+            }
+          </button>
+          <button onClick={toggleSortReviews}>
+            По количеству отзывов {sortReviews === "desc" ?
+              <svg width="16" height="28" viewBox="0 0 16 28" fill="none">
+                <path d="M7.44963 27.3216C7.84016 27.7121 8.47332 27.7121 8.86385 27.3216L15.2278 20.9576C15.6183 20.5671 15.6183 19.9339 15.2278 19.5434C14.8373 19.1529 14.2041 19.1529 13.8136 19.5434L8.15674 25.2002L2.49988 19.5434C2.10936 19.1529 1.4762 19.1529 1.08567 19.5434C0.695147 19.9339 0.695147 20.5671 1.08567 20.9576L7.44963 27.3216ZM7.15674 0.108429L7.15674 26.6145L9.15674 26.6145L9.15674 0.108429L7.15674 0.108429Z" fill="#3066BE" />
+              </svg>
+              :
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="28" viewBox="0 0 16 28" fill="none">
+                <path d="M8.78972 0.294011C8.39988 -0.0971974 7.76671 -0.0983072 7.3755 0.291532L1.0004 6.64433C0.60919 7.03417 0.60808 7.66733 0.997919 8.05854C1.38776 8.44975 2.02092 8.45086 2.41213 8.06102L8.07889 2.41409L13.7258 8.08085C14.1157 8.47206 14.7488 8.47317 15.14 8.08333C15.5312 7.69349 15.5324 7.06032 15.1425 6.66912L8.78972 0.294011ZM9.03491 27.5076L9.08137 1.00163L7.08137 0.998124L7.03491 27.5041L9.03491 27.5076Z" fill="#3066BE" />
+              </svg>
+            }
+          </button>
+        </div>
+
         <div className="filter__cards">
           {filter.filteredDoctors
             .slice(0, displayedDoctors)
