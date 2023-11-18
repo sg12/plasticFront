@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
+
+import FilterForm from "../filterForm/FilterForm";
+import SortOptions from "../sortOptions/SortOptions";
+import DoctorCard from "../doctorCard/DoctorCard";
 import doctorsData from "./DoctorData";
-import RenderStar from "./RenderStar";
 
 import "./FilterDoctor.scss";
 
 const FilterDoctor = () => {
+  console.log(doctorsData);
   const [displayedDoctors, setDisplayedDoctors] = useState(2);
   const [allDoctorsDisplayed, setAllDoctorsDisplayed] = useState(false);
   const [sortOrder, setSortOrder] = useState("desc");
-  const [sortReviews, setSortReviews] = useState("desc")
-
+  const [sortReviews, setSortReviews] = useState("desc");
   const [filter, setFilter] = useState({
     experience: "",
     gender: "",
@@ -63,7 +66,6 @@ const FilterDoctor = () => {
       popupSort.style.display = isSortPopupOpen ? "block" : "none";
     }
   }, [isSortPopupOpen]);
-
   // END POPUP
 
   // Чистка фильтров
@@ -154,9 +156,13 @@ const FilterDoctor = () => {
   const sortDoctorsReviews = (doctors) => {
     const sortedDoctorsReviews = [...doctors];
     if (sortReviews === "desc") {
-      sortedDoctorsReviews.sort((a, b) => b.numberOfReviews - a.numberOfReviews);
+      sortedDoctorsReviews.sort(
+        (a, b) => b.numberOfReviews - a.numberOfReviews
+      );
     } else {
-      sortedDoctorsReviews.sort((a, b) => a.numberOfReviews - b.numberOfReviews);
+      sortedDoctorsReviews.sort(
+        (a, b) => a.numberOfReviews - b.numberOfReviews
+      );
     }
 
     setFilter((prevFilter) => ({
@@ -164,7 +170,6 @@ const FilterDoctor = () => {
       filteredDoctors: sortedDoctorsReviews,
     }));
   };
-
   // END Параметры фильтрация
 
   const handleFilterChange = (e, key) => {
@@ -215,7 +220,7 @@ const FilterDoctor = () => {
     <section className="filter">
       <div className="filter__container container">
         <b>Количество врачей: {filter.filteredDoctors.length}</b>
-        <h2 className="filter__title title-h2">Рейтинг хирургов</h2>
+        <h2 className="filter__title title-h2">Рейтинг пластических хирургов </h2>
         <div className="filter__buttons filter-buttons">
           <button
             className="filter-buttons__button"
@@ -224,9 +229,6 @@ const FilterDoctor = () => {
           >
             Фильтр
           </button>
-          <button className="filter-buttons__button" type="button">
-            Дата
-          </button>
           <button
             className="filter-buttons__button"
             type="button"
@@ -234,153 +236,29 @@ const FilterDoctor = () => {
           >
             Сортировка
           </button>
-          <button className="filter-buttons__button" type="button">
-            Показать на карте
-          </button>
         </div>
-        <div className="filter__popup popup-content" id="popupFilter">
-          {Object.keys(commonOptions).map((key) => (
-            <label key={key}>
-              {key === "experience"
-                ? "Стаж:"
-                : key === "gender"
-                  ? "Пол:"
-                  : key === "category"
-                    ? "Категория:"
-                    : key === "academicDegree"
-                      ? "Ученая степень:"
-                      : key === "rating"
-                        ? "Оценка:"
-                        : key === "numberOfReviews"
-                          ? "Количество отзывов:"
-                          : "Тип приёма"}
-              <select
-                placeholder="Все"
-                value={filter[key]}
-                onChange={(e) => handleFilterChange(e, key)}
-              >
-                {commonOptions[key].map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-            </label>
-          ))}
-          <button
-            className="filter-buttons__button"
-            type="button"
-            onClick={applyFilter}
-          >
-            Применить фильтр
-          </button>
-          <button
-            className="filter-buttons__button"
-            type="button"
-            onClick={clearFilter}
-          >
-            Сбросить фильтры
-          </button>
-        </div>
-        <div
-          className="filter__popup popup-content"
-          id="popupSort"
-          onChange={(e) => console.log("Выбранная опция:", e.target.value)}
-        >
-          <button onClick={toggleSortOrder}>
-            По рейтингу {sortOrder === "desc" ?
-              <svg width="16" height="28" viewBox="0 0 16 28" fill="none">
-                <path d="M7.44963 27.3216C7.84016 27.7121 8.47332 27.7121 8.86385 27.3216L15.2278 20.9576C15.6183 20.5671 15.6183 19.9339 15.2278 19.5434C14.8373 19.1529 14.2041 19.1529 13.8136 19.5434L8.15674 25.2002L2.49988 19.5434C2.10936 19.1529 1.4762 19.1529 1.08567 19.5434C0.695147 19.9339 0.695147 20.5671 1.08567 20.9576L7.44963 27.3216ZM7.15674 0.108429L7.15674 26.6145L9.15674 26.6145L9.15674 0.108429L7.15674 0.108429Z" fill="#3066BE" />
-              </svg>
-              :
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="28" viewBox="0 0 16 28" fill="none">
-                <path d="M8.78972 0.294011C8.39988 -0.0971974 7.76671 -0.0983072 7.3755 0.291532L1.0004 6.64433C0.60919 7.03417 0.60808 7.66733 0.997919 8.05854C1.38776 8.44975 2.02092 8.45086 2.41213 8.06102L8.07889 2.41409L13.7258 8.08085C14.1157 8.47206 14.7488 8.47317 15.14 8.08333C15.5312 7.69349 15.5324 7.06032 15.1425 6.66912L8.78972 0.294011ZM9.03491 27.5076L9.08137 1.00163L7.08137 0.998124L7.03491 27.5041L9.03491 27.5076Z" fill="#3066BE" />
-              </svg>
-            }
-          </button>
-          <button onClick={toggleSortReviews}>
-            По количеству отзывов {sortReviews === "desc" ?
-              <svg width="16" height="28" viewBox="0 0 16 28" fill="none">
-                <path d="M7.44963 27.3216C7.84016 27.7121 8.47332 27.7121 8.86385 27.3216L15.2278 20.9576C15.6183 20.5671 15.6183 19.9339 15.2278 19.5434C14.8373 19.1529 14.2041 19.1529 13.8136 19.5434L8.15674 25.2002L2.49988 19.5434C2.10936 19.1529 1.4762 19.1529 1.08567 19.5434C0.695147 19.9339 0.695147 20.5671 1.08567 20.9576L7.44963 27.3216ZM7.15674 0.108429L7.15674 26.6145L9.15674 26.6145L9.15674 0.108429L7.15674 0.108429Z" fill="#3066BE" />
-              </svg>
-              :
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="28" viewBox="0 0 16 28" fill="none">
-                <path d="M8.78972 0.294011C8.39988 -0.0971974 7.76671 -0.0983072 7.3755 0.291532L1.0004 6.64433C0.60919 7.03417 0.60808 7.66733 0.997919 8.05854C1.38776 8.44975 2.02092 8.45086 2.41213 8.06102L8.07889 2.41409L13.7258 8.08085C14.1157 8.47206 14.7488 8.47317 15.14 8.08333C15.5312 7.69349 15.5324 7.06032 15.1425 6.66912L8.78972 0.294011ZM9.03491 27.5076L9.08137 1.00163L7.08137 0.998124L7.03491 27.5041L9.03491 27.5076Z" fill="#3066BE" />
-              </svg>
-            }
-          </button>
-        </div>
-
+        <FilterForm
+          filter={filter}
+          handleFilterChange={handleFilterChange}
+          applyFilter={applyFilter}
+          clearFilter={clearFilter}
+          commonOptions={commonOptions}
+        />
+        <SortOptions
+          sortOrder={sortOrder}
+          sortReviews={sortReviews}
+          toggleSortOrder={toggleSortOrder}
+          toggleSortReviews={toggleSortReviews}
+        />
         <div className="filter__cards">
           {filter.filteredDoctors
             .slice(0, displayedDoctors)
-            .map((doctor, index) => (
-              <div className="filter__cards cards-doctor" key={index}>
-                <div className="filter__info">
-                  <img
-                    className="card__img"
-                    src={doctor.photoPath}
-                    alt={doctor.name}
-                  />
-                  <RenderStar />
-                  <span>{RenderStar(doctor.rating)}</span>
-                  <span>
-                    {doctor.numberOfReviews} отзыва / {doctor.rating} звёзд
-                  </span>
-                </div>
-                <div className="filter__info">
-                  <div className="info__up">
-                    <h2>
-                      {doctor.name} {/* ({doctor.gender})*/}{" "}
-                    </h2>
-                    <div>
-                      <h4>
-                        Стаж{" "}
-                        {doctor.experience >= 5
-                          ? `${doctor.experience} лет`
-                          : `${doctor.experience} года`}
-                      </h4>
-                      <p>{doctor.category}</p>
-                      <p>{doctor.academicDegree}</p>
-                    </div>
-                  </div>
-                  <div className="info__down">
-                    <h4>Запись на приём: ( {doctor.admissionType} )</h4>
-                    <span>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="29"
-                        height="26"
-                        viewBox="0 0 29 26"
-                        fill="none"
-                      >
-                        <path
-                          d="M4.17392 13.9368L8.65779 9.06449C9.11535 8.53983 9.34413 8.27747 9.46404 7.98325C9.57013 7.72291 9.61401 7.44567 9.5929 7.1693C9.56903 6.85698 9.43063 6.5484 9.15384 5.93125L8.098 3.57716C7.68838 2.66386 7.48356 2.2072 7.13024 1.90788C6.8189 1.64412 6.42876 1.46622 6.00672 1.39555C5.52776 1.31534 4.99276 1.43464 3.92273 1.67321L1 2.32495C1 15.5744 11.399 24.8491 26.2558 24.8491L26.9861 22.2421C27.2537 21.2878 27.3874 20.8106 27.2975 20.3835C27.2182 20.0072 27.0188 19.6591 26.723 19.3816C26.3874 19.0664 25.8753 18.8838 24.8512 18.5185L22.4958 17.6781C21.7063 17.3965 21.3116 17.2557 20.918 17.2449C20.5701 17.2354 20.2247 17.2986 19.9091 17.4295C19.5521 17.5778 19.2516 17.8458 18.6504 18.382L14.1143 22.4288M15.8559 6.2998C17.3071 6.55229 18.6406 7.18521 19.686 8.11755C20.7314 9.04988 21.4411 10.2392 21.7241 11.5333M15.8559 1C18.8707 1.2987 21.6819 2.50272 23.8282 4.41441C25.9744 6.32609 27.3279 8.83179 27.6667 11.5201"
-                          stroke="#2BAD47"
-                          strokeWidth="1.91489"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                      + 7 999 999 99-99
-                    </span>
-                  </div>
-                </div>
-                <div className="filter_info">
-                  <div className="info__up">
-                    <h2>Клиника “Елена” на Сакко и Ванцетти</h2>
-                    <h4>ул. Сакко и Ванцетти, д. 77</h4>
-                    <ul>
-                      <li>Октябрьская (300 м)</li>
-                      <li>Березовая роща (1.3 км)</li>
-                    </ul>
-                  </div>
-                  <div className="info__down">
-                    <button>Посмотреть расписание</button>
-                    <h4>Стоимость приёма: 4 000 руб.</h4>
-                  </div>
-                </div>
-              </div>
+            .map((doctor, displayedDoctors) => (
+              <DoctorCard
+                key={displayedDoctors}
+                doctor={doctor}
+                displayedDoctors={displayedDoctors}
+              />
             ))}
           {!allDoctorsDisplayed &&
             displayedDoctors < filter.filteredDoctors.length && (
