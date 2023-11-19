@@ -56,14 +56,14 @@ const FilterDoctor = () => {
   useEffect(() => {
     const popupFilter = document.getElementById("popupFilter");
     if (popupFilter) {
-      popupFilter.style.display = isFilterPopupOpen ? "block" : "none";
+      popupFilter.style.display = isFilterPopupOpen ? "flex" : "none";
     }
   }, [isFilterPopupOpen]);
 
   useEffect(() => {
     const popupSort = document.getElementById("popupSort");
     if (popupSort) {
-      popupSort.style.display = isSortPopupOpen ? "block" : "none";
+      popupSort.style.display = isSortPopupOpen ? "flex" : "none";
     }
   }, [isSortPopupOpen]);
   // END POPUP
@@ -229,6 +229,7 @@ const FilterDoctor = () => {
           >
             Фильтр
           </button>
+          <hr className="filter-buttons__hr"/>
           <button
             className="filter-buttons__button"
             type="button"
