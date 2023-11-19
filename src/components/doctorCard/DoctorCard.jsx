@@ -29,6 +29,17 @@ const DoctorCard = ({ doctor, displayedDoctors }) => {
             <p>{doctor.academicDegree}</p>
           </div>
         </div>
+        <div className="info__down"></div>
+      </div>
+      <div className="filter_info">
+        <div className="info__up">
+          <h2>Клиника “Елена” на Сакко и Ванцетти</h2>
+          <h4>ул. Сакко и Ванцетти, д. 77</h4>
+          <ul>
+            <li>Октябрьская (300 м)</li>
+            <li>Березовая роща (1.3 км)</li>
+          </ul>
+        </div>
         <div className="info__down">
           <h4>Запись на приём: ( {doctor.admissionType} )</h4>
           <span>
@@ -49,19 +60,6 @@ const DoctorCard = ({ doctor, displayedDoctors }) => {
             </svg>
             + 7 999 999 99-99
           </span>
-        </div>
-      </div>
-      <div className="filter_info">
-        <div className="info__up">
-          <h2>Клиника “Елена” на Сакко и Ванцетти</h2>
-          <h4>ул. Сакко и Ванцетти, д. 77</h4>
-          <ul>
-            <li>Октябрьская (300 м)</li>
-            <li>Березовая роща (1.3 км)</li>
-          </ul>
-        </div>
-        <div className="info__down">
-          <button>Посмотреть расписание</button>
           <h4>Стоимость приёма: 4 000 руб.</h4>
         </div>
       </div>
