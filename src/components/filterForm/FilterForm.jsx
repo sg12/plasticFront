@@ -11,7 +11,7 @@ const FilterForm = ({
   return (
     <div className="filter__popup popup-content" id="popupFilter">
       {Object.keys(commonOptions).map((key) => (
-        <label key={key}>
+        <label className="filter-popup__label" key={key}>
           {key === "experience"
             ? "Стаж:"
             : key === "gender"
@@ -26,6 +26,7 @@ const FilterForm = ({
             ? "Количество отзывов:"
             : "Тип приёма"}
           <select
+            className="filter-popup__select"
             placeholder="Все"
             value={filter[key]}
             onChange={(e) => handleFilterChange(e, key)}
@@ -39,14 +40,14 @@ const FilterForm = ({
         </label>
       ))}
       <button
-        className="filter-buttons__button"
+        className="filter-popup__apply-button "
         type="button"
         onClick={applyFilter}
       >
         Применить фильтр
       </button>
       <button
-        className="filter-buttons__button"
+        className="filter-popup__clear-button"
         type="button"
         onClick={clearFilter}
       >

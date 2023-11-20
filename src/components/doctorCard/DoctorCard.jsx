@@ -6,7 +6,7 @@ const DoctorCard = ({ doctor, displayedDoctors }) => {
   return (
     <div className="doctor-card filter__cards cards-doctor" key={displayedDoctors}>
       <div className="doctor-card__info filter__info">
-        <img className="doctor-card__img card__img" src={doctor.photoPath} alt={doctor.name} />
+        <img className="doctor-card__info__img" src={doctor.photoPath} alt={doctor.name} />
         <RenderStar />
         <span className="doctor-card__rating">{RenderStar(doctor.rating)}</span>
         <span className="doctor-card__review-info">
@@ -15,7 +15,7 @@ const DoctorCard = ({ doctor, displayedDoctors }) => {
       </div>
       <div className="doctor-card__info filter__info">
         <div className="doctor-card__up info__up">
-          <h2 className="doctor-card__name">
+          <h2 className="doctor-card__info__up-name">
             {doctor.name} {/* ({doctor.gender})*/}
           </h2>
           <div>
@@ -31,9 +31,9 @@ const DoctorCard = ({ doctor, displayedDoctors }) => {
         </div>
         <div className="doctor-card__down info__down"></div>
       </div>
-      <div className="doctor-card__info filter_info">
+      <div className="doctor-card__info filter__info">
         <div className="doctor-card__up info__up">
-          <h2 className="doctor-card__clinic-name">Клиника “Елена” на Сакко и Ванцетти</h2>
+          <h2 className="doctor-card__info__up-name">Клиника “Елена” на Сакко и Ванцетти</h2>
           <h4 className="doctor-card__clinic-address">ул. Сакко и Ванцетти, д. 77</h4>
           <ul className="doctor-card__clinic-ul">
             <li>Октябрьская (300 м)</li>
@@ -54,7 +54,7 @@ const DoctorCard = ({ doctor, displayedDoctors }) => {
             </svg>
             + 7 999 999 99-99
           </span>
-          <h4 className="doctor-card__appointment-cost">Стоимость приёма: 4 000 руб.</h4>
+          {/* <h4 className="doctor-card__appointment-cost">Стоимость приёма: 4 000 руб.</h4> */}
         </div>
       </div>
     </div>

@@ -1,210 +1,278 @@
-// // @font-face {
-// // 	font-family: "Bahnschrift";
-// // 	src: local("Bahnschrift-Regular"),
-// // 		url("../../assets/fonts/Bahnschrift-Regular.woff2") format("woff2"),
-// // 		url("../../assets/fonts/Bahnschrift-Regular.woff") format("woff"),
-// //         url("../../assets/fonts/Bahnschrift-Regular.ttf") format("ttf");
-// //   font-weight: 400;
-// //   font-style: normal;
-// //   font-display: swap;
-// // }
-
-// // @font-face {
-// // 	font-family: "Bahnschrift";
-// // 	src: local("Bahnschrift-Bold"),
-// // 		url("../../assets/fonts/Bahnschrift-Bold.woff2") format("woff2"),
-// // 		url("../../assets/fonts/Bahnschrift-Bold.woff") format("woff"),
-// //         url("../../assets/fonts/Bahnschrift-Bold.ttf") format("ttf");
-// //   font-weight: 700;
-// //   font-style: normal;
-// //   font-display: swap;
-// // }
-
-// // @font-face {
-// // 	font-family: "Raleway";
-// // 	src: local("Raleway-Regular"),
-// // 		url("../../assets/fonts/Raleway-Regular.woff2") format("woff2"),
-// // 		url("../../assets/fonts/Raleway-Regular.woff") format("woff"),
-// //         url("../../assets/fonts/Raleway-Regular.ttf") format("ttf");
-// //   font-weight: 400;
-// //   font-style: normal;
-// //   font-display: swap;
-// // }
-
-// // @font-face {
-// // 	font-family: "Raleway";
-// // 	src: local("Raleway-Bold"),
-// // 		url("../../assets/fonts/Raleway-Bold.woff2") format("woff2"),
-// // 		url("../../assets/fonts/Raleway-Bold.woff") format("woff"),
-// //         url("../../assets/fonts/Raleway-Bold.ttf") format("ttf");
-// //   font-weight: 700;
-// //   font-style: normal;
-// //   font-display: swap;
-// // }
-
-// .filter {
-//   padding: 60px 0;
-
-//   &__title {
-//     margin-bottom: 30px;
-//     font-family: Raleway;
-//     font-size: 40px;
-//     font-style: normal;
-//     font-weight: 700;
-//     line-height: normal;
-//   }
-
-//   &__buttons {
-//     display: flex;
-//     margin-bottom: 63px;
-//   }
-
-//   &__popup {
-//     display: flex;
-//   }
-
-//   &__cards {
-//     border-radius: 12.766px;
-//     background: #fff;
-//   }
-
-//   &__cards:not(:last-child) {
-//     margin-bottom: 43px;
-//   }
-
-//   &__info {
-//   }
-// }
-
-// .filter-buttons {
-//   &__button {
-//     display: flex;
-//     height: 64px;
-//     min-height: 64px;
-//     padding: 0px 32px;
-//     flex-direction: column;
-//     justify-content: center;
-//     align-items: center;
-//     gap: 4px;
-//     border-radius: 16px;
-//     border: 2px solid #3066be;
-//     background: none;
-//     transition: all 0.2s ease-in-out;
-
-//     /* Raleway 24px,regular (400) */
-//     color: #3066be;
-//     font-family: Raleway;
-//     font-size: 24px;
-//     font-style: normal;
-//     font-weight: 400;
-//     line-height: normal;
-//   }
-//   &__button:hover {
-//     background: #3066be20;
-//   }
-//   &__button:active {
-//     background: #3066be30;
-//   }
-
-//   &__hr {
-//     color: rgba(0, 0, 0, 0.5);
-//     height: auto;
-//     margin-top: 1em;
-//     margin-bottom: 1em;
-//     margin-left: 32px;
-//     margin-right: 32px;
-//     border-style: solid;
-//     border-width: 1px;
-//     border-radius: 16px;
-//   }
-// }
-
-// .popup {
-//   &-content {
-//     gap: 16px;
-//     box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.5);
-//     border-radius: 16px;
-//     padding: 16px;
-//     margin-bottom: 32px;
-//   }
-// }
-// .cards {
-//   &-doctor {
-//     display: flex;
-//     padding: 16px;
-//     border-radius: 16px;
-//     box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.5);
-//   }
-// }
-// .card {
-//   &__img {
-//     border-radius: 16px;
-//     box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.5);
-//   }
-// }
-// .info {
-//   &__up {
-//   }
-
-//   &__down {
-//   }
-// }
-// .filter_info {
-// }
-
-// New scss
-
-.doctor-card {
-  &__info {
-  }
-  &__img {
-  }
-  &__rating {
-  }
-  &__review-info {
-  }
-  &__up {
-  }
-  &__name {
-  }
-  &__experience {
-  }
-  &__category {
-  }
-  &__academic-degree {
-  }
-  &__down {
-  }
-  &__clinic-name {
-  }
-  &__clinic-address {
-  }
-  &__clinic-ul {
-  }
-  &__admission-type {
-  }
-  &__phone-number {
-  }
-  &__appointment-cost {
-  }
-}
+// FilterDoctor.scss
 .filter {
+  padding: 60px 0;
+  &__container {
+  }
+
+  &__title {
+    margin-bottom: 32px;
+    font-family: Raleway;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+
+  &__buttons {
+    display: flex;
+    margin-bottom: 32px;
+
+    &-button {
+      display: flex;
+      height: 64px;
+      min-height: 64px;
+      padding: 0px 32px;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+      border-radius: 16px;
+      border: 2px solid #3066be;
+      background: none;
+      transition: all 0.2s ease-in-out;
+
+      /* Raleway 24px,regular (400) */
+      color: #3066be;
+      font-family: Raleway;
+      font-size: 24px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+
+      &:hover {
+        background-color: #3066be20;
+      }
+      &:active {
+        background: #3066be40;
+      }
+    }
+
+    &-hr {
+      color: rgba(0, 0, 0, 0.5);
+      height: auto;
+      margin-top: 1em;
+      margin-bottom: 1em;
+      margin-left: 32px;
+      margin-right: 32px;
+      border-style: solid;
+      border-width: 1px;
+      border-radius: 16px;
+    }
+  }
+
+  &__popup {
+    gap: 16px;
+    box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.5);
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 32px;
+  }
+
   &_info {
   }
+
   &__cards {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    border-radius: 16px;
+    background: #fff;
+
+    &-button {
+      display: flex;
+      height: 64px;
+      min-height: 64px;
+      padding: 0px 32px;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+      border-radius: 16px;
+      border: 2px solid #3066be;
+      background: none;
+      transition: all 0.2s ease-in-out;
+
+      /* Raleway 24px,regular (400) */
+      color: #3066be;
+      font-family: Raleway;
+      font-size: 24px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+
+      &:hover {
+        background-color: #3066be20;
+      }
+      &:active {
+        background: #3066be40;
+      }
+    }
+  }
+}
+
+// FilterForm
+.filter-popup {
+  box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.5);
+  border-radius: 16px;
+  padding: 16px;
+  &__label {
+    display: block;
+    margin-bottom: 10px;
+
+    &__select {
+      display: flex;
+      padding: 16px;
+      border-radius: 16px;
+      box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  &__apply-button,
+  &__clear-button {
+    display: flex;
+    height: 64px;
+    min-height: 64px;
+    padding: 0px 32px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    border-radius: 16px;
+    border: 2px solid #3066be;
+    background: none;
+    transition: all 0.2s ease-in-out;
+
+    /* Raleway 24px,regular (400) */
+    color: #3066be;
+    font-family: Raleway;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+
+    &:hover {
+      background-color: #3066be20;
+    }
+    &:active {
+      background: #3066be40;
+    }
+  }
+}
+
+// DoctorCard
+
+.doctor-card {
+  display: flex;
+  flex-direction: row;
+  box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.5);
+  padding: 32px;
+  &__info:first-child{
+    align-items: center;
   }
   &__info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    &__img {
+      border-radius: 16px;
+    }
+
+    &__rating {
+      // Add styles for rating
+    }
+
+    &__review-info {
+      // Add styles for review info
+    }
+
+    &__up {
+      width: 70%;
+
+      &-name {
+        font-size: 1.5rem;
+        margin: 0px;
+      }
+
+      &__experience {
+        font-size: 1rem;
+        margin-bottom: 4px;
+      }
+
+      &__category,
+      &__academic-degree {
+        margin-bottom: 4px;
+        font-size: 0.9rem;
+        color: #555;
+      }
+    }
+
+    &__down {
+      width: 30%;
+      // Add styles for the bottom part of info
+    }
+  }
+
+  &__clinic-name {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+  }
+
+  &__clinic-address {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 8px;
+  }
+
+  &__clinic-ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      font-size: 0.9rem;
+      color: #555;
+      margin-bottom: 4px;
+    }
+  }
+
+  &__admission-type {
+    font-size: 1rem;
+    margin-bottom: 8px;
+  }
+
+  &__phone-number {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    margin-bottom: 8px;
+
+    svg {
+      margin-right: 8px;
+      // Add styles for the phone icon
+    }
   }
 }
-.cards-doctor {
-}
-.card {
-  &__img {
-  }
-}
-.info {
-  &__up {
-  }
-  &__down {
+
+// SortOptions
+.sort-options {
+  &__button {
+    // Styles for the button container
+    background-color: #2bad47;
+    color: #fff;
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    margin-bottom: 10px;
+
+    &:hover {
+      background-color: #208c3e;
+    }
+
+    &__icon {
+      // Styles for the icon inside the button
+      margin-left: 5px;
+      fill: #fff;
+    }
   }
 }

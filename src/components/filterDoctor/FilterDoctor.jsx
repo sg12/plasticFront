@@ -221,17 +221,17 @@ const FilterDoctor = () => {
       <div className="filter__container container">
         <b>Количество врачей: {filter.filteredDoctors.length}</b>
         <h2 className="filter__title title-h2">Рейтинг пластических хирургов </h2>
-        <div className="filter__buttons filter-buttons">
+        <div className="filter__buttons">
           <button
-            className="filter-buttons__button"
+            className="filter__buttons-button"
             type="button"
             onClick={toggleFilterPopup}
           >
             Фильтр
           </button>
-          <hr className="filter-buttons__hr"/>
+          <hr className="filter__buttons-hr"/>
           <button
-            className="filter-buttons__button"
+            className="filter__buttons-button"
             type="button"
             onClick={toggleSortPopup}
           >
@@ -264,7 +264,7 @@ const FilterDoctor = () => {
           {!allDoctorsDisplayed &&
             displayedDoctors < filter.filteredDoctors.length && (
               <button
-                className="filter-buttons__button"
+                className="filter__cards-button"
                 onClick={displayMoreDoctors}
               >
                 Показать ещё

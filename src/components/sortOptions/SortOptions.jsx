@@ -9,14 +9,20 @@ const SortOptions = ({
 }) => {
   return (
     <div
-      className="filter__popup popup-content"
+      className="sort-options filter__popup popup-content"
       id="popupSort"
       onChange={(e) => console.log("Выбранная опция:", e.target.value)}
     >
-      <button onClick={toggleSortOrder}>
+      <button onClick={toggleSortOrder} className="sort-options__button">
         По рейтингу{" "}
         {sortOrder === "desc" ? (
-          <svg width="16" height="28" viewBox="0 0 16 28" fill="none">
+          <svg
+            className="sort-options__icon"
+            width="16"
+            height="28"
+            viewBox="0 0 16 28"
+            fill="none"
+          >
             <path
               d="M7.44963 27.3216C7.84016 27.7121 8.47332 27.7121 8.86385 27.3216L15.2278 20.9576C15.6183 20.5671 15.6183 19.9339 15.2278 19.5434C14.8373 19.1529 14.2041 19.1529 13.8136 19.5434L8.15674 25.2002L2.49988 19.5434C2.10936 19.1529 1.4762 19.1529 1.08567 19.5434C0.695147 19.9339 0.695147 20.5671 1.08567 20.9576L7.44963 27.3216ZM7.15674 0.108429L7.15674 26.6145L9.15674 26.6145L9.15674 0.108429L7.15674 0.108429Z"
               fill="#3066BE"
@@ -24,6 +30,7 @@ const SortOptions = ({
           </svg>
         ) : (
           <svg
+            className="sort-options__icon"
             xmlns="http://www.w3.org/2000/svg"
             width="16"
             height="28"
@@ -37,10 +44,16 @@ const SortOptions = ({
           </svg>
         )}
       </button>
-      <button onClick={toggleSortReviews}>
+      <button onClick={toggleSortReviews} className="sort-options__button">
         По количеству отзывов{" "}
         {sortReviews === "desc" ? (
-          <svg width="16" height="28" viewBox="0 0 16 28" fill="none">
+          <svg
+            className="sort-options__icon"
+            width="16"
+            height="28"
+            viewBox="0 0 16 28"
+            fill="none"
+          >
             <path
               d="M7.44963 27.3216C7.84016 27.7121 8.47332 27.7121 8.86385 27.3216L15.2278 20.9576C15.6183 20.5671 15.6183 19.9339 15.2278 19.5434C14.8373 19.1529 14.2041 19.1529 13.8136 19.5434L8.15674 25.2002L2.49988 19.5434C2.10936 19.1529 1.4762 19.1529 1.08567 19.5434C0.695147 19.9339 0.695147 20.5671 1.08567 20.9576L7.44963 27.3216ZM7.15674 0.108429L7.15674 26.6145L9.15674 26.6145L9.15674 0.108429L7.15674 0.108429Z"
               fill="#3066BE"
@@ -48,6 +61,7 @@ const SortOptions = ({
           </svg>
         ) : (
           <svg
+            className="sort-options__icon"
             xmlns="http://www.w3.org/2000/svg"
             width="16"
             height="28"
