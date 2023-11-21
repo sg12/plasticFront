@@ -220,7 +220,9 @@ const FilterDoctor = () => {
     <section className="filter">
       <div className="filter__container container">
         <b>Количество врачей: {filter.filteredDoctors.length}</b>
-        <h2 className="filter__title title-h2">Рейтинг пластических хирургов </h2>
+        <h2 className="filter__title title-h2">
+          Рейтинг пластических хирургов{" "}
+        </h2>
         <div className="filter__buttons">
           <button
             className="filter__buttons-button"
@@ -229,7 +231,7 @@ const FilterDoctor = () => {
           >
             Фильтр
           </button>
-          <hr className="filter__buttons-hr"/>
+          <hr className="filter__buttons-hr" />
           <button
             className="filter__buttons-button"
             type="button"
@@ -263,12 +265,14 @@ const FilterDoctor = () => {
             ))}
           {!allDoctorsDisplayed &&
             displayedDoctors < filter.filteredDoctors.length && (
-              <button
-                className="filter__cards-button"
-                onClick={displayMoreDoctors}
-              >
-                Показать ещё
-              </button>
+              <div className="filter__cards-next">
+                <button
+                  className="filter__cards-button"
+                  onClick={displayMoreDoctors}
+                >
+                  Показать ещё
+                </button>
+              </div>
             )}
         </div>
       </div>
