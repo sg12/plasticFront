@@ -242,6 +242,14 @@
   &__item {
   }
 
+  &__item:nth-child(1)::marker {
+    color: #FD5050;
+  }
+
+  &__item:nth-child(2)::marker {
+    color: #30A743;
+  }
+
   &__admission {
     display: flex;
     flex-direction: column;
