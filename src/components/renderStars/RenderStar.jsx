@@ -1,7 +1,4 @@
-// Функция для генерации SVG звезд в зависимости от рейтинга
 import React from "react";
-
-import doctorsData from "./DoctorData";
 
 const RenderStar = (rating) => {
   const starsTotal = 5;
