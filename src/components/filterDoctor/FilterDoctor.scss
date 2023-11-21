@@ -61,6 +61,8 @@
   }
 
   &__popup {
+    position: absolute;
+    background: white;
     max-width: 400px;
     display: flex;
     flex-direction: column;
@@ -72,6 +74,20 @@
     margin-bottom: 32px;
   }
 
+  &__popupSort {
+    position: absolute;
+    left: 400px;
+    background: white;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.2);
+    border-radius: 16px;
+    padding: 16px;
+  }
+
   &_info {
   }
 
@@ -81,8 +97,8 @@
     gap: 32px;
     border-radius: 16px;
     background: #fff;
-    
-    &-next{
+
+    &-next {
       margin: 0 auto;
     }
 
@@ -125,28 +141,28 @@
   border-radius: 16px;
   padding: 16px;
   &__label {
-    display: block;
-    margin-bottom: 10px;
-
-    &__select {
-      display: flex;
-      padding: 16px;
-      border-radius: 16px;
-      box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.5);
-    }
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+  }
+  &__select {
+    padding: 8px;
+    border-radius: 8px;
   }
 
   &__apply-button,
   &__clear-button {
     display: flex;
-    height: 64px;
-    min-height: 64px;
+    height: 32px;
+    width: 100%;
+    min-height: 32px;
     padding: 0px 32px;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 4px;
-    border-radius: 16px;
+    border-radius: 8px;
     border: 2px solid #3066be;
     background: none;
     transition: all 0.2s ease-in-out;
@@ -154,7 +170,7 @@
     /* Raleway 24px,regular (400) */
     color: #3066be;
     font-family: Raleway;
-    font-size: 24px;
+    font-size: 16px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
@@ -171,7 +187,6 @@
 .sort-options {
   &__button {
     border: none;
-    border-bottom: 3px solid #3066BE;
     background-color: transparent;
   }
 
@@ -264,11 +279,11 @@
   }
 
   &__item:nth-child(1)::marker {
-    color: #FD5050;
+    color: #fd5050;
   }
 
   &__item:nth-child(2)::marker {
-    color: #30A743;
+    color: #30a743;
   }
 
   &__admission {
