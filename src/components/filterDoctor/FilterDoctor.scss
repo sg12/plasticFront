@@ -161,79 +161,66 @@
 
 // DoctorCard
 
-.articles {
-
-  &-item {
+.filter {
+  
+  &__card {
   }
 
-  &__container {
+  &__up {
+  }
+}
+.filter-card {
+
+  &__info {
   }
 
-  &__title {
+  &__img {
   }
 
-  &__box {
+  &__rating {
+  }
+
+  &__review {
+  }
+
+  &__down {
+  }
+
+  &__up {
+  }
+
+  &__clinic {
+  }
+
+  &__address {
+  }
+
+  &__list {
   }
 
   &__item {
   }
 
-  &__button {
+  &__admission {
+  }
+
+  &__phone {
+  }
+
+  &__cost {
   }
 }
-.container {
-}
-.title {
-
-  &-h2 {
-  }
-
-  &-h3 {
-  }
-}
-.articles-item {
-
-  &__img {
-  }
-
-  &__box {
-  }
-
-  &__company {
-  }
-
-  &__logo {
-  }
+.filter-up {
 
   &__name {
   }
 
-  &__title {
+  &__experience {
   }
 
-  &__text {
+  &__category {
   }
 
-  &__button {
-  }
-
-  &__info {
-  }
-
-  &__data {
-  }
-
-  &__views {
-
-    &-img {
-    }
-
-    &-text {
-    }
-  }
-}
-.text {
-
-  &-h3 {
+  &__degree {
   }
 }
