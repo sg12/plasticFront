@@ -9,7 +9,7 @@ const SortOptions = ({
 }) => {
   return (
     <div
-      className="sort-options filter__popup popup-content"
+      className="sort-options filter__popupSort popup-content"
       id="popupSort"
       onChange={(e) => console.log("Выбранная опция:", e.target.value)}
     >
