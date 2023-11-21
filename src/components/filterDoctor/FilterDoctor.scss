@@ -62,7 +62,7 @@
 
   &__popup {
     gap: 16px;
-    box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.2);
     border-radius: 16px;
     padding: 16px;
     margin-bottom: 32px;
@@ -77,6 +77,10 @@
     gap: 32px;
     border-radius: 16px;
     background: #fff;
+    
+    &-next{
+      margin: 0 auto;
+    }
 
     &-button {
       display: flex;
@@ -91,6 +95,7 @@
       border: 2px solid #3066be;
       background: none;
       transition: all 0.2s ease-in-out;
+      flex-shrink: 0;
 
       /* Raleway 24px,regular (400) */
       color: #3066be;
@@ -162,16 +167,43 @@
 // DoctorCard
 
 .filter {
-  
   &__card {
   }
-
   &__up {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
   }
 }
 .filter-card {
-
+  display: flex;
+  flex-direction: row;
+  gap: 32px;
+  padding: 32px;
+  border-radius: 16px;
+  background: var(--pallet-color-11005, #fff);
+  box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.2);
   &__info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  &__info:nth-child(1) {
+    align-items: center;
+    gap: 16px;
+  }
+  &__info:nth-child(2) {
+    justify-content: space-between;
+    flex: 1 0 0;
+    align-self: stretch;
+  }
+
+  &__visit {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    list-style-type: none;
+    padding: 0;
   }
 
   &__img {
@@ -184,43 +216,91 @@
   }
 
   &__down {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
   }
 
   &__up {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
   }
 
   &__clinic {
+    margin: 0;
   }
 
   &__address {
+    margin: 0;
   }
 
   &__list {
+    margin: 0;
   }
 
   &__item {
   }
 
   &__admission {
+    display: flex;
+    flex-direction: column;
   }
 
   &__phone {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
   }
+}
 
-  &__cost {
+.filter-visit {
+  margin: 0;
+  text-align: center;
+  font-family: Roboto;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  text-transform: uppercase;
+
+  color: #000;
+  &__home {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 110px;
+    border: 2px solid #3066be;
+    border-radius: 16px;
+  }
+  &__clinic {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 110px;
+    border: 2px solid #3066be;
+    border-radius: 16px;
   }
 }
 .filter-up {
-
   &__name {
+    margin: 0;
   }
 
   &__experience {
+    margin: 0;
   }
 
   &__category {
+    margin: 0;
   }
 
   &__degree {
+    margin: 0;
   }
 }
