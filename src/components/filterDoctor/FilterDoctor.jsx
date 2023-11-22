@@ -8,7 +8,6 @@ import doctorsData from "./DoctorData";
 import "./FilterDoctor.scss";
 
 const FilterDoctor = () => {
-  console.log(doctorsData);
   const [displayedDoctors, setDisplayedDoctors] = useState(2);
   const [allDoctorsDisplayed, setAllDoctorsDisplayed] = useState(false);
   const [sortOrder, setSortOrder] = useState("desc");
