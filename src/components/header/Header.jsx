@@ -3,7 +3,16 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import "./Header.scss";
-import logo from '../../assets/imgs/logo.png';
+import logo from '../../assets/icons/logo.png';
+
+export const links = [
+	{ text: 'Главная', to: '/' },
+	{ text: 'Услуги', to: '/services' },
+	{ text: 'Врачи', to: '/doctors' },
+	{ text: 'Клиники', to: '/clinics' },
+	{ text: 'Отзывы', to: '/reviews' },
+	{ text: 'Статьи', to: '/articles' },
+];
 
 const Header = () => {
 	const [activeLink, setActiveLink] = useState(0);
@@ -12,19 +21,10 @@ const Header = () => {
 		setActiveLink(index);
 	};
 
-	const links = [
-		{ text: 'Главная', to: '/' },
-		{ text: 'Услуги', to: '/services' },
-		{ text: 'Врачи', to: '/doctors' },
-		{ text: 'Клиники', to: '/clinics' },
-		{ text: 'Отзывы', to: '/reviews' },
-		{ text: 'Статьи', to: '/articles' },
-	];
-
 	return (
 		<header className="header">
 			<div className="header__logo">
-			<Link to='/'> <img className='logo__img' src={logo} alt="лого" /></Link>
+				<Link to='/'><img className='logo__img' src={logo} alt="лого" /></Link>
 			</div>
 			<ul className="header__links">
 				{links.map((link, index) => (
