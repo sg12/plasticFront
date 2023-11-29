@@ -4,6 +4,7 @@ import FilterForm from "../filterForm/FilterForm";
 import SortOptions from "../sortOptions/SortOptions";
 import DoctorCard from "../doctorCard/DoctorCard";
 import doctorsData from "./DoctorData";
+import MyButton from "../UI/button/MyButton";
 
 import "./FilterDoctor.scss";
 
@@ -223,21 +224,19 @@ const FilterDoctor = () => {
           Рейтинг пластических хирургов{" "}
         </h2>
         <div className="filter__buttons">
-          <button
-            className="filter__buttons-button"
+          <MyButton
             type="button"
             onClick={toggleFilterPopup}
           >
             Фильтр
-          </button>
+          </MyButton>
           <hr className="filter__buttons-hr" />
-          <button
-            className="filter__buttons-button"
+          <MyButton
             type="button"
             onClick={toggleSortPopup}
           >
             Сортировка
-          </button>
+          </MyButton>
         </div>
         <FilterForm
           filter={filter}
@@ -265,12 +264,11 @@ const FilterDoctor = () => {
           {!allDoctorsDisplayed &&
             displayedDoctors < filter.filteredDoctors.length && (
               <div className="filter__cards-next">
-                <button
-                  className="filter__cards-button"
+                <MyButton
                   onClick={displayMoreDoctors}
                 >
                   Показать ещё
-                </button>
+                </MyButton>
               </div>
             )}
         </div>

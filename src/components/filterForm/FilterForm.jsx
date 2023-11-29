@@ -1,5 +1,6 @@
 // FilterForm.js
 import React from "react";
+import MyButton from "../UI/button/MyButton";
 
 const FilterForm = ({
   filter,
@@ -39,20 +40,18 @@ const FilterForm = ({
           </select>
         </label>
       ))}
-      <button
-        className="filter-popup__apply-button "
+      <MyButton
         type="button"
         onClick={applyFilter}
       >
         Применить фильтр
-      </button>
-      <button
-        className="filter-popup__clear-button"
+      </MyButton>
+      <MyButton
         type="button"
         onClick={clearFilter}
       >
         Сбросить фильтры
-      </button>
+      </MyButton>
     </div>
   );
 };
