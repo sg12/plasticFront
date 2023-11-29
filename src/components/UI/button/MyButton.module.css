@@ -1,0 +1,31 @@
+.myBtn {
+    display: flex;
+    height: 64px;
+    min-height: 64px;
+    padding: 0px 32px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    border-radius: 16px;
+    border: 2px solid #3066be;
+    cursor: pointer;
+    background: none;
+    transition: all 0.2s ease-in-out;
+
+    /* Raleway 24px,regular (400) */
+    color: #3066be;
+    font-family: Raleway;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.myBtn:hover{
+    background-color: #3066be20;
+}
+
+.myBtn:active{
+    background-color: #3066be20;
+}

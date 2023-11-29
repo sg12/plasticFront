@@ -6,6 +6,8 @@ import './Articles.scss';
 
 import articles1 from '../../assets/imgs/articles-1.png'
 
+import MyButton from '../UI/button/MyButton';
+
 const Articles = () => {
 
 	const [posts, setPosts] = useState([]);
@@ -54,9 +56,9 @@ const Articles = () => {
 					))}
 				</div>
 				{totalPosts > posts.length && (
-					<button className='articles__button' onClick={loadMorePosts}>
+					<MyButton onClick={loadMorePosts} style = {{margin: 'auto'}}>
 						Показать ещё
-					</button>
+					</MyButton>
 				)}
 			</div>
 		</section>
