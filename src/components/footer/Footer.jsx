@@ -1,15 +1,15 @@
-import { useState } from 'react'
+import { useState } from 'react';
 
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
-import './Footer.scss'
+import './Footer.scss';
 
-import logo from '../../assets/icons/logo.png'
-import telegram from '../../assets/icons/telegram.png'
-import instagram from '../../assets/icons/instagram.png'
-import whatsapp from '../../assets/icons/whatsapp.png'
+import logo from '../../assets/icons/logo.png';
+import telegram from '../../assets/icons/telegram.png';
+import instagram from '../../assets/icons/instagram.png';
+import whatsapp from '../../assets/icons/whatsapp.png';
 
-import { links } from '../header/Header'
+import { links } from '../header/Header';
 
 const Footer = () => {
 	const [activeLink, setActiveLink] = useState(0);
@@ -70,7 +70,7 @@ const Footer = () => {
 				</div>
 			</div>
 		</section>
-	)
-}
+	);
+};
 
-export default Footer
+export default Footer;

@@ -1,6 +1,6 @@
 import './NotFound.scss';
 
-import notFoundImg from '../../assets/imgs/not-found.png'
+import notFoundImg from '../../assets/imgs/not-found.png';
 
 const NotFound = () => {
 	return (
@@ -20,7 +20,7 @@ const NotFound = () => {
 				</div>
 			</section>
 		</>
-	)
-}
+	);
+};
 
-export default NotFound
+export default NotFound;
