@@ -5,6 +5,7 @@ import './ArticlesList.scss';
 import ArticlesServices from '../../services/articlesServices';
 
 import ArticlesItem from '../articlesItem/ArticlesItem';
+import MyButton from '../UI/button/MyButton';
 import Spinner from '../spinner/Spinner';
 
 import { useFetching } from '../../hooks/useFetching';
@@ -54,9 +55,9 @@ const ArticlesList = () => {
 					{spinner}
 				</ul>
 				{totalCount > posts.length && (
-					<button className='articles__button' onClick={loadMorePosts}>
+					<MyButton className='articles__button' style={{ margin: 'auto' }} onClick={loadMorePosts}>
 						Показать ещё
-					</button>
+					</MyButton>
 				)}
 			</div>
 		</section>
