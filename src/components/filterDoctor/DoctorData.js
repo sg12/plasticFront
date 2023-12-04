@@ -1,4 +1,4 @@
-import women from '../../assets/imgs/women.png'
+import women from '../../assets/imgs/women.png';
 
 class Doctor {
     constructor(id, name, experience, gender, category, academicDegree, rating, numberOfReviews, admissionType, photoPath) {
