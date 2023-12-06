@@ -35,9 +35,9 @@ const Header = () => {
 					</li>
 				))}
 				<li>
-					<div className="header__button-item">
+					<Link to={'/enter'} className="header__button-item" style={{color: 'white'}}>
 						<p>Войти</p>
-					</div>
+					</Link>
 				</li>
 			</ul>
 		</header>

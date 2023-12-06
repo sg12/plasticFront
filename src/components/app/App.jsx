@@ -12,6 +12,8 @@ import ReviewsPage from '../../pages/ReviewsPage';
 import ArticlesPage from '../../pages/ArticlesPage';
 import NotFound from '../notFound/NotFound';
 
+import EnterPage from '../../pages/EnterPage';
+
 function App() {
 
 	return (
@@ -25,6 +27,7 @@ function App() {
 					<Route path='reviews' element={<ReviewsPage />}></Route>
 					<Route path='articles' element={<ArticlesPage />}></Route>
 					<Route path='*' element={<NotFound />}></Route>
+					<Route path='enter' element={<EnterPage />}></Route>
 				</Route>
 			</Routes>
 		</>
