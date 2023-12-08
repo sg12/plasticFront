@@ -41,6 +41,7 @@
 
     &__input {
         min-width: 500px;
+        min-height: max-content;
         padding: 16px;
         min-height: 64px;
         border-radius: var(--corner-radius-r-16, 16px);
@@ -88,6 +89,8 @@
     }
 }
 
-.error-input {
-    border: 2px solid #BE3030;
+.error {
+    &__input {
+        border: 2px solid #BE3030;
+    }
 }

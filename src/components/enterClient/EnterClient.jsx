@@ -22,7 +22,7 @@ const EnterClient = () => {
             <a href='#' className='client__link'>Вход клиента</a>
             <form className='client__form form' onSubmit={handleSubmit(onSubmit)}>
                 <div className='form__box'>
-                    <input className={`form__input${errors?.email ? ' error-input' : ''}`} placeholder='Электронная почта'
+                    <input className={`form__input${errors?.email ? ' error__input' : ''}`} placeholder='Электронная почта'
                         {...register('email', {
                             required: 'Поле обязательно к заполнению',
                             pattern: {
@@ -35,7 +35,7 @@ const EnterClient = () => {
                 </div>
 
                 <div className='form__box'>
-                    <input className={`form__input${errors?.email ? ' error-input' : ''}`} type='password' placeholder='Пароль'
+                    <input className={`form__input${errors?.password ? ' error__input' : ''}`} type='password' placeholder='Пароль'
                         {...register('password', {
                             required: 'Поле обязательно к заполнению',
                             pattern: {
