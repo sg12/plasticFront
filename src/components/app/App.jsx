@@ -13,6 +13,7 @@ import ArticlesPage from '../../pages/ArticlesPage';
 import NotFound from '../notFound/NotFound';
 
 import EnterPage from '../../pages/EnterPage';
+import EnterClient from '../enterClient/EnterClient';
 
 function App() {
 
@@ -27,8 +28,9 @@ function App() {
 					<Route path='reviews' element={<ReviewsPage />}></Route>
 					<Route path='articles' element={<ArticlesPage />}></Route>
 					<Route path='*' element={<NotFound />}></Route>
-					<Route path='enter' element={<EnterPage />}></Route>
 				</Route>
+				<Route path='enter' element={<EnterPage />}></Route>
+				<Route path='enterClient' element={<EnterClient />}></Route>
 			</Routes>
 		</>
 	);

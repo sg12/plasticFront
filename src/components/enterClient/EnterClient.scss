@@ -1,0 +1,93 @@
+.enter {
+
+    &__client {
+        margin-top: 180px;
+        margin-bottom: 259px;
+        display: flex;
+        max-width: 500px;
+        flex-direction: column;
+        gap: var(--corner-radius-r-16, 16px);
+    }
+}
+.client {
+
+    &__link {
+        max-width: max-content;
+        align-items: flex-start;
+        text-decoration: none;
+        color: #3066BE;
+        font-family: Raleway;
+        font-size: 24px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+    }
+
+    &__form {
+        display: flex;
+        max-width: 500px;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: var(--corner-radius-r-16, 16px);
+    }
+}
+.form {
+
+    &__box {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__input {
+        min-width: 500px;
+        padding: 16px;
+        min-height: 64px;
+        border-radius: var(--corner-radius-r-16, 16px);
+        border: 2px solid #87CDD1;
+        background: var(--pallet-color-11005, #FFF);
+    }
+
+    &__span {
+        margin-top: 4px;
+        color: #BE3030;
+        font-family: Raleway;
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
+
+    &__link {
+        text-decoration: none;
+        color: #3066BE;
+        font-family: Raleway;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
+
+    &__button {
+        min-width: 500px;
+        height: 64px;
+        min-height: 64px;
+        padding: 0px 32px;
+        justify-content: center;
+        align-items: center;
+        border-radius: 16px;
+        border: none;
+        background: #3066BE;
+        color: var(--pallet-color-11005, #FFF);
+        font-family: Raleway;
+        font-size: 24px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        cursor: pointer;
+    }
+}
+
+.error-input {
+    border: 2px solid #BE3030;
+}

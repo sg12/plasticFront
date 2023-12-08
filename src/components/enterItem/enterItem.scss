@@ -2,6 +2,8 @@
     display: flex;
 
     &__content {
+        margin-top: 250px;
+        margin-bottom: 250px;
         display: flex;
         width: 500px;
         flex-direction: column;
@@ -31,6 +33,7 @@
         align-items: center;
         gap: 4px;
         align-self: stretch;
+        border: none;
         border-radius: 16px;
         background: #3066BE;
         color: var(--pallet-color-11005, #FFF);
@@ -40,6 +43,7 @@
         font-weight: 400;
         line-height: normal;
         cursor: pointer;
+        text-decoration: none;
     }
 
     &__text {
@@ -65,6 +69,4 @@
         opacity: 0.5;
         text-decoration: none;
     }
-}
-.content {
 }
