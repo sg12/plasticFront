@@ -30,7 +30,7 @@ const EnterClient = () => {
                                 message: 'Некорректная почта'
                             }
                         })} 
-                        />
+                    />
                     {errors?.email && <span className='form__span'>{errors?.email?.message}</span>}
                 </div>
 
@@ -42,7 +42,8 @@ const EnterClient = () => {
                                 value: /^[a-zA-Z0-9!.]{6,15}$/,
                                 message: 'Некорректный пароль'
                             }
-                        })} />
+                        })} 
+                    />
                     {errors?.password && <span className='form__span'>{errors?.password?.message}</span>}
                 </div>
 
