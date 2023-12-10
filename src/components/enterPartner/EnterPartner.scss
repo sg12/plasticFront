@@ -37,66 +37,6 @@
         flex-direction: column;
     }
 
-    &__input {
-        min-width: 500px;
-        min-height: max-content;
-        padding: 16px;
-        min-height: 64px;
-        border-radius: var(--corner-radius-r-16, 16px);
-        border: none;
-        outline: 2px solid #87CDD1;
-        background: var(--pallet-color-11005, #FFF);
-        font-family: Raleway;
-        font-size: 16px;
-        font-style: normal;
-        font-weight: 400;
-        line-height: normal;
-        transition: outline 0.3s ease-in-out;
-    }
-
-    &__input:not(:placeholder-shown) {
-        outline: 2px solid #1758C2;
-    }
-
-    &__input:hover {
-        outline: 2px solid #1758C2;
-    }
-
-    &__input:focus {
-        outline: 2px solid #1758C2;
-    }
-
-    &__input:active {
-        outline: 2px solid #1758C2;
-    }
-
-    &__input::placeholder {
-        transition: opacity 0.3s ease-in-out;
-    }
-
-    &__input::placeholder{
-        opacity: 0.5;
-    }
-
-    &__input:hover::placeholder {
-        opacity: 1;
-    }
-
-    &__input:focus::placeholder {
-        opacity: 1;
-    }
-
-
-    &__span {
-        margin-top: 4px;
-        color: #BE3030;
-        font-family: Raleway;
-        font-size: 12px;
-        font-style: normal;
-        font-weight: 400;
-        line-height: normal;
-    }
-
     &__link {
         text-decoration: none;
         color: #3066BE;
@@ -145,28 +85,5 @@
         font-weight: 400;
         line-height: normal;
         text-decoration-line: underline;
-    }
-}
-
-.error {
-    &__input {
-        outline: 2px solid #BE3030;
-        transition: outline 0.3s;
-    }
-
-    &__input:hover {
-        outline: 2px solid #BE3030;
-    }
-
-    &__input:focus {
-        outline: 2px solid #BE3030;
-    }
-
-    &__input:active {
-        outline: 2px solid #BE3030;
-    }
-
-    &__input:not(:placeholder-shown) {
-        outline: 2px solid #BE3030;
     }
 }

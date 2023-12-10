@@ -1,6 +1,6 @@
 // FilterForm.js
 import React from "react";
-import MyButton from "../UI/button/MyButton";
+import OutlineButton from "../UI/button/outlineButton/OutlineButton";
 
 const FilterForm = ({
   filter,
@@ -40,18 +40,18 @@ const FilterForm = ({
           </select>
         </label>
       ))}
-      <MyButton
+      <OutlineButton
         type="button"
         onClick={applyFilter}
       >
         Применить фильтр
-      </MyButton>
-      <MyButton
+      </OutlineButton>
+      <OutlineButton
         type="button"
         onClick={clearFilter}
       >
         Сбросить фильтры
-      </MyButton>
+      </OutlineButton>
     </div>
   );
 };
