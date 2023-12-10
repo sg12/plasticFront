@@ -1,10 +1,12 @@
+import React from 'react';
+
 import EnterButton from '../UI/button/enterButton/EnterButton';
 
 import { useForm } from 'react-hook-form';
 
-import './RegisterDoctor.scss';
+import './RegisterClinic.scss';
 
-const RegisterDoctor = () => {
+const RegisterClinic = () => {
     const {register, formState: { errors }, handleSubmit, watch} = useForm({
         defaultValues:{
             email:'',
@@ -19,7 +21,7 @@ const RegisterDoctor = () => {
 
     return (
         <div className='enter__client client'>
-            <a href='#' className='client__link'>Регистрация врача</a>
+            <a href='#' className='client__link'>Регистрация клиники</a>
             <form className='client__form form' onSubmit={handleSubmit(onSubmit)}>
                 <div className='form__box'>
                     <input className={`form__input${errors?.email ? ' error__input' : ''}`} placeholder='Электронная почта'
@@ -65,12 +67,12 @@ const RegisterDoctor = () => {
                     Зарегистрироваться
                 </EnterButton>
                 <div className='form__registers'>
-                    <a className='form__register' href="#">Вход врача</a>
-                    <a className='form__register' href="#">Регистрация клиники</a>
+                    <a className='form__register' href="#">Вход клиники</a>
+                    <a className='form__register' href="#">Регистрация врача</a>
                 </div>
             </form>
         </div>
     );
 };
 
-export default RegisterDoctor;
+export default RegisterClinic;
