@@ -55,8 +55,8 @@ const EnterPartner = () => {
                 </EnterButton>
                 <p className='form__approval approval'>Нажимая кнопку “Войти”, вы соглашаешься с <a className='approval__link' href="#">Политикой Конфиденциальности</a> и даёте <a className='approval__link' href="#">Согласие на обработку персональных данных</a></p>
                 <div className='form__registers'>
-                <a className='form__register' href="#">Регистрация врача</a>
-                <a className='form__register' href="#">Регистрация клиники</a>
+                    <a className='form__register' href="#">Регистрация врача</a>
+                    <a className='form__register' href="#">Регистрация клиники</a>
                 </div>
             </form>
         </div>
