@@ -53,6 +53,8 @@ const EnterClient = () => {
                 <EnterButton type="submit">
                     Войти
                 </EnterButton>
+                <p className='form__approval approval'>Нажимая кнопку “Войти”, вы соглашаешься с <a className='approval__link' href="#">Политикой Конфиденциальности</a> и даёте <a className='approval__link' href="#">Согласие на обработку персональных данных</a></p>
+                <a className='form__register' href="#">Регистрация клиента</a>
             </form>
         </div>
     );

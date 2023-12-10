@@ -2,6 +2,7 @@ import React from 'react';
 import './EnterList.scss';
 import EnterItem from '../enterItem/enterItem';
 import EnterClient from '../enterClient/EnterClient';
+import RegisterClient from '../registerClient/RegisterClient';
 
 import enter1 from '../../assets/icons/enterLogo.png';
 
@@ -12,7 +13,8 @@ const EnterList = () => {
                 <img className='enter__logo' src={enter1} alt="Лого" />
                 <>
                 {/* <EnterItem /> */}
-                <EnterClient />
+                {/* <EnterClient /> */}
+                <RegisterClient />
                 </>
                 <p className='enter__copyright'>© Copyright 2023 Plastic Beauty</p>
             </div>

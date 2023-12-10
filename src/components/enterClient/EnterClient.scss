@@ -106,6 +106,39 @@
         font-weight: 400;
         line-height: normal;
     }
+
+    &__approval {
+        margin: 0;
+        color: #3066BE;
+        text-align: center;
+        font-family: Raleway;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
+
+    &__register {
+        color: #3066BE;
+        font-family: Raleway;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        text-decoration: none;
+    }
+}
+
+.approval {
+    &__link {
+        color: #3066BE;
+        font-family: Raleway;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        text-decoration-line: underline;
+    }
 }
 
 .error {
