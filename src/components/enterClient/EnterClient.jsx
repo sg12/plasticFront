@@ -1,5 +1,7 @@
 import React from 'react';
 
+import EnterButton from '../UI/enterButton/EnterButton';
+
 import { useForm } from 'react-hook-form';
 
 import './EnterClient.scss';
@@ -48,7 +50,9 @@ const EnterClient = () => {
                 </div>
 
                 <a href="#" className='form__link'>Забыли пароль?</a>
-                <button className='form__button'>Войти</button>
+                <EnterButton type="submit">
+                    Войти
+                </EnterButton>
             </form>
         </div>
     );
