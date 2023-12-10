@@ -2,7 +2,7 @@ import EnterButton from '../UI/button/enterButton/EnterButton';
 
 import { useForm } from 'react-hook-form';
 
-import './ForgotPassword.scss'
+import './ForgotPassword.scss';
 
 const ForgotPassword = () => {
     const {register, formState: { errors }, handleSubmit } = useForm({
