@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 
 import './RegisterClient.scss';
 
-const EnterClient = () => {
+const RegisterClient = () => {
     const [referralCode, setReferralCode] = useState('');
 
     const {register, formState: { errors }, handleSubmit, watch} = useForm({
@@ -90,4 +90,4 @@ const EnterClient = () => {
     );
 };
 
-export default EnterClient;
+export default RegisterClient;
