@@ -6,6 +6,7 @@ import RegisterClient from '../registerClient/RegisterClient';
 import EnterPartner from '../enterPartner/EnterPartner';
 import RegisterDoctor from '../registerDoctor/RegisterDoctor';
 import RegisterClinic from '../registerClinik/RegisterClinic';
+import ForgotPassword from '../forgotPassword/ForgotPassword';
 
 import enter1 from '../../assets/icons/enterLogo.png';
 
@@ -20,7 +21,8 @@ const EnterList = () => {
                 {/* <RegisterClient /> */}
                 {/* <EnterPartner /> */}
                 {/* <RegisterDoctor /> */}
-                <RegisterClinic />
+                {/* <RegisterClinic /> */}
+                <ForgotPassword />
                 </>
                 <p className='enter__copyright'>© Copyright 2023 Plastic Beauty</p>
             </div>
