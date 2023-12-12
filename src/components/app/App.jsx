@@ -20,7 +20,6 @@ import RegisterDoctor from '../registerDoctor/RegisterDoctor';
 import RegisterClinic from '../registerClinik/RegisterClinic';
 import ForgotPassword from '../forgotPassword/ForgotPassword';
 import NewPassword from '../newPassword/newPassword';
-import EnterList from '../enterList/enterList';
 import EnterPage from '../../pages/EnterPage';
 
 function App() {
