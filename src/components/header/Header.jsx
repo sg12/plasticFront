@@ -35,7 +35,7 @@ const Header = () => {
 					</li>
 				))}
 				<li>
-					<Link to={'/enter'} className="header__button-item" style={{color: 'white'}}>
+					<Link to={'enterPage'} className="header__button-item" style={{color: 'white'}}>
 						<p>Войти</p>
 					</Link>
 				</li>

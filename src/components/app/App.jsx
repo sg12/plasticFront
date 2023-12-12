@@ -12,8 +12,16 @@ import ReviewsPage from '../../pages/ReviewsPage';
 import ArticlesPage from '../../pages/ArticlesPage';
 import NotFound from '../notFound/NotFound';
 
-import EnterPage from '../../pages/EnterPage';
+import EnterItem from '../enterItem/enterItem';
 import EnterClient from '../enterClient/EnterClient';
+import RegisterClient from '../registerClient/RegisterClient';
+import EnterPartner from '../enterPartner/EnterPartner';
+import RegisterDoctor from '../registerDoctor/RegisterDoctor';
+import RegisterClinic from '../registerClinik/RegisterClinic';
+import ForgotPassword from '../forgotPassword/ForgotPassword';
+import NewPassword from '../newPassword/newPassword';
+import EnterList from '../enterList/enterList';
+import EnterPage from '../../pages/EnterPage';
 
 function App() {
 
@@ -29,8 +37,16 @@ function App() {
 					<Route path='articles' element={<ArticlesPage />}></Route>
 					<Route path='*' element={<NotFound />}></Route>
 				</Route>
-				<Route path='enter' element={<EnterPage />}></Route>
-				<Route path='enterClient' element={<EnterClient />}></Route>
+				<Route path='enterPage' element={<EnterPage />}>
+					<Route index element={<EnterItem />}></Route>
+					<Route path='enterClient' element={<EnterClient />}></Route>
+					<Route path='registerClient' element={<RegisterClient />}></Route>
+					<Route path='enterPartner' element={<EnterPartner />}></Route>
+					<Route path='registerDoctor' element={<RegisterDoctor />}></Route>
+					<Route path='registerClinic' element={<RegisterClinic />}></Route>
+					<Route path='forgotPassword' element={<ForgotPassword />}></Route>
+					<Route path='newPassword' element={<NewPassword />}></Route>
+				</Route>
 			</Routes>
 		</>
 	);

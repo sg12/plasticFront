@@ -1,4 +1,4 @@
-import React from 'react';
+import { Link } from 'react-router-dom';
 
 import EnterButton from '../UI/button/enterButton/EnterButton';
 
@@ -17,11 +17,11 @@ const RegisterClinic = () => {
 
     const onSubmit = (data) => {
         console.log(data);
-    }
+    };
 
     return (
         <div className='enter__client client'>
-            <a href='#' className='client__link'>Регистрация клиники</a>
+            <Link to={'/enterPage/enterPartner'} href='#' className='client__link'>Регистрация клиники</Link>
             <form className='client__form form' onSubmit={handleSubmit(onSubmit)}>
                 <div className='form__box'>
                     <input className={`form__input${errors?.email ? ' error__input' : ''}`} placeholder='Электронная почта'
@@ -62,13 +62,12 @@ const RegisterClinic = () => {
                     {errors?.confirm_password && <span className='form__span'>{errors?.confirm_password?.message}</span>}
                 </div>
 
-                <a href="#" className='form__link'>Забыли пароль?</a>
                 <EnterButton type="submit">
                     Зарегистрироваться
                 </EnterButton>
                 <div className='form__registers'>
-                    <a className='form__register' href="#">Вход клиники</a>
-                    <a className='form__register' href="#">Регистрация врача</a>
+                    <Link to={'/enterPage/enterPartner'} className='form__register'>Вход клиники</Link>
+                    <Link to={'/enterPage/registerDoctor'} className='form__register'>Регистрация врача</Link>
                 </div>
             </form>
         </div>

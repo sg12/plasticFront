@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+
+import { useState } from 'react';
 
 import EnterButton from '../UI/button/enterButton/EnterButton';
 
@@ -20,11 +22,11 @@ const RegisterClient = () => {
 
     const onSubmit = (data) => {
         console.log(data);
-    }
+    };
 
     return (
         <div className='enter__client client'>
-            <a href='#' className='client__link'>Вход клиента</a>
+            <Link to={'/enterPage/enterClient'} className='client__link'>Регистрация клиента</Link>
             <form className='client__form form' onSubmit={handleSubmit(onSubmit)}>
                 <div className='form__box'>
                     <input className={`form__input${errors?.email ? ' error__input' : ''}`} placeholder='Электронная почта'
@@ -64,8 +66,6 @@ const RegisterClient = () => {
                     />
                     {errors?.confirm_password && <span className='form__span'>{errors?.confirm_password?.message}</span>}
                 </div>
-
-                <a href="#" className='form__link'>Забыли пароль?</a>
                 <div className='form__box'>
                     <input
                         className={`form__input${errors?.ref ? ' error__input' : ''}`}
@@ -84,7 +84,7 @@ const RegisterClient = () => {
                     Зарегистрироваться
                 </EnterButton>
                 <p className='form__confirmation'>Подтвердите адрес электронной почты. Письмо со ссылкой для подтверждения отправлено на указанную вами почту.</p>
-                <a className='form__enter' href="#">Вход клиента</a>
+                <Link to={'/enterPage/enterClient'} className='form__enter'>Вход клиента</Link>
             </form>
         </div>
     );

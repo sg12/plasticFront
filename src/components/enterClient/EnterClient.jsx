@@ -1,4 +1,4 @@
-import React from 'react';
+import { Link } from 'react-router-dom';
 
 import EnterButton from '../UI/button/enterButton/EnterButton';
 
@@ -17,11 +17,11 @@ const EnterClient = () => {
 
     const onSubmit = (data) => {
         console.log(data);
-    }
+    };
 
     return (
         <div className='enter__client client'>
-            <a href='#' className='client__link'>Вход клиента</a>
+            <Link to={'/enterPage/'} href='#' className='client__link'>Вход клиента</Link>
             <form className='client__form form' onSubmit={handleSubmit(onSubmit)}>
                 <div className='form__box'>
                     <input className={`form__input${errors?.email ? ' error__input' : ''}`} placeholder='Электронная почта'
@@ -49,12 +49,12 @@ const EnterClient = () => {
                     {errors?.password && <span className='form__span'>{errors?.password?.message}</span>}
                 </div>
 
-                <a href="#" className='form__link'>Забыли пароль?</a>
+                <Link to={'/enterPage/forgotPassword'} className='form__link'>Забыли пароль?</Link>
                 <EnterButton type="submit">
                     Войти
                 </EnterButton>
                 <p className='form__approval approval'>Нажимая кнопку “Войти”, вы соглашаешься с <a className='approval__link' href="#">Политикой Конфиденциальности</a> и даёте <a className='approval__link' href="#">Согласие на обработку персональных данных</a></p>
-                <a className='form__register' href="#">Регистрация клиента</a>
+                <Link to={'/enterPage/registerClient'} className='form__register' href="#">Регистрация клиента</Link>
             </form>
         </div>
     );

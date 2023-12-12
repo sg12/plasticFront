@@ -14,7 +14,7 @@ const NewPassword = () => {
 
     const onSubmit = (data) => {
         console.log(data);
-    }
+    };
 
     return (
         <div className='enter__client client'>

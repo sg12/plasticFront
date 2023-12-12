@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 import EnterButton from '../UI/button/enterButton/EnterButton';
 
 import { useForm } from 'react-hook-form';
@@ -15,11 +17,11 @@ const RegisterDoctor = () => {
 
     const onSubmit = (data) => {
         console.log(data);
-    }
+    };
 
     return (
         <div className='enter__client client'>
-            <a href='#' className='client__link'>Регистрация врача</a>
+            <Link to={'/enterPage/enterPartner'} className='client__link'>Регистрация врача</Link>
             <form className='client__form form' onSubmit={handleSubmit(onSubmit)}>
                 <div className='form__box'>
                     <input className={`form__input${errors?.email ? ' error__input' : ''}`} placeholder='Электронная почта'
@@ -60,13 +62,12 @@ const RegisterDoctor = () => {
                     {errors?.confirm_password && <span className='form__span'>{errors?.confirm_password?.message}</span>}
                 </div>
 
-                <a href="#" className='form__link'>Забыли пароль?</a>
                 <EnterButton type="submit">
                     Зарегистрироваться
                 </EnterButton>
                 <div className='form__registers'>
-                    <a className='form__register' href="#">Вход врача</a>
-                    <a className='form__register' href="#">Регистрация клиники</a>
+                    <Link to={'/enterPage/enterPartner'} className='form__register'>Вход врача</Link>
+                    <Link to={'/enterPage/registerClinic'} className='form__register'>Регистрация клиники</Link>
                 </div>
             </form>
         </div>

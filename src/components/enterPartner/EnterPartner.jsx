@@ -1,4 +1,4 @@
-import React from 'react';
+import { Link } from 'react-router-dom';
 
 import EnterButton from '../UI/button/enterButton/EnterButton';
 
@@ -21,7 +21,7 @@ const EnterPartner = () => {
 
     return (
         <div className='enter__partner partner'>
-            <a href='#' className='partner__link'>Вход партнёра</a>
+            <Link to={'/enterPage'} className='partner__link'>Вход партнёра</Link>
             <form className='partner__form form' onSubmit={handleSubmit(onSubmit)}>
                 <div className='form__box'>
                     <input className={`form__input${errors?.email ? ' error__input' : ''}`} placeholder='Электронная почта'
@@ -49,14 +49,14 @@ const EnterPartner = () => {
                     {errors?.password && <span className='form__span'>{errors?.password?.message}</span>}
                 </div>
 
-                <a href="#" className='form__link'>Забыли пароль?</a>
+                <Link to={'/enterPage/forgotPassword'} className='form__link'>Забыли пароль?</Link>
                 <EnterButton type="submit">
                     Войти
                 </EnterButton>
                 <p className='form__approval approval'>Нажимая кнопку “Войти”, вы соглашаешься с <a className='approval__link' href="#">Политикой Конфиденциальности</a> и даёте <a className='approval__link' href="#">Согласие на обработку персональных данных</a></p>
                 <div className='form__registers'>
-                    <a className='form__register' href="#">Регистрация врача</a>
-                    <a className='form__register' href="#">Регистрация клиники</a>
+                    <Link to={'/enterPage/registerDoctor'} className='form__register'>Регистрация врача</Link>
+                    <Link to={'/enterPage/registerClinic'} className='form__register'>Регистрация клиники</Link>
                 </div>
             </form>
         </div>
