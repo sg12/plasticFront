@@ -19,11 +19,11 @@ const ArticlesList = () => {
 	const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
 		const response = await ArticlesServices.getAll(page);
 		setPosts([...posts, ...response.data]);
+		setPage(page + 1);
 		setTotalCount(response.headers['x-total-count']);
 	});
 
 	const onRequest = () => {
-		setPage(page + 1);
 		fetchPosts();
 	};
 
@@ -41,9 +41,13 @@ const ArticlesList = () => {
 		))
 		: <h3 className='articles-item__title' style={{ margin: 'auto' }}>Нет статей</h3>;
 
-	const error = (postError) ? <h3 className='articles-item__title' style={{ margin: 'auto' }}>Ошибка: {postError}</h3> : null;
+	const error = postError ? <h3 className='articles-item__title' style={{ textAlign: 'center' }}>Ошибка: {postError}</h3> : null;
 
 	const spinner = isPostsLoading ? <Spinner /> : null;
+
+	const button = totalCount > posts.length || error || spinner
+		? <OutlineButton className='articles__button' style={{ margin: 'auto' }} onClick={loadMorePosts}>Показать ещё</OutlineButton>
+		: null;
 
 	return (
 		<section className='articles'>
@@ -51,14 +55,10 @@ const ArticlesList = () => {
 				<h2 className='articles__title'>СТАТЬИ</h2>
 				<ul className='articles__box'>
 					{content}
-					{error}
-					{spinner}
 				</ul>
-				{totalCount > posts.length && (
-					<OutlineButton className='articles__button' style={{ margin: 'auto' }} onClick={loadMorePosts}>
-						Показать ещё
-					</OutlineButton>
-				)}
+				{error}
+				{spinner}
+				{button}
 			</div>
 		</section>
 	);
