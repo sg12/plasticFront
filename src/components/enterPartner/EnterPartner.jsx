@@ -17,7 +17,7 @@ const EnterPartner = () => {
 
     const onSubmit = (data) => {
         console.log(data);
-    }
+    };
 
     return (
         <div className='enter__partner partner'>
