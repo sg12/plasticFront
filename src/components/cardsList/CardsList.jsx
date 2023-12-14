@@ -1,23 +1,24 @@
-import './ArticlesList.scss';
+import './CardsList.scss';
 
+import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 
 import PlasticServices from '../../services/PlasticServices';
 
-import ArticlesItem from '../articlesItem/ArticlesItem';
-import OutlineButton from '../UI/button/outlineButton/OutlineButton';
+import CardsItemHorizontal from '../cardsItemHorizontal/CardsItemHorizontal';
+import MyButton from '../UI/button/myButton/MyButton';
 import Spinner from '../spinner/Spinner';
 
 import { useFetching } from '../../hooks/useFetching';
 
-const ArticlesList = () => {
+const CardsList = (props) => {
 
 	const [posts, setPosts] = useState([]);
 	const [page, setPage] = useState(1);
 	const [totalCount, setTotalCount] = useState(0);
 
 	const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
-		const response = await PlasticServices.getAllArticles(page);
+		const response = await PlasticServices.getAllClinics(page);
 		setPosts([...posts, ...response.data]);
 		setPage(page + 1);
 		setTotalCount(response.headers['x-total-count']);
@@ -37,31 +38,37 @@ const ArticlesList = () => {
 
 	const content = !(!isPostsLoading && !postError && posts.length === 0)
 		? posts.map((post) => (
-			<ArticlesItem post={post} key={post.id} />
+			<CardsItemHorizontal post={post} key={post.id} />
 		))
-		: <h3 className='articles-item__title' style={{ margin: 'auto' }}>Нет статей</h3>;
+		: <h3 className='articles-item__title' style={{ margin: 'auto', textAlign: 'center' }}>Нет статей</h3>;
 
 	const error = postError ? <h3 className='articles-item__title' style={{ textAlign: 'center' }}>Ошибка: {postError}</h3> : null;
 
 	const spinner = isPostsLoading ? <Spinner /> : null;
 
 	const button = totalCount > posts.length || error || spinner
-		? <OutlineButton className='articles__button' style={{ margin: 'auto' }} onClick={loadMorePosts}>Показать ещё</OutlineButton>
+		? <MyButton className='articles__button' style={{ margin: 'auto' }} onClick={loadMorePosts}>Показать ещё</MyButton>
 		: null;
 
 	return (
-		<section className='articles'>
-			<div className='articles__container container'>
-				<h2 className='articles__title'>СТАТЬИ</h2>
-				<ul className='articles__box'>
+		<div className='list-cards'>
+			<div className='list-cards__container container'>
+				<h2 className='list-cards__title'>{props.title}</h2>
+				<p>(Добавить фильтрацию)</p>
+				<ul className='list-cards__box'>
 					{content}
 				</ul>
 				{error}
 				{spinner}
 				{button}
 			</div>
-		</section>
+		</div>
 	);
 };
 
-export default ArticlesList;
+CardsList.propTypes = {
+	title: PropTypes.string.isRequired,
+};
+
+
+export default CardsList;
