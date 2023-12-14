@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import PlasticServices from '../../services/PlasticServices';
 
 import CardsItemHorizontal from '../cardsItemHorizontal/CardsItemHorizontal';
-import MyButton from '../UI/button/myButton/MyButton';
+import OutlineButton from '../UI/button/outlineButton/OutlineButton';
 import Spinner from '../spinner/Spinner';
 
 import { useFetching } from '../../hooks/useFetching';
@@ -47,7 +47,7 @@ const CardsList = (props) => {
 	const spinner = isPostsLoading ? <Spinner /> : null;
 
 	const button = totalCount > posts.length || error || spinner
-		? <MyButton className='articles__button' style={{ margin: 'auto' }} onClick={loadMorePosts}>Показать ещё</MyButton>
+		? <OutlineButton className='articles__button' style={{ margin: 'auto' }} onClick={loadMorePosts}>Показать ещё</OutlineButton>
 		: null;
 
 	return (
