@@ -1,0 +1,17 @@
+.likeBtn {
+	width: 60px;
+	height: 60px;
+	border: none;
+	cursor: pointer;
+	background: url(../../../../assets/icons/like.png);
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: contain;
+
+	&:hover {
+		background: url(../../../../assets/icons/like-active.png);
+		background-repeat: no-repeat;
+		background-position: center;
+		background-size: contain;
+	}
+}

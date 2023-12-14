@@ -1,6 +1,6 @@
 // FilterForm.js
 import React from "react";
-import MyButton from "../UI/button/MyButton";
+import MyButton from '../UI/button/myButton/MyButton';
 
 const FilterForm = ({
   filter,

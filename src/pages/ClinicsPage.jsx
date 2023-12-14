@@ -1,7 +1,9 @@
+import CardsList from "../components/cardsList/CardsList";
+
 const ClinicsPage = () => {
 	return (
 		<>
-			<p>Тут должна быть страница клиник, но ее здесь нет, печалька</p>
+			<CardsList title='Клиники' />
 		</>
 	);
 };
