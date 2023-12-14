@@ -11,6 +11,14 @@ import ClinicsPage from '../../pages/ClinicsPage';
 import ReviewsPage from '../../pages/ReviewsPage';
 import ArticlesPage from '../../pages/ArticlesPage';
 import NotFound from '../notFound/NotFound';
+import AccountPage from "../../pages/AccountPage";
+
+// Account - `AsidePanel.jsx`
+import ProfileInfo from '../navBars/ProfileInfo/ProfileInfo';
+import ServicesInfo from '../navBars/ServicesInfo/ServicesInfo';
+import ClinicsInfo from '../navBars/clinicsInfo/ClinicsInfo';
+
+
 
 function App() {
 
@@ -25,6 +33,12 @@ function App() {
 					<Route path='reviews' element={<ReviewsPage />}></Route>
 					<Route path='articles' element={<ArticlesPage />}></Route>
 					<Route path='*' element={<NotFound />}></Route>
+				</Route>
+
+				<Route path="account" element={<AccountPage />}>
+					<Route path="profile" element={<ProfileInfo />} />
+					<Route path="service" element={<ServicesInfo />} />
+					<Route path="clinic" element={<ClinicsInfo />} />
 				</Route>
 			</Routes>
 		</>
