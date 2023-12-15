@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 
 import profile from "../../../assets/icons/profile.svg";
+import favourites from "../../../assets/icons/favourites.svg";
 import services from "../../../assets/icons/services.svg";
 import clinics from "../../../assets/icons/clinics.svg";
 import appointment from "../../../assets/icons/appointment.svg";
@@ -62,8 +63,7 @@ const AsidePanel = ({userType}) => {
 
   const linksData = [
     { to: "profile", text: "Профиль", icon: profile },
-    { to: "service", text: "Услуги", icon: services },
-    { to: "clinic", text: "Клиники", icon: clinics },
+    { to: "favourites", text: "Услуги", icon: favourites },
     // ниже нет маршрутизации
     { to: "appointment", text: "Записи на приём", icon: appointment },
     { to: "reviews", text: "История записей", icon: reviews },
@@ -82,7 +82,7 @@ const AsidePanel = ({userType}) => {
             </div>
             <span className="aside-panel__text">{link.text}</span>
           </NavLink>
-          {(index + 1) % 3 === 0 && index !== linksData.length - 1 && (
+          {(index + 1) % 2 === 0 && index !== linksData.length - 1 && (
             <hr className="aside-panel__divider" />
           )}
         </React.Fragment>
