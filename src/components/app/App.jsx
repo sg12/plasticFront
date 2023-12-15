@@ -15,8 +15,9 @@ import AccountPage from "../../pages/AccountPage";
 
 // Account - `AsidePanel.jsx`
 import ProfileInfo from '../navBars/ProfileInfo/ProfileInfo';
-import ServicesInfo from '../navBars/ServicesInfo/ServicesInfo';
-import ClinicsInfo from '../navBars/clinicsInfo/ClinicsInfo';
+// import ServicesInfo from '../navBars/ServicesInfo/ServicesInfo';
+// import ClinicsInfo from '../navBars/clinicsInfo/ClinicsInfo';
+import FavouritesInfo from '../navBars/favouritesInfo/FavouritesInfo';
 
 
 
@@ -37,8 +38,7 @@ function App() {
 
 				<Route path="account" element={<AccountPage />}>
 					<Route path="profile" element={<ProfileInfo />} />
-					<Route path="service" element={<ServicesInfo />} />
-					<Route path="clinic" element={<ClinicsInfo />} />
+					<Route path="favourites" element={<FavouritesInfo />} />
 				</Route>
 			</Routes>
 		</>
