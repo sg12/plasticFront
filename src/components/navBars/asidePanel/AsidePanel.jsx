@@ -67,7 +67,7 @@ const AsidePanel = ({userType}) => {
     // ниже нет маршрутизации
     { to: "appointment", text: "Записи на приём", icon: appointment },
     { to: "reviews", text: "История записей", icon: reviews },
-    { to: "setting", text: "Настройки", icon: setting },
+    { to: "settings", text: "Настройки", icon: setting },
     { to: "help", text: "Помощь", icon: help },
     { to: "support", text: "Поддержка", icon: support },
   ];

@@ -18,6 +18,7 @@ import ProfileInfo from '../navBars/ProfileInfo/ProfileInfo';
 // import ServicesInfo from '../navBars/ServicesInfo/ServicesInfo';
 // import ClinicsInfo from '../navBars/clinicsInfo/ClinicsInfo';
 import FavouritesInfo from '../navBars/favouritesInfo/FavouritesInfo';
+import SettingsInfo from '../navBars/settingsInfo/SettingsInfo';
 
 
 
@@ -39,6 +40,7 @@ function App() {
 				<Route path="account" element={<AccountPage />}>
 					<Route path="profile" element={<ProfileInfo />} />
 					<Route path="favourites" element={<FavouritesInfo />} />
+					<Route path='settings' element={<SettingsInfo />}></Route>
 				</Route>
 			</Routes>
 		</>
