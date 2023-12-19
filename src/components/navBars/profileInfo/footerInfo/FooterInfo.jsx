@@ -1,8 +1,10 @@
 import desc from "../../../../assets/imgs/desc.svg";
 
-const FooterInfo = () => {
+const FooterInfo = ({ isEditing, onEditClick }) => {
   return (
     <div className="profile__footer">
+      {!isEditing && (
+        <>
           <div className="profile__description">
             <img className="img" src={desc} alt="desc" />
             <div className="profile__description-text">
@@ -17,16 +19,29 @@ const FooterInfo = () => {
             </div>
           </div>
           <hr className="profile__divider" />
-          <div className="profile__action-button">
-            <button type="button" className="edit">
-              Редактировать профиль
+        </>
+      )}
+      <div className="profile__action-button">
+        {isEditing ? (
+          <>
+            <button type="button" className="save" >
+              Сохранить
             </button>
-            <button type="button" className="delete">
-              Удалить учетную запись
+            <button type="button" className="cancel" onClick={onEditClick}>
+              Отмена
             </button>
-          </div>
-        </div>
-  )
-}
+          </>
+        ) : (
+          <button type="button" className="edit" onClick={onEditClick}>
+            Редактировать профиль
+          </button>
+        )}
+        <button type="button" className="delete">
+          Удалить учетную запись
+        </button>
+      </div>
+    </div>
+  );
+};
 
-export default FooterInfo
+export default FooterInfo;

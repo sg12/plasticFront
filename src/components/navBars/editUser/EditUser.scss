@@ -1,0 +1,67 @@
+.edit {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  &_info {
+    display: flex;
+    width: 600px;
+    align-items: flex-start;
+    align-content: flex-start;
+    gap: 16px var(--CornerRadius-r16, 16px);
+    flex-wrap: wrap;
+
+  }
+
+  &__email {
+    display: flex;
+    flex-direction: column;
+    input {
+        width: 250px;
+    }
+  }
+  &__gender {
+    display: flex;
+    flex-direction: column;
+    select {
+        width: 250px;
+    }
+  }
+  &__address {
+    display: flex;
+    flex-direction: column;
+    input {
+        width: 250px;
+    }
+  }
+  &__name {
+    display: flex;
+    flex-direction: column;
+    input {
+        width: 250px;
+    }
+  }
+  &__date {
+    display: flex;
+    flex-direction: column;
+    input {
+        width: 250px;
+    }
+  }
+  &__tel {
+    display: flex;
+    flex-direction: column;
+    input {
+        width: 250px;
+    }
+  }
+  &__checkbox {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    &-politicy {
+    }
+    &-text{
+
+    }
+  }
+}

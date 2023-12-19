@@ -5,10 +5,17 @@ import ProfileServices from "../../../services/ProfileServices";
 import HeaderInfo from "./headerInfo/HeaderInfo";
 import MainInfo from "./mainInfo/MainInfo";
 import FooterInfo from "./footerInfo/FooterInfo";
+import EditUser from "../editUser/EditUser";
 
 const ProfileInfo = () => {
   const [imageSrc, setImageSrc] = useState(null);
   const [usersData, setUsersData] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const toggleEditingMode = () => {
+    setIsEditing((prev) => !prev);
+  };
+  
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -44,13 +51,25 @@ const ProfileInfo = () => {
             handleFileChange={handleFileChange}
           />
           <hr className="profile__divider" />
-          <MainInfo user={usersData.users[2]} />
+          {isEditing ? (
+            <EditUser
+              user={usersData.users[2]}
+              onCancel={toggleEditingMode}
+            />
+          ) : (
+            // В противном случае отображаем основную информацию
+            <MainInfo user={usersData.users[2]} />
+          )}
           <hr className="profile__divider" />
-          <FooterInfo />
+          <FooterInfo
+            isEditing={isEditing}
+            onEditClick={toggleEditingMode}
+          />
         </>
       )}
     </div>
   );
+  
 };
 
 export default ProfileInfo;
