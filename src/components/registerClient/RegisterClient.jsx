@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 import { useState } from 'react';
 
-import EnterButton from '../UI/button/enterButton/EnterButton';
+import EnterButton from '../UI/buttons/enterButton/EnterButton';
 
 import { useForm } from 'react-hook-form';
 

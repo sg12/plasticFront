@@ -4,7 +4,7 @@ import FilterForm from "../filterForm/FilterForm";
 import SortOptions from "../sortOptions/SortOptions";
 import DoctorCard from "../doctorCard/DoctorCard";
 import doctorsData from "./DoctorData";
-import OutlineButton from "../UI/button/outlineButton/OutlineButton";
+import OutlineButton from "../UI/buttons/outlineButton/OutlineButton";
 
 import "./FilterDoctor.scss";
 

@@ -6,7 +6,7 @@ import { useState, useEffect } from 'react';
 import PlasticServices from '../../services/PlasticServices';
 
 import CardsItemHorizontal from '../cardsItemHorizontal/CardsItemHorizontal';
-import OutlineButton from '../UI/button/outlineButton/OutlineButton';
+import OutlineButton from '../UI/buttons/outlineButton/OutlineButton';
 import Spinner from '../spinner/Spinner';
 
 import { useFetching } from '../../hooks/useFetching';
@@ -54,6 +54,7 @@ const CardsList = (props) => {
 		<div className='list-cards'>
 			<div className='list-cards__container container'>
 				<h2 className='list-cards__title'>{props.title}</h2>
+				<p>(Добавить поиск)</p>
 				<p>(Добавить фильтрацию)</p>
 				<ul className='list-cards__box'>
 					{content}

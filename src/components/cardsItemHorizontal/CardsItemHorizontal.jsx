@@ -2,9 +2,9 @@ import './CardsItemHorizontal.scss';
 
 import PropTypes from 'prop-types';
 
-import CallButton from '../UI/button/callButton/CallButton';
-import LikeButton from '../UI/button/likeButton/LikeButton';
-import Reviews from '../UI/other/reviews/Reviews';
+import CallButton from '../UI/buttons/callButton/CallButton';
+import LikeButton from '../UI/buttons/likeButton/LikeButton';
+import Review from '../UI/others/review/Review';
 
 import clinicImg from '../../assets/imgs/clinic-1.png';
 
@@ -16,7 +16,7 @@ const CardsItemHorizontal = (props) => {
 					<div className='cards-item__wrapper-left-box'>
 						<img className='cards-item__wrapper-left-img' src={clinicImg} alt="логотип клиники" />
 					</div>
-					<Reviews />
+					<Review />
 				</div>
 				<div className='cards-item__wrapper-center'>
 					<div className='cards-item__wrapper-center-box'>

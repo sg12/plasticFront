@@ -1,6 +1,6 @@
 // FilterForm.js
 import React from "react";
-import OutlineButton from "../UI/button/outlineButton/OutlineButton";
+import OutlineButton from "../UI/buttons/outlineButton/OutlineButton";
 
 const FilterForm = ({
   filter,
