@@ -19,28 +19,30 @@ import ProfileInfo from "../navBars/ProfileInfo/ProfileInfo";
 // import ClinicsInfo from '../navBars/clinicsInfo/ClinicsInfo';
 import FavouritesInfo from '../navBars/favouritesInfo/FavouritesInfo';
 import EditUser from "../navBars/editUser/EditUser";
+import SettingsInfo from "../navBars/settingsInfo/SettingsInfo";
 
 function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<MainPage />}></Route>
-          <Route path="services" element={<ServicesPage />}></Route>
-          <Route path="doctors" element={<DoctorsPage />}></Route>
-          <Route path="clinics" element={<ClinicsPage />}></Route>
-          <Route path="reviews" element={<ReviewsPage />}></Route>
-          <Route path="articles" element={<ArticlesPage />}></Route>
-          <Route path="*" element={<NotFound />}></Route>
-        </Route>
+			<Route path="/" element={<Layout />}>
+			<Route index element={<MainPage />}></Route>
+			<Route path="services" element={<ServicesPage />}></Route>
+			<Route path="doctors" element={<DoctorsPage />}></Route>
+			<Route path="clinics" element={<ClinicsPage />}></Route>
+			<Route path="reviews" element={<ReviewsPage />}></Route>
+			<Route path="articles" element={<ArticlesPage />}></Route>
+			<Route path="*" element={<NotFound />}></Route>
+			</Route>
 
-				<Route path="account" element={<AccountPage />}>
-					<Route path="profile" element={<ProfileInfo />}>
-             <Route path="edit" element={<EditUser />}/>
-          </Route>
-					<Route path="favourites" element={<FavouritesInfo />} />
+			<Route path="account" element={<AccountPage />}>
+				<Route path="profile" element={<ProfileInfo />}>
+					<Route path="edit" element={<EditUser />}/>
 				</Route>
-			</Routes>
+				<Route path="settings" element={<SettingsInfo />}></Route>
+				<Route path="favourites" element={<FavouritesInfo />} />
+			</Route>
+		</Routes>
 		</>
 	);
 }
