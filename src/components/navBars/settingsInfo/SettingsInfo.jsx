@@ -28,8 +28,8 @@ const SettingsInfo = () => {
             </div>
             <div className="settings__password password">
                 <h2 className="settings__title">Изменить пароль</h2>
-                <input type="password" className="" placeholder="Старый пароль" />
-                <input type="password" className="" placeholder="Новый пароль" />
+                <input type="password" placeholder="Старый пароль" />
+                <input type="password" placeholder="Новый пароль" />
             </div>
             <div className="settings__control control">
                 <h2 className="settings__title">Изменить пароль</h2>
