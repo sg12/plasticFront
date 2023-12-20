@@ -63,7 +63,7 @@ const AsidePanel = ({userType}) => {
 
   const linksData = [
     { to: "profile", text: "Профиль", icon: profile },
-    { to: "favourites", text: "Услуги", icon: favourites },
+    { to: "favourites", text: "Избранное", icon: favourites },
     // ниже нет маршрутизации
     { to: "appointment", text: "Записи на приём", icon: appointment },
     { to: "reviews", text: "История записей", icon: reviews },
