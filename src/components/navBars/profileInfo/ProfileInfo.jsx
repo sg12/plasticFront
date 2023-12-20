@@ -1,21 +1,19 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
+import qr from "../../../assets/imgs/qr-code.png";
+import desc from "../../../assets/imgs/desc.svg";
 
 import "./ProfileInfo.scss";
-import ProfileServices from "../../../services/ProfileServices";
-import HeaderInfo from "./headerInfo/HeaderInfo";
-import MainInfo from "./mainInfo/MainInfo";
-import FooterInfo from "./footerInfo/FooterInfo";
 import EditUser from "../editUser/EditUser";
 
 const ProfileInfo = () => {
   const [imageSrc, setImageSrc] = useState(null);
-  const [usersData, setUsersData] = useState(null);
+  const [userData, setUserData] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
 
   const toggleEditingMode = () => {
     setIsEditing((prev) => !prev);
   };
-  
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -30,46 +28,169 @@ const ProfileInfo = () => {
   };
 
   useEffect(() => {
-    // Вызов функции fetchUserData из предыдущего файла
-    ProfileServices.fetchUserData()
-      .then((data) => {
-        setUsersData(data);
-      })
-      .catch((error) => {
+    const fetchData = async () => {
+      const apiUrlUsers = "https://jsonplaceholder.typicode.com/users?_limit=1";
+      const apiUrlPhotos =
+        "https://jsonplaceholder.typicode.com/photos?_limit=1";
+
+      try {
+        const [usersResponse, photosResponse] = await axios.all([
+          axios.get(apiUrlUsers),
+          axios.get(apiUrlPhotos),
+        ]);
+
+        const userData = {
+          user: usersResponse.data[0],
+          photo: photosResponse.data[0],
+        };
+
+        setUserData(userData);
+      } catch (error) {
         console.error("Error fetching user data:", error);
-      });
+      }
+    };
+
+    fetchData();
   }, []);
 
   return (
     <div className="profile">
-      {usersData && usersData.users && usersData.users.length > 0 && (
+      {userData && (
         <>
-          <HeaderInfo
-            imageSrc={imageSrc}
-            user={usersData.users[2]}
-            img={usersData.photo[2]}
-            handleFileChange={handleFileChange}
-          />
+          {/* Header */}
+          <div className="profile__header">
+            <div className="profile__user">
+              <div className="profile__photo">
+                <label htmlFor="uploadInput" className="profile__photo-label">
+                  <img
+                    src={imageSrc || userData.photo.thumbnailUrl}
+                    alt=""
+                    className="profile__photo-img"
+                  />
+                </label>
+                <input
+                  type="file"
+                  id="uploadInput"
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  onChange={handleFileChange}
+                />
+              </div>
+              <div className="profile__details">
+                <h3 className="profile__user-name">
+                  {userData.user.name || "Макарова Светлана Викторовна"}
+                </h3>
+                <p className="profile__user-phone">
+                  <span className="profile__darkened">Телефон: </span>
+                  {userData.user.phone || "+7 (914) 001 96 58"}
+                </p>
+              </div>
+            </div>
+            <div className="profile__identification">
+              <div className="iden">
+                <div className="iden__id">
+                  <span>Ваш ID:</span> {userData.user.id || "1234"}
+                </div>
+                <div className="iden__code">
+                  Код: {userData.user.address?.zipcode || "a4861fe9-a65a"}
+                </div>
+              </div>
+              <img
+                src={qr}
+                width="150"
+                height="150"
+                border="0"
+                title="QR код"
+                className="identification__qr-img"
+              />
+            </div>
+          </div>
           <hr className="profile__divider" />
-          {isEditing ? (
-            <EditUser
-              user={usersData.users[2]}
-              onCancel={toggleEditingMode}
-            />
-          ) : (
-            // В противном случае отображаем основную информацию
-            <MainInfo user={usersData.users[2]} />
+
+          {/* MainInfo */}
+          {!isEditing && (
+            <div className="profile__main">
+              <div className="profile__details">
+                <div className="profile__gender">
+                  <span className="profile__darkened">Пол: </span>
+                  {userData.user.gender || "Женский"}
+                </div>
+                <div className="profile__birthdate">
+                  <span className="profile__darkened">Дата рождения: </span>
+                  {userData.user.birthdate || "01.08.1996"}
+                </div>
+                <hr className="profile__divider" />
+                <div className="profile__birthdate">
+                  <span className="profile__darkened">Почта: </span>
+                  {userData.user.email || "makarova480@mail.ru"}
+                </div>
+                <div className="profile__address">
+                  <span className="profile__darkened">Адрес: </span>
+                  {userData.user.address?.suite || "ул. Никитина 93"}
+                </div>
+              </div>
+              <hr className="profile__divider" />
+            </div>
           )}
-          <hr className="profile__divider" />
-          <FooterInfo
-            isEditing={isEditing}
-            onEditClick={toggleEditingMode}
-          />
+
+          {/* EditUser */}
+          {isEditing && <EditUser />}
+
+          {/* FooterInfo */}
+          <div className="profile__footer">
+            {!isEditing && (
+              <>
+                <div className="profile__description">
+                  <img className="img" src={desc} alt="desc" />
+                  <div className="profile__description-text">
+                    <div className="text">
+                      Расскажите вашим близким и знакомым о нас, а мы поможем
+                      сэкономить их время на поиск нужного специалиста.
+                    </div>
+                    <div className="text">
+                      Количество пользователей, указавших Ваш ID при
+                      регистрации: 4
+                    </div>
+                    <div className="profile__discount">
+                      Персональная скидка 3%
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+            <hr className="profile__divider" />
+            <div className="profile__action-button">
+              {isEditing ? (
+                <>
+                  <button type="button" className="save">
+                    Сохранить
+                  </button>
+                  <button
+                    type="button"
+                    className="cancel"
+                    onClick={toggleEditingMode}
+                  >
+                    Отмена
+                  </button>
+                </>
+              ) : (
+                <button
+                  type="button"
+                  className="edit"
+                  onClick={toggleEditingMode}
+                >
+                  Редактировать профиль
+                </button>
+              )}
+              <button type="button" className="delete">
+                Удалить учетную запись
+              </button>
+            </div>
+          </div>
         </>
       )}
     </div>
   );
-  
 };
 
 export default ProfileInfo;
