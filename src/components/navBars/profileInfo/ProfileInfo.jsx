@@ -10,6 +10,8 @@ const ProfileInfo = () => {
   const [imageSrc, setImageSrc] = useState(null);
   const [userData, setUserData] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [showEditPopup, setShowEditPopup] = useState(false);
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
 
   const toggleEditingMode = () => {
     setIsEditing((prev) => !prev);
@@ -26,6 +28,30 @@ const ProfileInfo = () => {
       reader.readAsDataURL(file);
     }
   };
+
+  const handleSave = () => {
+    // Логика для отправки данных на сервер
+
+    // После успешного сохранения, отображаем всплывающее окно
+    setShowEditPopup(true);
+    toggleEditingMode(false);
+
+    setTimeout(() => {
+      setShowEditPopup(false);
+    }, 3000);
+  };
+
+  const handleDelete = () => {
+    // Логика для отправки данных на сервер
+
+    // После успешного сохранения, отображаем всплывающее окно
+    setShowDeletePopup(true);
+
+  };
+
+  const handleReturn = () => {
+    setShowDeletePopup(false);
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -119,7 +145,6 @@ const ProfileInfo = () => {
                   <span className="profile__darkened">Дата рождения: </span>
                   {userData.user.birthdate || "01.08.1996"}
                 </div>
-                <hr className="profile__divider" />
                 <div className="profile__birthdate">
                   <span className="profile__darkened">Почта: </span>
                   {userData.user.email || "makarova480@mail.ru"}
@@ -128,8 +153,8 @@ const ProfileInfo = () => {
                   <span className="profile__darkened">Адрес: </span>
                   {userData.user.address?.suite || "ул. Никитина 93"}
                 </div>
+                <hr className="profile__divider" />
               </div>
-              <hr className="profile__divider" />
             </div>
           )}
 
@@ -160,9 +185,23 @@ const ProfileInfo = () => {
             )}
             <hr className="profile__divider" />
             <div className="profile__action-button">
+              {showEditPopup && (
+                <div className="edit__popup">
+                  <p>Данные успешно сохранены!</p>
+                </div>
+              )}
+              {showDeletePopup && (
+                <div className="delete__popup">
+                  <p>Вы точно хотите удалить аккаунт?</p>
+                  <div className="delete__popup-button">
+                    <button className="yes">Да</button>
+                    <button className="no" onClick={handleReturn}>Нет, передумал</button>
+                  </div>
+                </div>
+              )}
               {isEditing ? (
                 <>
-                  <button type="button" className="save">
+                  <button type="button" className="save" onClick={handleSave}>
                     Сохранить
                   </button>
                   <button
@@ -174,17 +213,23 @@ const ProfileInfo = () => {
                   </button>
                 </>
               ) : (
-                <button
-                  type="button"
-                  className="edit"
-                  onClick={toggleEditingMode}
-                >
-                  Редактировать профиль
-                </button>
+                <>
+                  <button
+                    type="button"
+                    className="edit"
+                    onClick={toggleEditingMode}
+                  >
+                    Редактировать профиль
+                  </button>
+                  <button
+                    type="button"
+                    className="delete"
+                    onClick={handleDelete}
+                  >
+                    Удалить учетную запись
+                  </button>
+                </>
               )}
-              <button type="button" className="delete">
-                Удалить учетную запись
-              </button>
             </div>
           </div>
         </>

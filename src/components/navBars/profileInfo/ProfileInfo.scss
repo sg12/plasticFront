@@ -134,11 +134,11 @@
     border: none;
   }
 
-  &__main {
-  }
+  // &__main {
+  // }
 
-  &__footer {
-  }
+  // &__footer {
+  // }
 
   &__description {
     margin-right: 32px;
@@ -205,6 +205,28 @@
       border: none;
       cursor: pointer;
       color: #3066be;
+
+      &__popup {
+        position: fixed;
+        right: 0;
+        top: 50%;
+        transform: translateX(100%) translateY(-50%);
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        padding: 16px;
+        border-radius: 16px 0 0 16px;
+        z-index: 999;
+        animation: slideIn 0.25s ease-out forwards;
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateX(100%) translateY(-50%);
+        }
+        to {
+          transform: translateX(0) translateY(-50%);
+        }
+      }
     }
 
     .delete {
@@ -213,6 +235,33 @@
       color: black;
       opacity: 25%;
       cursor: pointer;
+
+      &__popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        padding: 15px;
+        border-radius: 5px;
+        z-index: 999;
+
+        &-button {
+          display: flex;
+          justify-content: space-between;
+
+          .yes, .no {
+            border: none;
+            background: none;
+            cursor: pointer;
+          }
+          
+          .yes {
+            opacity: .5;
+          }
+        }
+      }
     }
   }
 }
