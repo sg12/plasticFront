@@ -1,8 +1,8 @@
-import classes from './CardsFilter.module.scss';
+import classes from './CardsSelect.module.scss';
 
 import PropTypes from 'prop-types';
 
-const CardsFilter = ({ options, defaultValue, value, onChange }) => {
+const CardsSelect = ({ options, defaultValue, value, onChange }) => {
 	return (
 		<select className={classes.select} value={value} onChange={event => onChange(event.target.value)}>
 			<option disabled value="">{defaultValue}</option>
@@ -15,9 +15,11 @@ const CardsFilter = ({ options, defaultValue, value, onChange }) => {
 	);
 };
 
-CardsFilter.propTypes = {
+CardsSelect.propTypes = {
 	options: PropTypes.array.isRequired,
 	defaultValue: PropTypes.string.isRequired,
+	value: PropTypes.string.isRequired,
+	onChange: PropTypes.any.isRequired,
 };
 
-export default CardsFilter;
+export default CardsSelect;

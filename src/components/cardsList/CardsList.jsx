@@ -1,46 +1,31 @@
 import './CardsList.scss';
 
 import PropTypes from 'prop-types';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 
 import PlasticServices from '../../services/PlasticServices';
 
 import CardsItemHorizontal from '../cardsItemHorizontal/CardsItemHorizontal';
-import CardsFilter from '../UI/selects/cardsFilter/CardsFilter';
-import CardsInput from '../UI/inputs/CardsInput';
+import CardsFilter from '../cardsFilter/CardsFilter';
 import OutlineButton from '../UI/buttons/outlineButton/OutlineButton';
 import Spinner from '../spinner/Spinner';
 
 import { useFetching } from '../../hooks/useFetching';
+// ? Переименовать хук для фильтрации ?
+import { usePosts } from '../../hooks/usePosts';
+
+//! https://www.youtube.com/watch?v=GNrdg3PzpJQ&list=WL&index=24&t=7483s
+// 1.24.00 - модальное окно
+// 1.36.24 - остановился
 
 const CardsList = (props) => {
 
 	const [posts, setPosts] = useState([]);
 	const [page, setPage] = useState(1);
 	const [totalCount, setTotalCount] = useState(0);
-	const [selectedSort, setSelectedSort] = useState('');
-	const [searchQuery, setSearchQuery] = useState('');
 
-	const sortedPosts = useMemo(() => {
-		if (selectedSort) {
-			return [...posts].sort((a, b) => {
-				if (typeof a[selectedSort] === 'number' && typeof b[selectedSort] === 'number') {
-					return a[selectedSort] - b[selectedSort];
-				} else {
-					return a[selectedSort].localeCompare(b[selectedSort]);
-				}
-			});
-		}
-		return posts;
-	}, [selectedSort, posts]);
-
-	const sortedAndSearchedPosts = useMemo(() => {
-		return sortedPosts.filter(post => post.title.includes(searchQuery));
-	}, [searchQuery, sortedPosts]);
-
-	const sortPosts = (sort) => {
-		setSelectedSort(sort);
-	};
+	const [filter, setFilter] = useState({ sort: '', query: '' });
+	const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
 
 	const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
 		const response = await PlasticServices.getAllClinics(page);
@@ -61,7 +46,7 @@ const CardsList = (props) => {
 		onRequest();
 	};
 
-	const content = !(!isPostsLoading && !postError && posts.length === 0)
+	const content = !(!isPostsLoading && !postError && sortedAndSearchedPosts.length === 0)
 		? sortedAndSearchedPosts.map((post) => (
 			<CardsItemHorizontal post={post} key={post.id} />
 		))
@@ -79,20 +64,7 @@ const CardsList = (props) => {
 		<div className='list-cards'>
 			<div className='list-cards__container container'>
 				<h2 className='list-cards__title'>{props.title}</h2>
-				<CardsInput
-					placeholder='Поиск'
-					value={searchQuery}
-					onChange={e => setSearchQuery(e.target.value)}
-				/>
-				<CardsFilter
-					value={selectedSort}
-					onChange={sortPosts}
-					defaultValue='Сортировка'
-					options={[
-						{ value: 'id', name: 'По индексу' },
-						{ value: 'title', name: 'По названию' },
-						{ value: 'body', name: 'По описанию' },
-					]} />
+				<CardsFilter filter={filter} setFilter={setFilter} />
 				<ul className='list-cards__box'>
 					{content}
 				</ul>
