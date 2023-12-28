@@ -2,7 +2,7 @@ import classes from './Review.module.scss';
 
 // import PropTypes from 'prop-types';
 
-import star from '../../../../assets/icons/star.png';
+import star from '../../assets/icons/star.png';
 
 const Review = ({ ...props }) => {
 	return (

@@ -1,14 +1,14 @@
-import './CardsItemHorizontal.scss';
+import './ClinicsCardsItem.scss';
 
 import PropTypes from 'prop-types';
 
 import CallButton from '../UI/buttons/callButton/CallButton';
 import LikeButton from '../UI/buttons/likeButton/LikeButton';
-import Review from '../UI/others/review/Review';
+import Review from '../review/Review';
 
 import clinicImg from '../../assets/imgs/clinic-1.png';
 
-const CardsItemHorizontal = (props) => {
+const ClinicsCardsItem = (props) => {
 	return (
 		<li className='cards-item'>
 			<div className='cards-item__wrapper'>
@@ -42,7 +42,7 @@ const CardsItemHorizontal = (props) => {
 	);
 };
 
-CardsItemHorizontal.propTypes = {
+ClinicsCardsItem.propTypes = {
 	post: PropTypes.shape({
 		id: PropTypes.number.isRequired,
 		title: PropTypes.string.isRequired,
@@ -50,4 +50,4 @@ CardsItemHorizontal.propTypes = {
 	}).isRequired,
 };
 
-export default CardsItemHorizontal;
+export default ClinicsCardsItem;
