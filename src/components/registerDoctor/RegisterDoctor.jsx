@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import EnterButton from '../UI/button/enterButton/EnterButton';
+import FieldButton from '../UI/button/fieldButton/FieldButton';
 
 import { useForm } from 'react-hook-form';
 
@@ -62,9 +62,9 @@ const RegisterDoctor = () => {
                     {errors?.confirm_password && <span className='form__span'>{errors?.confirm_password?.message}</span>}
                 </div>
 
-                <EnterButton type="submit">
+                <FieldButton type="submit">
                     Зарегистрироваться
-                </EnterButton>
+                </FieldButton>
                 <div className='form__registers'>
                     <Link to={'/enterPage/enterPartner'} className='form__register'>Вход врача</Link>
                     <Link to={'/enterPage/registerClinic'} className='form__register'>Регистрация клиники</Link>

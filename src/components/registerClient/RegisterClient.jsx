@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 import { useState } from 'react';
 
-import EnterButton from '../UI/button/enterButton/EnterButton';
+import FieldButton from '../UI/button/fieldButton/FieldButton';
 
 import { useForm } from 'react-hook-form';
 
@@ -80,9 +80,9 @@ const RegisterClient = () => {
                     {errors?.ref && <span className='form__span'>{errors?.ref?.message}</span>}
                 </div>
                 <p className='form__ref'>Укажите персональный ID пользователя, который вас пригласил - вы получите 5% скидку</p>
-                <EnterButton type="submit">
+                <FieldButton type="submit">
                     Зарегистрироваться
-                </EnterButton>
+                </FieldButton>
                 <p className='form__confirmation'>Подтвердите адрес электронной почты. Письмо со ссылкой для подтверждения отправлено на указанную вами почту.</p>
                 <Link to={'/enterPage/enterClient'} className='form__enter'>Вход клиента</Link>
             </form>

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import EnterButton from '../UI/button/enterButton/EnterButton';
+import FieldButton from '../UI/button/fieldButton/FieldButton';
 
 import { useForm } from 'react-hook-form';
 
@@ -33,9 +33,9 @@ const ForgotPassword = () => {
                     />
                     {errors?.email && <span className='form__span'>{errors?.email?.message}</span>}
                 </div>
-                <EnterButton type="submit">
+                <FieldButton type="submit">
                     Отправить
-                </EnterButton>
+                </FieldButton>
                 <p className='form__message'>На данную почту придёт сообщение с инструкцией по восстановлению пароля</p>
                 <div className='form__registers'>
                     <Link to={'/enterPage/enterClient'} className='form__register' href="#">Вход клиента</Link>
