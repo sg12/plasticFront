@@ -4,11 +4,11 @@ import { useState, useEffect } from 'react';
 
 import PlasticServices from '../../services/PlasticServices';
 
-import { useFetching } from '../../hooks/useFetching';
-
 import DoctorsCardsItem from '../doctorsCardsItem/DoctorsCardsItem';
 import OutlineButton from '../UI/buttons/outlineButton/OutlineButton';
 import Spinner from '../spinner/Spinner';
+
+import { useFetching } from '../../hooks/useFetching';
 
 const DoctorsCardsList = () => {
 
