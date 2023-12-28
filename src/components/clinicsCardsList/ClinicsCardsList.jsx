@@ -1,6 +1,5 @@
 import './ClinicsCardsList.scss';
 
-import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 
 import PlasticServices from '../../services/PlasticServices';
@@ -64,11 +63,11 @@ const ClinicsCardsList = () => {
 		: null;
 
 	return (
-		<div className='list-cards'>
-			<div className='list-cards__container container'>
-				<h2 className='list-cards__title'>КЛИНИКИ</h2>
+		<div className='clinics-cards-list'>
+			<div className='clinics-cards-list__container container'>
+				<h2 className='clinics-cards-list__title'>КЛИНИКИ</h2>
 				<CardsFilter filter={filter} setFilter={setFilter} />
-				<ul className='list-cards__box'>
+				<ul className='clinics-cards-list__box'>
 					{content}
 				</ul>
 				{error}
@@ -78,10 +77,5 @@ const ClinicsCardsList = () => {
 		</div>
 	);
 };
-
-ClinicsCardsList.propTypes = {
-	title: PropTypes.string.isRequired,
-};
-
 
 export default ClinicsCardsList;

@@ -1,7 +1,9 @@
+import DoctorsCardsList from "../components/doctorsCardsList/DoctorsCardsList";
+
 const DoctorsPage = () => {
 	return (
 		<>
-			<p>Тут должна быть страница врачей, но ее здесь нет, печалька</p>
+			<DoctorsCardsList />
 		</>
 	);
 };
