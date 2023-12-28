@@ -1,4 +1,4 @@
-import EnterButton from "../UI/button/enterButton/EnterButton";
+import FieldButton from '../UI/button/fieldButton/FieldButton';
 
 import { useForm } from 'react-hook-form';
 
@@ -48,9 +48,9 @@ const NewPassword = () => {
                     />
                     {errors?.confirm_password && <span className='form__span'>{errors?.confirm_password?.message}</span>}
                 </div>
-                <EnterButton type="submit">
+                <FieldButton type="submit">
                     Отправить
-                </EnterButton>
+                </FieldButton>
                 <p className='form__message'>Не забудьте новый пароль.</p>
                 <div className='form__registers'>
                     <a className='form__register' href="#">Вход клиента</a>
