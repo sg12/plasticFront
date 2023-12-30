@@ -6,6 +6,7 @@ import PlasticServices from '../../services/PlasticServices';
 
 import ClinicsCardsItem from '../clinicsCardsItem/ClinicsCardsItem';
 import CardsFilter from '../cardsFilter/CardsFilter';
+import CenterModal from '../UI/modals/centerModal/CenterModal';
 import OutlineButton from '../UI/buttons/outlineButton/OutlineButton';
 import Spinner from '../spinner/Spinner';
 
@@ -28,6 +29,8 @@ const ClinicsCardsList = () => {
 
 	const [filter, setFilter] = useState({ sort: '', query: '' });
 	const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
+
+	const [modal, setModal] = useState(false);
 
 	const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
 		const response = await PlasticServices.getAllClinics(page);
@@ -66,7 +69,12 @@ const ClinicsCardsList = () => {
 		<div className='clinics-cards-list'>
 			<div className='clinics-cards-list__container container'>
 				<h2 className='clinics-cards-list__title'>КЛИНИКИ</h2>
-				<CardsFilter filter={filter} setFilter={setFilter} />
+				<OutlineButton onClick={() => setModal(true)}>
+					Фильтр
+				</OutlineButton>
+				<CenterModal visible={modal} setVisible={setModal}>
+					<CardsFilter filter={filter} setFilter={setFilter} />
+				</CenterModal>
 				<ul className='clinics-cards-list__box'>
 					{content}
 				</ul>

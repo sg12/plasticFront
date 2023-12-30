@@ -1,12 +1,17 @@
-import React from "react";
-import classes from './OutlineButton.module.css'
+import classes from './OutlineButton.module.scss';
 
-const OutlineButton = ({children, ...props}) => {
-    return (
-        <button {...props} className={classes.myBtn}>
-            {children}
-        </button>
-    );
+import PropTypes from 'prop-types';
+
+const OutlineButton = ({ children, ...props }) => {
+	return (
+		<button {...props} className={classes.outlineButton}>
+			{children}
+		</button>
+	);
+};
+
+OutlineButton.propTypes = {
+	children: PropTypes.string.isRequired,
 };
 
 export default OutlineButton;

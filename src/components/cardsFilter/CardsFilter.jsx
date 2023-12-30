@@ -2,7 +2,7 @@ import './CardsFilter.scss';
 
 import PropTypes from 'prop-types';
 
-import CardsInput from '../UI/inputs/CardsInput';
+import CardsInput from '../UI/inputs/cardsInput/CardsInput';
 import CardsSelect from '../UI/selects/cardsSelect/CardsSelect';
 
 const CardsFilter = ({ filter, setFilter }) => {
