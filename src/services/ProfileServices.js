@@ -1,38 +1,34 @@
 import axios from "axios";
 
-// export default class ProfileServices {
-//   static async fetchUserData() {
-//     const apiUrlUsers = "https://jsonplaceholder.typicode.com/users?_limit=3";
-//     const apiUrlPhoto = "https://jsonplaceholder.typicode.com/photos?_limit=3";
-
-//     try {
-//       const [usersResponse, photoResponse] = await axios.all([
-//         axios.get(apiUrlUsers),
-//         axios.get(apiUrlPhoto),
-//       ]);
-
-//       return {
-//         users: usersResponse.data,
-//         photo: photoResponse.data,
-//       };
-//     } catch (error) {
-//       console.error("Error fetching user data:", error);
-//       throw error;
-//     }
-//   }
-// }
-
+// const _apiBase = 'http://localhost:8000/api/v1'
+const _apiBase = 'https://jsonplaceholder.typicode.com'
 
 export default class ProfileServices {
-  static async get
+
+  static async getUsers(userID = 1, userType = "users") {
+    try {
+      const response = await fetch(`${_apiBase}/${userType}/${userID}/`);
+      
+      if (!response.ok) {
+        throw new Error(`Error fetching user data: ${response.status}`);
+      }
+  
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+      throw error;
+    }
+  }
+  
+
+  // static async getPhotos(photoID = 3) {
+  //   try {
+  //     const response = await axios.get(`${_apiBase}/photos/${photoID}`);
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error("Error fetching photo data:", error);
+  //     throw error;
+  //   }
+  // }
 }
-
-
-// import axios from "axios";
-
-// export default class ArticlesServices {
-// 	static async getAll(page = 1) {
-// 		const response = await axios.get(`https://jsonplaceholder.typicode.com/posts?_limit=3&_page=${page}`);
-// 		return response;
-// 	}
-// }
