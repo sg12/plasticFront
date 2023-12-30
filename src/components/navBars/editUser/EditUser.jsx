@@ -1,12 +1,19 @@
 import "./EditUser.scss";
-const EditUser = () => {
+
+const EditUser = ({ userData }) => {
   return (
     <div className="edit">
-      <span>Персональные данные</span>
-      <div className="edit_info">
+      <span className="edit__title">Персональные данные</span>
+      <div className="edit__info">
         <form className="edit__email">
           <label htmlFor="email">Email</label>
-          <input autoComplete="none" type="email" name="" id="email" />
+          <input
+            autoComplete="none"
+            type="email"
+            name=""
+            id="email"
+            placeholder={userData.email || "Неизвестно"}
+          />
         </form>
         <form className="edit__gender">
           <label htmlFor="gender">Пол</label>
@@ -17,22 +24,46 @@ const EditUser = () => {
         </form>
         <form className="edit__address">
           <label htmlFor="address">Адрес</label>
-          <input autoComplete="none" type="text" name="" id="address" />
+          <input
+            autoComplete="none"
+            type="text"
+            name=""
+            id="address"
+            placeholder={userData.address.suite || "Неизвестно"}
+          />
         </form>
         <form className="edit__name">
           <label htmlFor="name">ФИО</label>
-          <input autoComplete="none" type="text" name="" id="name" />
+          <input
+            autoComplete="none"
+            type="text"
+            name=""
+            id="name"
+            placeholder={userData.username || "Неизвестно"}
+          />
         </form>
         <form className="edit__date">
           <label htmlFor="date">Дата рождения</label>
-          <input autoComplete="none" type="date" name="" id="date" />
+          <input
+            autoComplete="none"
+            type="date"
+            name=""
+            id="date"
+            placeholder={userData.birthdate || "Неизвестно"}
+          />
         </form>
         <form className="edit__tel">
           <label htmlFor="tel">Телефон</label>
-          <input autoComplete="none" type="tel" name="" id="tel" />
+          <input
+            autoComplete="none"
+            type="tel"
+            name=""
+            id="tel"
+            placeholder={userData.phone || "Неизвестно"}
+          />
         </form>
       </div>
-      <span>Согласие пользователя</span>
+      <span className="edit__title">Согласие пользователя</span>
       <div className="edit__checkbox">
         <div className="edit__checkbox-p1">
           <input

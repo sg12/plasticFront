@@ -1,14 +1,16 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useState } from "react";
+
 import qr from "../../../assets/imgs/qr-code.png";
 import desc from "../../../assets/imgs/desc.svg";
 
-import "./ProfileInfo.scss";
+import "./ProfileClinicInfo.scss";
 import EditUser from "../editUser/EditUser";
 
-const ProfileInfo = () => {
+import EditPopup from "../showEditPopup/ShowEditPopup";
+import DeletePopup from "../showDeletePopup/ShowDeletePopup";
+
+const ProfileClinicInfo = ({ userData }) => {
   const [imageSrc, setImageSrc] = useState(null);
-  const [userData, setUserData] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [showEditPopup, setShowEditPopup] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
@@ -44,40 +46,8 @@ const ProfileInfo = () => {
   const handleDelete = () => {
     // Логика для отправки данных на сервер
 
-    // После успешного сохранения, отображаем всплывающее окно
     setShowDeletePopup(true);
-
   };
-
-  const handleReturn = () => {
-    setShowDeletePopup(false);
-  }
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const apiUrlUsers = "https://jsonplaceholder.typicode.com/users?_limit=1";
-      const apiUrlPhotos =
-        "https://jsonplaceholder.typicode.com/photos?_limit=1";
-
-      try {
-        const [usersResponse, photosResponse] = await axios.all([
-          axios.get(apiUrlUsers),
-          axios.get(apiUrlPhotos),
-        ]);
-
-        const userData = {
-          user: usersResponse.data[0],
-          photo: photosResponse.data[0],
-        };
-
-        setUserData(userData);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   return (
     <div className="profile">
@@ -89,8 +59,8 @@ const ProfileInfo = () => {
               <div className="profile__photo">
                 <label htmlFor="uploadInput" className="profile__photo-label">
                   <img
-                    src={imageSrc || userData.photo.thumbnailUrl}
-                    alt=""
+                    src={imageSrc}
+                    alt="user image"
                     className="profile__photo-img"
                   />
                 </label>
@@ -104,21 +74,21 @@ const ProfileInfo = () => {
               </div>
               <div className="profile__details">
                 <h3 className="profile__user-name">
-                  {userData.user.name || "Макарова Светлана Викторовна"}
+                  {userData.name || "Неизвестно"} (Clinic)
                 </h3>
                 <p className="profile__user-phone">
                   <span className="profile__darkened">Телефон: </span>
-                  {userData.user.phone || "+7 (914) 001 96 58"}
+                  {userData.phone || "Неизвестно"}
                 </p>
               </div>
             </div>
             <div className="profile__identification">
               <div className="iden">
                 <div className="iden__id">
-                  <span>Ваш ID:</span> {userData.user.id || "1234"}
+                  <span>Ваш ID:</span> {userData.id || "Неизвестно"}
                 </div>
                 <div className="iden__code">
-                  Код: {userData.user.address?.zipcode || "a4861fe9-a65a"}
+                  Код: {userData.address.zipcode || "Неизвестно"}
                 </div>
               </div>
               <img
@@ -139,19 +109,19 @@ const ProfileInfo = () => {
               <div className="profile__details">
                 <div className="profile__gender">
                   <span className="profile__darkened">Пол: </span>
-                  {userData.user.gender || "Женский"}
+                  {userData.gender || "Неизвестно"}
                 </div>
                 <div className="profile__birthdate">
                   <span className="profile__darkened">Дата рождения: </span>
-                  {userData.user.birthdate || "01.08.1996"}
+                  {userData.birthdate || "Неизвестно"}
                 </div>
                 <div className="profile__birthdate">
                   <span className="profile__darkened">Почта: </span>
-                  {userData.user.email || "makarova480@mail.ru"}
+                  {userData.email || "Неизвестно"}
                 </div>
                 <div className="profile__address">
                   <span className="profile__darkened">Адрес: </span>
-                  {userData.user.address?.suite || "ул. Никитина 93"}
+                  {userData.address.suite || "Неизвестно"}
                 </div>
                 <hr className="profile__divider" />
               </div>
@@ -159,7 +129,7 @@ const ProfileInfo = () => {
           )}
 
           {/* EditUser */}
-          {isEditing && <EditUser />}
+          {isEditing && <EditUser userData={userData}/>}
 
           {/* FooterInfo */}
           <div className="profile__footer">
@@ -185,20 +155,14 @@ const ProfileInfo = () => {
             )}
             <hr className="profile__divider" />
             <div className="profile__action-button">
-              {showEditPopup && (
-                <div className="edit__popup">
-                  <p>Данные успешно сохранены!</p>
-                </div>
-              )}
-              {showDeletePopup && (
-                <div className="delete__popup">
-                  <p>Вы точно хотите удалить аккаунт?</p>
-                  <div className="delete__popup-button">
-                    <button className="yes">Да</button>
-                    <button className="no" onClick={handleReturn}>Нет, передумал</button>
-                  </div>
-                </div>
-              )}
+              <EditPopup
+                showEditPopup={showEditPopup}
+                setShowEditPopup={setShowEditPopup}
+              />
+              <DeletePopup
+                showDeletePopup={showDeletePopup}
+                setShowDeletePopup={setShowDeletePopup}
+              />
               {isEditing ? (
                 <>
                   <button type="button" className="save" onClick={handleSave}>
@@ -238,4 +202,4 @@ const ProfileInfo = () => {
   );
 };
 
-export default ProfileInfo;
+export default ProfileClinicInfo;

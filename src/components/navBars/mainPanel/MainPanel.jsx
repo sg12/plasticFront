@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import "./MainPanel.scss";
 import { Outlet } from "react-router-dom";
+import { UserProvider } from "../../../context/UserContext";
 
-const MainPanel = () => {
+const MainPanel = ({ userType, userData }) => {
   const [loading, setLoading] = useState(true);
+  // console.log(["UserData", userData, "UserType", userType]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -18,7 +20,9 @@ const MainPanel = () => {
       {loading ? (
         <div className="loader">Загрузка...</div>
       ) : (
-        <Outlet />
+        <UserProvider userData={userData} userType={userType}>
+          <Outlet />
+        </UserProvider>
       )}
     </main>
   );

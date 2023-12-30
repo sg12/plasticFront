@@ -1,0 +1,267 @@
+* {
+  font-family: Raleway;
+  font-size: 16px;
+  font-style: normal;
+  line-height: normal;
+  font-variant-numeric: lining-nums proportional-nums;
+}
+
+.profile {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  &__header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  &__user {
+    display: flex;
+    gap: 16px;
+  }
+
+  &__photo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f2f2f2;
+    width: 150px;
+    height: 150px;
+    border-radius: 16px;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      opacity: 0.5;
+
+      &::before {
+        content: "📷";
+        position: absolute;
+        color: #ffffff;
+        font-size: 24px;
+        opacity: 1;
+      }
+    }
+
+    &-label {
+      display: flex;
+      width: 100%;
+      height: 100%;
+    }
+
+    &-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  }
+
+  &__details {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__user-name {
+    margin: 0;
+  }
+
+  &__user-phone {
+    font-weight: 400;
+    margin: 0;
+  }
+
+  &__darkened {
+    opacity: 0.5;
+  }
+
+  &__identification {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 16px;
+
+    .iden {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 100%;
+      width: 100%;
+
+      &__id {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 150px;
+        width: 100%;
+        height: 50px;
+        padding: 8px;
+
+        span {
+          font-weight: 700;
+          margin-right: 4px;
+        }
+      }
+
+      &__code {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 50px;
+        background: #f2f2f2;
+        border-radius: 8px;
+        min-width: 150px;
+        width: 100%;
+        padding: 8px;
+      }
+    }
+
+    &__qr-img {
+      width: 150px;
+      height: 150px;
+    }
+  }
+
+  &__divider {
+    width: 100%;
+    margin: 0;
+    background: #5985cb;
+    opacity: 0.1;
+    height: 1px;
+    border: none;
+  }
+
+  // &__main {
+  // }
+
+  // &__footer {
+  // }
+
+  &__description {
+    margin-right: 32px;
+    margin-bottom: 16px;
+    display: flex;
+    gap: 16px;
+
+    .img {
+      border-radius: 8px;
+    }
+  }
+
+  &__description-text {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    width: 100%;
+
+    .text {
+      background: #d7e7ff;
+      padding: 16px;
+      border-radius: 8px;
+      width: 400px;
+    }
+    .text:nth-child(2) {
+      background: none;
+    }
+  }
+
+  &__discount {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    background: #f3f8fe;
+    border-radius: 8px;
+    border: 1px solid #3066be;
+  }
+
+  &__action-button {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 16px;
+    margin-top: 16px;
+
+    .save {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #3066be;
+    }
+
+    .cancel {
+      background: none;
+      border: none;
+      color: black;
+      opacity: 25%;
+      cursor: pointer;
+    }
+
+    .edit {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #3066be;
+
+      &__popup {
+        position: fixed;
+        right: 0;
+        top: 50%;
+        transform: translateX(100%) translateY(-50%);
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        padding: 16px;
+        border-radius: 16px 0 0 16px;
+        z-index: 999;
+        animation: slideIn 0.25s ease-out forwards;
+      }
+
+      @keyframes slideIn {
+        from {
+          transform: translateX(100%) translateY(-50%);
+        }
+        to {
+          transform: translateX(0) translateY(-50%);
+        }
+      }
+    }
+
+    .delete {
+      background: none;
+      border: none;
+      color: black;
+      opacity: 25%;
+      cursor: pointer;
+
+      &__popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        padding: 15px;
+        border-radius: 5px;
+        z-index: 999;
+
+        &-button {
+          display: flex;
+          justify-content: space-between;
+
+          .yes, .no {
+            border: none;
+            background: none;
+            cursor: pointer;
+          }
+          
+          .yes {
+            opacity: .5;
+          }
+        }
+      }
+    }
+  }
+}
