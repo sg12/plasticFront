@@ -8,7 +8,7 @@ export const links = [
 	{ text: 'Услуги', to: '/services' },
 	{ text: 'Врачи', to: '/doctors' },
 	{ text: 'Клиники', to: '/clinics' },
-	{ text: 'Акции', to: '/reviews' },
+	// { text: 'Акции', to: '/stocks' },
 	{ text: 'Статьи', to: '/articles' },
 ];
 
@@ -52,7 +52,7 @@ const Header = () => {
 				' ',
 				' ',
 				' ',
-				
+
 			],
 			blepharoplasty: [
 				'Блефаропластика',
@@ -85,7 +85,7 @@ const Header = () => {
 				'',
 				'',
 				'',
-				
+
 			],
 			blepharoplasty: [
 			],
@@ -154,7 +154,7 @@ const Header = () => {
 												>
 													{category.category}
 													<svg width="12" height="20" viewBox="0 0 12 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-														<path d="M2 2L9.29289 9.29289C9.68342 9.68342 9.68342 10.3166 9.29289 10.7071L2 18" stroke="black" stroke-width="3" stroke-linecap="round" />
+														<path d="M2 2L9.29289 9.29289C9.68342 9.68342 9.68342 10.3166 9.29289 10.7071L2 18" stroke="black" strokeWidth="3" strokeLinecap="round" />
 													</svg>
 												</li>
 											))}
@@ -185,8 +185,8 @@ const Header = () => {
 															</li>
 														))
 
-														}
-														
+													}
+
 												</ul>
 											</div>
 										)}
@@ -201,7 +201,7 @@ const Header = () => {
 					</li>
 				))}
 				<li>
-					<Link to={'enterPage'} className="header__button-item" style={{color: 'white'}}>
+					<Link to={'enterPage'} className="header__button-item" style={{ color: 'white' }}>
 						<p>Войти</p>
 					</Link>
 				</li>

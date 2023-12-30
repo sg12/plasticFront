@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import PlasticServices from '../../services/PlasticServices';
 
 import ArticlesItem from '../articlesItem/ArticlesItem';
-import OutlineButton from '../UI/button/outlineButton/OutlineButton';
+import OutlineButton from '../UI/buttons/outlineButton/OutlineButton';
 import Spinner from '../spinner/Spinner';
 
 import { useFetching } from '../../hooks/useFetching';

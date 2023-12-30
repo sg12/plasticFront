@@ -1,9 +1,9 @@
-import CardsList from "../components/cardsList/CardsList";
+import ClinicsCardsList from "../components/clinicsCardsList/ClinicsCardsList";
 
 const ClinicsPage = () => {
 	return (
 		<>
-			<CardsList title='Клиники' />
+			<ClinicsCardsList />
 		</>
 	);
 };

@@ -1,4 +1,4 @@
-import FieldButton from '../UI/button/fieldButton/FieldButton';
+import EnterButton from "../UI/buttons/enterButton/EnterButton";
 
 import { useForm } from 'react-hook-form';
 

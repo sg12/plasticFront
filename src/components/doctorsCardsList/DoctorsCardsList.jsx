@@ -1,24 +1,26 @@
-import './CardsList.scss';
+import './DoctorsCardsList.scss';
 
-import PropTypes from 'prop-types';
 import { useState, useEffect } from 'react';
 
 import PlasticServices from '../../services/PlasticServices';
 
-import CardsItemHorizontal from '../cardsItemHorizontal/CardsItemHorizontal';
-import OutlineButton from '../UI/button/outlineButton/OutlineButton';
+import DoctorsCardsItem from '../doctorsCardsItem/DoctorsCardsItem';
+import OutlineButton from '../UI/buttons/outlineButton/OutlineButton';
 import Spinner from '../spinner/Spinner';
 
 import { useFetching } from '../../hooks/useFetching';
 
-const CardsList = (props) => {
+const DoctorsCardsList = () => {
 
 	const [posts, setPosts] = useState([]);
 	const [page, setPage] = useState(1);
 	const [totalCount, setTotalCount] = useState(0);
 
+	// const [filter, setFilter] = useState({ sort: '', query: '' });
+	// const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
+
 	const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
-		const response = await PlasticServices.getAllClinics(page);
+		const response = await PlasticServices.getAllDoctors(page);
 		setPosts([...posts, ...response.data]);
 		setPage(page + 1);
 		setTotalCount(response.headers['x-total-count']);
@@ -38,9 +40,9 @@ const CardsList = (props) => {
 
 	const content = !(!isPostsLoading && !postError && posts.length === 0)
 		? posts.map((post) => (
-			<CardsItemHorizontal post={post} key={post.id} />
+			<DoctorsCardsItem post={post} key={post.id} />
 		))
-		: <h3 className='articles-item__title' style={{ margin: 'auto', textAlign: 'center' }}>Нет статей</h3>;
+		: <h3 className='articles-item__title' style={{ margin: 'auto', textAlign: 'center' }}>Нет клиник</h3>;
 
 	const error = postError ? <h3 className='articles-item__title' style={{ textAlign: 'center' }}>Ошибка: {postError}</h3> : null;
 
@@ -51,11 +53,11 @@ const CardsList = (props) => {
 		: null;
 
 	return (
-		<div className='list-cards'>
-			<div className='list-cards__container container'>
-				<h2 className='list-cards__title'>{props.title}</h2>
-				<p>(Добавить фильтрацию)</p>
-				<ul className='list-cards__box'>
+		<div className='doctors-cards-list'>
+			<div className='doctors-cards-list__container container'>
+				<h2 className='doctors-cards-list__title'>ВРАЧИ</h2>
+				{/* <CardsFilter filter={filter} setFilter={setFilter} /> */}
+				<ul className='doctors-cards-list__box'>
 					{content}
 				</ul>
 				{error}
@@ -66,9 +68,4 @@ const CardsList = (props) => {
 	);
 };
 
-CardsList.propTypes = {
-	title: PropTypes.string.isRequired,
-};
-
-
-export default CardsList;
+export default DoctorsCardsList;
