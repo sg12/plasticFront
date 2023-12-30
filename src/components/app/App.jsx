@@ -14,12 +14,11 @@ import NotFound from "../notFound/NotFound";
 import AccountPage from "../../pages/AccountPage";
 
 // Account - `AsidePanel.jsx`
-import ProfileInfo from "../navBars/ProfileInfo/ProfileInfo";
-// import ServicesInfo from '../navBars/ServicesInfo/ServicesInfo';
-// import ClinicsInfo from '../navBars/clinicsInfo/ClinicsInfo';
 import FavouritesInfo from '../navBars/favouritesInfo/FavouritesInfo';
-import EditUser from "../navBars/editUser/EditUser";
 import SettingsInfo from "../navBars/settingsInfo/SettingsInfo";
+import ProfileUser from "../navBars/profileUser/ProfileUser";
+import SpecialistInfo from "../navBars/specialistInfo/SpecialistInfo";
+import ReviewsInfo from "../navBars/reviewsInfo/ReviewsInfo";
 
 function App() {
   return (
@@ -36,10 +35,10 @@ function App() {
 			</Route>
 
 			<Route path="account" element={<AccountPage />}>
-				<Route path="profile" element={<ProfileInfo />}>
-					<Route path="edit" element={<EditUser />}/>
-				</Route>
-				<Route path="settings" element={<SettingsInfo />}></Route>
+				<Route path="profile" element={<ProfileUser/>} />
+				<Route path="reviews" element={<ReviewsInfo />} />
+				<Route path="specialist" element={<SpecialistInfo />} />
+				<Route path="settings" element={<SettingsInfo />} />
 				<Route path="favourites" element={<FavouritesInfo />} />
 			</Route>
 		</Routes>
