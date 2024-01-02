@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import './ArticlesItem.scss';
 
 import articles1 from '../../assets/imgs/articles-1.png';
+import { Link } from 'react-router-dom';
 
 const ArticlesItem = (props) => {
 
@@ -18,7 +19,7 @@ const ArticlesItem = (props) => {
 				<p className='articles-item__text'>
 					{props.post.body.slice(0, 300)} ...
 				</p>
-				<button className='articles-item__button'>Читать дальше</button>
+				<Link to={'/articlesMore'} className='articles-item__button'>Читать дальше</Link>
 			</div>
 		</li>
 	);

@@ -21,6 +21,7 @@ import RegisterClinic from '../registerClinic/RegisterClinic';
 import ForgotPassword from '../forgotPassword/ForgotPassword';
 import NewPassword from '../newPassword/newPassword';
 import EnterPage from '../../pages/EnterPage';
+import ArticlesMore from '../articlesMore/ArticlesMore';
 
 function App() {
 
@@ -34,6 +35,7 @@ function App() {
 					<Route path='clinics' element={<ClinicsPage />}></Route>
 					{/* <Route path='stocks' element={<StocksPage />}></Route> */}
 					<Route path='articles' element={<ArticlesPage />}></Route>
+					<Route path='articlesMore' element={<ArticlesMore />}></Route>
 					<Route path='*' element={<NotFound />}></Route>
 				</Route>
 				<Route path='enterPage' element={<EnterPage />}>
