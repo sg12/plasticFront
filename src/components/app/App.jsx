@@ -7,6 +7,7 @@ import Layout from '../../pages/Layout';
 import MainPage from '../../pages/MainPage';
 import ServicesPage from '../../pages/ServicesPage';
 import DoctorsPage from '../../pages/DoctorsPage';
+import DoctorPage from '../../pages/DoctorPage';
 import ClinicsPage from '../../pages/ClinicsPage';
 // import StocksPage from '../../pages/StocksPage';
 import ArticlesPage from '../../pages/ArticlesPage';
@@ -31,6 +32,7 @@ function App() {
 					<Route index element={<MainPage />}></Route>
 					<Route path='services' element={<ServicesPage />}></Route>
 					<Route path='doctors' element={<DoctorsPage />}></Route>
+					<Route path='doctors/:id' element={<DoctorPage />}></Route>
 					<Route path='clinics' element={<ClinicsPage />}></Route>
 					{/* <Route path='stocks' element={<StocksPage />}></Route> */}
 					<Route path='articles' element={<ArticlesPage />}></Route>
