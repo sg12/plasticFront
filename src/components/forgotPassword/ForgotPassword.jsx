@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import EnterButton from '../UI/buttons/enterButton/EnterButton';
+import FieldButton from '../UI/buttons/fieldButton/FieldButton';
 
 import { useForm } from 'react-hook-form';
 
