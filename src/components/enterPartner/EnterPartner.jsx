@@ -1,10 +1,9 @@
 import { Link } from 'react-router-dom';
 
-import EnterButton from '../UI/buttons/enterButton/EnterButton';
-
 import { useForm } from 'react-hook-form';
 
 import './EnterPartner.scss';
+import FieldButton from '../UI/buttons/fieldButton/FieldButton';
 
 const EnterPartner = () => {
 
@@ -52,7 +51,7 @@ const EnterPartner = () => {
                 <Link to={'/enterPage/forgotPassword'} className='form__link'>Забыли пароль?</Link>
                 <FieldButton type="submit">
                     Войти
-                </FieldButton>
+                </ FieldButton>
                 <p className='form__approval approval'>Нажимая кнопку “Войти”, вы соглашаешься с <a className='approval__link' href="#">Политикой Конфиденциальности</a> и даёте <a className='approval__link' href="#">Согласие на обработку персональных данных</a></p>
                 <div className='form__registers'>
                     <Link to={'/enterPage/registerDoctor'} className='form__register'>Регистрация врача</Link>
