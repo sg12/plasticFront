@@ -1,54 +1,36 @@
 import "./CardsItem.scss";
 
 import women from "../../../assets/imgs/women.png";
-import { useEffect, useState } from "react";
-import ProfileServices from "../../../services/ProfileServices";
 
-const CardsItem = ({ count, type }) => {
-  const [userData, setUserData] = useState(null);
-
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const fetchedUserData = await ProfileServices.getUsers();
-        setUserData(fetchedUserData);
-        console.log(fetchedUserData);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-
-    fetchUserData();
-  }, []);
-
+const CardsItem = ({ count, type, userData }) => {
   const renderCards = () => {
     const cards = [];
     for (let i = 0; i < count; i++) {
       if (type === "doctors") {
-        cards.push(<DoctorCard key={i} user={userData} />);
+        cards.push(<DoctorCard key={i} userData={userData} />);
       } else if (type === "clinics") {
-        cards.push(<ClinicsCard key={i} user={userData} />);
+        cards.push(<ClinicsCard key={i} userData={userData} />);
       } else if (type === "all") {
         cards.push(
-          <ClinicsCard key={i} user={userData} />,
-          <DoctorCard key={i} user={userData} />
+          <ClinicsCard key={i} userData={userData} />,
+          <DoctorCard key={i} userData={userData} />
         );
       }
     }
-    return cards; 
+    return cards;
   };
 
   return <div className="cards">{renderCards()}</div>;
 };
 
-const DoctorCard = ({ isFavorite, user }) => {
+const DoctorCard = ({ isFavorite, userData }) => {
   return (
     <div className={`card ${isFavorite ? "favorite" : ""}`}>
       <div className="card__body">
         <div className="card__photo">
           <img src={women} alt="some photo" />
         </div>
-        <span className="card__name">{user?.name}</span>
+        <span className="card__name">{userData?.name}</span>
         <span className="card__direction">Хирург</span>
         <div className="card__action">
           <button className="card__action-delete">
@@ -72,14 +54,14 @@ const DoctorCard = ({ isFavorite, user }) => {
   );
 };
 
-const ClinicsCard = ({ isFavorite, user }) => {
+const ClinicsCard = ({ isFavorite, userData }) => {
   return (
     <div className={`card ${isFavorite ? "favorite" : ""}`}>
       <div className="card__body">
         <div className="card__photo">
           <img src="" alt="some photo" />
         </div>
-        <span className="card__name">{user?.name}</span>
+        <span className="card__name">{userData?.name}</span>
         <span className="card__direction">Все направления</span>
         <div className="card__action">
           <button className="card__action-delete">

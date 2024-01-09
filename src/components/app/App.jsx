@@ -19,6 +19,10 @@ import SettingsInfo from "../navBars/settingsInfo/SettingsInfo";
 import ProfileUser from "../navBars/profileUser/ProfileUser";
 import SpecialistInfo from "../navBars/specialistInfo/SpecialistInfo";
 import ReviewsInfo from "../navBars/reviewsInfo/ReviewsInfo";
+import HelpInfo from "../navBars/helpInfo/HelpInfo";
+import SupportInfo from "../navBars/supportInfo/SupportInfo";
+import ClinicsInfo from "../navBars/clinicsInfo/ClinicsInfo";
+import ServicesInfo from "../navBars/servicesInfo/ServicesInfo";
 
 function App() {
   return (
@@ -37,6 +41,10 @@ function App() {
 			<Route path="account" element={<AccountPage />}>
 				<Route path="profile" element={<ProfileUser/>} />
 				<Route path="reviews" element={<ReviewsInfo />} />
+				<Route path="help" element={<HelpInfo />} />
+				<Route path="support" element={<SupportInfo />} />
+				<Route path="clinic" element={<ClinicsInfo />} />
+				<Route path="service" element={<ServicesInfo />} />
 				<Route path="specialist" element={<SpecialistInfo />} />
 				<Route path="settings" element={<SettingsInfo />} />
 				<Route path="favourites" element={<FavouritesInfo />} />

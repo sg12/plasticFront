@@ -5,12 +5,13 @@ import HeaderPanel from "./headerPanel/HeaderPanel";
 import MainPanel from "./mainPanel/MainPanel";
 
 import "./NavBars.scss";
+import "./root.scss";
 import ProfileServices from "../../services/ProfileServices";
 
 const NavBars = () => {
   const [isAsideVisible, setAsideVisible] = useState(window.innerWidth > 1440);
   const [userData, setUserData] = useState(null);
-  const userType = "doctor";
+  const userType = "client"; // Заглушка для выбора типа пользователя
 
   const toggleAside = () => {
     setAsideVisible(!isAsideVisible);
@@ -32,7 +33,7 @@ const NavBars = () => {
   return (
     <div className="grid-container">
       <header className="header-grid">
-        <HeaderPanel onToggleAside={toggleAside} />
+        <HeaderPanel userData={userData} onToggleAside={toggleAside} />
       </header>
       {isAsideVisible && (
         <aside className="aside-grid">

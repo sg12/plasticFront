@@ -1,31 +1,21 @@
-import React from "react";
-
 import classes from "../search/Search.module.css";
 
-const Search = ({ children, ...props }) => {
+const Search = ({placeholder, onSearch}) => {
+  const handleSearch = (event) => {
+    const searchTerm = event.target.value;
+    onSearch(searchTerm);
+  };
+
   return (
-    <input
-      type="search"
-      name="doctor"
-      placeholder="Поиск"
-      value={children}
-      {...props}
-      className={classes.search}
-    />
+    <form >
+      <input
+        type="search"
+        placeholder={placeholder || "Поиск"}
+        className={classes.search}
+        onChange={handleSearch}
+      />
+    </form>
   );
 };
 
 export default Search;
-
-// import React from "react";
-// import classes from './MyButton.module.css'
-
-// const MyButton = ({children, ...props}) => {
-//     return (
-//         <button {...props} className={classes.myBtn}>
-//             {children}
-//         </button>
-//     );
-// };
-
-// export default MyButton;

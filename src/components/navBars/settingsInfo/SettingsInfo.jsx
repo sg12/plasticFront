@@ -27,12 +27,11 @@ const SettingsInfo = () => {
                 </div>
             </div>
             <div className="settings__password password">
-                <h2 className="settings__title">Изменить пароль</h2>
+                <span className="settings__title">Изменить пароль</span>
                 <input type="password" placeholder="Старый пароль" />
                 <input type="password" placeholder="Новый пароль" />
             </div>
             <div className="settings__control control">
-                <h2 className="settings__title">Изменить пароль</h2>
                 <p className="control__date">Вы с нами с 01.12.1023</p>
                 <div className="control__buttons">
                     <button className="control__button">Выйти из аккаунта</button>

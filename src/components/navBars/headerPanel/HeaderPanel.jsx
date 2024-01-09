@@ -1,13 +1,11 @@
-import React from "react";
 import { Link } from "react-router-dom";
 
-import women from "../../../assets/imgs/women.png";
 import bell from "../../../assets/icons/bell.svg";
 import logo from "../../../assets/icons/logoNew.svg";
 
 import "./HeaderPanel.scss";
 
-const HeaderPanel = ({ onToggleAside }) => {
+const HeaderPanel = ({ onToggleAside, userData }) => {
   const burger = (
     <svg
       width="24"
@@ -40,12 +38,12 @@ const HeaderPanel = ({ onToggleAside }) => {
           </div>
         </div>
         <div className="header__account">
-          <div className="header__notification">
+          {/* <div className="header__notification">
             <img src={bell} alt="bell" />
-          </div>
+          </div> */}
           <div className="header__user">
-            <img className="user__photo" src={women} alt="photo" />
-            <span>Светлана М.</span>
+            <img className="user__photo" src={ userData?.photo } alt="photo" />
+            <span>{userData?.name || "Неизвестно"}</span>
           </div>
         </div>
       </div>

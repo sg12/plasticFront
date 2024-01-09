@@ -3,11 +3,12 @@ import { useState } from "react";
 import qr from "../../../assets/imgs/qr-code.png";
 import desc from "../../../assets/imgs/desc.svg";
 
-import "./ProfileClinicInfo.scss";
+import "../profileUser/ProfileUser.scss";
 import EditUser from "../editUser/EditUser";
 
 import EditPopup from "../showEditPopup/ShowEditPopup";
 import DeletePopup from "../showDeletePopup/ShowDeletePopup";
+import InDev from "../inDev/InDev";
 
 const ProfileClinicInfo = ({ userData }) => {
   const [imageSrc, setImageSrc] = useState(null);
@@ -59,7 +60,7 @@ const ProfileClinicInfo = ({ userData }) => {
               <div className="profile__photo">
                 <label htmlFor="uploadInput" className="profile__photo-label">
                   <img
-                    src={imageSrc}
+                    src={ userData.photo ||imageSrc}
                     alt="user image"
                     className="profile__photo-img"
                   />
@@ -87,18 +88,8 @@ const ProfileClinicInfo = ({ userData }) => {
                 <div className="iden__id">
                   <span>Ваш ID:</span> {userData.id || "Неизвестно"}
                 </div>
-                <div className="iden__code">
-                  Код: {userData.address.zipcode || "Неизвестно"}
-                </div>
+                {/* Rating Component */}
               </div>
-              <img
-                src={qr}
-                width="150"
-                height="150"
-                border="0"
-                title="QR код"
-                className="identification__qr-img"
-              />
             </div>
           </div>
           <hr className="profile__divider" />
@@ -107,15 +98,11 @@ const ProfileClinicInfo = ({ userData }) => {
           {!isEditing && (
             <div className="profile__main">
               <div className="profile__details">
-                <div className="profile__gender">
-                  <span className="profile__darkened">Пол: </span>
-                  {userData.gender || "Неизвестно"}
+                <div className="profile__site">
+                  <span className="profile__darkened">Официальный сайт: </span>
+                  {userData.site || "Неизвестно"}
                 </div>
-                <div className="profile__birthdate">
-                  <span className="profile__darkened">Дата рождения: </span>
-                  {userData.birthdate || "Неизвестно"}
-                </div>
-                <div className="profile__birthdate">
+                <div className="profile__email">
                   <span className="profile__darkened">Почта: </span>
                   {userData.email || "Неизвестно"}
                 </div>
@@ -123,78 +110,71 @@ const ProfileClinicInfo = ({ userData }) => {
                   <span className="profile__darkened">Адрес: </span>
                   {userData.address.suite || "Неизвестно"}
                 </div>
-                <hr className="profile__divider" />
               </div>
             </div>
           )}
+          <hr className="profile__divider" />
 
           {/* EditUser */}
-          {isEditing && <EditUser userData={userData}/>}
+          {isEditing && <EditUser userData={userData} />}
 
           {/* FooterInfo */}
           <div className="profile__footer">
             {!isEditing && (
               <>
-                <div className="profile__description">
-                  <img className="img" src={desc} alt="desc" />
-                  <div className="profile__description-text">
-                    <div className="text">
-                      Расскажите вашим близким и знакомым о нас, а мы поможем
-                      сэкономить их время на поиск нужного специалиста.
-                    </div>
-                    <div className="text">
-                      Количество пользователей, указавших Ваш ID при
-                      регистрации: 4
-                    </div>
-                    <div className="profile__discount">
-                      Персональная скидка 3%
+                <InDev>
+                  <div className="profile__additionally">
+                    <div className="profile__licenses">
+                      <span className="profile__darkened">
+                        Лицензии и сертификаты
+                      </span>
+                      {userData.licenses || "Неизвестно"}
+                      {/* <button className="add" type="button">
+                        Добавить
+                      </button> */}
                     </div>
                   </div>
-                </div>
+                </InDev>
               </>
             )}
-            <hr className="profile__divider" />
-            <div className="profile__action-button">
-              <EditPopup
-                showEditPopup={showEditPopup}
-                setShowEditPopup={setShowEditPopup}
-              />
-              <DeletePopup
-                showDeletePopup={showDeletePopup}
-                setShowDeletePopup={setShowDeletePopup}
-              />
-              {isEditing ? (
-                <>
-                  <button type="button" className="save" onClick={handleSave}>
-                    Сохранить
-                  </button>
-                  <button
-                    type="button"
-                    className="cancel"
-                    onClick={toggleEditingMode}
-                  >
-                    Отмена
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button
-                    type="button"
-                    className="edit"
-                    onClick={toggleEditingMode}
-                  >
-                    Редактировать профиль
-                  </button>
-                  <button
-                    type="button"
-                    className="delete"
-                    onClick={handleDelete}
-                  >
-                    Удалить учетную запись
-                  </button>
-                </>
-              )}
-            </div>
+          </div>
+          <hr className="profile__divider" />
+          <div className="profile__action-button">
+            <EditPopup
+              showEditPopup={showEditPopup}
+              setShowEditPopup={setShowEditPopup}
+            />
+            <DeletePopup
+              showDeletePopup={showDeletePopup}
+              setShowDeletePopup={setShowDeletePopup}
+            />
+            {isEditing ? (
+              <>
+                <button type="button" className="save" onClick={handleSave}>
+                  Сохранить
+                </button>
+                <button
+                  type="button"
+                  className="cancel"
+                  onClick={toggleEditingMode}
+                >
+                  Отмена
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  className="edit"
+                  onClick={toggleEditingMode}
+                >
+                  Редактировать профиль
+                </button>
+                <button type="button" className="delete" onClick={handleDelete}>
+                  Удалить учетную запись
+                </button>
+              </>
+            )}
           </div>
         </>
       )}

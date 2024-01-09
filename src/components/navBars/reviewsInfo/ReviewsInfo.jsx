@@ -1,19 +1,15 @@
+import { useUser } from "../../../context/UserContext";
 import ReviewsItem from "../reviewsItem/ReviewsItem";
 import "./ReviewsInfo.scss";
-import ProfileServices from "../../../services/ProfileServices";
 
 const ReviewsInfo = () => {
-
-    const userData = ProfileServices.getUsers();
-    console.log(userData);
+  const { userData, userType } = useUser();
 
   return (
-    <div>
-      <span>Мои отзывы</span>
+    <div className="reviews__info">
+      <span className="reviews__title">Мои отзывы</span>
       {/* Добавить кнопки сортировки - врач и клиника */}
-      <ReviewsItem
-
-      />
+      <ReviewsItem /> 
     </div>
   );
 };
