@@ -18,6 +18,11 @@ class PlasticServices {
 		const response = await axios.get(`${_apiBase}posts?_limit=6&_page=${page}`);
 		return response;
 	}
+
+	static async getUsers(userID = 6, userType = "users") {
+		const response = await axios.get(`${_apiBase}/${userType}/${userID}/`);
+		return response;
+	}
 }
 
 export default PlasticServices;
