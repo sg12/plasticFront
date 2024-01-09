@@ -1,0 +1,34 @@
+.doctor-detailed-item {
+
+	&__box-title {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		margin-bottom: 60px;
+	}
+
+	&__wrapper {
+		display: flex;
+		justify-content: space-between;
+	}
+
+	&__wrapper-left {
+		display: flex;
+		flex-direction: column;
+		width: 45%;
+		gap: 30px;
+	}
+
+	&__wrapper-item {
+		display: flex;
+		gap: 30px;
+	}
+
+	&__description {
+		width: 100%;
+		height: 100%;
+		padding: 20px;
+		background: #ffffff;
+		border-radius: 20px;
+	}
+}

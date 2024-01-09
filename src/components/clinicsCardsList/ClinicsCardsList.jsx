@@ -14,13 +14,6 @@ import { useFetching } from '../../hooks/useFetching';
 // ? Переименовать хук для фильтрации ?
 import { usePosts } from '../../hooks/usePosts';
 
-//! https://www.youtube.com/watch?v=GNrdg3PzpJQ&list=WL&index=24&t=7483s
-// 1.24.00 - модальное окно
-// 1.54.00 - страницы для постов
-// 2.22.06 - открытие конкретный пост
-// 2.33.00 - ограниченная навигация + глобальные данные
-// 1.36.24 - остановился
-
 const ClinicsCardsList = () => {
 
 	const [posts, setPosts] = useState([]);
@@ -66,7 +59,7 @@ const ClinicsCardsList = () => {
 		: null;
 
 	return (
-		<div className='clinics-cards-list'>
+		<section className='clinics-cards-list'>
 			<div className='clinics-cards-list__container container'>
 				<h2 className='clinics-cards-list__title'>КЛИНИКИ</h2>
 				<OutlineButton onClick={() => setModal(true)}>
@@ -82,7 +75,7 @@ const ClinicsCardsList = () => {
 				{spinner}
 				{button}
 			</div>
-		</div>
+		</section>
 	);
 };
 

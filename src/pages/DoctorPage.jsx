@@ -1,10 +1,10 @@
-import Doctor from "../components/doctor/Doctor";
+import DoctorDetailedList from "../components/doctorDetailedList/DoctorDetailedList";
 
 const DoctorPage = () => {
 
 	return (
 		<>
-			<Doctor />
+			<DoctorDetailedList />
 		</>
 	);
 };

@@ -53,7 +53,7 @@ const DoctorsCardsList = () => {
 		: null;
 
 	return (
-		<div className='doctors-cards-list'>
+		<section className='doctors-cards-list'>
 			<div className='doctors-cards-list__container container'>
 				<h2 className='doctors-cards-list__title'>ВРАЧИ</h2>
 				{/* <CardsFilter filter={filter} setFilter={setFilter} /> */}
@@ -64,7 +64,7 @@ const DoctorsCardsList = () => {
 				{spinner}
 				{button}
 			</div>
-		</div>
+		</section>
 	);
 };
 
