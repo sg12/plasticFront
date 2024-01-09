@@ -1,7 +1,19 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route } from "react-router-dom";
 
-import 'normalize.css';
-import './App.scss';
+import "normalize.css";
+import "./App.scss";
+
+
+// Account - `AsidePanel.jsx`
+import FavouritesInfo from '../navBars/favouritesInfo/FavouritesInfo';
+import SettingsInfo from "../navBars/settingsInfo/SettingsInfo";
+import ProfileUser from "../navBars/profileUser/ProfileUser";
+import SpecialistInfo from "../navBars/specialistInfo/SpecialistInfo";
+import ReviewsInfo from "../navBars/reviewsInfo/ReviewsInfo";
+import HelpInfo from "../navBars/helpInfo/HelpInfo";
+import SupportInfo from "../navBars/supportInfo/SupportInfo";
+import ClinicsInfo from "../navBars/clinicsInfo/ClinicsInfo";
+import ServicesInfo from "../navBars/servicesInfo/ServicesInfo";
 
 import Layout from '../../pages/Layout';
 import MainPage from '../../pages/MainPage';
@@ -23,7 +35,6 @@ import NewPassword from '../newPassword/newPassword';
 import EnterPage from '../../pages/EnterPage';
 
 function App() {
-
 	return (
 		<>
 			<Routes>
@@ -46,6 +57,17 @@ function App() {
 					<Route path='forgotPassword' element={<ForgotPassword />}></Route>
 					<Route path='newPassword' element={<NewPassword />}></Route>
 				</Route>
+			<Route path="account" element={<AccountPage />}>
+				<Route path="profile" element={<ProfileUser/>} />
+				<Route path="reviews" element={<ReviewsInfo />} />
+				<Route path="help" element={<HelpInfo />} />
+				<Route path="support" element={<SupportInfo />} />
+				<Route path="clinic" element={<ClinicsInfo />} />
+				<Route path="service" element={<ServicesInfo />} />
+				<Route path="specialist" element={<SpecialistInfo />} />
+				<Route path="settings" element={<SettingsInfo />} />
+				<Route path="favourites" element={<FavouritesInfo />} />
+			</Route>
 			</Routes>
 		</>
 	);

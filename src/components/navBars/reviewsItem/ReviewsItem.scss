@@ -1,0 +1,87 @@
+.reviews {
+  width: 100%;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.25);
+  padding: 16px;
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    &-left {
+      display: flex;
+      gap: 16px;
+    }
+    &-name {
+      font-size: 16px;
+      font-weight: 700;
+    }
+    &-rating {
+      opacity: 0.5;
+    }
+    &-date {
+      opacity: 0.5;
+    }
+  }
+  &__main {
+    margin-bottom: 16px;
+    &-text {
+      textarea {
+        border: none;
+        box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.25);
+        padding: 8px;
+        border-radius: 8px;
+        resize: none;
+        width: 100%;
+        height: 100px;
+      }
+      p {
+        margin: 0;
+      }
+      span {
+        margin-left: 16px;
+        opacity: 0.5;
+        cursor: pointer;
+      }
+    }
+  }
+  &__footer {
+    &-button {
+      width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      gap: 16px;
+
+      .edit {
+        background: none;
+        border: none;
+        color: #3066be;
+        cursor: pointer;
+      }
+      .save {
+        padding: 8px;
+        background: #3066be;
+        border: none;
+        border-radius: 8px;
+        color: white;
+        cursor: pointer;
+      }
+      .cancel {
+        padding: 8px;
+        background: none;
+        border: none;
+        border-radius: 8px;
+        color: #3066be;
+        cursor: pointer;
+      }
+    }
+  }
+  &__hr {
+    width: 100%;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    background: #5985cb;
+    opacity: 0.5;
+    height: 1px;
+    border: none;
+  }
+}

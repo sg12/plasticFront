@@ -1,0 +1,10 @@
+.favourites {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  &__title {
+    font-size: 24px;
+    font-weight: 700;
+  }
+}
+

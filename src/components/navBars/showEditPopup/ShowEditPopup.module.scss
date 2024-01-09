@@ -1,0 +1,51 @@
+.edit {
+  &__title {
+    font-weight: 700;
+  }
+
+  &__subtitle {
+    opacity: 0.5;
+  }
+
+  &__popup {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    position: fixed;
+    right: 32px;
+    bottom: 32px;
+    transform: translateY(100%);
+    background-color: #fff;
+    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.05);
+    padding: 16px;
+    border-radius: 8px;
+    z-index: 999;
+    animation: slideIn 0.5s ease-out forwards;
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+  }
+
+  &__popup.active {
+    transform: translateY(0);
+  }
+  &__popup.fadeOut {
+    opacity: 0;
+  }
+
+//   &__popup:nth-child(1) {
+//     bottom: 50px;
+//     z-index: 900;
+//   }
+//   &__popup:nth-child(2)  {
+//     bottom: 40px;
+//     z-index: 900;
+//   }
+
+  @keyframes slideIn {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+}
