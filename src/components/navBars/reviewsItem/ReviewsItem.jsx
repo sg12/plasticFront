@@ -1,6 +1,6 @@
 import { useState } from "react";
-import RenderStar from "../../renderStars/RenderStar";
 import "./ReviewsItem.scss";
+import Review from "../../review/Review";
 
 const ReviewsItem = ({ text, name, date }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -34,9 +34,8 @@ const ReviewsItem = ({ text, name, date }) => {
           <span className="reviews__header-name">
             {...name || "Васильев Семен Семёнович"}
           </span>
-          <span className="reviews__header-rating">
-            Rating Component
-            <RenderStar />
+          <span>
+            {/* <Review /> */}
           </span>
         </div>
         <span className="reviews__header-date">{...date || "10.02.2023"}</span>

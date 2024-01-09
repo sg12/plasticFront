@@ -1,5 +1,5 @@
 import { useUser } from "../../../context/UserContext";
-import Search from "../../UI/search/Search";
+import Search from "../../UI/inputs/searchInput/SearchInput";
 import CardsItem from "../cardsItem/cardsItem";
 
 import "./FavouritesInfo.scss";

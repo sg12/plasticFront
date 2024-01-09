@@ -1,4 +1,4 @@
-import classes from "../search/Search.module.css";
+import classes from "./SearchInput.module.css";
 
 const Search = ({placeholder, onSearch}) => {
   const handleSearch = (event) => {

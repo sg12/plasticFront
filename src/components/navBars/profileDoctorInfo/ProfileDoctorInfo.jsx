@@ -60,7 +60,7 @@ const ProfileDoctorInfo = ({ userData }) => {
               <div className="profile__photo">
                 <label htmlFor="uploadInput" className="profile__photo-label">
                   <img
-                    src={ userData.photo || imageSrc}
+                    src={userData.photo || imageSrc}
                     alt="user image"
                     className="profile__photo-img"
                   />
@@ -141,7 +141,7 @@ const ProfileDoctorInfo = ({ userData }) => {
           <div className="profile__footer">
             {!isEditing && (
               <>
-                <InDev>  
+                <InDev>
                   <div className="profile__additionally">
                     <div className="profile__licenses">
                       <span className="profile__darkened">
@@ -185,10 +185,12 @@ const ProfileDoctorInfo = ({ userData }) => {
           </div>
           <hr className="profile__divider" />
           <div className="profile__action-button">
-            <EditPopup
-              showEditPopup={showEditPopup}
-              setShowEditPopup={setShowEditPopup}
-            />
+            {/* <EditPopup
+              showEditPopup={notifications.length > 0}
+              setShowEditPopup={() => setNotifications([])}
+              notifications={notifications}
+              setNotifications={setNotifications}
+            /> */}
             <DeletePopup
               showDeletePopup={showDeletePopup}
               setShowDeletePopup={setShowDeletePopup}

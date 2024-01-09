@@ -6,29 +6,52 @@ import MainPanel from "./mainPanel/MainPanel";
 
 import "./NavBars.scss";
 import "./root.scss";
-import ProfileServices from "../../services/ProfileServices";
+import PlasticServices from "../../services/PlasticServices";
+import { useFetching } from "../../hooks/useFetching";
+
+// import Spinner from "../spinner/Spinner";
 
 const NavBars = () => {
   const [isAsideVisible, setAsideVisible] = useState(window.innerWidth > 1440);
   const [userData, setUserData] = useState(null);
-  const userType = "client"; // Заглушка для выбора типа пользователя
+  const userType = "clinic"; // Заглушка для выбора типа пользователя
 
   const toggleAside = () => {
     setAsideVisible(!isAsideVisible);
     console.log("Active");
   };
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const userData = await PlasticServices.getUsers();
+  //       setUserData(userData);
+  //     } catch (error) {
+  //       console.error("Error fetching data:", error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, [setUserData]);
+
+  const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
+    const response = await PlasticServices.getUsers();
+    setUserData(response.data);
+    // console.log(response.data);
+    // setPage(page + 1);
+    // setTotalCount(response.headers['x-total-count']);
+  });
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const userData = await ProfileServices.getUsers();
-        setUserData(userData);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchData();
-  }, [setUserData]);
+    fetchPosts();
+  }, []);
+
+  // const error = postError ? (
+  //   <h3 className="articles-item__title" style={{ textAlign: "center" }}>
+  //     Ошибка: {postError}
+  //   </h3>
+  // ) : null;
+
+  // const spinner = isPostsLoading ? <Spinner /> : null;
 
   return (
     <div className="grid-container">
