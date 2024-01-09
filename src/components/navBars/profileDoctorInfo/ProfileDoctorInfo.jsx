@@ -13,8 +13,8 @@ import InDev from "../inDev/InDev";
 const ProfileDoctorInfo = ({ userData }) => {
   const [imageSrc, setImageSrc] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [showEditPopup, setShowEditPopup] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [notifications, setNotifications] = useState([]);
 
   const toggleEditingMode = () => {
     setIsEditing((prev) => !prev);
@@ -36,12 +36,15 @@ const ProfileDoctorInfo = ({ userData }) => {
     // Логика для отправки данных на сервер
 
     // После успешного сохранения, отображаем всплывающее окно
-    setShowEditPopup(true);
+    const newNotification = {
+      title: "Данные успешно сохранены!",
+      subtitle: "Изменено 03.01.2024 в 12:38",
+    };
+    setNotifications((prevNotifications) => [
+      ...prevNotifications,
+      newNotification,
+    ]);
     toggleEditingMode(false);
-
-    setTimeout(() => {
-      setShowEditPopup(false);
-    }, 3000);
   };
 
   const handleDelete = () => {
@@ -185,12 +188,12 @@ const ProfileDoctorInfo = ({ userData }) => {
           </div>
           <hr className="profile__divider" />
           <div className="profile__action-button">
-            {/* <EditPopup
+            <EditPopup
               showEditPopup={notifications.length > 0}
               setShowEditPopup={() => setNotifications([])}
               notifications={notifications}
               setNotifications={setNotifications}
-            /> */}
+            />
             <DeletePopup
               showDeletePopup={showDeletePopup}
               setShowDeletePopup={setShowDeletePopup}

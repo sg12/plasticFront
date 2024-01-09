@@ -1,8 +1,13 @@
-import React from 'react'
+import { useUser } from "../../../context/UserContext";
+import Table from "../../UI/table/Table"
 
 const SpecialistInfo = () => {
+  const { userType } = useUser();
   return (
-    <div>SpecialistInfo</div>
+    <div>
+      <span>Ваши специалисты</span>
+      <Table userType="clinic/specialists"/>
+    </div>
   )
 }
 

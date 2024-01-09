@@ -31,14 +31,14 @@
     opacity: 0;
   }
 
-//   &__popup:nth-child(1) {
-//     bottom: 50px;
-//     z-index: 900;
-//   }
-//   &__popup:nth-child(2)  {
-//     bottom: 40px;
-//     z-index: 900;
-//   }
+  &__popup:nth-child(1) {
+    bottom: 50px;
+    z-index: 900;
+  }
+  &__popup:nth-child(2)  {
+    bottom: 40px;
+    z-index: 900;
+  }
 
   @keyframes slideIn {
     from {

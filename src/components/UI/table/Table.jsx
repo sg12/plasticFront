@@ -63,6 +63,44 @@ const Table = ({ userType }) => {
       footer: "",
       cell: EditableCell,
     },
+    {
+      userType: "clinic/specialists", 
+      header: "№",
+      accessorKey: "actions",
+      footer: "№",
+      cell: EditableCell,
+    },
+    {
+      userType: "clinic/specialists", 
+      header: "№",
+      accessorKey: "id",
+      footer: "№",
+    },
+    {
+      userType: "clinic/specialists", 
+      header: "ФИО",
+      accessorKey: "full_name",
+      footer: "ФИО",
+    },
+    {
+      userType: "clinic/specialists", 
+      header: "Специалисты",
+      accessorKey: "specialists",
+      footer: "Специалисты",
+    },
+    {
+      userType: "clinic/specialists", 
+      header: "Статус",
+      accessorKey: "status",
+      footer: "Статус",
+    },
+    {
+      userType: "clinic/specialists", 
+      header: "",
+      accessorKey: "actions",
+      footer: "",
+      cell: EditableCell,
+    },
   ];
 
   const filteredColumns = useMemo(

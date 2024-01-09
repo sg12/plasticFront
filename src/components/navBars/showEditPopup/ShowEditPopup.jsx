@@ -18,7 +18,7 @@ const EditPopup = ({ notifications, setNotifications }) => {
 
         setTimeout(() => {
           setNotifications((prevNotifications) => prevNotifications.slice(1));
-          setShowNotifications(false);
+          // setShowNotifications(false);
         }, 500); 
       }, 3000);
 

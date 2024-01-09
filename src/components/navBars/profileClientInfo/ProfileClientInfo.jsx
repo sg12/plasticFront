@@ -37,7 +37,7 @@ const ProfileClientInfo = ({ userData }) => {
 
     // После успешного сохранения, отображаем всплывающее окно
     const newNotification = {
-      title: "Данные успешно сохране321323212",
+      title: "Данные успешно сохранены!",
       subtitle: "Изменено 03.01.2024 в 12:38",
     };
     setNotifications((prevNotifications) => [
