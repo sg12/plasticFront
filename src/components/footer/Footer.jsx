@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import './Footer.scss';
 
@@ -12,11 +12,19 @@ import whatsapp from '../../assets/icons/whatsapp.png';
 import { links } from '../header/Header';
 
 const Footer = () => {
-	const [activeLink, setActiveLink] = useState(0);
+	const [activeLink, setActiveLink] = useState(null);
 
 	const handleLinkClick = (index) => {
 		setActiveLink(index);
 	};
+
+	const location = useLocation();
+
+	useEffect(() => {
+		const currentPath = window.location.pathname;
+		const foundLinkIndex = links.findIndex((link) => link.to === currentPath);
+		setActiveLink(foundLinkIndex === -1 ? null : foundLinkIndex);
+	}, [location.pathname]);
 
 	return (
 		<section className='footer'>
@@ -39,7 +47,11 @@ const Footer = () => {
 						<nav className='footer-item__box'>
 							{links.map((link, index) => (
 								<li key={index} className='footer-item__link'>
-									<Link className={`footer-item__a ${index === activeLink ? 'footer-item__a_active' : ''}`} to={link.to} onClick={(event) => handleLinkClick(index, event)}>
+									<Link
+										className={`footer-item__a ${index === activeLink ? 'footer-item__a_active' : ''}`}
+										to={link.to}
+										onClick={() => handleLinkClick(index)}
+									>
 										{link.text}
 									</Link>
 								</li>
