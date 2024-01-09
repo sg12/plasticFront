@@ -5,7 +5,7 @@ const _apiBase = 'https://jsonplaceholder.typicode.com'
 
 export default class ProfileServices {
 
-  static async getUsers(userID = 1, userType = "users") {
+  static async getUsers(userID = 6, userType = "users") {
     try {
       const response = await fetch(`${_apiBase}/${userType}/${userID}/`);
       
