@@ -88,6 +88,10 @@
         max-width: 1136px;
         max-height: 279px;
         flex-shrink: 0;
+    }
+
+    &__point {
+        margin: 0;
         color: #000;
         text-align: justify;
         font-family: Raleway;
@@ -95,10 +99,6 @@
         font-style: normal;
         font-weight: 400;
         line-height: normal;
-    }
-
-    &__point {
-        margin: 0;
     }
 
     &__point:first-child {
