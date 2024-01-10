@@ -33,6 +33,7 @@ import ForgotPassword from "../forgotPassword/ForgotPassword";
 import NewPassword from "../newPassword/newPassword";
 import EnterPage from "../../pages/EnterPage";
 import AccountPage from "../../pages/AccountPage";
+import ArticleDetailedPage from '../../pages/ArticleDetailedPage';
 
 function App() {
   return (
@@ -71,6 +72,7 @@ function App() {
       </Routes>
     </>
   );
+					<Route path='articles/:id' element={<ArticleDetailedPage />}></Route>
 }
 
 export default App;
