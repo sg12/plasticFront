@@ -15,38 +15,68 @@ const DoctorDetailedItem = (props) => {
 				<Review />
 				<h2>{props.post.title}</h2>
 			</div>
-			<div className='doctor-detailed-item__wrapper'>
-				<div className='doctor-detailed-item__wrapper-left'>
-					<div className='doctor-detailed-item__wrapper-item'>
-						<div className='doctor-detailed-item__description'>
+			<div className='doctor-detailed-item__wrapper-first'>
+				<div className='doctor-detailed-item__wrapper-first-left'>
+					<div className='doctor-detailed-item__wrapper-first-item'>
+						<div className='doctor-detailed-item__description-first'>
 							<h3>Стаж</h3>
 							<p>{props.post.id} лет</p>
 						</div>
-						<div className='doctor-detailed-item__description'>
+						<div className='doctor-detailed-item__description-first'>
 							<h3>Категория</h3>
 							<p>Высшая</p>
 						</div>
-						<div className='doctor-detailed-item__description'>
+						<div className='doctor-detailed-item__description-first'>
 							<h3>Специализация</h3>
 							<p>Пластический хирург</p>
 						</div>
 					</div>
-					<div className='doctor-detailed-item__wrapper-item'>
-						<div className='doctor-detailed-item__description'>
+					<div className='doctor-detailed-item__wrapper-first-item'>
+						<div className='doctor-detailed-item__description-first'>
 							<h3>Лицензия</h3>
 							<p>(Добавить компонент лицензий)</p>
 						</div>
 					</div>
 				</div>
-				<div className='doctor-detailed-item__wrapper-center'>
-					<div className='doctor-detailed-item__description'>
+				<div className='doctor-detailed-item__wrapper-first-center'>
+					<div className='doctor-detailed-item__description-first'>
 						<Contacts />
 					</div>
 				</div>
-				<div className='doctor-detailed-item__wrapper-right'>
-					<div className='doctor-detailed-item__description'>
+				<div className='doctor-detailed-item__wrapper-first-right'>
+					<div className='doctor-detailed-item__description-first'>
 						<h3>Тип приема</h3>
 						<p>(Добавить компонент приема)</p>
+					</div>
+				</div>
+			</div>
+			<div className='doctor-detailed-item__wrapper-second'>
+				<div className='doctor-detailed-item__wrapper-second-left'>
+					<div className='doctor-detailed-item__description-second doctor-detailed-item__description-second_nav'>
+						<h3>Навигация</h3>
+						<p>(Добавить список)</p>
+					</div>
+				</div>
+				<div className='doctor-detailed-item__wrapper-second-right'>
+					<div className='doctor-detailed-item__description-second'>
+						<h3>Перечень услуг</h3>
+						<p>(Добавить компонент)</p>
+					</div>
+					<div className='doctor-detailed-item__description-second'>
+						<h3>Образование</h3>
+						<p>(Добавить компонент)</p>
+					</div>
+					<div className='doctor-detailed-item__description-second'>
+						<h3>Повышение квалификации</h3>
+						<p>(Добавить компонент)</p>
+					</div>
+					<div className='doctor-detailed-item__description-second'>
+						<h3>Опыт работы</h3>
+						<p>(Добавить компонент)</p>
+					</div>
+					<div className='doctor-detailed-item__description-second'>
+						<h3>Отзывы клиентов</h3>
+						<p>(Добавить компонент)</p>
 					</div>
 				</div>
 			</div>

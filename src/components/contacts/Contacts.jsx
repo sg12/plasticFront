@@ -4,7 +4,7 @@ import CallButton from '../UI/buttons/callButton/CallButton';
 
 const Contacts = () => {
 	return (
-		<div>
+		<div className='contacts'>
 			<h4>(Название клиники на данном месте):</h4>
 			<p>ул. Военная, д. 4</p>
 			<h4>ЗАПИСАТЬСЯ НА ПРИЁМ:</h4>

@@ -13,8 +13,7 @@
 		justify-content: center;
 		background: linear-gradient(225deg, #3066BE -17%, #119DA4 89%);
 		box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.40);
-		position: relative;
-		z-index: 1;
+		position: absolute;
 
 		&:hover {
 			background: linear-gradient(225deg, #4c80d4 -17%, #27c2ca 89%);
@@ -22,10 +21,10 @@
 	}
 
 	&__number {
+		white-space: nowrap;
 		padding: 15px 30px 15px 80px;
 		border-radius: 25px;
 		background: #AEECEF;
 		box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.50);
-		position: absolute;
 	}
 }
