@@ -23,6 +23,7 @@ class PlasticServices {
 		const response = await axios.get(`${_apiBase}/${userType}/${userID}/`);
 		return response;
 	}
+	
 	static async getArticle(id) {
 		const response = await axios.get(`${_apiBase}posts/${id}`);
 		return response;
