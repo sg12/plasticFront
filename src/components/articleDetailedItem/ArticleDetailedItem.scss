@@ -1,5 +1,5 @@
 
-.articles-more {
+.article-detailed-item {
     padding: 64px 110px 128px;
 
     &__link {
@@ -59,9 +59,6 @@
         opacity: 0.5;
     }
 
-    &__right {
-    }
-
     &__title {
         margin: 0;
         margin-bottom: 47px;
@@ -106,9 +103,6 @@
 
     &__point:first-child {
         margin-bottom: 24px;
-    }
-
-    &__down {
     }
 
     &__item {
