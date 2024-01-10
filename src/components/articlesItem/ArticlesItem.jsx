@@ -1,11 +1,18 @@
 import PropTypes from 'prop-types';
 
+import { useNavigate } from 'react-router-dom';
+
 import './ArticlesItem.scss';
 
 import articles1 from '../../assets/imgs/articles-1.png';
-import { Link } from 'react-router-dom';
 
 const ArticlesItem = (props) => {
+
+    const navigate = useNavigate();
+
+    const toArticlesMore = () =>{
+        navigate(`/articles/${props.post.id}`);
+    };
 
 	return (
 		<li className='articles__item articles-item'>
@@ -19,7 +26,7 @@ const ArticlesItem = (props) => {
 				<p className='articles-item__text'>
 					{props.post.body.slice(0, 300)} ...
 				</p>
-				<Link to={'/articlesMore'} className='articles-item__button'>Читать дальше</Link>
+				<button onClick={toArticlesMore} className='articles-item__button'>Читать дальше</button>
 			</div>
 		</li>
 	);
