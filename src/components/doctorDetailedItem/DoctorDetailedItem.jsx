@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 import Review from '../review/Review';
 import Contacts from '../contacts/Contacts';
+import Admission from '../admission/Admission';
 
 import doctorImg from '../../assets/imgs/doctor-1.png';
 
@@ -45,8 +46,7 @@ const DoctorDetailedItem = (props) => {
 				</div>
 				<div className='doctor-detailed-item__wrapper-first-right'>
 					<div className='doctor-detailed-item__description-first'>
-						<h3>Тип приема</h3>
-						<p>(Добавить компонент приема)</p>
+						<Admission />
 					</div>
 				</div>
 			</div>
