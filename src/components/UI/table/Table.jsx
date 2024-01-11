@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import styles from "./Table.module.scss";
 import EditableCell from "./EditableCell.jsx";
 import {
@@ -7,111 +7,61 @@ import {
   flexRender,
 } from "@tanstack/react-table";
 import DATA from "./data.js";
+import Checkbox from "../checkbox/Checkbox.jsx";
+import ServicesColumns from "./columns/ServiceColumns.jsx";
+import ClinicSpecialistsColumns from "./columns/ClinicSpecialistsColumns.jsx";
 
 const Table = ({ userType }) => {
   const data = useMemo(() => DATA, []);
-  const columns = [
-    // Doctor Column
-    {
-      userType: "doctor",
-      header: "Услуги",
-      accessorKey: "services",
-      footer: "Services",
-    },
-    {
-      userType: "doctor",
-      header: "Стоимость",
-      accessorKey: "costs",
-      footer: "Costs",
-    },
-    {
-      userType: "doctor",
-      header: "Статус",
-      accessorKey: "status",
-      footer: "Status",
-    },
-    {
-      userType: "doctor",
-      header: "",
-      accessorKey: "actions",
-      footer: "",
-      cell: EditableCell,
-    },
-    // Clinic Column
-    {
-      userType: "clinic",
-      header: "Услуги",
-      accessorKey: "services",
-      footer: "Услуги",
-    },
-    {
-      userType: "clinic",
-      header: "Стоимость",
-      accessorKey: "costs",
-      footer: "Стоимость",
-    },
-    {
-      userType: "clinic",
-      header: "Статус",
-      accessorKey: "status",
-      footer: "Статус",
-    },
-    {
-      userType: "clinic",
-      header: "",
-      accessorKey: "actions",
-      footer: "",
-      cell: EditableCell,
-    },
-    {
-      userType: "clinic/specialists", 
-      header: "№",
-      accessorKey: "actions",
-      footer: "№",
-      cell: EditableCell,
-    },
-    {
-      userType: "clinic/specialists", 
-      header: "№",
-      accessorKey: "id",
-      footer: "№",
-    },
-    {
-      userType: "clinic/specialists", 
-      header: "ФИО",
-      accessorKey: "full_name",
-      footer: "ФИО",
-    },
-    {
-      userType: "clinic/specialists", 
-      header: "Специалисты",
-      accessorKey: "specialists",
-      footer: "Специалисты",
-    },
-    {
-      userType: "clinic/specialists", 
-      header: "Статус",
-      accessorKey: "status",
-      footer: "Статус",
-    },
-    {
-      userType: "clinic/specialists", 
-      header: "",
-      accessorKey: "actions",
-      footer: "",
-      cell: EditableCell,
-    },
-  ];
+  const [rowSelection, setRowSelection] = useState({});
+  let table;
 
-  const filteredColumns = useMemo(
-    () => columns.filter((column) => column.userType === userType),
-    [columns, userType]
-  );
+  const isAnyRowSelected = () => {
+    return Object.values(rowSelection).some((isSelected) => isSelected);
+  };
 
-  const table = useReactTable({
+  const getHeaderCheckboxProps = () => {
+    const allRowsSelected = table.getIsAllRowsSelected();
+    return {
+      checked: isAnyRowSelected(),
+      indeterminate: !allRowsSelected && isAnyRowSelected(),
+      onChange: handleHeaderCheckboxChange,
+    };
+  };
+
+  const handleHeaderCheckboxChange = () => {
+    const allRowsSelected = table.getIsAllRowsSelected();
+    const newSelection = {};
+
+    table.getRowModel().rows.forEach((row) => {
+      newSelection[row.id] = !allRowsSelected;
+    });
+
+    setRowSelection(newSelection);
+  };
+
+  const handleRowCheckboxChange = (row) => {
+    const newSelection = { ...rowSelection, [row.id]: !rowSelection[row.id] };
+    setRowSelection(newSelection);
+  };
+
+  let columns;
+  if (userType === "clinic/specialists") {
+    columns = ClinicSpecialistsColumns({ rowSelection, handleRowCheckboxChange });
+  } else {
+    columns = ServicesColumns({ rowSelection, handleRowCheckboxChange });
+  }
+
+  table = useReactTable({
     data,
-    columns: filteredColumns,
+    columns,
+    state: {
+      rowSelection,
+    },
+    enableRowSelection: true,
+    onRowSelectionChange: setRowSelection,
     getCoreRowModel: getCoreRowModel(),
+    debugTable: true,
   });
 
   return (
@@ -122,9 +72,13 @@ const Table = ({ userType }) => {
             <tr className={styles.tr} key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
                 <th className={styles.th} key={header.id}>
-                  {flexRender(
-                    header.column.columnDef.header,
-                    header.getContext()
+                  {header.column.id === "select" ? (
+                    <Checkbox {...getHeaderCheckboxProps()} />
+                  ) : (
+                    flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )
                   )}
                 </th>
               ))}
@@ -137,27 +91,21 @@ const Table = ({ userType }) => {
             <tr className={styles.trData} key={row.id}>
               {row.getVisibleCells().map((cell) => (
                 <td className={styles.td} key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  {cell.column.id === "select" ? (
+                    <Checkbox
+                      checked={rowSelection[row.id]}
+                      disabled={!row.getCanSelect()}
+                      indeterminate={row.getIsSomeSelected()}
+                      onChange={() => handleRowCheckboxChange(row)}
+                    />
+                  ) : (
+                    flexRender(cell.column.columnDef.cell, cell.getContext())
+                  )}
                 </td>
               ))}
             </tr>
           ))}
         </tbody>
-
-        {/* <tfoot className={styles.tfoot}>
-          {table.getFooterGroups().map((footerGroup) => (
-            <tr className={styles.tr} key={footerGroup.id}>
-              {footerGroup.headers.map((header) => (
-                <th className={styles.th} key={header.id}>
-                  {flexRender(
-                    header.column.columnDef.header,
-                    header.getContext()
-                  )}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </tfoot> */}
       </table>
     </div>
   );

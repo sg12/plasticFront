@@ -6,7 +6,7 @@ import desc from "../../../assets/imgs/desc.svg";
 import "../profileUser/ProfileUser.scss";
 import EditUser from "../editUser/EditUser";
 
-import EditPopup from "../showEditPopup/ShowEditPopup";
+import Toast from "../../UI/toast/Toast.jsx";
 import DeletePopup from "../showDeletePopup/ShowDeletePopup";
 
 
@@ -159,7 +159,7 @@ const ProfileClientInfo = ({ userData }) => {
             )}
             <hr className="profile__divider" />
             <div className="profile__action-button">
-              <EditPopup
+              <Toast
                 showEditPopup={notifications.length > 0}
                 setShowEditPopup={() => setNotifications([])}
                 notifications={notifications}

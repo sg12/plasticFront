@@ -6,7 +6,7 @@ import desc from "../../../assets/imgs/desc.svg";
 import "../profileUser/ProfileUser.scss";
 import EditUser from "../editUser/EditUser";
 
-import EditPopup from "../showEditPopup/ShowEditPopup";
+import EditPopup from "../../UI/toast/Toast";
 import DeletePopup from "../showDeletePopup/ShowDeletePopup";
 import InDev from "../inDev/InDev";
 

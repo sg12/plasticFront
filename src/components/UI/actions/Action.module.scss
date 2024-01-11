@@ -1,0 +1,25 @@
+.action {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+
+  .button {
+    &__refresh,
+    &__filter,
+    &__more {
+      cursor: pointer;
+      background: none;
+      border-radius: 4px;
+      border: none;
+      padding: 4px;
+      transition: background 0.2s ease-in-out;
+      svg {
+        display: flex;
+      }
+
+      &:hover {
+        background: #eaf0f8;
+      }
+    }
+  }
+}

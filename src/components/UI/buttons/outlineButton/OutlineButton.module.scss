@@ -1,14 +1,13 @@
 .outlineButton {
 	display: flex;
-	height: 64px;
-	min-height: 64px;
-	padding: 0px 32px;
+	min-height: 32px;
+	padding: 0px 16px;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	gap: 4px;
-	border-radius: 16px;
-	border: 2px solid #3066be;
+	border-radius: 8px;
+	border: 1px solid #3066be;
 	cursor: pointer;
 	background: none;
 	transition: all 0.2s ease-in-out;
@@ -16,7 +15,7 @@
 	/* Raleway 24px,regular (400) */
 	color: #3066be;
 	font-family: Raleway;
-	font-size: 24px;
+	font-size: 16px;
 	font-style: normal;
 	font-weight: 400;
 	line-height: normal;

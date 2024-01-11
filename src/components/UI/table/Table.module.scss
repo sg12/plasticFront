@@ -15,19 +15,19 @@
 
 .trData {
   &:nth-child(odd) {
-    background-color: #eaf0f8;
-    
+    background: #eaf0f8;
   }
 }
 
 .th {
   text-align: left;
-  opacity: 0.5;
+  // opacity: 0.5;
   font-weight: 400;
   padding: 16px;
 }
 
 .td {
+  width: auto;
   padding: 16px;
   &:last-child {
     width: 24px;
