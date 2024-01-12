@@ -14,8 +14,18 @@ class PlasticServices {
 		return response;
 	}
 
+	static async getClinic(id) {
+		const response = await axios.get(`${_apiBase}posts/${id}`);
+		return response;
+	}
+
 	static async getAllDoctors(page = 1) {
 		const response = await axios.get(`${_apiBase}posts?_limit=6&_page=${page}`);
+		return response;
+	}
+
+	static async getDoctor(id) {
+		const response = await axios.get(`${_apiBase}posts/${id}`);
 		return response;
 	}
 
@@ -23,7 +33,7 @@ class PlasticServices {
 		const response = await axios.get(`${_apiBase}/${userType}/${userID}/`);
 		return response;
 	}
-	
+
 	static async getArticle(id) {
 		const response = await axios.get(`${_apiBase}posts/${id}`);
 		return response;

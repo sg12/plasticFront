@@ -1,0 +1,17 @@
+.admission {
+	&__box {
+		display: flex;
+	}
+
+	&__item {
+		padding: 10px;
+		text-align: center;
+		border-radius: 10px;
+		border: 2px solid #119DA4;
+		margin-right: 20px;
+
+		&:last-child {
+			margin-right: 0;
+		}
+	}
+}

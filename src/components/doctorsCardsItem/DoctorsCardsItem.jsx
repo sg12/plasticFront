@@ -2,6 +2,8 @@ import './DoctorsCardsItem.scss';
 
 import PropTypes from 'prop-types';
 
+import { useNavigate } from 'react-router-dom';
+
 import Review from '../review/Review';
 import Contacts from '../contacts/Contacts';
 import LikeButton from '../UI/buttons/likeButton/LikeButton';
@@ -9,6 +11,13 @@ import LikeButton from '../UI/buttons/likeButton/LikeButton';
 import doctorImg from '../../assets/imgs/doctor-1.png';
 
 const DoctorsCardsItem = (props) => {
+
+	const navigate = useNavigate();
+
+	const toDetailedPage = () => {
+		navigate(`/doctors/${props.post.id}`);
+	};
+
 	return (
 		<li className='doctors-cards-item'>
 			<div className='doctors-cards-item__wrapper'>
@@ -20,7 +29,7 @@ const DoctorsCardsItem = (props) => {
 				</div>
 				<div className='doctors-cards-item__wrapper-center'>
 					<div className='doctors-cards-item__wrapper-center-box'>
-						<h3>{props.post.title}</h3>
+						<button onClick={toDetailedPage}>{props.post.title}</button>
 						<p>{props.post.id}</p>
 						<h4>Услуги</h4>
 						<p>{props.post.body}</p>
