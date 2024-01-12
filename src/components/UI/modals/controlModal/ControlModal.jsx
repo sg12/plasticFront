@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./ControlModal.module.scss";
 
 const ControlModal = ({
@@ -9,6 +9,10 @@ const ControlModal = ({
   setIsControlOpen,
 }) => {
   const [modalAnimation, setModalAnimation] = useState("open");
+
+  useEffect(() => {
+    setModalAnimation(isControlOpen ? "open" : "close");
+  }, [isControlOpen]);
 
   const trash = (
     <button
@@ -73,6 +77,15 @@ const ControlModal = ({
     </button>
   );
   
+  const modalContent = (
+    <div className={`${styles.modalContent} ${styles[modalAnimation]}`}>
+      <div className={styles.button}>
+        {trash}
+        {pen}
+        {save}
+      </div>
+    </div>
+  );
 
   return (
     <div className={styles.modalBackdrop}>

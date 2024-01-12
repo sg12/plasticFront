@@ -14,12 +14,7 @@ import { useFetching } from "../../hooks/useFetching";
 const NavBars = () => {
   const [isAsideVisible, setAsideVisible] = useState(window.innerWidth > 1440);
   const [userData, setUserData] = useState(null);
-  const userType = "clinic"; // Заглушка для выбора типа пользователя
-
-  const toggleAside = () => {
-    setAsideVisible(!isAsideVisible);
-    console.log("Active");
-  };
+  const userType = "client"; // Заглушка для выбора типа пользователя
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -56,7 +51,7 @@ const NavBars = () => {
   return (
     <div className="grid-container">
       <header className="header-grid">
-        <HeaderPanel userData={userData} onToggleAside={toggleAside} />
+        <HeaderPanel userData={userData} onToggleAside={() => setAsideVisible(!isAsideVisible)} />
       </header>
       {isAsideVisible && (
         <aside className="aside-grid">

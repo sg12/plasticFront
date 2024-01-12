@@ -20,7 +20,12 @@ const AsidePanel = ({ userType }) => {
         return [
           { to: "profile", text: "Профиль (Клиент)", icon: profile },
           { to: "favourites", text: "Избранное", icon: favourites },
-          { to: "appointment", text: "Записи на приём", icon: appointment, disabled: true},
+          {
+            to: "appointment",
+            text: "Записи на приём",
+            icon: appointment,
+            disabled: true,
+          },
           { to: "reviews", text: "Отзывы", icon: reviews },
           { to: "settings", text: "Настройки", icon: setting },
           { to: "help", text: "Помощь", icon: help },
@@ -31,7 +36,12 @@ const AsidePanel = ({ userType }) => {
           { to: "profile", text: "Профиль (Доктор)", icon: profile },
           { to: "clinic", text: "Клиника", icon: specialist },
           { to: "service", text: "Услуги", icon: services },
-          { to: "appointment", text: "Записи на приём", icon: appointment, disabled: true },
+          {
+            to: "appointment",
+            text: "Записи на приём",
+            icon: appointment,
+            disabled: true,
+          },
           { to: "reviews", text: "Отзывы пациентов", icon: reviews },
           { to: "settings", text: "Настройки", icon: setting },
           { to: "help", text: "Помощь", icon: help },
@@ -42,14 +52,26 @@ const AsidePanel = ({ userType }) => {
           { to: "profile", text: "Профиль (Клиника)", icon: profile },
           { to: "specialist", text: "Специалисты", icon: specialist },
           { to: "service", text: "Услуги", icon: services },
-          { to: "appointment", text: "Записи на приём", icon: appointment, disabled: true },
+          {
+            to: "appointment",
+            text: "Записи на приём",
+            icon: appointment,
+            disabled: true,
+          },
           { to: "reviews", text: "Отзывы пациентов", icon: reviews },
           { to: "settings", text: "Настройки", icon: setting },
           { to: "help", text: "Помощь", icon: help },
           { to: "support", text: "Поддержка", icon: support },
         ];
       default:
-        return [{ to: "undefined", text: "Неизвестный тип пользователя", icon: profile, disabled: true }];
+        return [
+          {
+            to: "undefined",
+            text: "Неизвестный тип пользователя",
+            icon: profile,
+            disabled: true,
+          },
+        ];
     }
   };
   const linksData = getLinkData();
@@ -58,15 +80,22 @@ const AsidePanel = ({ userType }) => {
     <aside className="aside-panel">
       {linksData.map((link, index) => (
         <React.Fragment key={index}>
-          <NavLink to={link.to} className={`aside-panel__link ${link.disabled ? "disabled" : ""}`}>
+          <NavLink
+            to={link.to}
+            className={`aside-panel__link ${link.disabled ? "disabled" : ""}`}
+          >
             <div className="aside-panel__icon">
               <img src={link.icon} alt="icon" />
             </div>
             <span className="aside-panel__text">{link.text}</span>
           </NavLink>
-          {(index + 2) % 3 === 0 && index !== linksData.length - 1 && (
-            <hr className="aside-panel__divider" />
-          )}
+          {((userType === "client" &&
+            (index === 1 || index === 3 || (index + 1) === 0)) ||
+            (userType !== "client" &&
+              (index === 1 || (index + 2) % 3 === 0))) &&
+            index !== linksData.length - 1 && (
+              <hr className="aside-panel__divider" />
+            )}
         </React.Fragment>
       ))}
     </aside>
