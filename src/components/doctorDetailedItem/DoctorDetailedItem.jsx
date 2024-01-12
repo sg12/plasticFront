@@ -34,7 +34,7 @@ const DoctorDetailedItem = (props) => {
 					</div>
 					<div className='doctor-detailed-item__wrapper-first-item'>
 						<div className='doctor-detailed-item__description-first'>
-							<h3>Лицензия</h3>
+							<h3>ЛИЦЕНЗИЯ</h3>
 							<p>(Добавить компонент лицензий)</p>
 						</div>
 					</div>
@@ -49,6 +49,10 @@ const DoctorDetailedItem = (props) => {
 						<Admission />
 					</div>
 				</div>
+			</div>
+			<div className='doctor-detailed-item__description'>
+				<h3>СПЕЦИАЛИЗАЦИЯ</h3>
+				<p>{props.post.body}</p>
 			</div>
 			<div className='doctor-detailed-item__wrapper-second'>
 				<div className='doctor-detailed-item__wrapper-second-left'>
@@ -88,6 +92,7 @@ DoctorDetailedItem.propTypes = {
 	post: PropTypes.shape({
 		id: PropTypes.number.isRequired,
 		title: PropTypes.string.isRequired,
+		body: PropTypes.string.isRequired,
 	}).isRequired,
 };
 

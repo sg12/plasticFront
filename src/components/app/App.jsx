@@ -9,6 +9,7 @@ import ServicesPage from '../../pages/ServicesPage';
 import DoctorsPage from '../../pages/DoctorsPage';
 import DoctorPage from '../../pages/DoctorPage';
 import ClinicsPage from '../../pages/ClinicsPage';
+import ClinicPage from '../../pages/ClinicPage';
 // import StocksPage from '../../pages/StocksPage';
 import ArticlesPage from '../../pages/ArticlesPage';
 import NotFound from '../notFound/NotFound';
@@ -34,6 +35,7 @@ function App() {
 					<Route path='doctors' element={<DoctorsPage />}></Route>
 					<Route path='doctors/:id' element={<DoctorPage />}></Route>
 					<Route path='clinics' element={<ClinicsPage />}></Route>
+					<Route path='clinics/:id' element={<ClinicPage />}></Route>
 					{/* <Route path='stocks' element={<StocksPage />}></Route> */}
 					<Route path='articles' element={<ArticlesPage />}></Route>
 					<Route path='*' element={<NotFound />}></Route>

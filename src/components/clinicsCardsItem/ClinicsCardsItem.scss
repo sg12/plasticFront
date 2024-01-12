@@ -32,6 +32,15 @@
 		width: 700px;
 	}
 
+	&__wrapper-center-box {
+		>button {
+			background: none;
+			border: none;
+			padding: 0;
+			cursor: pointer;
+		}
+	}
+
 	&__wrapper-right {
 		width: 400px;
 	}

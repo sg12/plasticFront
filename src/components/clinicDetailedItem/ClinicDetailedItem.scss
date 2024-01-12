@@ -1,4 +1,4 @@
-.doctor-detailed-item {
+.clinic-detailed-item {
 
 	&__box-title {
 		display: flex;
@@ -40,6 +40,20 @@
 		padding: 20px;
 		background: #ffffff;
 		border-radius: 20px;
+	}
+
+	&__description-first-box {
+		display: flex;
+		align-items: center;
+		margin-bottom: 30px;
+	}
+
+	&__description-first-item {
+		margin-right: 20px;
+
+		&:last-child {
+			margin-right: 0;
+		}
 	}
 
 	&__description {
