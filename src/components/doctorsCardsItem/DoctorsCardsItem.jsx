@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 
 import Review from '../review/Review';
+import Admission from '../admission/Admission';
 import Contacts from '../contacts/Contacts';
 import LikeButton from '../UI/buttons/likeButton/LikeButton';
 
@@ -33,6 +34,7 @@ const DoctorsCardsItem = (props) => {
 						<p>{props.post.id}</p>
 						<h4>Услуги</h4>
 						<p>{props.post.body}</p>
+						<Admission />
 					</div>
 				</div>
 				<div className='doctors-cards-item__wrapper-right'>

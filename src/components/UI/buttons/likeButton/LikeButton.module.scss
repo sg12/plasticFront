@@ -1,17 +1,21 @@
 .likeBtn {
 	width: 60px;
 	height: 60px;
-	border: none;
+	border: solid 2px black;
+	border-radius: 50px;
 	cursor: pointer;
-	background: url(../../../../assets/icons/like.png);
-	background-repeat: no-repeat;
-	background-position: center;
-	background-size: contain;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: white;
 
 	&:hover {
-		background: url(../../../../assets/icons/like-active.png);
-		background-repeat: no-repeat;
-		background-position: center;
-		background-size: contain;
+		.likeBtn__img {
+			filter: invert(43%) sepia(45%) saturate(4890%) hue-rotate(340deg) brightness(101%) contrast(100%);
+		}
+	}
+
+	&__active {
+		background: #F44336;
 	}
 }
