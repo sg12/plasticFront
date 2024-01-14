@@ -6,9 +6,9 @@ import desc from "../../../assets/imgs/desc.svg";
 import "../profileUser/ProfileUser.scss";
 import EditUser from "../editUser/EditUser";
 
-import EditPopup from "../../UI/toast/Toast";
 import DeletePopup from "../showDeletePopup/ShowDeletePopup";
 import InDev from "../inDev/InDev";
+import Toast from "../../UI/toast/Toast";
 
 const ProfileClinicInfo = ({ userData }) => {
   const [imageSrc, setImageSrc] = useState(null);
@@ -142,7 +142,7 @@ const ProfileClinicInfo = ({ userData }) => {
           </div>
           <hr className="profile__divider" />
           <div className="profile__action-button">
-            <EditPopup
+            <Toast
               showEditPopup={notifications.length > 0}
               setShowEditPopup={() => setNotifications([])}
               notifications={notifications}

@@ -8,35 +8,6 @@
     font-weight: 700;
   }
 
-  &__info,
-  &__email,
-  &__address,
-  &__name,
-  &__date,
-  &__tel {
-    label {
-      font-size: 12px;
-      margin-bottom: 4px;
-    }
-    input,
-    select {
-      border: 2px solid #87cdd1;
-      border-radius: 8px;
-      width: 500px;
-      height: 64px;
-      padding: 16px;
-      color: black;
-
-      option {
-        border-radius: 8px;
-      }
-
-      &::placeholder {
-        color: black;
-      }
-    }
-  }
-
   &__info {
     display: flex;
     width: auto;
@@ -44,33 +15,8 @@
     align-content: flex-start;
     gap: 16px var(--CornerRadius-r16, 16px);
     flex-wrap: wrap;
-    margin-bottom: 32px;
   }
 
-  &__email {
-    display: flex;
-    flex-direction: column;
-  }
-  &__gender {
-    display: flex;
-    flex-direction: column;
-  }
-  &__address {
-    display: flex;
-    flex-direction: column;
-  }
-  &__name {
-    display: flex;
-    flex-direction: column;
-  }
-  &__date {
-    display: flex;
-    flex-direction: column;
-  }
-  &__tel {
-    display: flex;
-    flex-direction: column;
-  }
   &__checkbox {
     display: flex;
     flex-direction: column;
@@ -85,11 +31,11 @@
     }
 
     &-politicy {
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-        border: 2px solid #3066be;
-        background: #1758c2;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 2px solid #3066be;
+      background: #1758c2;
     }
     &-text {
       font-size: 16px;

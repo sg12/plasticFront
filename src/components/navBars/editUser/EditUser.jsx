@@ -1,92 +1,117 @@
+import { useState } from "react";
+import TextInput from "../../UI/inputs/textInput/TextInput";
+import Select from "../../UI/selects/select/Select";
 import "./EditUser.scss";
+import Checkbox from "../../UI/inputs/checkbox/Checkbox";
 
-const EditUser = ({ userData }) => {
+const EditUser = ({ userData, onSave, onInputChange, onCheckboxChange }) => {
+  const [selectedGender, setSelectedGender] = useState("");
+  const [politicy1Checked, setPoliticy1Checked] = useState(false);
+  const [politicy2Checked, setPoliticy2Checked] = useState(false);
+
+  const genderOptions = [
+    { label: "Мужской", value: "male" },
+    { label: "Женский", value: "female" },
+  ];
+
+  // const handleSelectChange = (e) => {
+  //   setSelectedGender(e.target.value), console.log("Gender:", e.target.value);
+  // };
+
+  const handleCheckboxChange = (checkboxName, isChecked) => {
+    // Обработка изменений состояния чекбокса
+    if (checkboxName === "Check 1") {
+      setPoliticy1Checked(isChecked);
+    } else if (checkboxName === "Check 2") {
+      setPoliticy2Checked(isChecked);
+    }
+  };
+
   return (
     <div className="edit">
       <span className="edit__title">Персональные данные</span>
       <div className="edit__info">
-        <form className="edit__email">
-          <label htmlFor="email">Email</label>
-          <input
-            autoComplete="none"
-            type="email"
-            name=""
-            id="email"
-            placeholder={userData.email || "Неизвестно"}
-          />
-        </form>
-        <form className="edit__gender">
-          <label htmlFor="gender">Пол</label>
-          <select name="" id="gender">
-            <option value="">Мужской</option>
-            <option value="">Женский</option>
-          </select>
-        </form>
-        <form className="edit__address">
-          <label htmlFor="address">Адрес</label>
-          <input
-            autoComplete="none"
-            type="text"
-            name=""
-            id="address"
-            placeholder={userData.address.suite || "Неизвестно"}
-          />
-        </form>
-        <form className="edit__name">
-          <label htmlFor="name">ФИО</label>
-          <input
-            autoComplete="none"
-            type="text"
-            name=""
-            id="name"
-            placeholder={userData.username || "Неизвестно"}
-          />
-        </form>
-        <form className="edit__date">
-          <label htmlFor="date">Дата рождения</label>
-          <input
-            autoComplete="none"
-            type="date"
-            name=""
-            id="date"
-            placeholder={userData.birthdate || "Неизвестно"}
-          />
-        </form>
-        <form className="edit__tel">
-          <label htmlFor="tel">Телефон</label>
-          <input
-            autoComplete="none"
-            type="tel"
-            name=""
-            id="tel"
-            placeholder={userData.phone || "Неизвестно"}
-          />
-        </form>
+        <TextInput
+          htmlFor="email"
+          id="email"
+          type="email"
+          name="email"
+          userData={userData?.email || "Неизвестно"}
+          onChange={(e) => onInputChange("email", e.target.value)}
+        >
+          Email
+        </TextInput>
+        <TextInput
+          htmlFor="text"
+          id="text"
+          type="text"
+          name="address"
+          userData={userData?.address.street || "Неизвестно"}
+          onChange={(e) => onInputChange("address", e.target.value)}
+        >
+          Адрес
+        </TextInput>
+        <TextInput
+          htmlFor="text"
+          id="text"
+          type="text"
+          name="name"
+          userData={userData?.name || "Неизвестно"}
+          onChange={(e) => onInputChange("name", e.target.value)}
+        >
+          ФИО
+        </TextInput>
+        <TextInput
+          htmlFor="date"
+          id="date"
+          type="date"
+          name="birthday"
+          userData={userData?.birthday || "Неизвестно"}
+          onChange={(e) => onInputChange("birthday", e.target.value)}
+        >
+          Дата рождения
+        </TextInput>
+        <TextInput
+          htmlFor="tel"
+          id="tel"
+          type="tel"
+          name="phone"
+          userData={userData?.phone || "Неизвестно"}
+          onChange={(e) => onInputChange("phone", e.target.value)}
+        >
+          Телефон
+        </TextInput>
+        <Select
+          htmlFor="gender"
+          id="gender"
+          name="gender"
+          value={selectedGender}
+          onChange={(e) => onInputChange("gender", e.target.value)}
+          options={genderOptions}
+        >
+          Пол
+        </Select>
       </div>
       <span className="edit__title">Согласие пользователя</span>
       <div className="edit__checkbox">
-        <div className="edit__checkbox-p1">
-          <input
-            className="edit__checkbox-politicy"
-            type="checkbox"
-            name="politicy"
-            id=""
-          />
-          <span className="edit__checkbox-text">
-            Пользователь ознакомлен с Политикой Конфиденциальности
-          </span>
-        </div>
-        <div className="edit__checkbox-p2">
-          <input
-            className="edit__checkbox-politicy"
-            type="checkbox"
-            name="politicy"
-            id=""
-          />
-          <span className="edit__checkbox-text">
-            Пользователь даёт Согласие на обработку персональных данных
-          </span>
-        </div>
+        <Checkbox
+          htmlFor="politicy1"
+          id="politicy1"
+          name="politicy1"
+          checked={politicy1Checked}
+          onChange={(e) => handleCheckboxChange("Check 1", e.target.checked)}
+        >
+          Пользователь ознакомлен с Политикой Конфиденциальности
+        </Checkbox>
+        <Checkbox
+          htmlFor="politicy1"
+          id="politicy1"
+          name="politicy1"
+          checked={politicy2Checked}
+          onChange={(e) => handleCheckboxChange("Check 2", e.target.checked)}
+        >
+          Пользователь даёт Согласие на обработку персональных данных
+        </Checkbox>
       </div>
     </div>
   );

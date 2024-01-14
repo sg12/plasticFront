@@ -9,12 +9,22 @@ import EditUser from "../editUser/EditUser";
 import Toast from "../../UI/toast/Toast.jsx";
 import DeletePopup from "../showDeletePopup/ShowDeletePopup";
 
-
 const ProfileClientInfo = ({ userData }) => {
   const [imageSrc, setImageSrc] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [notifications, setNotifications] = useState([]);
+
+  const [editedData, setEditedData] = useState({
+    email: userData?.email || "",
+    address: userData?.address.street || "",
+    name: userData?.name || "",
+    birthday: userData?.birthdate || "",
+    phone: userData?.phone || "",
+    gender: userData?.gender || "",
+    politicy1: userData?.politicy1 || "",
+    politicy2: userData?.politicy2 || "",
+  });
 
   const toggleEditingMode = () => {
     setIsEditing((prev) => !prev);
@@ -34,7 +44,7 @@ const ProfileClientInfo = ({ userData }) => {
 
   const handleSave = () => {
     // Логика для отправки данных на сервер
-
+    console.log("Данные успешно сохранены:", editedData);
     // После успешного сохранения, отображаем всплывающее окно
     const newNotification = {
       title: "Данные успешно сохранены!",
@@ -47,11 +57,21 @@ const ProfileClientInfo = ({ userData }) => {
     toggleEditingMode(false);
   };
 
+  const handleInputChange = (fieldName, value) => {
+    setEditedData((prevData) => ({
+      ...prevData,
+      [fieldName]: value,
+    }));
+  };
+
   const handleDelete = () => {
     // Логика для отправки данных на сервер
 
     setShowDeletePopup(true);
   };
+
+
+
 
   return (
     <div className="profile">
@@ -133,7 +153,12 @@ const ProfileClientInfo = ({ userData }) => {
           )}
 
           {/* EditUser */}
-          {isEditing && <EditUser userData={userData} />}
+          {isEditing && (
+            <EditUser
+              userData={userData}
+              onInputChange={handleInputChange}
+            />
+          )}
 
           {/* FooterInfo */}
           <div className="profile__footer">
@@ -157,50 +182,46 @@ const ProfileClientInfo = ({ userData }) => {
                 </div>
               </>
             )}
-            <hr className="profile__divider" />
-            <div className="profile__action-button">
-              <Toast
-                showEditPopup={notifications.length > 0}
-                setShowEditPopup={() => setNotifications([])}
-                notifications={notifications}
-                setNotifications={setNotifications}
-              />
-              <DeletePopup
-                showDeletePopup={showDeletePopup}
-                setShowDeletePopup={setShowDeletePopup}
-              />
-              {isEditing ? (
-                <>
-                  <button type="button" className="save" onClick={handleSave}>
-                    Сохранить
-                  </button>
-                  <button
-                    type="button"
-                    className="cancel"
-                    onClick={toggleEditingMode}
-                  >
-                    Отмена
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button
-                    type="button"
-                    className="edit"
-                    onClick={toggleEditingMode}
-                  >
-                    Редактировать профиль
-                  </button>
-                  <button
-                    type="button"
-                    className="delete"
-                    onClick={handleDelete}
-                  >
-                    Удалить учетную запись
-                  </button>
-                </>
-              )}
-            </div>
+          </div>
+          <hr className="profile__divider" />
+          <div className="profile__action-button">
+            <Toast
+              showEditPopup={notifications.length > 1}
+              setShowEditPopup={() => setNotifications([])}
+              notifications={notifications}
+              setNotifications={setNotifications}
+            />
+            <DeletePopup
+              showDeletePopup={showDeletePopup}
+              setShowDeletePopup={setShowDeletePopup}
+            />
+            {isEditing ? (
+              <>
+                <button type="button" className="save" onClick={handleSave}>
+                  Сохранить
+                </button>
+                <button
+                  type="button"
+                  className="cancel"
+                  onClick={toggleEditingMode}
+                >
+                  Отмена
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  type="button"
+                  className="edit"
+                  onClick={toggleEditingMode}
+                >
+                  Редактировать профиль
+                </button>
+                <button type="button" className="delete" onClick={handleDelete}>
+                  Удалить учетную запись
+                </button>
+              </>
+            )}
           </div>
         </>
       )}

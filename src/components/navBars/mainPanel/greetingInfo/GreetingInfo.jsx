@@ -1,16 +1,37 @@
 import { Link } from "react-router-dom";
 import "./GreetingInfo.scss";
 import { useUser } from "../../../../context/UserContext";
+import { useEffect, useState } from "react";
 
 const GreetingInfo = () => {
   const { userData, userType } = useUser();
-  console.log(userData, userType);
+  const [time, setTime] = useState(new Date());
+  // console.log(time);
+
+  // const mockHour = 11;
+  // useEffect(() => {
+  //   const updatedTime = new Date(time);
+  //   updatedTime.setHours(mockHour);
+  //   setTime(updatedTime);
+  // }, []);
+
+  const currentHour = time.getHours();
+  const greeting =
+    currentHour >= 6 && currentHour < 12
+      ? "Доброе утро"
+      : currentHour >= 12 && currentHour < 18
+      ? "Добрый день"
+      : currentHour >= 18 && currentHour < 24
+      ? "Добрый вечер"
+      : "Доброй ночи";
+
+  // console.log(currentHour);
+
   return (
     <div className="greeting">
       <span className="greeting__title">
-        Добро пожаловать, {userData?.name}
+        {greeting}, {userData?.name || "Неизвестно"}
       </span>
-      {/* <span className="greeting__subtitle">Личный кабинет предоставляет универсальный доступ к вашим услугам, отзывам и т.д.</span> */}
       <Link to="/account/profile" className="greeting__link">
         Перейти в профиль
       </Link>
