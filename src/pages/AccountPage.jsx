@@ -1,5 +1,6 @@
 // import { useAuth } from "../context/AuthContext";
 // import { Navigate } from "react-router-dom";
+import { useEffect } from "react";
 import NavBars from "../components/navBars/NavBars";
 
 const AccountPage = () => {
@@ -12,6 +13,12 @@ const AccountPage = () => {
   //     </>
   //   );
   // }
+
+  useEffect(() => {
+    document.body.style.background = "#f2f2f2";
+    return () => (document.body.style.background = "");
+  }, []);
+
   return (
     <>
       <NavBars />
