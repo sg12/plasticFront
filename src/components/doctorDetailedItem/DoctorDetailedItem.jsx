@@ -1,14 +1,22 @@
 import './DoctorDetailedItem.scss';
 
+import { useState } from 'react';
+
 import PropTypes from 'prop-types';
 
+import CenterModal from '../UI/modals/centerModal/CenterModal';
 import Review from '../review/Review';
 import Contacts from '../contacts/Contacts';
 import Admission from '../admission/Admission';
 
 import doctorImg from '../../assets/imgs/doctor-1.png';
+import licenseImg from '../../assets/imgs/license.png';
+import licenseBigImg from '../../assets/imgs/license-big.png';
 
 const DoctorDetailedItem = (props) => {
+	const [modal, setModal] = useState(false);
+	const [modal2, setModal2] = useState(false);
+
 	return (
 		<div className='doctor-detailed-item'>
 			<div className='doctor-detailed-item__box-title'>
@@ -34,9 +42,36 @@ const DoctorDetailedItem = (props) => {
 					</div>
 					<div className='doctor-detailed-item__wrapper-first-item'>
 						<div className='doctor-detailed-item__description-first'>
-							<h3>ЛИЦЕНЗИЯ</h3>
-							<p>(Добавить компонент лицензий)</p>
+							<div className='doctor-detailed-item__flex'>
+								<div>
+									<h3>ЛИЦЕНЗИЯ</h3>
+									<img className='doctor-detailed-item__license-img' src={licenseImg} alt="Лицензия" onClick={() => setModal2(true)} />
+									<img className='doctor-detailed-item__license-img' src={licenseImg} alt="Лицензия" onClick={() => setModal2(true)} />
+									<img className='doctor-detailed-item__license-img' src={licenseImg} alt="Лицензия" onClick={() => setModal2(true)} />
+									<img className='doctor-detailed-item__license-img' src={licenseImg} alt="Лицензия" onClick={() => setModal2(true)} />
+								</div>
+								<div>
+									<button className='doctor-detailed-item__license-button' onClick={() => setModal(true)}>Показать подробнее</button>
+								</div>
+							</div>
 						</div>
+						<CenterModal visible={modal} setVisible={setModal}>
+							<div className='doctor-detailed-item__modal'>
+								<h3 className='doctor-detailed-item__modal-title'>ЛИЦЕНЗИЯ</h3>
+								<p className='doctor-detailed-item__modal-descr'>*нажмите на изображение для его увеличения</p>
+								<div>
+									<img className='doctor-detailed-item__modal-license-img' src={licenseImg} alt="Лицензия" onClick={() => setModal2(true)} />
+									<img className='doctor-detailed-item__modal-license-img' src={licenseImg} alt="Лицензия" onClick={() => setModal2(true)} />
+									<img className='doctor-detailed-item__modal-license-img' src={licenseImg} alt="Лицензия" onClick={() => setModal2(true)} />
+									<img className='doctor-detailed-item__modal-license-img' src={licenseImg} alt="Лицензия" onClick={() => setModal2(true)} />
+									<img className='doctor-detailed-item__modal-license-img' src={licenseImg} alt="Лицензия" onClick={() => setModal2(true)} />
+									<img className='doctor-detailed-item__modal-license-img' src={licenseImg} alt="Лицензия" onClick={() => setModal2(true)} />
+								</div>
+							</div>
+						</CenterModal>
+						<CenterModal visible={modal2} setVisible={setModal2}>
+							<img src={licenseBigImg} alt="Лицензия" />
+						</CenterModal>
 					</div>
 				</div>
 				<div className='doctor-detailed-item__wrapper-first-center'>
