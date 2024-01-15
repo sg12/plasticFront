@@ -8,6 +8,7 @@ import CenterModal from '../UI/modals/centerModal/CenterModal';
 import Review from '../review/Review';
 import Contacts from '../contacts/Contacts';
 import Admission from '../admission/Admission';
+import WhiteButton from '../UI/buttons/whiteButton/WhiteButton';
 
 import doctorImg from '../../assets/imgs/doctor-1.png';
 import licenseImg from '../../assets/imgs/license.png';
@@ -51,7 +52,7 @@ const DoctorDetailedItem = (props) => {
 									<img className='doctor-detailed-item__license-img' src={licenseImg} alt="Лицензия" onClick={() => setModal2(true)} />
 								</div>
 								<div>
-									<button className='doctor-detailed-item__license-button' onClick={() => setModal(true)}>Показать подробнее</button>
+									<WhiteButton className='doctor-detailed-item__license-button' onClick={() => setModal(true)}>Показать подробнее</WhiteButton>
 								</div>
 							</div>
 						</div>
