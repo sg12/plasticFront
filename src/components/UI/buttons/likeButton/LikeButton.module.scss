@@ -1,21 +1,43 @@
 .likeBtn {
 	width: 60px;
 	height: 60px;
-	border: solid 2px black;
+	border: none;
 	border-radius: 50px;
 	cursor: pointer;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 	background: white;
+
+	& {
+		.likeBtn__img {
+			width: 30px;
+			height: 26px;
+			fill: white;
+			stroke: black;
+			stroke-width: 2px;
+		}
+	}
 
 	&:hover {
 		.likeBtn__img {
-			filter: invert(43%) sepia(45%) saturate(4890%) hue-rotate(340deg) brightness(101%) contrast(100%);
+			stroke: #F44336;
 		}
 	}
 
 	&__active {
-		background: #F44336;
+		.likeBtn__img {
+			fill: #F44336;
+			stroke: #F44336;
+		}
+	}
+
+	&__active {
+		&:hover {
+			.likeBtn__img {
+				stroke: black;
+			}
+		}
 	}
 }
