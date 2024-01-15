@@ -1,4 +1,6 @@
-import EditableCell from "../EditableCell.jsx";
+// import ControlModal from "../../modals/controlModal/ControlModal.jsx";
+// import EditableCell from "../EditableCell.jsx";
+import Action from "../../actions/Action.jsx";
 // import Checkbox from "../../checkbox/Checkbox.jsx";
 
 const ServicesColumns = ({ table, rowSelection, handleRowCheckboxChange }) => {
@@ -18,7 +20,7 @@ const ServicesColumns = ({ table, rowSelection, handleRowCheckboxChange }) => {
     {
       header: "",
       accessorKey: "actions",
-      cell: EditableCell,
+      cell: <Action actionType="more" />,
     },
   ];
 };

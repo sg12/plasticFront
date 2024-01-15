@@ -1,29 +1,21 @@
-import { useState, useEffect } from "react";
 import "./MainPanel.scss";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { UserProvider } from "../../../context/UserContext";
+import GreetingInfo from "./greetingInfo/GreetingInfo";
 
 const MainPanel = ({ userType, userData }) => {
-  const [loading, setLoading] = useState(true);
-  // console.log(["UserData", userData, "UserType", userType]);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setLoading(false);
-    }, 1000); // 1 секунды
-
-    return () => clearTimeout(timeout);
-  }, []);
+  const location = useLocation();
+  const showProfileInfo = location.pathname.startsWith("/account/");
 
   return (
     <main className="account_main">
-      {loading ? (
-        <div className="loader">Загрузка...</div>
-      ) : (
-        <UserProvider userData={userData} userType={userType}>
+      <UserProvider userData={userData} userType={userType}>
+        {showProfileInfo ? (
           <Outlet />
-        </UserProvider>
-      )}
+        ) : (
+          <GreetingInfo />
+        )}
+      </UserProvider>
     </main>
   );
 };

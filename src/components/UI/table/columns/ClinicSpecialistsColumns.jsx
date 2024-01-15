@@ -12,27 +12,27 @@ const ClinicSpecialistsColumns = ({
   handleRowCheckboxChange,
 }) => {
   const navigate = useNavigate();
-//   const { userData } = useUser();
+  //   const { userData } = useUser();
 
   const handleUserPageNavigation = (row) => {
     const userId = row.id;
     navigate(`/users/${userId}`);
   };
 
-//   const handleRefresh = () => {
-//     // userData;
-//     console.log("Таблица обновлена!", userData);
-//   };
+  //   const handleRefresh = () => {
+  //     // userData;
+  //     console.log("Таблица обновлена!", userData);
+  //   };
 
-//   const handleFilter = () => {
-//     // Здесь можете добавить логику фильтрации, если это нужно
-//     console.log("Применена фильтрация!");
-//   };
+  //   const handleFilter = () => {
+  //     // Здесь можете добавить логику фильтрации, если это нужно
+  //     console.log("Применена фильтрация!");
+  //   };
 
-//   const handleMoreOptions = () => {
-//     // Здесь можете добавить логику для отображения дополнительных опций
-//     console.log("Показаны дополнительные опции!");
-//   };
+  //   const handleMoreOptions = () => {
+  //     // Здесь можете добавить логику для отображения дополнительных опций
+  //     console.log("Показаны дополнительные опции!");
+  //   };
 
   return [
     {
@@ -74,7 +74,11 @@ const ClinicSpecialistsColumns = ({
     },
     {
       header: (
-        <Action />
+        <div style={{ display: "flex", gap:"8px" }}>
+          <Action actionType="refresh" />
+          <Action actionType="filter" />
+          <Action actionType="more" />
+        </div>
       ),
       accessorKey: "actions",
       cell: ({ row }) => (

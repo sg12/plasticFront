@@ -8,6 +8,7 @@ import "./NavBars.scss";
 import "./root.scss";
 import PlasticServices from "../../services/PlasticServices";
 import { useFetching } from "../../hooks/useFetching";
+// import Toast from "../UI/toast/Toast";
 
 // import Spinner from "../spinner/Spinner";
 
@@ -15,11 +16,6 @@ const NavBars = () => {
   const [isAsideVisible, setAsideVisible] = useState(window.innerWidth > 1440);
   const [userData, setUserData] = useState(null);
   const userType = "clinic"; // Заглушка для выбора типа пользователя
-
-  const toggleAside = () => {
-    setAsideVisible(!isAsideVisible);
-    console.log("Active");
-  };
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -56,7 +52,10 @@ const NavBars = () => {
   return (
     <div className="grid-container">
       <header className="header-grid">
-        <HeaderPanel userData={userData} onToggleAside={toggleAside} />
+        <HeaderPanel
+          userData={userData}
+          onToggleAside={() => setAsideVisible(!isAsideVisible)}
+        />
       </header>
       {isAsideVisible && (
         <aside className="aside-grid">

@@ -47,7 +47,7 @@ const DeletePopup = ({ showDeletePopup, setShowDeletePopup }) => {
             <button className={styles.no} onClick={handleReturn}>
               Отмена
             </button>
-            <button className={styles.yes} onClick={handleAccept}>
+            <button className={styles.yes} onClick={() => {handleAccept, console.log("Deleting account...")}}>
               Да, удалить аккаунт
             </button>
           </div>

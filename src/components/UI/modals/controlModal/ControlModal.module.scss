@@ -1,13 +1,13 @@
 .modalBackdrop {
+  position:absolute;
+  right: 125px;
   z-index: 1;
-  position: absolute;
-  top: 130px;
-  right: 136px;
   width: 100px;
 }
 
 .modalContent {
-  display: inline-flex;
+  position: absolute;
+  display: flex;
   align-items: center;
   padding: 8px;
   border-radius: 8px;

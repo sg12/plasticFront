@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useRef } from "react";
 import styles from "./Table.module.scss";
 import EditableCell from "./EditableCell.jsx";
 import {
@@ -15,6 +15,8 @@ const Table = ({ userType }) => {
   const data = useMemo(() => DATA, []);
   const [rowSelection, setRowSelection] = useState({});
   let table;
+
+  const moreButtonRef = useRef();
 
   const isAnyRowSelected = () => {
     return Object.values(rowSelection).some((isSelected) => isSelected);
@@ -47,7 +49,10 @@ const Table = ({ userType }) => {
 
   let columns;
   if (userType === "clinic/specialists") {
-    columns = ClinicSpecialistsColumns({ rowSelection, handleRowCheckboxChange });
+    columns = ClinicSpecialistsColumns({
+      rowSelection,
+      handleRowCheckboxChange,
+    });
   } else {
     columns = ServicesColumns({ rowSelection, handleRowCheckboxChange });
   }

@@ -27,15 +27,17 @@ const HeaderPanel = ({ onToggleAside, userData }) => {
   return (
     <header>
       <div className="account__header">
-        <div className="header__logo-burger">
+        <div className="header__logoAccount-burger">
           <div className="header__burger-icon" onClick={onToggleAside}>
             {burger}
           </div>
-          <div className="header__logo">
+          <div className="header__logoAccount">
+            <Link className="header__logoAccount-link" to={"/"}>
               <img src={logo} alt="logo" />
-            <Link className="header__logo-link" to={"/"}>
-              <span className="header__logo-link">На главную</span>
             </Link>
+            {/* <Link className="header__logo-link" to={"/"}>
+              <span className="header__logo-link">На главную</span>
+            </Link> */}
           </div>
         </div>
         <div className="header__account">
@@ -43,7 +45,7 @@ const HeaderPanel = ({ onToggleAside, userData }) => {
             <img src={bell} alt="bell" />
           </div> */}
           <div className="header__user">
-            <img className="user__photo" src={userData?.photo} alt="photo" />
+            {/* <img className="user__photo" src={userData?.photo} alt="photo" /> */}
             <span>{userData?.name || "Неизвестно"}</span>
           </div>
         </div>

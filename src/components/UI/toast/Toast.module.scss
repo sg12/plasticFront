@@ -1,4 +1,14 @@
-.edit {
+.toast__container {
+  position: fixed;
+  right: 32px;
+  bottom: 32px;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 8px;
+  z-index: 999;
+}
+
+.toast {
   &__title {
     font-weight: 700;
   }
@@ -7,37 +17,36 @@
     opacity: 0.5;
   }
 
-  &__popup {
+  &__toast {
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    position: fixed;
-    right: 32px;
-    bottom: 32px;
-    transform: translateY(100%);
+    gap: 8px;
     background-color: #fff;
     box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.05);
     padding: 16px;
     border-radius: 8px;
-    z-index: 999;
     animation: slideIn 0.5s ease-out forwards;
     transition: opacity 0.3s ease-out, transform 0.3s ease-out;
-  }
-
-  &__popup.active {
+    opacity: 1;
     transform: translateY(0);
   }
-  &__popup.fadeOut {
+
+  &__toast.fadeOut {
     opacity: 0;
   }
 
-  &__popup:nth-child(1) {
+  &__toast:nth-child(1) {
     bottom: 50px;
-    z-index: 900;
+    z-index: 800;
   }
-  &__popup:nth-child(2)  {
+
+  &__toast:nth-child(2) {
     bottom: 40px;
     z-index: 900;
+  }
+
+  &__toast:nth-child(n + 3) {
+    display: none;
   }
 
   @keyframes slideIn {
