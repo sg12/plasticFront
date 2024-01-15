@@ -1,15 +1,15 @@
+import { useEffect, useState } from "react";
 import { useUser } from "../../../context/UserContext";
 import ProfileClientInfo from "../profileClientInfo/ProfileClientInfo";
 import ProfileClinicInfo from "../profileClinicInfo/ProfileClinicInfo";
 import ProfileDoctorInfo from "../profileDoctorInfo/ProfileDoctorInfo";
+import { Slide, ToastContainer } from "react-toastify";
 
 const ProfileUser = () => {
   const { userData, userType } = useUser();
   console.log(userData, userType);
-  
-  // Логика отображения компонента в зависимости от userType
-  let profileInfoComponent;
 
+  let profileInfoComponent;
   if (userData) {
     switch (userType) {
       case "client":
@@ -27,9 +27,21 @@ const ProfileUser = () => {
   }
 
   return (
-    <div>
+    <>
       {profileInfoComponent}
-    </div>
+      <ToastContainer
+        stacked
+        position="bottom-right"
+        autoClose={5000}
+        limit={3}
+        hideProgressBar
+        closeOnClick
+        pauseOnFocusLoss
+        draggable={false}
+        pauseOnHover
+        transition={Slide}
+      />
+    </>
   );
 };
 

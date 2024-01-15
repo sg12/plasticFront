@@ -45,7 +45,7 @@ const HeaderPanel = ({ onToggleAside, userData }) => {
             <img src={bell} alt="bell" />
           </div> */}
           <div className="header__user">
-            <img className="user__photo" src={userData?.photo} alt="photo" />
+            {/* <img className="user__photo" src={userData?.photo} alt="photo" /> */}
             <span>{userData?.name || "Неизвестно"}</span>
           </div>
         </div>

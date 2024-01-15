@@ -1,20 +1,98 @@
-import { useState } from "react";
-
-import qr from "../../../assets/imgs/qr-code.png";
-import desc from "../../../assets/imgs/desc.svg";
-
+import React, { useState } from "react";
 import "../profileUser/ProfileUser.scss";
 import EditUser from "../editUser/EditUser";
-
 import DeletePopup from "../showDeletePopup/ShowDeletePopup";
 import InDev from "../inDev/InDev";
-import Toast from "../../UI/toast/Toast";
+// import Toast from "../../UI/toast/Toast";
+// import CurrentTime from "../../UI/CurrentTime/CurrentTime";
+
+// Выносим компонент для отображения информации о пользователе
+const UserProfileDetails = ({ userData }) => (
+  <div className="profile__details">
+    <div className="profile__site">
+      <span className="profile__darkened">Официальный сайт: </span>
+      {userData.site || "Неизвестно"}
+    </div>
+    <div className="profile__email">
+      <span className="profile__darkened">Почта: </span>
+      {userData.email || "Неизвестно"}
+    </div>
+    <div className="profile__address">
+      <span className="profile__darkened">Адрес: </span>
+      {userData.address.suite || "Неизвестно"}
+    </div>
+  </div>
+);
+
+// Выносим компонент для отображения футера профиля
+const UserProfileFooter = ({ userData }) => (
+  <div className="profile__footer">
+    <InDev>
+      <div className="profile__additionally">
+        <div className="profile__licenses">
+          <span className="profile__darkened">Лицензии и сертификаты</span>
+          {userData?.licenses || "Неизвестно"}
+        </div>
+      </div>
+    </InDev>
+  </div>
+);
+
+const UserProfileAction = ({ toggleEditingMode, handleDelete }) => (
+  <div className="profile__action-button">
+    <DeletePopup />
+    <button type="button" className="edit" onClick={toggleEditingMode}>
+      Редактировать профиль
+    </button>
+    <button type="button" className="delete" onClick={handleDelete}>
+      Удалить учетную запись
+    </button>
+  </div>
+);
+
+const UserProfileHeader = ({ userData, imageSrc, handleFileChange }) => (
+  <div className="profile__header">
+    <div className="profile__user">
+      <div className="profile__photo">
+        <label htmlFor="uploadInput" className="profile__photo-label">
+          <img
+            src={userData.photo || imageSrc}
+            alt="user image"
+            className="profile__photo-img"
+          />
+        </label>
+        <input
+          type="file"
+          id="uploadInput"
+          accept="image/*"
+          style={{ display: "none" }}
+          onChange={handleFileChange}
+        />
+      </div>
+      <div className="profile__details">
+        <h3 className="profile__user-name">
+          {userData.name || "Неизвестно"} (Clinic)
+        </h3>
+        <p className="profile__user-phone">
+          <span className="profile__darkened">Телефон: </span>
+          {userData.phone || "Неизвестно"}
+        </p>
+      </div>
+    </div>
+    <div className="profile__identification">
+      <div className="iden">
+        <div className="iden__id">
+          <span>Ваш ID:</span> {userData.id || "Неизвестно"}
+        </div>
+      </div>
+    </div>
+  </div>
+);
 
 const ProfileClinicInfo = ({ userData }) => {
   const [imageSrc, setImageSrc] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
-  const [notifications, setNotifications] = useState([]);
 
   const toggleEditingMode = () => {
     setIsEditing((prev) => !prev);
@@ -22,7 +100,6 @@ const ProfileClinicInfo = ({ userData }) => {
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -32,23 +109,7 @@ const ProfileClinicInfo = ({ userData }) => {
     }
   };
 
-  const handleSave = () => {
-    // Логика для отправки данных на сервер
-
-    // После успешного сохранения, отображаем всплывающее окно
-    const newNotification = {
-      title: "Данные успешно сохранены!",
-      subtitle: "Изменено 03.01.2024 в 12:38",
-    };
-    setNotifications((prevNotifications) => [
-      ...prevNotifications,
-      newNotification,
-    ]);
-    toggleEditingMode(false);
-  };
   const handleDelete = () => {
-    // Логика для отправки данных на сервер
-
     setShowDeletePopup(true);
   };
 
@@ -56,130 +117,33 @@ const ProfileClinicInfo = ({ userData }) => {
     <div className="profile">
       {userData && (
         <>
-          {/* Header */}
-          <div className="profile__header">
-            <div className="profile__user">
-              <div className="profile__photo">
-                <label htmlFor="uploadInput" className="profile__photo-label">
-                  <img
-                    src={userData.photo || imageSrc}
-                    alt="user image"
-                    className="profile__photo-img"
-                  />
-                </label>
-                <input
-                  type="file"
-                  id="uploadInput"
-                  accept="image/*"
-                  style={{ display: "none" }}
-                  onChange={handleFileChange}
-                />
-              </div>
-              <div className="profile__details">
-                <h3 className="profile__user-name">
-                  {userData.name || "Неизвестно"} (Clinic)
-                </h3>
-                <p className="profile__user-phone">
-                  <span className="profile__darkened">Телефон: </span>
-                  {userData.phone || "Неизвестно"}
-                </p>
-              </div>
-            </div>
-            <div className="profile__identification">
-              <div className="iden">
-                <div className="iden__id">
-                  <span>Ваш ID:</span> {userData.id || "Неизвестно"}
-                </div>
-                {/* Rating Component */}
-              </div>
-            </div>
-          </div>
+          <UserProfileHeader
+            userData={userData}
+            imageSrc={imageSrc}
+            handleFileChange={handleFileChange}
+          />
           <hr className="profile__divider" />
-
-          {/* MainInfo */}
-          {!isEditing && (
-            <div className="profile__main">
-              <div className="profile__details">
-                <div className="profile__site">
-                  <span className="profile__darkened">Официальный сайт: </span>
-                  {userData.site || "Неизвестно"}
-                </div>
-                <div className="profile__email">
-                  <span className="profile__darkened">Почта: </span>
-                  {userData.email || "Неизвестно"}
-                </div>
-                <div className="profile__address">
-                  <span className="profile__darkened">Адрес: </span>
-                  {userData.address.suite || "Неизвестно"}
-                </div>
-              </div>
-            </div>
+          {!isEditing && <UserProfileDetails userData={userData} />}
+          {isEditing && (
+            <EditUser
+              userData={userData}
+              toggleEditingMode={toggleEditingMode}
+            />
           )}
-          <hr className="profile__divider" />
-
-          {/* EditUser */}
-          {isEditing && <EditUser userData={userData} />}
-
-          {/* FooterInfo */}
-          <div className="profile__footer">
-            {!isEditing && (
-              <>
-                <InDev>
-                  <div className="profile__additionally">
-                    <div className="profile__licenses">
-                      <span className="profile__darkened">
-                        Лицензии и сертификаты
-                      </span>
-                      {userData.licenses || "Неизвестно"}
-                      {/* <button className="add" type="button">
-                        Добавить
-                      </button> */}
-                    </div>
-                  </div>
-                </InDev>
-              </>
-            )}
-          </div>
-          <hr className="profile__divider" />
-          <div className="profile__action-button">
-            <Toast
-              showEditPopup={notifications.length > 0}
-              setShowEditPopup={() => setNotifications([])}
-              notifications={notifications}
-              setNotifications={setNotifications}
-            />
-            <DeletePopup
-              showDeletePopup={showDeletePopup}
-              setShowDeletePopup={setShowDeletePopup}
-            />
-            {isEditing ? (
-              <>
-                <button type="button" className="save" onClick={handleSave}>
-                  Сохранить
-                </button>
-                <button
-                  type="button"
-                  className="cancel"
-                  onClick={toggleEditingMode}
-                >
-                  Отмена
-                </button>
-              </>
-            ) : (
-              <>
-                <button
-                  type="button"
-                  className="edit"
-                  onClick={toggleEditingMode}
-                >
-                  Редактировать профиль
-                </button>
-                <button type="button" className="delete" onClick={handleDelete}>
-                  Удалить учетную запись
-                </button>
-              </>
-            )}
-          </div>
+          {!isEditing && (
+            <>
+              <UserProfileFooter userData={userData} />
+              <hr className="profile__divider" />
+              <UserProfileAction
+                toggleEditingMode={toggleEditingMode}
+                handleDelete={handleDelete}
+              />
+            </>
+          )}
+          <DeletePopup
+            showDeletePopup={showDeletePopup}
+            setShowDeletePopup={setShowDeletePopup}
+          />
         </>
       )}
     </div>

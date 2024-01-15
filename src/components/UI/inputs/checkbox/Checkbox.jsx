@@ -2,7 +2,7 @@ import styles from "./Checkbox.module.scss";
 
 const Checkbox = ({ htmlFor, children, id, name, checked, onChange, ...props }) => {
   const handleCheckboxChange = (e) => {
-    console.log("Checkbox Checked:", e.target.checked);
+    // console.log("Checkbox Checked:", e.target.checked);
     if (onChange) {
       onChange(e);
     }
