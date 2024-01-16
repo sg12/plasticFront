@@ -8,8 +8,10 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  pointer-events: none;
 }
 .modal {
+  pointer-events:all;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -20,6 +22,26 @@
   box-shadow: 0 0px 10px 0px rgba(0, 0, 0, 0.25);
   width: 350px;
   height: 100%;
+
+  &__title {
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  &__buttons {
+    .close {
+      padding: 8px 16px;
+      background: #3066BE;
+      border-radius: 8px;
+      color: white;
+      border: none;
+    }
+  }
+
+  &__checkbox {
+    display: inline;
+  }
+
   input {
     padding: 8px;
     border-radius: 8px;

@@ -15,7 +15,7 @@ import { useFetching } from "../../hooks/useFetching";
 const PersonalAccount = () => {
   const [isAsideVisible, setAsideVisible] = useState(window.innerWidth > 1440);
   const [userData, setUserData] = useState(null);
-  const userType = "doctor"; // Заглушка для выбора типа пользователя
+  const userType = "client"; // Заглушка для выбора типа пользователя
 
   // useEffect(() => {
   //   const fetchData = async () => {

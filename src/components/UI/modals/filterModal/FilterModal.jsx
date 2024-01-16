@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styles from "./Filter.module.scss";
+import Checkbox from "../../inputs/checkbox/Checkbox";
 
 const FilterModal = ({
   isFilterOpen,
@@ -9,9 +10,24 @@ const FilterModal = ({
   style,
   animationEnabled,
   animationTime,
+  filterValue,
+  setFilterValue,
+  searchData,
 }) => {
-  const [filterValue, setFilterValue] = useState("");
+  // const [filterValue, setFilterValue] = useState("");
   const [modalAnimation, setModalAnimation] = useState("open");
+
+  const handleInputChange = (e) => {
+    const inputValue = e.target.value;
+    setFilterValue(inputValue);
+
+    // Выполните поиск в данных searchData на основе введенного значения
+    return searchData.filter(
+      (item) =>
+        item.name &&
+        item.name.trim().toLowerCase().includes(inputValue.toLowerCase())
+    );
+  };
 
   function close() {
     setModalAnimation("close");
@@ -28,25 +44,29 @@ const FilterModal = ({
     <div className={`${styles.modalOverlay} ${styles[style]}`}>
       <div className={modalClass}>
         {/* {title} */}
-        {/* {children} */}
-        <h2>Фильтрация</h2>
+        <span className={styles.modal__title}>Фильтрация</span>
         <input
+          placeholder={children}
           type="text"
           value={filterValue}
-          onChange={(e) => setFilterValue(e.target.value)}
+          onChange={handleInputChange}
         />
-        <div className={styles.modalButtons}>
-          <button
+        <div className={styles.modal__checkbox}>
+          <Checkbox children="Докторы" />
+          <Checkbox children="Клиники" />
+        </div>
+        <div className={styles.modal__buttons}>
+          {/* <button
             className={styles.button__apply}
             onClick={() => {
-              filterValue, close();
+              close();
               console.log("FilterValue", filterValue || "undefined");
             }}
           >
             Применить
-          </button>
+          </button> */}
           <button
-            className={styles.button}
+            className={styles.close}
             onClick={() => {
               close();
             }}
