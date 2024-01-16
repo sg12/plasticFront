@@ -1,9 +1,7 @@
 import { useState } from "react";
 import EditUser from "../editUser/EditUser";
-import DeletePopup from "../showDeletePopup/ShowDeletePopup";
-// import Toast from "../../UI/toast/Toast";
+import AlertModal from "../../UI/modals/alertModal/AlertModal";
 import InDev from "../inDev/InDev";
-// import CurrentTime from "../../UI/CurrentTime/CurrentTime";
 
 // Выносим компонент для отображения информации о пользователе
 const UserProfileDetails = ({ userData }) => (
@@ -126,7 +124,7 @@ const UserProfileHeader = ({ userData, imageSrc, handleFileChange }) => (
 const ProfileDoctorInfo = ({ userData }) => {
   const [imageSrc, setImageSrc] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [isModalOpen, setModalOpen] = useState(false);
 
   const toggleEditingMode = () => {
     setIsEditing((prev) => !prev);
@@ -143,8 +141,12 @@ const ProfileDoctorInfo = ({ userData }) => {
     }
   };
 
-  const handleDelete = () => {
-    setShowDeletePopup(true);
+  const handleOpenModal = () => {
+    setModalOpen(true);
+  };
+
+  const handleDeleteAccount = () => {
+    console.log("Account deleting");
   };
 
   return (
@@ -174,9 +176,13 @@ const ProfileDoctorInfo = ({ userData }) => {
               />
             </>
           )}
-          <DeletePopup
-            showDeletePopup={showDeletePopup}
-            setShowDeletePopup={setShowDeletePopup}
+          <AlertModal
+            isOpen={isModalOpen}
+            onClose={() => setModalOpen(false)}
+            onAccept={handleDeleteAccount}
+            title="Удалить учетную запись?"
+            message="Удаление аккаунта приведет к безвозвратной потере всех связанных с
+            ним данных."
           />
         </>
       )}

@@ -1,12 +1,9 @@
 import React, { useState } from "react";
 import "../profileUser/ProfileUser.scss";
 import EditUser from "../editUser/EditUser";
-import DeletePopup from "../showDeletePopup/ShowDeletePopup";
+import AlertModal from "../../UI/modals/alertModal/AlertModal";
 import InDev from "../inDev/InDev";
-// import Toast from "../../UI/toast/Toast";
-// import CurrentTime from "../../UI/CurrentTime/CurrentTime";
 
-// Выносим компонент для отображения информации о пользователе
 const UserProfileDetails = ({ userData }) => (
   <div className="profile__details">
     <div className="profile__site">
@@ -24,7 +21,6 @@ const UserProfileDetails = ({ userData }) => (
   </div>
 );
 
-// Выносим компонент для отображения футера профиля
 const UserProfileFooter = ({ userData }) => (
   <div className="profile__footer">
     <InDev>
@@ -92,7 +88,7 @@ const UserProfileHeader = ({ userData, imageSrc, handleFileChange }) => (
 const ProfileClinicInfo = ({ userData }) => {
   const [imageSrc, setImageSrc] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [isModalOpen, setModalOpen] = useState(false);
 
   const toggleEditingMode = () => {
     setIsEditing((prev) => !prev);
@@ -109,8 +105,12 @@ const ProfileClinicInfo = ({ userData }) => {
     }
   };
 
-  const handleDelete = () => {
-    setShowDeletePopup(true);
+  const handleOpenModal = () => {
+    setModalOpen(true);
+  };
+
+  const handleDeleteAccount = () => {
+    console.log("Account deleting");
   };
 
   return (
@@ -140,9 +140,13 @@ const ProfileClinicInfo = ({ userData }) => {
               />
             </>
           )}
-          <DeletePopup
-            showDeletePopup={showDeletePopup}
-            setShowDeletePopup={setShowDeletePopup}
+          <AlertModal
+            isOpen={isModalOpen}
+            onClose={() => setModalOpen(false)}
+            onAccept={handleDeleteAccount}
+            title="Удалить учетную запись?"
+            message="Удаление аккаунта приведет к безвозвратной потере всех связанных с
+            ним данных."
           />
         </>
       )}

@@ -3,11 +3,8 @@ import qr from "../../../assets/imgs/qr-code.png";
 import desc from "../../../assets/imgs/desc.svg";
 import "../profileUser/ProfileUser.scss";
 import EditUser from "../editUser/EditUser";
-import DeletePopup from "../showDeletePopup/ShowDeletePopup";
+import AlertModal from "../../UI/modals/alertModal/AlertModal";
 
-// import CurrentTime from "../../UI/CurrentTime/CurrentTime";
-// import { ToastContainer, toast } from "react-toastify";
-// import "react-toastify/dist/ReactToastify.css";
 
 const UserProfileDetails = ({ userData }) => (
   <div className="profile__details">
@@ -51,7 +48,6 @@ const UserProfileFooter = () => (
 
 const UserProfileAction = ({ toggleEditingMode, handleDelete }) => (
   <div className="profile__action-button">
-    {/* <DeletePopup /> */}
     <button type="button" className="edit" onClick={toggleEditingMode}>
       Редактировать профиль
     </button>
@@ -114,7 +110,7 @@ const UserProfileHeader = ({ userData, imageSrc, handleFileChange }) => (
 const ProfileClientInfo = ({ userData }) => {
   const [imageSrc, setImageSrc] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [isModalOpen, setModalOpen] = useState(false);
 
   const toggleEditingMode = () => {
     setIsEditing((prev) => !prev);
@@ -131,9 +127,12 @@ const ProfileClientInfo = ({ userData }) => {
     }
   };
 
-  const handleDelete = () => {
-    // Логика для удаления пользователя
-    setShowDeletePopup(true);
+  const handleOpenModal = () => {
+    setModalOpen(true);
+  };
+
+  const handleDeleteAccount = () => {
+    console.log("Account deleting");
   };
 
   return (
@@ -159,13 +158,17 @@ const ProfileClientInfo = ({ userData }) => {
               <hr className="profile__divider" />
               <UserProfileAction
                 toggleEditingMode={toggleEditingMode}
-                handleDelete={handleDelete}
+                handleDelete={handleOpenModal}
               />
             </>
           )}
-          <DeletePopup
-            showDeletePopup={showDeletePopup}
-            setShowDeletePopup={setShowDeletePopup}
+          <AlertModal
+            isOpen={isModalOpen}
+            onClose={() => setModalOpen(false)}
+            onAccept={handleDeleteAccount}
+            title="Удалить учетную запись?"
+            message="Удаление аккаунта приведет к безвозвратной потере всех связанных с
+            ним данных."
           />
         </>
       )}

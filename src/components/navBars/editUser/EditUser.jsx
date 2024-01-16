@@ -35,11 +35,10 @@ const EditUser = ({ userData, toggleEditingMode }) => {
       
       const promise = toast.promise(sendPostRequest(editedData), {
         pending: "Сохранение", 
-        success: "Данные успешно сохранились", 
+        success: `Данные успешно сохранились ${new Date().toLocaleDateString()} в ${new Date().toLocaleTimeString()}`, 
         error: "Ошибка при сохранении данных", 
         autoClose: 3000, 
       });
-
       promise
         .then(() => {
           toggleEditingMode(false); 

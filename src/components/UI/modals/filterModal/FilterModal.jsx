@@ -20,7 +20,9 @@ const FilterModal = ({
     }, animationTime || 400); // Мин. 0.1
   }
 
-  const modalClass = animationEnabled ? `${styles.modal} ${styles[modalAnimation]}` : styles.modal;
+  const modalClass = animationEnabled
+    ? `${styles.modal} ${styles[modalAnimation]}`
+    : styles.modal;
 
   return (
     <div className={`${styles.modalOverlay} ${styles[style]}`}>
@@ -28,11 +30,11 @@ const FilterModal = ({
         {/* {title} */}
         {/* {children} */}
         <h2>Фильтрация</h2>
-          <input
-            type="text"
-            value={filterValue}
-            onChange={(e) => setFilterValue(e.target.value)}
-          />
+        <input
+          type="text"
+          value={filterValue}
+          onChange={(e) => setFilterValue(e.target.value)}
+        />
         <div className={styles.modalButtons}>
           <button
             className={styles.button__apply}
