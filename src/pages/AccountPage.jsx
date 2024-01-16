@@ -1,7 +1,7 @@
 // import { useAuth } from "../context/AuthContext";
 // import { Navigate } from "react-router-dom";
 import { useEffect } from "react";
-import NavBars from "../components/navBars/NavBars";
+import PersonalAccount from "../components/personalAccount/PersonalAccount";
 
 const AccountPage = () => {
   // const { state } = useAuth();
@@ -21,7 +21,7 @@ const AccountPage = () => {
 
   return (
     <>
-      <NavBars />
+      <PersonalAccount />
     </>
   );
 };

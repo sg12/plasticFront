@@ -4,15 +4,15 @@ import "normalize.css";
 import "./App.scss";
 
 // Account - `AsidePanel.jsx`
-import FavouritesInfo from "../navBars/favouritesInfo/FavouritesInfo";
-import SettingsInfo from "../navBars/settingsInfo/SettingsInfo";
-import ProfileUser from "../navBars/profileUser/ProfileUser";
-import SpecialistInfo from "../navBars/specialistInfo/SpecialistInfo";
-import ReviewsInfo from "../navBars/reviewsInfo/ReviewsInfo";
-import HelpInfo from "../navBars/helpInfo/HelpInfo";
-import SupportInfo from "../navBars/supportInfo/SupportInfo";
-import ClinicsInfo from "../navBars/clinicsInfo/ClinicsInfo";
-import ServicesInfo from "../navBars/servicesInfo/ServicesInfo";
+import FavouritesInfo from "../personalAccount/favouritesInfo/FavouritesInfo";
+import SettingsInfo from "../personalAccount/settingsInfo/SettingsInfo";
+import ProfileUser from "../personalAccount/profileUser/ProfileUser";
+import SpecialistInfo from "../personalAccount/specialistInfo/SpecialistInfo";
+import ReviewsInfo from "../personalAccount/reviewsInfo/ReviewsInfo";
+import HelpInfo from "../personalAccount/helpInfo/HelpInfo";
+import SupportInfo from "../personalAccount/supportInfo/SupportInfo";
+import ClinicsInfo from "../personalAccount/clinicsInfo/ClinicsInfo";
+import ServicesInfo from "../personalAccount/servicesInfo/ServicesInfo";
 
 import Layout from "../../pages/Layout";
 import MainPage from "../../pages/MainPage";

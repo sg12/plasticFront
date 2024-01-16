@@ -4,7 +4,7 @@ import AsidePanel from "./asidePanel/AsidePanel";
 import HeaderPanel from "./headerPanel/HeaderPanel";
 import MainPanel from "./mainPanel/MainPanel";
 
-import "./NavBars.scss";
+import "./PersonalAccount.scss";
 import "./root.scss";
 import PlasticServices from "../../services/PlasticServices";
 import { useFetching } from "../../hooks/useFetching";
@@ -12,10 +12,10 @@ import { useFetching } from "../../hooks/useFetching";
 
 // import Spinner from "../spinner/Spinner";
 
-const NavBars = () => {
+const PersonalAccount = () => {
   const [isAsideVisible, setAsideVisible] = useState(window.innerWidth > 1440);
   const [userData, setUserData] = useState(null);
-  const userType = "client"; // Заглушка для выбора типа пользователя
+  const userType = "doctor"; // Заглушка для выбора типа пользователя
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -69,4 +69,4 @@ const NavBars = () => {
   );
 };
 
-export default NavBars;
+export default PersonalAccount;

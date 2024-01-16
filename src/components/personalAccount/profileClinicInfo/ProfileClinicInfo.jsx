@@ -36,7 +36,7 @@ const UserProfileFooter = ({ userData }) => (
 
 const UserProfileAction = ({ toggleEditingMode, handleDelete }) => (
   <div className="profile__action-button">
-    <DeletePopup />
+    {/* <DeletePopup /> */}
     <button type="button" className="edit" onClick={toggleEditingMode}>
       Редактировать профиль
     </button>
@@ -136,7 +136,7 @@ const ProfileClinicInfo = ({ userData }) => {
               <hr className="profile__divider" />
               <UserProfileAction
                 toggleEditingMode={toggleEditingMode}
-                handleDelete={handleDelete}
+                handleDelete={handleOpenModal}
               />
             </>
           )}
