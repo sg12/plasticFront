@@ -1,4 +1,4 @@
-
+import {Link} from 'react-router-dom';
 import PropTypes from "prop-types"; // Добавляем импорт PropTypes
 import "./Slides.scss";
 
@@ -14,7 +14,9 @@ const Slides = ({ data }) => {
                 <p>{aiText}</p>
             </div>
             <div className="button_item" id="button_slide">
-                <p>{buttonText}</p>
+                <Link to={'constructor'}>
+                    <p>{buttonText}</p>
+				</Link>
             </div>
         </div>
     );
