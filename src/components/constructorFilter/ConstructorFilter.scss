@@ -1,0 +1,83 @@
+.constructor-filter {
+
+    &__container {
+        padding-left: 111px;
+        &-flex {
+            display: flex;
+        }
+    }
+
+    &__buttons {
+        padding-right: 32px;
+        display: flex;
+        gap: 20px;
+        border-right: 1px solid #5985CB;
+    }
+
+    &__select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        
+        border-radius: 16px;
+        border: 2px solid #3066BE;
+        outline: none;
+        padding: 15px 88px 15px 32px;
+        cursor: pointer;
+    }
+
+    &__select-bg {
+        margin-right: 32px;
+        display: flex;
+        justify-content: flex-end;
+        padding-left: 32px;
+        position: relative;
+    }
+
+    &__select-bg::before {
+        content: "";
+        position: absolute;
+
+        display: block;
+        width: 56px;
+        height: 100%;
+        opacity: 0.8;
+        background-color: #3066BE;
+        background-image: url('../../assets/icons/select-arrow-icon.png');
+        background-repeat: no-repeat;
+        background-position: center center;
+        border-radius: 0 16px 16px 0;
+        pointer-events: none;
+    }
+
+    &__instruction {
+        position: relative;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+      
+        svg {
+          display: block;
+          width: 100%;
+          height: 100%;
+        }
+      
+        &-tooltip {
+          position: absolute;
+          top: 100%; /* Исходное значение для расположения снизу */
+          left: 50%;
+          transform: translateX(-50%); /* Исходное значение для центрирования по горизонтали */
+          background-color: #333;
+          color: white;
+          padding: 5px;
+          border-radius: 3px;
+          opacity: 0;
+          transition: opacity 0.3s ease-in-out;
+        }
+      
+        &:hover &-tooltip {
+          opacity: 1;
+        }
+    }      
+}
