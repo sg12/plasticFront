@@ -8,6 +8,7 @@ import "./PersonalAccount.scss";
 import "./root.scss";
 import PlasticServices from "../../services/PlasticServices";
 import { useFetching } from "../../hooks/useFetching";
+import UserGuide from "./userGuide/UserGuide";
 // import Toast from "../UI/toast/Toast";
 
 // import Spinner from "../spinner/Spinner";
@@ -65,6 +66,7 @@ const PersonalAccount = () => {
       <main className="main-grid">
         <MainPanel userData={userData} userType={userType} />
       </main>
+        {/* <UserGuide /> */}
     </div>
   );
 };
