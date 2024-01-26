@@ -132,7 +132,7 @@ const ProfileClinicInfo = ({ userData }) => {
           )}
           {!isEditing && (
             <>
-              <UserProfileFooter userData={userData} />
+              <UserProfileFooter />
               <hr className="profile__divider" />
               <UserProfileAction
                 toggleEditingMode={toggleEditingMode}
