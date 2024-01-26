@@ -1,0 +1,48 @@
+.parents{
+    position: absolute;
+    left: 850px;
+    top: 300px;
+    padding-left: 32px;
+    border-left: 1px solid gray;
+
+}
+
+.head{
+    color: #3066BE;
+    font-family: Raleway;
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.text{
+    width: 754px;
+    height: 115px;
+    flex-shrink: 0;
+    color: #000;
+    text-align: justify;
+    font-family: Raleway;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.text2{
+    color: #000;
+    font-family: Raleway;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-transform: uppercase;
+    opacity: 0.5;
+}
+
+.button{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 200px;
+}
