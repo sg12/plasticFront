@@ -80,5 +80,48 @@
         &:hover &-tooltip {
           opacity: 1;
         }
-    }      
+    }
+    
+    &__instruction-modal {
+        max-width: 754px;
+        max-height: 800px;
+        overflow-y: scroll;
+
+        ::-webkit-scrollbar-track {
+            background: #000;
+        }
+
+        &-title {
+            margin: 0;
+            margin-bottom: 32px;
+            color: #3066BE;
+            font-family: Raleway;
+            font-size: 36px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+        }
+
+        &-container:not(:last-child) {
+            margin-bottom: 32px;
+        }
+
+        &-img {
+            margin-bottom: 20px;
+        }
+
+        &-text {
+            margin: 0;
+            color: #000;
+            font-family: Raleway;
+            font-size: 20px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+        }
+
+        &-text:not(:last-child) {
+            margin-bottom: 20px;
+        }
+    }
 }
