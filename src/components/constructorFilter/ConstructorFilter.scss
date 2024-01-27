@@ -85,6 +85,10 @@
     &__instruction-modal {
         max-width: 754px;
         max-height: 800px;
+        padding-right: 13px;
+        margin-top: -30px;
+        margin-bottom: -30px;
+        margin-right: -30px;
         overflow-y: scroll;
 
         ::-webkit-scrollbar-track {
@@ -93,6 +97,7 @@
 
         &-title {
             margin: 0;
+            margin-top: 30px;
             margin-bottom: 32px;
             color: #3066BE;
             font-family: Raleway;
@@ -122,6 +127,10 @@
 
         &-text:not(:last-child) {
             margin-bottom: 20px;
+        }
+
+        &-text:last-child {
+            margin-bottom: 30px;
         }
     }
 }
