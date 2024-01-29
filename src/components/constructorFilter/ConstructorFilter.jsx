@@ -26,8 +26,8 @@ const ConstructorFilter = () => {
                 <div className='constructor-filter__select-bg'>
                     <select className='constructor-filter__select' name="" id="">
                         <option value="" disabled selected>Тип внешности</option>
-                        <option value="Азия">Азия</option>
-                        <option value="Европа">Европа</option>
+                        <option value="Азиатский ">Азиатский </option>
+                        <option value="Европейский ">Европейский </option>
                     </select>
                 </div>
                 <button className='constructor-filter__instruction' onClick={() => setModal(true)}>
