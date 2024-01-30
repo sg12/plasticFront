@@ -9,7 +9,7 @@ const Constructor = () => {
 
   return (
     <div>
-      <h1>Страница конструктора</h1>
+      <h1>Страница конструктора!</h1>
       <ConstructorFilter />
       <ConstructorFace activeLine={activeLine} setActiveLine={setActiveLine} />
       <About_operation activeLine={activeLine}/>
