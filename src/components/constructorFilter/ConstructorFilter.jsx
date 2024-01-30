@@ -1,5 +1,4 @@
 import './ConstructorFilter.scss';
-
 import { useState } from 'react';
 
 import CenterModal from '../UI/modals/centerModal/CenterModal';
@@ -15,19 +14,45 @@ import instruction6 from '../../assets/imgs/instruction-6.png';
 
 const ConstructorFilter = () => {
     const [modal, setModal] = useState(false);
+    const [selectedOption, setSelectedOption] = useState('');
+
+    const handleGenderButtonClick = (gender) => {
+        console.log(gender);
+    };
+
+    const handleSelectChange = (event) => {
+        const selectedValue = event.target.value;
+        setSelectedOption(selectedValue);
+        console.log(selectedValue);
+    };
 
     return (
         <div className='constructor-filter__container'>
             <div className='constructor-filter__container-flex'>
                 <div className='constructor-filter__buttons'>  
-                    <OutlineButton className='constructor-filter__button-woman'>Женщина</OutlineButton>
-                    <OutlineButton className='constructor-filter__button-man'>Мужчина</OutlineButton>
+                    <OutlineButton 
+                        className='constructor-filter__button-woman'
+                        onClick={() => handleGenderButtonClick('Женский')}
+                    >
+                        Женщина
+                    </OutlineButton>
+                    
+                    <OutlineButton 
+                        className='constructor-filter__button-man'
+                        onClick={() => handleGenderButtonClick('Мужской')}
+                    >
+                        Мужчина
+                    </OutlineButton>
                 </div>
                 <div className='constructor-filter__select-bg'>
-                    <select className='constructor-filter__select' name="" id="">
+                    <select
+                        className='constructor-filter__select'
+                        onChange={handleSelectChange}
+                        value={selectedOption}
+                    >        
                         <option value="" disabled selected>Тип внешности</option>
-                        <option value="Азиатский ">Азиатский </option>
-                        <option value="Европейский ">Европейский </option>
+                        <option value="Азиатский">Азиатский </option>
+                        <option value="Европейский">Европейский </option>
                     </select>
                 </div>
                 <button className='constructor-filter__instruction' onClick={() => setModal(true)}>
