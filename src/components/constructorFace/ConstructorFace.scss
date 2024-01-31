@@ -5,7 +5,12 @@
   &__wrapper {
     position: relative;
   }
+  &__image {
+    width: 815px;
+    height: 100%;
+  }
   &__img {
+    width: 100%;
   }
 
   &__lines {
@@ -19,23 +24,9 @@
         fill: rgba(217, 217, 217, 0.4);
       }
     }
-
     &.forehead {
       top: 120px;
       left: 100px;
-    }
-    &.eyes {
-      &.left {
-        z-index: 1;
-        top: 208px;
-        left: 100px;
-      }
-      &.right {
-        z-index: 1;
-        transform: scale(-1, 1);
-        top: 208px;
-        left: 208px;
-      }
     }
     &.nose {
       top: 220px;
@@ -45,18 +36,6 @@
       top: 316px;
       left: 143px;
     }
-    &.cheekbones {
-      &.left {
-        top: 225px;
-        left: 75px;
-      }
-      &.right {
-        transform: scale(-1, 1);
-        top: 225px;
-        left: 240px;
-      }
-    }
-
     &.ears {
       top: 197px;
       left: 697px;
@@ -84,6 +63,30 @@
 }
 
 .constructor-face__group {
+  &.cheekbones {
+    .leftCheekbone {
+      top: 225px;
+      left: 75px;
+    }
+    .rightCheekbone {
+      transform: scale(-1, 1);
+      top: 225px;
+      left: 240px;
+    }
+  }
+  &.eyes {
+    .leftEye {
+      z-index: 1;
+      top: 208px;
+      left: 100px;
+    }
+    .rightEye {
+      z-index: 1;
+      transform: scale(-1, 1);
+      top: 208px;
+      left: 208px;
+    }
+  }
   &.active {
     .svg-line-path {
       fill: rgba(217, 217, 217, 0.4);
