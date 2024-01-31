@@ -12,7 +12,7 @@ const Constructor = () => {
       <h1>Не бойся меняться!</h1>
       <ConstructorFilter />
       <ConstructorFace activeLine={activeLine} setActiveLine={setActiveLine} />
-      <About_operation activeLine={activeLine}/>
+      {/* <About_operation activeLine={activeLine}/> */}
     </div>
   );
 };
