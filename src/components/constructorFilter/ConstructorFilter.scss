@@ -80,5 +80,102 @@
         &:hover &-tooltip {
           opacity: 1;
         }
-    }      
+    }
+    
+    &__instruction-modal {
+        max-width: 754px;
+        max-height: 800px;
+        padding-right: 13px;
+        margin-top: -30px;
+        margin-bottom: -30px;
+        margin-right: -30px;
+        overflow-y: scroll;
+
+
+        &-title {
+            margin: 0;
+            margin-top: 30px;
+            margin-bottom: 32px;
+            color: #3066BE;
+            font-family: Raleway;
+            font-size: 36px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: normal;
+        }
+
+        &-container:not(:last-child) {
+            margin-bottom: 32px;
+        }
+
+        &-img {
+            margin-bottom: 20px;
+        }
+
+        &-text {
+            margin: 0;
+            color: #000;
+            font-family: Raleway;
+            font-size: 20px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+        }
+
+        &-text:not(:last-child) {
+            margin-bottom: 20px;
+        }
+
+        &-text:last-child {
+            margin-bottom: 30px;
+        }
+    }
+
+    &__instruction-modal::-webkit-scrollbar {
+        width: 30px;
+        border-radius: 4px;
+        border: 0.5px solid rgba(48, 102, 190, 0.54);
+        background: white;
+    }
+
+    &__instruction-modal::-webkit-scrollbar-thumb {
+        border-radius: 20px;
+        background: #5985CB;
+    }
+
+    &__instruction-modal::-webkit-scrollbar-thumb:hover {
+        background: #41649b;
+    }
+
+    &__instruction-modal::-webkit-scrollbar-thumb:active {
+        background: #6e96d6;
+    }
+
+    &__instruction-modal::-webkit-scrollbar-button {
+        background-color: white; /* Цвет фона стрелок */
+        background-repeat: no-repeat;
+        border: 0.5px solid rgba(48, 102, 190, 0.54)
+    }
+
+    &__instruction-modal::-webkit-scrollbar-button:vertical {
+        height: 40px;
+    }
+
+    &__instruction-modal::-webkit-scrollbar-button:vertical:start {
+        background-image: url('../../assets/icons/instruction-up-arrow.svg'); /* Замените на свой путь к изображению */
+        background-position: center center;
+    }
+    
+    &__instruction-modal::-webkit-scrollbar-button:vertical:end {
+        background-image: url('../../assets/icons/instruction-down-arrow.svg'); /* Замените на свой путь к изображению */
+        background-position: center center;
+    }
+
+    &__instruction-modal::-webkit-scrollbar-button:hover {
+        background-color: rgb(211, 211, 211);
+    }
+
+    &__instruction-modal::-webkit-scrollbar-button:active {
+        background-color: rgb(230, 230, 230);
+    }
 }
