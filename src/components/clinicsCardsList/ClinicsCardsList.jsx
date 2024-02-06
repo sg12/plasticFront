@@ -5,25 +5,16 @@ import { useState, useEffect } from 'react';
 import PlasticServices from '../../services/PlasticServices';
 
 import ClinicsCardsItem from '../clinicsCardsItem/ClinicsCardsItem';
-import CardsFilter from '../cardsFilter/CardsFilter';
-import CenterModal from '../UI/modals/centerModal/CenterModal';
 import OutlineButton from '../UI/buttons/outlineButton/OutlineButton';
 import Spinner from '../spinner/Spinner';
 
 import { useFetching } from '../../hooks/useFetching';
-// ? Переименовать хук для фильтрации ?
-import { usePosts } from '../../hooks/usePosts';
 
 const ClinicsCardsList = () => {
 
 	const [posts, setPosts] = useState([]);
 	const [page, setPage] = useState(1);
 	const [totalCount, setTotalCount] = useState(0);
-
-	const [filter, setFilter] = useState({ sort: '', query: '' });
-	const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
-
-	const [modal, setModal] = useState(false);
 
 	const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
 		const response = await PlasticServices.getAllClinics(page);
@@ -44,8 +35,8 @@ const ClinicsCardsList = () => {
 		onRequest();
 	};
 
-	const content = !(!isPostsLoading && !postError && sortedAndSearchedPosts.length === 0)
-		? sortedAndSearchedPosts.map((post) => (
+	const content = !(!isPostsLoading && !postError && posts.length === 0)
+		? posts.map((post) => (
 			<ClinicsCardsItem post={post} key={post.id} />
 		))
 		: <h3 className='articles-item__title' style={{ margin: 'auto', textAlign: 'center' }}>Нет клиник</h3>;
@@ -62,12 +53,6 @@ const ClinicsCardsList = () => {
 		<section className='clinics-cards-list'>
 			<div className='clinics-cards-list__container container'>
 				<h2 className='clinics-cards-list__title'>КЛИНИКИ</h2>
-				<OutlineButton onClick={() => setModal(true)}>
-					Фильтр
-				</OutlineButton>
-				<CenterModal visible={modal} setVisible={setModal}>
-					<CardsFilter filter={filter} setFilter={setFilter} />
-				</CenterModal>
 				<ul className='clinics-cards-list__box'>
 					{content}
 				</ul>
