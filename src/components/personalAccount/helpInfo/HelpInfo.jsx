@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./HelpInfo.scss";
+import { useFetching } from "../../../hooks/useFetching";
+import PlasticServices from "../../../services/PlasticServices";
 
 const HelpInfo = () => {
   const [openIndex, setOpenIndex] = useState(null);
+  const [faq, setFaq] = useState("");
   const [visibleQuestions, setVisibleQuestions] = useState(2);
 
   const toggleAccordion = (index) => {
@@ -13,31 +16,23 @@ const HelpInfo = () => {
     setVisibleQuestions((prevCount) => prevCount + 3);
   };
 
-  const faqData = [
-    {
-      id: 1,
-      question: "Что такое React?",
-      answer:
-        "React - это библиотека JavaScript для создания пользовательских интерфейсов.",
-    },
-    {
-      id: 2,
-      question: "Как создать компонент в React?",
-      answer:
-        "Компонент в React можно создать с использованием функциональных или классовых компонентов.",
-    },
-    {
-      id: 3,
-      question: "Что такое хуки в React?",
-      answer:
-        "Хуки - это функции, которые позволяют использовать состояние и другие возможности React в функциональных компонентах.",
-    },
-  ];
+  const [fetchFaq, isFaqLoading, faqError] = useFetching(async () => {
+    try {
+      const response = await PlasticServices.getFaq();
+      setFaq(response.data);
+    } catch (error) {
+      console.error("Ошибка при загрузке FAQ:", error);
+    }
+  });
+
+  useEffect(() => {
+    fetchFaq();
+  }, []);
 
   return (
     <div className="help">
       <span className="help__title">Часто задаваемые вопросы</span>
-      {faqData.slice(0, visibleQuestions).map((item, index) => (
+      {faq.slice(0, visibleQuestions).map((item, index) => (
         <div
           key={item.id}
           className={`help__accordion ${openIndex === index ? "open" : ""}`}
@@ -47,43 +42,13 @@ const HelpInfo = () => {
           {openIndex === index && <p className="help__answer">{item.answer}</p>}
         </div>
       ))}
-      {visibleQuestions < faqData.length && (
-        <button className="help__more" onClick={showMoreQuestions}>Показать ещё</button>
+      {visibleQuestions < faq.length && (
+        <button className="help__more" onClick={showMoreQuestions}>
+          Показать ещё
+        </button>
       )}
     </div>
   );
 };
 
 export default HelpInfo;
-
-// import { useState } from "react";
-// import "./HelpInfo.scss";
-// import { useUser } from "../../../context/UserContext";
-
-// const HelpInfo = () => {
-//   const { userData } = useUser();
-//   const [openIndex, setOpenIndex] = useState(null);
-//   console.log(userData);
-
-//   const toggleAccordion = (index) => {
-//     setOpenIndex(openIndex === index ? null : index);
-//   };
-
-//   return (
-//     <div className="help">
-//       <span className="help__title">Часто задаваемые вопросы</span>
-//       {Object.keys(userData).map((item, index) => (
-//         <div
-//           key={userData.id}
-//           className={`help__accordion ${openIndex === index ? "open" : ""}`}
-//           onClick={() => toggleAccordion(index)}
-//         >
-//           <span className="help__question">{userData.title}</span>
-//           {openIndex === index && <p className="help__answer">{item.answer}</p>}
-//         </div>
-//       ))}
-//     </div>
-//   );
-// };
-
-// export default HelpInfo;

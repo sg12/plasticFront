@@ -16,7 +16,8 @@ import UserGuide from "./userGuide/UserGuide";
 const PersonalAccount = () => {
   const [isAsideVisible, setAsideVisible] = useState(window.innerWidth > 1440);
   const [userData, setUserData] = useState(null);
-  const userType = "client"; // Заглушка для выбора типа пользователя
+  const userType = "clients"; // Заглушка для выбора типа пользователя
+  const userId = 1;
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -31,7 +32,7 @@ const PersonalAccount = () => {
   // }, [setUserData]);
 
   const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
-    const response = await PlasticServices.getUsers();
+    const response = await PlasticServices.getUsers(userId, userType);
     setUserData(response.data);
     // console.log(response.data);
     // setPage(page + 1);

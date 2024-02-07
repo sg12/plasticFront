@@ -16,7 +16,7 @@ import "./AsidePanel.scss";
 const AsidePanel = ({ userType }) => {
   const getLinkData = () => {
     switch (userType) {
-      case "client":
+      case "clients":
         return [
           { to: "profile", text: "Профиль (Клиент)", icon: profile },
           { to: "favourites", text: "Избранное", icon: favourites },
@@ -31,7 +31,7 @@ const AsidePanel = ({ userType }) => {
           { to: "help", text: "Помощь", icon: help },
           { to: "support", text: "Поддержка", icon: support },
         ];
-      case "doctor":
+      case "doctors":
         return [
           { to: "profile", text: "Профиль (Доктор)", icon: profile },
           { to: "clinic", text: "Клиника", icon: specialist },
@@ -47,7 +47,7 @@ const AsidePanel = ({ userType }) => {
           { to: "help", text: "Помощь", icon: help },
           { to: "support", text: "Поддержка", icon: support },
         ];
-      case "clinic":
+      case "clinics":
         return [
           { to: "profile", text: "Профиль (Клиника)", icon: profile },
           { to: "specialist", text: "Специалисты", icon: specialist },
