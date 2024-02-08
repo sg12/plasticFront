@@ -4,6 +4,10 @@ import FieldButton from '../UI/buttons/fieldButton/FieldButton';
 
 import { useForm } from 'react-hook-form';
 
+import PlasticServices from '../../services/PlasticServices.js';
+
+import Cookies from 'js-cookie';
+
 import './EnterClient.scss';
 
 const EnterClient = () => {
@@ -15,8 +19,11 @@ const EnterClient = () => {
         },
     });
 
-    const onSubmit = (data) => {
-        console.log(data);
+    const onSubmit = async ({ email, password }) => {
+        const data = { email, password };
+        const respData = await PlasticServices.loginUser(data);
+        console.log(respData);
+        Cookies.set('token', respData.token);
     };
 
     return (

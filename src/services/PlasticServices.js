@@ -38,6 +38,24 @@ class PlasticServices {
 		const response = await axios.get(`${_apiBase}posts/${id}`);
 		return response;
 	}
+	
+	static async registerUser(data, type) {
+		try {
+			const response = await axios.post(`http://localhost:8000/api/v1/auth/register/${type}/`, data);
+			return response.data; // Ответ от сервера (можно обработать по вашему усмотрению)
+		} catch (error) {
+			console.error('Ошибка при регистрации:', error);
+		}
+	}
+
+	static async loginUser(data) {
+		try {
+			const response = await axios.post(`http://localhost:8000/api/v1/auth/login/`, data);
+			return response.data; // Ответ от сервера (можно обработать по вашему усмотрению)
+		} catch (error) {
+			console.error('Ошибка при авторизации:', error);
+		}
+	}
 }
 
 export default PlasticServices;
