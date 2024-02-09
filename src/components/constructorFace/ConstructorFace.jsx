@@ -1,6 +1,7 @@
 import "./ConstructorFace.scss";
 import SvgLine from "./SvgLine";
 import facesConfig from "./FacesConfig";
+import { useEffect, useRef } from "react";
 
 const ConstructorFace = ({
   activeFace = "woman", // woman or man
@@ -78,6 +79,26 @@ const ConstructorFace = ({
 
   const currentFaceConfig = facesConfig[activeFace][activeFaceStyle];
 
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    // Обработчик клика на всей странице
+    const handleClickOutside = (event) => {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target)
+      ) {
+        setActiveLine(null); // Убираем активный класс
+      }
+    };
+    // Добавляем обработчик события клика при монтировании компонента
+    document.addEventListener("mousedown", handleClickOutside);
+    // Очищаем обработчик события клика при размонтировании компонента
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [containerRef, setActiveLine]);
+
   return (
     <div className="constructor-face__container">
       <div className="constructor-face__wrapper">
@@ -88,7 +109,7 @@ const ConstructorFace = ({
             alt="face"
           />
         </div>
-        <div className="constructor-face__lines">
+        <div ref={containerRef} className="constructor-face__lines">
           {renderLines(currentFaceConfig.lines)}
         </div>
       </div>
