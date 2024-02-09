@@ -24,6 +24,8 @@ const ProfileUser = () => {
       default:
         profileInfoComponent = "Неизвестный тип пользователя";
     }
+  } else {
+    profileInfoComponent = "Данные о пользователе не получены. Сервер в спячке";
   }
 
   return (
