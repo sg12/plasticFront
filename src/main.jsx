@@ -1,16 +1,16 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+import React from "react";
+import ReactDOM from "react-dom/client";
 
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from "react-router-dom";
 
-import './main.scss';
+import "./main.scss";
 
-import App from './components/app/App';
+import App from "./components/app/App";
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-	<React.StrictMode>
-		<BrowserRouter>
-			<App />
-		</BrowserRouter>
-	</React.StrictMode>,
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </React.StrictMode>
 );
