@@ -50,4 +50,25 @@
       gap: 16px;
     }
   }
+  &__divider {
+    width: 100%;
+    margin: 0;
+    background: #5985cb;
+    opacity: 0.25;
+    height: 1px;
+    border: none;
+  }
+
+  &__footer {
+    justify-content: flex-end;
+    width: 100%;
+  }
+  &__actions {
+    .add {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #3066be;
+    }
+  }
 }

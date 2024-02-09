@@ -8,7 +8,7 @@ const ServicesInfo = () => {
   return (
     <div className="services">
       <span className="services__title">Ваши услуги</span>
-      <Table userType={userType} /> 
+      <Table userType={userType} />
       {/* <Dropdown/> */}
       {/* <div className="services__footer">
          <div className="services__footer-gap">
@@ -40,6 +40,14 @@ const ServicesInfo = () => {
           </div>
         </div>
       </div> */}
+      <hr className="services__divider" />
+      <div className="services__footer">
+        <div className="services__actions">
+          <button type="button" className="add">
+            Добавить услугу
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

@@ -11,13 +11,13 @@
   pointer-events: none;
 }
 .modal {
-  pointer-events:all;
+  pointer-events: all;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
   background: #fff;
-  padding: 20px;
+  padding: 16px;
   //   border-radius: 16px;
   box-shadow: 0 0px 10px 0px rgba(0, 0, 0, 0.25);
   width: 350px;
@@ -29,12 +29,15 @@
   }
 
   &__buttons {
+    width: 100%;
     .close {
+      width: 100%;
       padding: 8px 16px;
-      background: #3066BE;
+      background: #3066be;
       border-radius: 8px;
       color: white;
       border: none;
+      cursor: pointer;
     }
   }
 
@@ -43,6 +46,7 @@
   }
 
   input {
+    width: 100%;
     padding: 8px;
     border-radius: 8px;
     border: 2px solid black;

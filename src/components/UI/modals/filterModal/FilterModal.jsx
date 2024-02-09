@@ -51,10 +51,10 @@ const FilterModal = ({
           value={filterValue}
           onChange={handleInputChange}
         />
-        <div className={styles.modal__checkbox}>
+        {/* <div className={styles.modal__checkbox}>
           <Checkbox children="Докторы" />
           <Checkbox children="Клиники" />
-        </div>
+        </div> */}
         <div className={styles.modal__buttons}>
           {/* <button
             className={styles.button__apply}
