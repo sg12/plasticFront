@@ -6,7 +6,7 @@ import Checkbox from "../../UI/inputs/checkbox/Checkbox";
 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
+// import axios from "axios";
 import { useFetching } from "../../../hooks/useFetching";
 import PlasticServices from "../../../services/PlasticServices";
 
@@ -14,7 +14,7 @@ const EditUser = ({ userData, toggleEditingMode }) => {
   const [editedData, setEditedData] = useState({
     email: userData?.user?.email || "",
     address: userData?.user?.address || "",
-    name: userData?.user?.username || "",
+    username: userData?.user?.username || "",
     birthday: userData?.date_born || "",
     phone: userData?.user?.phone || "",
     gender: userData?.user?.gender || "",
@@ -24,7 +24,7 @@ const EditUser = ({ userData, toggleEditingMode }) => {
 
   const sendUserData = async () => {
     try {
-      const response = await PlasticServices.postUser(1, "clients", editedData);
+      const response = await PlasticServices.patchUser(editedData);
       return response.data;
     } catch (error) {
       throw error;
@@ -85,6 +85,7 @@ const EditUser = ({ userData, toggleEditingMode }) => {
           name="email"
           userData={userData?.user?.email || "Неизвестно"}
           onChange={(e) => handleInputChange("email", e.target.value)}
+          disabled
         >
           Email
         </TextInput>
@@ -115,6 +116,7 @@ const EditUser = ({ userData, toggleEditingMode }) => {
           name="birthday"
           userData={userData?.date_born || "Неизвестно"}
           onChange={(e) => handleInputChange("birthday", e.target.value)}
+          disabled
         >
           Дата рождения
         </TextInput>

@@ -5,6 +5,7 @@ import Checkbox from "../../inputs/checkbox/Checkbox";
 const FilterModal = ({
   isFilterOpen,
   setIsFilterOpen,
+  placeholder,
   children,
   title,
   style,
@@ -13,6 +14,8 @@ const FilterModal = ({
   filterValue,
   setFilterValue,
   searchData,
+  save,
+  disabledSearch,
 }) => {
   // const [filterValue, setFilterValue] = useState("");
   const [modalAnimation, setModalAnimation] = useState("open");
@@ -45,26 +48,24 @@ const FilterModal = ({
       <div className={modalClass}>
         {/* {title} */}
         <span className={styles.modal__title}>Фильтрация</span>
-        <input
-          placeholder={children}
-          type="text"
-          value={filterValue}
-          onChange={handleInputChange}
-        />
-        {/* <div className={styles.modal__checkbox}>
-          <Checkbox children="Докторы" />
-          <Checkbox children="Клиники" />
-        </div> */}
+        {disabledSearch && (
+          <input
+            placeholder={placeholder}
+            type="text"
+            value={filterValue}
+            onChange={handleInputChange}
+          />
+        )}
+        {children}
         <div className={styles.modal__buttons}>
-          {/* <button
-            className={styles.button__apply}
+          <button
+            className={styles.save}
             onClick={() => {
-              close();
-              console.log("FilterValue", filterValue || "undefined");
+              save();
             }}
           >
-            Применить
-          </button> */}
+            Сохранить
+          </button>
           <button
             className={styles.close}
             onClick={() => {

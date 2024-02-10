@@ -30,12 +30,25 @@
 
   &__buttons {
     width: 100%;
-    .close {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    .save {
       width: 100%;
       padding: 8px 16px;
       background: #3066be;
       border-radius: 8px;
       color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .close {
+      width: 100%;
+      padding: 8px 16px;
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.4);
+      color: rgb(0, 0, 0);
       border: none;
       cursor: pointer;
     }

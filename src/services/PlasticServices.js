@@ -33,9 +33,13 @@ class PlasticServices {
     const response = await axios.get(`${_apiBase}/${userType}/${userID}/`);
     return response;
   }
+  static async patchUser() {
+    const response = await axios.patch(`${_apiBase}/account/`);
+    return response;
+  }
 
   static async getFaq() {
-    const response = await axios.get(`${_apiBase}`);
+    const response = await axios.get(`${_apiBase}/faq/`);
     return response;
   }
 

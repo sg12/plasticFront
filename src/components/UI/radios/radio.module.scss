@@ -1,0 +1,12 @@
+.radio {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  width: 100%;
+  &__label {
+    display: flex;
+    gap: 8px;
+  }
+  &__input {
+  }
+}

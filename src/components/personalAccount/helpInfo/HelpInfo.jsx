@@ -5,7 +5,7 @@ import PlasticServices from "../../../services/PlasticServices";
 
 const HelpInfo = () => {
   const [openIndex, setOpenIndex] = useState(null);
-  const [faq, setFaq] = useState("");
+  const [faq, setFaq] = useState([]);
   const [visibleQuestions, setVisibleQuestions] = useState(2);
 
   const toggleAccordion = (index) => {
@@ -20,6 +20,7 @@ const HelpInfo = () => {
     try {
       const response = await PlasticServices.getFaq();
       setFaq(response.data);
+      console.log(response.data);
     } catch (error) {
       console.error("Ошибка при загрузке FAQ:", error);
     }
@@ -38,7 +39,7 @@ const HelpInfo = () => {
           className={`help__accordion ${openIndex === index ? "open" : ""}`}
           onClick={() => toggleAccordion(index)}
         >
-          <span className="help__question">{item.question}</span>
+          <span className="help__question">{item.name}</span>
           {openIndex === index && <p className="help__answer">{item.answer}</p>}
         </div>
       ))}

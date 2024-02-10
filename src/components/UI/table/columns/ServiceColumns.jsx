@@ -14,6 +14,10 @@ const ServicesColumns = ({ table, rowSelection, handleRowCheckboxChange }) => {
       accessorKey: "costs",
     },
     {
+      header: "Тип приёма",
+      accessorKey: "reception",
+    },
+    {
       header: "Статус",
       accessorKey: "status",
     },
