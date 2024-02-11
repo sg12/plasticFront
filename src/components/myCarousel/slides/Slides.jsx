@@ -1,12 +1,13 @@
 
-import PropTypes from "prop-types"; // Добавляем импорт PropTypes
+import PropTypes from "prop-types";
 import "./Slides.scss";
 
 const Slides = ({ data }) => {
-    const { text, aiText, buttonText, backgroundImage } = data;
+    const { text, aiText, buttonText, backgroundImage, id } = data;
 
     return (
-        <div className="slide" style={{ backgroundImage: backgroundImage }}>
+        // <div className={`slide_${data.id}`} style={{ backgroundImage: backgroundImage }}>
+            <div className="slide" style={{ backgroundImage: backgroundImage }}>
             <div className="slide__info title-h2">
                 <p>{text}</p>
             </div>

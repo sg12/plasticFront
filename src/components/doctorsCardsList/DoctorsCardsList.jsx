@@ -16,9 +16,6 @@ const DoctorsCardsList = () => {
 	const [page, setPage] = useState(1);
 	const [totalCount, setTotalCount] = useState(0);
 
-	// const [filter, setFilter] = useState({ sort: '', query: '' });
-	// const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
-
 	const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
 		const response = await PlasticServices.getAllDoctors(page);
 		setPosts([...posts, ...response.data]);
@@ -56,7 +53,6 @@ const DoctorsCardsList = () => {
 		<section className='doctors-cards-list'>
 			<div className='doctors-cards-list__container container'>
 				<h2 className='doctors-cards-list__title'>ВРАЧИ</h2>
-				{/* <CardsFilter filter={filter} setFilter={setFilter} /> */}
 				<ul className='doctors-cards-list__box'>
 					{content}
 				</ul>

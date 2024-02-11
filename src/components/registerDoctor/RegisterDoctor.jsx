@@ -4,6 +4,10 @@ import FieldButton from '../UI/buttons/fieldButton/FieldButton';
 
 import { useForm } from 'react-hook-form';
 
+import PlasticServices from '../../services/PlasticServices.js';
+
+import Cookies from 'js-cookie';
+
 import './RegisterDoctor.scss';
 
 const RegisterDoctor = () => {
@@ -11,12 +15,24 @@ const RegisterDoctor = () => {
         defaultValues:{
             email:'',
             password:'',
-            confirm_password:'',
+            re_password:'',
         },
     });
 
-    const onSubmit = (data) => {
-        console.log(data);
+    const onSubmit = async ({ email, password, re_password }) => {
+        const data = { email, password, re_password };
+        const pathname = window.location.pathname;
+        let type = '';
+        if (pathname === '/enterPage/registerDoctor') {
+            type = 'surgeon';
+        } else if (pathname === '/enterPage/registerClinic'){
+            type = 'clinic';
+        } else if (pathname === '/enterPage/registerClient'){
+            type = 'client';
+        }
+        const respData = await PlasticServices.registerUser(data, type);
+        console.log(respData);
+        Cookies.set('token', respData.token);
     };
 
     return (
@@ -51,15 +67,15 @@ const RegisterDoctor = () => {
 
                 <div className='form__box'>
                     <input
-                        className={`form__input${errors?.confirm_password ? ' error__input' : ''}`}
+                        className={`form__input${errors?.re_password ? ' error__input' : ''}`}
                         type='password'
                         placeholder='Повторите пароль'
-                        {...register('confirm_password', {
+                        {...register('re_password', {
                             required: 'Поле обязательно к заполнению',
                             validate: (value) => value === watch('password') || 'Пароли не совпадают',
                         })}
                     />
-                    {errors?.confirm_password && <span className='form__span'>{errors?.confirm_password?.message}</span>}
+                    {errors?.re_password && <span className='form__span'>{errors?.re_password?.message}</span>}
                 </div>
 
                 <FieldButton type="submit">

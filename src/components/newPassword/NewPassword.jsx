@@ -3,6 +3,7 @@ import FieldButton from "../UI/buttons/fieldButton/FieldButton";
 import { useForm } from 'react-hook-form';
 
 import './newPassword.scss';
+import { Link } from "react-router-dom";
 
 const NewPassword = () => {
     const {register, formState: { errors }, handleSubmit, watch } = useForm({
@@ -18,7 +19,7 @@ const NewPassword = () => {
 
     return (
         <div className='enter__client client'>
-            <a href='#' className='client__link'>Введите новый пароль</a>
+            <Link to={'/enterPage'} className='client__link'>Введите новый пароль</Link>
             <form className='client__form form' onSubmit={handleSubmit(onSubmit)}>
                 <div className='form__box'>
                     <input 
@@ -53,8 +54,8 @@ const NewPassword = () => {
                 </FieldButton>
                 <p className='form__message'>Не забудьте новый пароль.</p>
                 <div className='form__registers'>
-                    <a className='form__register' href="#">Вход клиента</a>
-                    <a className='form__register' href="#">Вход партнёра</a>
+                    <Link to={'/enterPage/enterClient'} className='form__register'>Вход клиента</Link>
+                    <Link to={'/enterPage/enterPartner'} className='form__register'>Вход партнёра</Link>
                 </div>
             </form>
         </div>
