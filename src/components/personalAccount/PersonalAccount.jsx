@@ -16,7 +16,7 @@ import UserGuide from "./userGuide/UserGuide";
 const PersonalAccount = () => {
   const [isAsideVisible, setAsideVisible] = useState(window.innerWidth > 1440);
   const [userData, setUserData] = useState(null);
-  const userType = "clinics"; // Заглушка для выбора типа пользователя
+  const userType = "clients"; // Заглушка для выбора типа пользователя
   const userId = 1;
 
   // useEffect(() => {

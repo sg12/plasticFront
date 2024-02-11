@@ -40,15 +40,19 @@ const EditUser = ({ userData, toggleEditingMode }) => {
         console.log(editedData);
 
         // Отправляем POST-запрос с данными
-        await sendPostRequest(editedData);
+        const response = await sendPostRequest(editedData);
 
-        // Обрабатываем успешный ответ
-        toast.success(
-          `Данные успешно сохранились ${new Date().toLocaleDateString()} в ${new Date().toLocaleTimeString()}`
-        );
-
-        // Закрываем режим редактирования
-        toggleEditingMode(false);
+        if (response) {
+          // Обрабатываем успешный ответ
+          toast.success(
+            `Данные успешно сохранились ${new Date().toLocaleDateString()} в ${new Date().toLocaleTimeString()}`
+          );
+          // Закрываем режим редактирования
+          toggleEditingMode(false);
+        } else {
+          toast.error("Ошибка при сохранении данных");
+          console.error("Некорректный ответ от сервера");
+        }
       } else {
         toast.warn("Проставьте обе галочки перед сохранением.");
         console.error("Пожалуйста, поставьте обе галочки перед сохранением.");
