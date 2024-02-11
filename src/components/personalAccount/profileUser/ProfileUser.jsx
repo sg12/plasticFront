@@ -12,18 +12,20 @@ const ProfileUser = () => {
   let profileInfoComponent;
   if (userData) {
     switch (userType) {
-      case "client":
+      case "clients":
         profileInfoComponent = <ProfileClientInfo userData={userData} />;
         break;
-      case "clinic":
+      case "clinics":
         profileInfoComponent = <ProfileClinicInfo userData={userData} />;
         break;
-      case "doctor":
+      case "doctors":
         profileInfoComponent = <ProfileDoctorInfo userData={userData} />;
         break;
       default:
         profileInfoComponent = "Неизвестный тип пользователя";
     }
+  } else {
+    profileInfoComponent = "Данные о пользователе не получены. Сервер в спячке";
   }
 
   return (

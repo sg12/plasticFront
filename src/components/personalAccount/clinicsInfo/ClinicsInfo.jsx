@@ -55,7 +55,7 @@ const ClinicCard = ({ userData }) => {
               Руководитель
             </span>
             <span className="clinic-card__info-personal-position-director">
-              {userData.name}
+              {/* {userData.name} */}
             </span>
           </div>
           <div className="clinic-card__info-personal-address">
@@ -63,7 +63,7 @@ const ClinicCard = ({ userData }) => {
               Адрес
             </span>
             <span className="clinic-card__info-personal-address-street">
-              {userData.address.street}
+              {/* {userData.address.street} */}
             </span>
           </div>
         </div>

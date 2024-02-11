@@ -6,49 +6,60 @@ import Checkbox from "../../UI/inputs/checkbox/Checkbox";
 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
+// import axios from "axios";
+import { useFetching } from "../../../hooks/useFetching";
+import PlasticServices from "../../../services/PlasticServices";
 
 const EditUser = ({ userData, toggleEditingMode }) => {
   const [editedData, setEditedData] = useState({
-    email: userData?.email || "",
-    address: userData?.address.street || "",
-    name: userData?.name || "",
-    birthday: userData?.birthdate || "",
-    phone: userData?.phone || "",
-    gender: userData?.gender || "",
+    email: userData?.user?.email || "",
+    address: userData?.user?.address || "",
+    username: userData?.user?.username || "",
+    birthday: userData?.date_born || "",
+    phone: userData?.user?.phone || "",
+    gender: userData?.user?.gender || "",
   });
   const [politicy1Checked, setPoliticy1Checked] = useState(false);
   const [politicy2Checked, setPoliticy2Checked] = useState(false);
 
-  const sendPostRequest = async (data) => {
+  const sendUserData = async () => {
     try {
-      const response = await axios.post("https://jsonplaceholder.typicode.com/users", data);
+      const response = await PlasticServices.patchUser(editedData);
       return response.data;
     } catch (error) {
       throw error;
     }
   };
 
+  const [sendPostRequest, isSendingData, sendPostError] =
+    useFetching(sendUserData);
+
   const handleSave = async () => {
-    if (politicy1Checked && politicy2Checked) {
-      console.log(editedData)
-      
-      const promise = toast.promise(sendPostRequest(editedData), {
-        pending: "Сохранение", 
-        success: `Данные успешно сохранились ${new Date().toLocaleDateString()} в ${new Date().toLocaleTimeString()}`, 
-        error: "Ошибка при сохранении данных", 
-        autoClose: 3000, 
-      });
-      promise
-        .then(() => {
-          toggleEditingMode(false); 
-        })
-        .catch((error) => {
-          console.error("Ошибка при сохранении данных:", error);
-        });
-    } else {
-      toast.warn("Проставьте обе галочки, перед сохранением.");
-      console.error("Пожалуйста, поставьте обе галочки, перед сохранением.");
+    try {
+      if (politicy1Checked && politicy2Checked) {
+        console.log(editedData);
+
+        // Отправляем POST-запрос с данными
+        const response = await sendPostRequest(editedData);
+
+        if (response) {
+          // Обрабатываем успешный ответ
+          toast.success(
+            `Данные успешно сохранились ${new Date().toLocaleDateString()} в ${new Date().toLocaleTimeString()}`
+          );
+          // Закрываем режим редактирования
+          toggleEditingMode(false);
+        } else {
+          toast.error("Ошибка при сохранении данных");
+          console.error("Некорректный ответ от сервера");
+        }
+      } else {
+        toast.warn("Проставьте обе галочки перед сохранением.");
+        console.error("Пожалуйста, поставьте обе галочки перед сохранением.");
+      }
+    } catch (error) {
+      toast.error("Ошибка при сохранении данных");
+      console.error("Ошибка при сохранении данных:", error);
     }
   };
 
@@ -76,8 +87,9 @@ const EditUser = ({ userData, toggleEditingMode }) => {
           id="email"
           type="email"
           name="email"
-          userData={userData?.email || "Неизвестно"}
+          userData={userData?.user?.email || "Неизвестно"}
           onChange={(e) => handleInputChange("email", e.target.value)}
+          disabled
         >
           Email
         </TextInput>
@@ -86,7 +98,7 @@ const EditUser = ({ userData, toggleEditingMode }) => {
           id="text"
           type="text"
           name="address"
-          userData={userData?.address.street || "Неизвестно"}
+          userData={userData?.user?.address || "Неизвестно"}
           onChange={(e) => handleInputChange("address", e.target.value)}
         >
           Адрес
@@ -96,7 +108,7 @@ const EditUser = ({ userData, toggleEditingMode }) => {
           id="text"
           type="text"
           name="name"
-          userData={userData?.name || "Неизвестно"}
+          userData={userData?.user?.username || "Неизвестно"}
           onChange={(e) => handleInputChange("name", e.target.value)}
         >
           ФИО
@@ -106,8 +118,9 @@ const EditUser = ({ userData, toggleEditingMode }) => {
           id="date"
           type="date"
           name="birthday"
-          userData={userData?.birthday || "Неизвестно"}
+          userData={userData?.date_born || "Неизвестно"}
           onChange={(e) => handleInputChange("birthday", e.target.value)}
+          disabled
         >
           Дата рождения
         </TextInput>
@@ -116,7 +129,7 @@ const EditUser = ({ userData, toggleEditingMode }) => {
           id="tel"
           type="tel"
           name="phone"
-          userData={userData?.phone || "Неизвестно"}
+          userData={userData?.user?.phone || "Неизвестно"}
           onChange={(e) => handleInputChange("phone", e.target.value)}
         >
           Телефон
@@ -125,7 +138,7 @@ const EditUser = ({ userData, toggleEditingMode }) => {
           htmlFor="gender"
           id="gender"
           name="gender"
-          value={userData?.gender}
+          value={userData?.user?.gender}
           onChange={(e) => handleInputChange("gender", e.target.value)}
           options={[
             { label: "Мужской", value: "male" },

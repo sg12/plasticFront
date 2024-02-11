@@ -1,17 +1,36 @@
 import React, { useState } from "react";
 import styles from "./Filter.module.scss";
+import Checkbox from "../../inputs/checkbox/Checkbox";
 
 const FilterModal = ({
   isFilterOpen,
   setIsFilterOpen,
+  placeholder,
   children,
   title,
   style,
   animationEnabled,
   animationTime,
+  filterValue,
+  setFilterValue,
+  searchData,
+  save,
+  disabledSearch,
 }) => {
-  const [filterValue, setFilterValue] = useState("");
+  // const [filterValue, setFilterValue] = useState("");
   const [modalAnimation, setModalAnimation] = useState("open");
+
+  const handleInputChange = (e) => {
+    const inputValue = e.target.value;
+    setFilterValue(inputValue);
+
+    // Выполните поиск в данных searchData на основе введенного значения
+    return searchData.filter(
+      (item) =>
+        item.name &&
+        item.name.trim().toLowerCase().includes(inputValue.toLowerCase())
+    );
+  };
 
   function close() {
     setModalAnimation("close");
@@ -28,25 +47,27 @@ const FilterModal = ({
     <div className={`${styles.modalOverlay} ${styles[style]}`}>
       <div className={modalClass}>
         {/* {title} */}
-        {/* {children} */}
-        <h2>Фильтрация</h2>
-        <input
-          type="text"
-          value={filterValue}
-          onChange={(e) => setFilterValue(e.target.value)}
-        />
-        <div className={styles.modalButtons}>
+        <span className={styles.modal__title}>Фильтрация</span>
+        {disabledSearch && (
+          <input
+            placeholder={placeholder}
+            type="text"
+            value={filterValue}
+            onChange={handleInputChange}
+          />
+        )}
+        {children}
+        <div className={styles.modal__buttons}>
           <button
-            className={styles.button__apply}
+            className={styles.save}
             onClick={() => {
-              filterValue, close();
-              console.log("FilterValue", filterValue || "undefined");
+              save();
             }}
           >
-            Применить
+            Сохранить
           </button>
           <button
-            className={styles.button}
+            className={styles.close}
             onClick={() => {
               close();
             }}

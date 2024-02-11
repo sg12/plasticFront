@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const _apiBase = 'https://jsonplaceholder.typicode.com/';
+// const _apiBase = "https://jsonplaceholder.typicode.com/";
+const _apiBase = "http://localhost:8000/api/v1";
 
 class PlasticServices {
-
 	static async getAllArticles(page = 1) {
 		const response = await axios.get(`${_apiBase}posts?_limit=6&_page=${page}`);
 		return response;
@@ -29,10 +29,20 @@ class PlasticServices {
 		return response;
 	}
 
-	static async getUsers(userID = 6, userType = "users") {
-		const response = await axios.get(`${_apiBase}/${userType}/${userID}/`);
-		return response;
-	}
+	static async getUsers(userID, userType) {
+    const response = await axios.get(`${_apiBase}/${userType}/${userID}/`);
+    return response;
+  }
+
+  static async patchUser() {
+    const response = await axios.patch(`${_apiBase}/account/`);
+    return response;
+  }
+
+  static async getFaq() {
+    const response = await axios.get(`${_apiBase}/faq/`);
+    return response;
+  }
 
 	static async getArticle(id) {
 		const response = await axios.get(`${_apiBase}posts/${id}`);
