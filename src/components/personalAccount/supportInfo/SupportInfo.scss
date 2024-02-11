@@ -1,0 +1,88 @@
+.support {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  &__title {
+    font-size: 16px;
+    font-weight: 700;
+  }
+  &__subtitle {
+    font-size: 16px;
+    font-weight: 400;
+    opacity: 0.5;
+  }
+  &__form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+
+    &-email,
+    &-link,
+    &-request,
+    &-details,
+    &-description,
+    &-status {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      width: 350px;
+
+      label {
+        font-size: 16px;
+        opacity: 0.5;
+      }
+      input {
+        padding: 16px;
+        border-radius: 8px;
+        border: 2px solid #87cdd1;
+        background: var(--pallet-color-11005, #fff);
+      }
+      input::placeholder {
+        color: black;
+      }
+    }
+    // &-email{
+    // }
+    // &-link {
+    // }
+    // &-request {
+    // }
+    // &-details {
+    // }
+    // &-description {
+    // }
+    // &-status {
+    // }
+  }
+  &__button {
+    display: flex;
+    gap: 16px;
+    &-upload,
+    &-send {
+      cursor: pointer;
+      display: flex;
+      height: 54px;
+      min-height: 54px;
+      padding: 8px;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+      border-radius: 8px;
+      border: 2px solid #3066be;
+      background: none;
+    }
+    &-upload {
+        color: #3066BE;
+    } 
+    input[type=file]::file-selector-button {
+        border-radius: 4px;
+        border: 2px solid #3066be;
+        color: #3066BE;
+        background: none;
+    }
+    &-send {
+        color: white;
+        background: #3066BE;
+    }
+  }
+}

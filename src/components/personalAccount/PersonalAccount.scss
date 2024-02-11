@@ -1,0 +1,70 @@
+// html {
+//   background: #f2f2f2;
+// }
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  grid-template-rows: auto auto;
+  grid-gap: 16px;
+  max-width: 1700px;
+  margin: 16px auto;
+
+  font-family: Raleway;
+  font-size: 16px;
+  font-style: normal;
+  line-height: normal;
+  font-variant-numeric: lining-nums proportional-nums;
+
+  @media (max-width: 1920px) {
+    max-width: 1700px;
+  }
+
+  @media (max-width: 1700px) {
+    max-width: 1440px;
+  }
+
+  @media (max-width: 1440px) {
+    max-width: 1200px;
+    .main-grid {  
+      grid-column: span 2;
+    }
+  }
+
+  @media (max-width: 1200px) {
+    max-width: 960px;
+    grid-template-columns: 1fr;
+  }
+
+  @media (max-width: 960px) {
+    max-width: 720px;
+  }
+
+  @media (max-width: 720px) {
+    max-width: 100%;
+  }
+}
+
+.header-grid {
+  grid-column: span 2; /* Занимает обе колонки */
+}
+
+.aside-grid,
+.main-grid {
+  grid-column: span 1; /* Занимают по одной колонке */
+}
+
+
+@media (max-width: 1440px) {
+  .aside-grid {
+    position: absolute;
+    margin-top: calc(76px + 16px);
+    z-index: 10;
+    opacity: 1;
+    transition: opacity 0.2s ease-in-out;
+  }
+  .aside-grid.visible {
+    opacity: 1;
+  }
+  
+}

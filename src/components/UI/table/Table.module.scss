@@ -1,0 +1,35 @@
+.table {
+  outline: 1px solid #eaf0f8;
+  background: #fff;
+  border-radius: 16px;
+  width: 100%;
+  display: table;
+  overflow: hidden;
+  border-collapse: collapse;
+}
+.thead {
+  width: 100%;
+}
+.tbody {
+}
+
+.trData {
+  &:nth-child(odd) {
+    background: #eaf0f8;
+  }
+}
+
+.th {
+  text-align: left;
+  // opacity: 0.5;
+  font-weight: 400;
+  padding: 16px;
+}
+
+.td {
+  width: auto;
+  padding: 16px;
+  &:last-child {
+    width: 24px;
+  }
+}

@@ -1,0 +1,37 @@
+.favourites {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 16px;
+  &__title {
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  &__noCards {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    font-size: 16px;
+    font-weight: 700;
+    opacity: 0.5;
+  }
+
+  &__button {
+    &-filter {
+      padding: 8px 16px;
+      border-radius: 8px;
+      border: 2px solid #3066be;
+      background: none;
+      transition: background 0.1s ease-out;
+
+      &:hover {
+        background: rgba($color: #3066be, $alpha: 0.1);
+      }
+      &:focus {
+        background: rgba($color: #3066be, $alpha: 0.2);
+      }
+    }
+  }
+}

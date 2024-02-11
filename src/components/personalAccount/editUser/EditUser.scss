@@ -1,0 +1,65 @@
+.edit {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  &__title {
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  &__info {
+    display: flex;
+    width: auto;
+    align-items: flex-start;
+    align-content: flex-start;
+    gap: 16px var(--CornerRadius-r16, 16px);
+    flex-wrap: wrap;
+  }
+
+  &__checkbox {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    &-p1,
+    &-p2 {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 8px;
+    }
+
+    &-politicy {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 2px solid #3066be;
+      background: #1758c2;
+    }
+    &-text {
+      font-size: 16px;
+    }
+  }
+  &__action-button {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-end;
+    .save,
+    .cancel {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #3066be;
+    }
+    .cancel {
+      color: black;
+      opacity: 25%;
+    }
+  }
+
+  &__error-message{
+    font-size: 12px;
+  }
+}

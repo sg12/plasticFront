@@ -1,0 +1,23 @@
+.centerModal {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	display: none;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: 10;
+}
+
+.centerModalContent {
+	padding: 30px;
+	background: white;
+	border-radius: 20px;
+	min-width: 250px;
+}
+
+.centerModal.active {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}

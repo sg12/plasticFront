@@ -1,0 +1,8 @@
+.specialist {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    &__title {
+        font-weight: 700;
+    }
+}

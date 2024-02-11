@@ -1,0 +1,147 @@
+.clinic-detailed-item {
+
+	&__box-title {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		margin-bottom: 60px;
+	}
+
+	&__wrapper-first {
+		display: flex;
+		justify-content: space-between;
+		margin-bottom: 30px;
+	}
+
+	&__wrapper-first-left {
+		display: flex;
+		flex-direction: column;
+		width: 40%;
+		gap: 30px;
+	}
+
+	&__wrapper-first-center {
+		width: 25%;
+	}
+
+	&__wrapper-first-right {
+		width: 25%;
+	}
+
+	&__wrapper-first-item {
+		display: flex;
+		gap: 30px;
+		height: 100%;
+	}
+
+	&__description-first {
+		width: 100%;
+		height: 100%;
+		padding: 20px;
+		background: #ffffff;
+		border-radius: 20px;
+	}
+
+	&__license-img{
+		max-width: 69px;
+		max-height: 99px;
+		cursor: pointer;
+	}
+
+	&__license-img:not(:nth-child(5)){
+		margin-right: 16px;
+	}
+
+	&__flex{
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-end;
+	}
+
+	&__modal{
+		padding: 34px;
+		width: 1144px;
+		height: max-content;
+	}
+
+	&__modal-title {
+		margin: 0;
+		margin-bottom: 12px;
+		color: #000;
+		font-family: Raleway;
+		font-size: 40px;
+		font-style: normal;
+		font-weight: 700;
+		line-height: normal;
+		text-transform: uppercase;
+	}
+
+	&__modal-descr {
+		margin: 0;
+		margin-bottom: 32px;
+		color: #000;
+		font-family: Raleway;
+		font-size: 16px;
+		font-style: normal;
+		font-weight: 400;
+		line-height: normal;
+	}
+
+	&__modal-license-img{
+		cursor: pointer;
+	}
+
+	&__modal-license-img:not(:nth-child(5n)){
+		margin-right: 32px;
+	}
+
+	&__modal-license-img:not(:first-child):not(:nth-child(2)):not(:nth-child(3)):not(:nth-child(4)):not(:nth-child(5)){
+		margin-top: 32px;
+	}
+
+	&__description-first-box {
+		display: flex;
+		align-items: center;
+		margin-bottom: 30px;
+	}
+
+	&__description-first-item {
+		margin-right: 20px;
+
+		&:last-child {
+			margin-right: 0;
+		}
+	}
+
+	&__description {
+		padding: 20px;
+		background: #ffffff;
+		border-radius: 20px;
+		margin-bottom: 30px;
+	}
+
+	&__wrapper-second {
+		display: flex;
+		justify-content: space-between;
+	}
+
+	&__wrapper-second-left {
+		width: 25%;
+	}
+
+	&__wrapper-second-right {
+		width: 70%;
+	}
+
+	&__description-second {
+		padding: 20px;
+		background: #ffffff;
+		border-radius: 20px;
+		margin-bottom: 30px;
+
+		&_nav {
+			position: sticky;
+			top: 30px;
+		}
+	}
+}

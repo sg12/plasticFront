@@ -1,0 +1,11 @@
+.reviews {
+    &__info {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+    &__title {
+        font-size: var(--title-font-size);
+        font-weight: 700;
+    }
+}
