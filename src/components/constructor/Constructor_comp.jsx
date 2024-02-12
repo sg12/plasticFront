@@ -9,7 +9,7 @@ const Constructor = () => {
 
   return (
     <div>
-      <h1>Не бойся меняться!</h1>
+      <h1 className="head">Не бойся меняться!</h1>
       <ConstructorFilter />
       <ConstructorFace activeLine={activeLine} setActiveLine={setActiveLine} />
       <About_operation activeLine={activeLine}/>

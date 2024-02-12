@@ -7,15 +7,10 @@
         padding-left: 32px;
         border-left: 1px solid gray;
         font-family: Raleway;
+        height: 487px;
     }
-    &__parents2 {
-        position: absolute;
-        left: 850px;
-        top: 300px;
-        padding-left: 32px;
-        border-left: 1px solid gray;
-        font-family: Raleway;
-    }
+    
+    
     &__header{
         padding-right: 32px;
         display: flex;
@@ -29,13 +24,7 @@
         font-weight: 700;
         line-height: normal;
     }
-    &__head2 {
-        color: #3066BE;
-        font-size: 36px;
-        font-style: normal;
-        font-weight: 700;
-        line-height: normal;
-    }
+    
 
     &__text {
         width: 754px;
@@ -105,28 +94,13 @@
         font-weight: 700;
         line-height: normal;
     }
-    &__not_face {
-        position: absolute;
-        left: 850px;
-        top: 300px;
-        padding-left: 32px;
-        font-family: Raleway;
-        color: #3066BE;
-        font-size: 36px;
-        font-style: normal;
-        font-weight: 700;
-        line-height: normal;
-    }
-    &__not_face_img{
-         height: 350px;
-    }
 
-    &__hint{
-        display: none;
-    }
-    &__button:hover &__hint{
-        display:inline-block;
-    }
+
+    // &__hint{
+    //     display: none;
+    // }
+    // &__button:hover &__hint{
+    //     display:inline-block;
     // &__hint#__first{
     //     top:10px;
     // }
@@ -137,6 +111,77 @@
     //     top:35px;
     // }
     
+}
+
+.plug{
+    &__parents{
+        position: absolute;
+        left: 850px;
+        top: 300px;
+        color: #3066BE;
+        font-size: 36px;
+        font-family: Raleway;
+        padding-left: 32px;
+        border-left: 1px solid gray;
+        height: 487px;
+    }
+    &__text{ 
+        position: relative;
+        left: 150px;
+        width: 600px;
+        text-align:end;
+        color: #00AD9F;
+        font-size: 20px;
+        font-weight: 700px;
+        font-weight: bold;
+        padding: 25px;
+    }
+    &__button1{
+        //position: absolute;
+        border-radius: 15px;
+        background: rgb(215, 231, 255);
+        width: 453px;
+        height: 85px;
+        color: rgb(0, 0, 0);
+        font-family: Raleway;
+        font-size: 16px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        text-align: left;
+        padding-inline: 10px;
+    }
+    &__button2{
+        //position: absolute;
+        top: 150px;
+        border-radius: 15px;
+        background: rgb(215, 231, 255);
+        width: 260px;
+        height: 40px;
+        color: rgb(0, 0, 0);
+        font-family: Raleway;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        padding-inline: 10px;
+        margin-top: 10px;
+        
+    }
+
+    &__head{
+        color: #3066BE;
+        font-size: 36px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+    }
+    &__image {
+        position: relative;
+        transform: scaleX(-1);
+        height: 350px;
+        left:270px;
+        bottom: 100px;
 
 
+    }
 }
