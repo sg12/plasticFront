@@ -19,7 +19,7 @@ const EnterItem = () => {
 						Партнер
 					</FieldButton>
 				</Link>
-				<Link to={'/'} href="#" className='enter__link'>Вернуться на главную</Link>
+				<Link to={'/'} className='enter__link'>Вернуться на главную</Link>
 			</div>
 		</div>
 	);

@@ -6,6 +6,7 @@ export default [
     services: "Устранение дефектов подбородка",
     costs: "12 999" + " ₽",
     status: "Активный",
+    reception: "Частная практика",
   },
   {
     id: 2,
@@ -14,6 +15,7 @@ export default [
     services: "Контурная пластика подбородка",
     costs: "12 999" + " ₽",
     status: "Активный",
+    reception: "На дому",
   },
   {
     id: 3,
@@ -22,6 +24,7 @@ export default [
     services: "Коррекция лопоухости",
     costs: "12 999" + " ₽",
     status: "Активный",
+    reception: "Частная практика",
   },
   {
     id: 4,
@@ -30,5 +33,6 @@ export default [
     services: "Удаление атеромы",
     costs: "12 999" + " ₽",
     status: "Активный",
+    reception: "Частная практика",
   },
 ];

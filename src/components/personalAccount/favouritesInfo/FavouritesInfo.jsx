@@ -9,6 +9,7 @@ import FilterModal from "../../UI/modals/filterModal/FilterModal";
 const FavouritesInfo = () => {
   const { userData } = useUser();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [filterValue, setFilterValue] = useState("");
   const [favorites, setFavorites] = useState([
     { id: 1, type: "doctor", username: "Ирина", direction: "Все напраление" },
     { id: 2, type: "doctor", username: "Елена", direction: "Ринопластика" },
@@ -20,6 +21,14 @@ const FavouritesInfo = () => {
     { id: 8, type: "doctor", username: "Валерия", direction: "Ринопластика" },
   ]);
 
+  const filteredFavorites = favorites.filter((favorite) => {
+    const username = favorite.username.toLowerCase().includes(filterValue.toLowerCase());
+    const direction = favorite.direction.toLowerCase().includes(filterValue.toLowerCase());
+    // const type = favorite.type.toLowerCase().includes(filterValue.toLowerCase());
+
+    return username || direction;
+  });
+
   const removeFromFavorites = (id) => {
     setFavorites((prevFavorites) =>
       prevFavorites.filter((favorite) => favorite.id !== id)
@@ -30,7 +39,12 @@ const FavouritesInfo = () => {
     <div className="favourites">
       <span className="favourites__title">Избранное</span>
       <div>
-        <button className="favourites__button-filter" onClick={() => setIsFilterOpen(!isFilterOpen)}>Фильтры</button>
+        <button
+          className="favourites__button-filter"
+          onClick={() => setIsFilterOpen(!isFilterOpen)}
+        >
+          Фильтры
+        </button>
         {isFilterOpen && (
           <FilterModal
             isFilterOpen={isFilterOpen}
@@ -38,16 +52,22 @@ const FavouritesInfo = () => {
             style="right"
             animationEnabled={true}
             animationTime={400}
+            filterValue={filterValue}
+            setFilterValue={setFilterValue}
+            searchData={favorites}
+            children="Имя или направление"
           />
         )}
       </div>
-      {favorites.length > 0 ? (
+      {filteredFavorites.length > 0 ? (
         <CardsItem
           isFavorite={true}
           userData={userData}
-          favorites={favorites}
+          favorites={filteredFavorites}
           removeFromFavorites={removeFromFavorites}
         />
+      ) : filterValue.length > 0 ? (
+        <span className="favourites__noCards">Карточка с такими параметрами не найдена</span>
       ) : (
         <span className="favourites__noCards">Нет избранных карточек</span>
       )}

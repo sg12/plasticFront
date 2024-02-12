@@ -8,19 +8,19 @@ const UserProfileDetails = ({ userData }) => (
   <div className="profile__details">
     <div className="profile__gender">
       <span className="profile__darkened">Пол: </span>
-      {userData.gender || "Неизвестно"}
+      {userData?.user?.gender || "Неизвестно"}
     </div>
     <div className="profile__birthdate">
       <span className="profile__darkened">Дата рождения: </span>
-      {userData.birthdate || "Неизвестно"}
+      {userData?.date_born || "Неизвестно"}
     </div>
     <div className="profile__address">
       <span className="profile__darkened">Адрес: </span>
-      {userData.address.suite || "Неизвестно"}
+      {userData?.user?.address || "Неизвестно"}
     </div>
     <div className="profile__site">
       <span className="profile__darkened">Официальный сайт: </span>
-      {userData.site || "Неизвестно"}
+      {userData?.user?.site || "Неизвестно"}
     </div>
   </div>
 );
@@ -40,7 +40,7 @@ const UserProfileFooter = ({ userData }) => (
         <hr className="profile__divider" />
         <div className="profile__education">
           <span className="profile__darkened">Образование</span>
-          {userData.education || "Неизвестно"}
+          {userData?.education || "Неизвестно"}
           <button className="add" type="button">
             Добавить
           </button>
@@ -48,7 +48,7 @@ const UserProfileFooter = ({ userData }) => (
         <hr className="profile__divider" />
         <div className="profile__qualification">
           <span className="profile__darkened">Повышение квалификации</span>
-          {userData.qualification || "Неизвестно"}
+          {userData?.qualification || "Неизвестно"}
           <button className="add" type="button">
             Добавить
           </button>
@@ -56,7 +56,7 @@ const UserProfileFooter = ({ userData }) => (
         <hr className="profile__divider" />
         <div className="profile__experience">
           <span className="profile__darkened">Опыт работы</span>
-          {userData.experience || "Неизвестно"}
+          {userData?.experience || "Неизвестно"}
           <button className="add" type="button">
             Добавить
           </button>
@@ -68,7 +68,6 @@ const UserProfileFooter = ({ userData }) => (
 
 const UserProfileAction = ({ toggleEditingMode, handleDelete }) => (
   <div className="profile__action-button">
-    <DeletePopup />
     <button type="button" className="edit" onClick={toggleEditingMode}>
       Редактировать профиль
     </button>
@@ -84,7 +83,7 @@ const UserProfileHeader = ({ userData, imageSrc, handleFileChange }) => (
       <div className="profile__photo">
         <label htmlFor="uploadInput" className="profile__photo-label">
           <img
-            src={userData.photo || imageSrc}
+            src={userData?.user?.avatar || imageSrc}
             alt="user image"
             className="profile__photo-img"
           />
@@ -99,22 +98,22 @@ const UserProfileHeader = ({ userData, imageSrc, handleFileChange }) => (
       </div>
       <div className="profile__details">
         <h3 className="profile__user-name">
-          {userData.name || "Неизвестно"} (Doctor)
+          {userData?.user?.username || "Неизвестно"} (Doctor)
         </h3>
         <div className="profile__user-phone">
           <span className="profile__darkened">Телефон: </span>
-          {userData.phone || "Неизвестно"}
+          {userData?.user?.phone || "Неизвестно"}
         </div>
         <div className="profile__email">
           <span className="profile__darkened">Почта: </span>
-          {userData.email || "Неизвестно"}
+          {userData?.user?.email || "Неизвестно"}
         </div>
       </div>
     </div>
     <div className="profile__identification">
       <div className="iden">
         <div className="iden__id">
-          <span>Ваш ID:</span> {userData.id || "Неизвестно"}
+          <span>Ваш ID:</span> {userData?.user?.id || "Неизвестно"}
         </div>
       </div>
     </div>
@@ -172,7 +171,7 @@ const ProfileDoctorInfo = ({ userData }) => {
               <hr className="profile__divider" />
               <UserProfileAction
                 toggleEditingMode={toggleEditingMode}
-                handleDelete={handleDelete}
+                handleDelete={handleOpenModal}
               />
             </>
           )}

@@ -2,8 +2,13 @@ import { Link } from 'react-router-dom';
 
 import { useForm } from 'react-hook-form';
 
-import './EnterPartner.scss';
 import FieldButton from '../UI/buttons/fieldButton/FieldButton';
+
+import PlasticServices from '../../services/PlasticServices.js';
+
+import Cookies from 'js-cookie';
+
+import './EnterPartner.scss';
 
 const EnterPartner = () => {
 
@@ -14,8 +19,11 @@ const EnterPartner = () => {
         },
     });
 
-    const onSubmit = (data) => {
-        console.log(data);
+    const onSubmit = async ({ email, password }) => {
+        const data = { email, password };
+        const respData = await PlasticServices.loginUser(data);
+        console.log(respData);
+        Cookies.set('token', respData.token);
     };
 
     return (
