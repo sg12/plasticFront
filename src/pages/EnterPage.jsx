@@ -1,4 +1,4 @@
-import EnterList from "../components/enterList/enterList";
+import EnterList from "../components/enterList/EnterList";
 
 const EnterPage = () => {
     return (
