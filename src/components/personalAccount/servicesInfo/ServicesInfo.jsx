@@ -3,7 +3,7 @@ import Table from "../../UI/table/Table";
 import "./ServicesInfo.scss";
 import FilterModal from "../../UI/modals/filterModal/FilterModal";
 import { useState } from "react";
-import Radio from "../../UI/radios/radio";
+import Radio from "../../UI/radios/Radio";
 
 const ServicesInfo = () => {
   const options = [

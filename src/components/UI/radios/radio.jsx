@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "./radio.module.scss";
+import styles from "./Radio.module.scss";
 
 const Radio = ({ options, onChange }) => {
   const [selectedOption, setSelectedOption] = useState(null);
