@@ -51,7 +51,7 @@ class PlasticServices {
 	
 	static async registerUser(data, type) {
 		try {
-			const response = await axios.post(`http://localhost:8000/api/v1/auth/register/${type}/`, data);
+			const response = await axios.post(`${_apiBase}/auth/register/${type}/`, data);
 			return response.data; // Ответ от сервера (можно обработать по вашему усмотрению)
 		} catch (error) {
 			console.error('Ошибка при регистрации:', error);
@@ -60,7 +60,7 @@ class PlasticServices {
 
 	static async loginUser(data) {
 		try {
-			const response = await axios.post(`http://localhost:8000/api/v1/auth/login/`, data);
+			const response = await axios.post(`${_apiBase}/auth/login/`, data);
 			return response.data; // Ответ от сервера (можно обработать по вашему усмотрению)
 		} catch (error) {
 			console.error('Ошибка при авторизации:', error);
