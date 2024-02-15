@@ -24,6 +24,7 @@ import ClinicPage from '../../pages/ClinicPage';
 // import StocksPage from '../../pages/StocksPage';
 import ArticlesPage from "../../pages/ArticlesPage";
 import NotFound from "../notFound/NotFound";
+import ConstructorPage from "../../pages/Constructor";
 
 import EnterItem from "../enterItem/EnterItem";
 import EnterClient from "../enterClient/EnterClient";
@@ -52,6 +53,7 @@ function App() {
 					<Route path="articles" element={<ArticlesPage />}></Route>
 					<Route path="articles/:id" element={<ArticleDetailedPage />}></Route>
 					<Route path="*" element={<NotFound />}></Route>
+                    <Route path="constructor" element={<ConstructorPage/>}></Route>
 				</Route>
 				<Route path="enterPage" element={<EnterPage />}>
 					<Route index element={<EnterItem />}></Route>
