@@ -37,6 +37,7 @@ import NewPassword from "../newPassword/newPassword";
 import EnterPage from "../../pages/EnterPage";
 import AccountPage from "../../pages/AccountPage";
 import ArticleDetailedPage from "../../pages/ArticleDetailedPage";
+import PrivateRoute from "../../routes/PrivateRoute";
 
 function App() {
 	return (
@@ -65,6 +66,7 @@ function App() {
 					<Route path="forgotPassword" element={<ForgotPassword />}></Route>
 					<Route path="newPassword" element={<NewPassword />}></Route>
 				</Route>
+				<Route element={<PrivateRoute />}>
 				<Route path="account" element={<AccountPage />}>
 					<Route path="profile" element={<ProfileUser />} />
 					<Route path="reviews" element={<ReviewsInfo />} />
@@ -75,6 +77,7 @@ function App() {
 					<Route path="specialist" element={<SpecialistInfo />} />
 					<Route path="settings" element={<SettingsInfo />} />
 					<Route path="favourites" element={<FavouritesInfo />} />
+				</Route>
 				</Route>
 			</Routes>
 		</>
