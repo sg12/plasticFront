@@ -54,6 +54,7 @@ class PlasticServices {
 			const response = await axios.post(`http://localhost:8000/api/v1/auth/register/${type}/`, data);
 			return response.data; // Ответ от сервера (можно обработать по вашему усмотрению)
 		} catch (error) {
+			window.alert('Ошибка при регистрации: ' + error.message);
 			console.error('Ошибка при регистрации:', error);
 		}
 	}
@@ -63,6 +64,7 @@ class PlasticServices {
 			const response = await axios.post(`http://localhost:8000/api/v1/auth/login/`, data);
 			return response.data; // Ответ от сервера (можно обработать по вашему усмотрению)
 		} catch (error) {
+			window.alert('Ошибка при авторизации: ' + error.message);
 			console.error('Ошибка при авторизации:', error);
 		}
 	}
