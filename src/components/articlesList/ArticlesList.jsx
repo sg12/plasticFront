@@ -5,22 +5,26 @@ import { useState, useEffect } from 'react';
 import PlasticServices from '../../services/PlasticServices';
 
 import ArticlesItem from '../articlesItem/ArticlesItem';
-import OutlineButton from '../UI/buttons/outlineButton/OutlineButton';
+// import OutlineButton from '../UI/buttons/outlineButton/OutlineButton';
 import Spinner from '../spinner/Spinner';
 
 import { useFetching } from '../../hooks/useFetching';
 
+//!!! дождаться изменений от Димы
+//!!! убрать лишние комментарии
+//!!! заменить page на offset
+
 const ArticlesList = () => {
 
 	const [posts, setPosts] = useState([]);
-	const [page, setPage] = useState(1);
-	const [totalCount, setTotalCount] = useState(0);
+	// const [page, setPage] = useState(1);
+	// const [totalCount, setTotalCount] = useState(0);
 
 	const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
-		const response = await PlasticServices.getAllArticles(page);
+		const response = await PlasticServices.getAllArticles();
 		setPosts([...posts, ...response.data]);
-		setPage(page + 1);
-		setTotalCount(response.headers['x-total-count']);
+		// setPage(page + 1);
+		// setTotalCount(response.headers['x-total-count']);
 	});
 
 	const onRequest = () => {
@@ -31,23 +35,24 @@ const ArticlesList = () => {
 		onRequest();
 	}, []);
 
-	const loadMorePosts = () => {
-		onRequest();
-	};
+	// const loadMorePosts = () => {
+	// 	onRequest();
+	// };
 
 	const content = !(!isPostsLoading && !postError && posts.length === 0)
 		? posts.map((post) => (
 			<ArticlesItem post={post} key={post.id} />
 		))
-		: <h3 className='articles-item__title' style={{ margin: 'auto' }}>Нет статей</h3>;
+		: <h3 style={{ margin: 'auto', fontSize: '1.5rem' }}>Нет статей</h3>;
 
-	const error = postError ? <h3 className='articles-item__title' style={{ textAlign: 'center' }}>Ошибка: {postError}</h3> : null;
+	const error = postError ? <h3 style={{ textAlign: 'center', fontSize: '1.5rem' }}>Ошибка: {postError}</h3> : null;
 
 	const spinner = isPostsLoading ? <Spinner /> : null;
 
-	const button = totalCount > posts.length || error || spinner
-		? <OutlineButton className='articles__button' style={{ margin: 'auto' }} onClick={loadMorePosts}>Показать ещё</OutlineButton>
-		: null;
+	//!!! заменить класс articles__button на стили
+	// const button = totalCount > posts.length || error || spinner
+	// 	? <OutlineButton className='articles__button' style={{ margin: 'auto' }} onClick={loadMorePosts}>Показать ещё</OutlineButton>
+	// 	: null;
 
 	return (
 		<section className='articles'>
@@ -58,7 +63,7 @@ const ArticlesList = () => {
 				</ul>
 				{error}
 				{spinner}
-				{button}
+				{/* {button} */}
 			</div>
 		</section>
 	);
