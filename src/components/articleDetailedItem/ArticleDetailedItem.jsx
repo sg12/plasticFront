@@ -19,7 +19,7 @@ const ArticleDetailedItem = (props) => {
 				</div>
 				<div className="article-detailed-item__right">
 					<h2 className="article-detailed-item__title">{props.post.id} {props.post.name}</h2>
-					<p className="article-detailed-item__description">Как считают специалисты</p>
+					{/* <p className="article-detailed-item__description">Как считают специалисты</p> */}
 					<div className="article-detailed-item__text">
 						<p className="article-detailed-item__point">
 							{props.post.description}
@@ -40,7 +40,7 @@ const ArticleDetailedItem = (props) => {
 					</div>
 				</div>
 			</div>
-			<div className="article-detailed-item__down">
+			{/* <div className="article-detailed-item__down">
 				<p className="article-detailed-item__description">стереотипы о пластике летом</p>
 				<p className="article-detailed-item__item">
 					1. «Жаркая погода ухудшает результат»
@@ -115,7 +115,7 @@ const ArticleDetailedItem = (props) => {
 					сердечной недостаточностью врачи «Медикал Арт» действительно рекомендуют отложить хирургические вмешательства до
 					осени или зимы.
 				</p>
-			</div>
+			</div> */}
 		</div>
 	);
 };

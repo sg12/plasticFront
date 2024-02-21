@@ -14,6 +14,7 @@ class PlasticServices {
 		return response;
 	}
 
+	//! изменить формат времени
 	static async getArticle(id) {
 		const response = await axios.get(`${_apiBase}/articles/${id}`);
 		return response;
