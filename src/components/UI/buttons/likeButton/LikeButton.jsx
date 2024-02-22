@@ -22,7 +22,7 @@ const LikeButton = ({ ...props }) => {
 };
 
 LikeButton.propTypes = {
-	className: PropTypes.string.isRequired,
+	className: PropTypes.string,
 };
 
 export default LikeButton;

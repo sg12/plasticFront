@@ -12,7 +12,7 @@ const WhiteButton = ({ children, ...props }) => {
 
 WhiteButton.propTypes = {
 	children: PropTypes.string.isRequired,
-	className: PropTypes.string.isRequired,
+	className: PropTypes.string,
 };
 
 export default WhiteButton;

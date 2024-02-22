@@ -20,8 +20,8 @@ class PlasticServices {
 		return response;
 	}
 
-	static async getAllClinics(page = 1) {
-		const response = await axios.get(`${_apiBase}posts?_limit=6&_page=${page}`);
+	static async getAllClinics(offset = 0) {
+		const response = await axios.get(`${_apiBase}/clinics?limit=6&offset=${offset}`);
 		return response;
 	}
 

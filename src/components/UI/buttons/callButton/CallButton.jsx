@@ -19,7 +19,7 @@ const CallButton = ({ children, ...props }) => {
 
 CallButton.propTypes = {
 	children: PropTypes.string.isRequired,
-	className: PropTypes.string.isRequired,
+	className: PropTypes.string,
 };
 
 export default CallButton;

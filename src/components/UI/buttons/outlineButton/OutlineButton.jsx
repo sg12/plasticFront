@@ -12,7 +12,7 @@ const OutlineButton = ({ children, ...props }) => {
 
 OutlineButton.propTypes = {
 	children: PropTypes.string.isRequired,
-	className: PropTypes.string.isRequired,
+	className: PropTypes.string,
 };
 
 export default OutlineButton;

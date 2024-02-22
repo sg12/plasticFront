@@ -12,7 +12,7 @@ const FieldButton = ({ children, ...props }) => {
 
 FieldButton.propTypes = {
 	children: PropTypes.string.isRequired,
-	className: PropTypes.string.isRequired,
+	className: PropTypes.string,
 };
 
 export default FieldButton;

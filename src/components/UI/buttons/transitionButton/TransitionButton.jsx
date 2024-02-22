@@ -19,7 +19,7 @@ const TransitionButton = ({ children, ...props }) => {
 
 TransitionButton.propTypes = {
 	children: PropTypes.string.isRequired,
-	className: PropTypes.string.isRequired,
+	className: PropTypes.string,
 };
 
 export default TransitionButton;
