@@ -32,14 +32,18 @@ const ArticleDetailedList = () => {
 		? article.map((post) => (
 			<ArticleDetailedItem post={post} key={post.id} />
 		))
-		: <h3 style={{ textAlign: 'center', fontSize: '1.5rem' }}>Нет врача</h3>;
+		: <h3 className='component-content-text'>Нет врача</h3>;
 
-	const error = postError ? <h3 style={{ textAlign: 'center', fontSize: '1.5rem' }}>Ошибка: {postError}</h3> : null;
+	const error = postError
+		? <h3 className='component-error-text'>Ошибка: {postError}</h3>
+		: null;
 
-	const spinner = isPostsLoading ? <Spinner /> : null;
+	const spinner = isPostsLoading
+		? <Spinner />
+		: null;
 
 	const button = error || spinner || article.length === 0
-		? <OutlineButton style={{ margin: 'auto' }} onClick={() => navigate(-1)}>Вернутся назад</OutlineButton>
+		? <OutlineButton className='component-button-text' onClick={() => navigate(-1)}>Вернутся назад</OutlineButton>
 		: null;
 
 	return (

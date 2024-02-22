@@ -43,13 +43,17 @@ const ArticlesList = () => {
 		? posts.map((post) => (
 			<ArticlesItem post={post} key={post.id} />
 		))
-		: <h3 style={{ margin: 'auto', fontSize: '1.5rem' }}>Нет статей</h3>;
+		: <h3 className='component-content-text component-content-text_wrapper'>Нет статей</h3>;
 
-	const error = postError ? <h3 style={{ textAlign: 'center', fontSize: '1.5rem' }}>Ошибка: {postError}</h3> : null;
+	const error = postError
+		? <h3 className='component-error-text'>Ошибка: {postError}</h3>
+		: null;
 
-	const spinner = isPostsLoading ? <Spinner /> : null;
+	const spinner = isPostsLoading
+		? <Spinner />
+		: null;
 
-	//!!! заменить класс articles__button на стили
+	//!!! заменить класс articles__button на универсальные стили
 	// const button = totalCount > posts.length || error || spinner
 	// 	? <OutlineButton className='articles__button' style={{ margin: 'auto' }} onClick={loadMorePosts}>Показать ещё</OutlineButton>
 	// 	: null;

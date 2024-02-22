@@ -6,7 +6,7 @@ import telephone from '../../../../assets/icons/telephone.svg';
 
 const CallButton = ({ children, ...props }) => {
 	return (
-		<div {...props} className={classes.callBtn}>
+		<div {...props} className={`${classes.callBtn} ${props.className}`}>
 			<button className={classes.callBtn__img}>
 				<img src={telephone} alt="телефон" />
 			</button>
@@ -19,6 +19,7 @@ const CallButton = ({ children, ...props }) => {
 
 CallButton.propTypes = {
 	children: PropTypes.string.isRequired,
+	className: PropTypes.string.isRequired,
 };
 
 export default CallButton;
