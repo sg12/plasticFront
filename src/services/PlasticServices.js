@@ -4,11 +4,6 @@ import axios from "axios";
 const _apiBase = "http://localhost:8000/api/v1";
 
 class PlasticServices {
-	// static async getAllArticles(page = 1) {
-	// 	const response = await axios.get(`${_apiBase}posts?_limit=6&_page=${page}`);
-	// 	return response;
-	// }
-
 	static async getAllArticles(offset = 0) {
 		const response = await axios.get(`${_apiBase}/articles?limit=6&offset=${offset}`);
 		return response;
@@ -30,13 +25,13 @@ class PlasticServices {
 		return response;
 	}
 
-	static async getAllDoctors(page = 1) {
-		const response = await axios.get(`${_apiBase}posts?_limit=6&_page=${page}`);
+	static async getAllDoctors(offset = 0) {
+		const response = await axios.get(`${_apiBase}/surgeons?limit=6&offset=${offset}`);
 		return response;
 	}
 
 	static async getDoctor(id) {
-		const response = await axios.get(`${_apiBase}posts/${id}`);
+		const response = await axios.get(`${_apiBase}/surgeons/${id}`);
 		return response;
 	}
 
@@ -57,7 +52,7 @@ class PlasticServices {
 
 	static async registerUser(data, type) {
 		try {
-			const response = await axios.post(`http://localhost:8000/api/v1/auth/register/${type}/`, data);
+			const response = await axios.post(`${_apiBase}/auth/register/${type}/`, data);
 			return response.data; // Ответ от сервера (можно обработать по вашему усмотрению)
 		} catch (error) {
 			window.alert('Ошибка при регистрации: ' + error.message);
@@ -67,7 +62,7 @@ class PlasticServices {
 
 	static async loginUser(data) {
 		try {
-			const response = await axios.post(`http://localhost:8000/api/v1/auth/login/`, data);
+			const response = await axios.post(`${_apiBase}/auth/login/`, data);
 			return response.data; // Ответ от сервера (можно обработать по вашему усмотрению)
 		} catch (error) {
 			window.alert('Ошибка при авторизации: ' + error.message);
