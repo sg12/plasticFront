@@ -26,7 +26,7 @@ class PlasticServices {
 	}
 
 	static async getClinic(id) {
-		const response = await axios.get(`${_apiBase}posts/${id}`);
+		const response = await axios.get(`${_apiBase}/clinics/${id}`);
 		return response;
 	}
 

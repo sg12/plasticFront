@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import PlasticServices from '../../services/PlasticServices';
 
 import ClinicsCardsItem from '../clinicsCardsItem/ClinicsCardsItem';
-import OutlineButton from '../UI/buttons/outlineButton/OutlineButton';
+// import OutlineButton from '../UI/buttons/outlineButton/OutlineButton';
 import Spinner from '../spinner/Spinner';
 
 import { useFetching } from '../../hooks/useFetching';
@@ -13,14 +13,15 @@ import { useFetching } from '../../hooks/useFetching';
 const ClinicsCardsList = () => {
 
 	const [posts, setPosts] = useState([]);
-	const [page, setPage] = useState(1);
-	const [totalCount, setTotalCount] = useState(0);
+	const [offset, setOffset] = useState(0);
+	// const [totalCount, setTotalCount] = useState(0);
 
 	const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
-		const response = await PlasticServices.getAllClinics(page);
+		const response = await PlasticServices.getAllClinics(offset);
 		setPosts([...posts, ...response.data]);
-		setPage(page + 1);
-		setTotalCount(response.headers['x-total-count']);
+		setOffset(offset + 6);
+		// setTotalCount(response.headers['x-total-count']);
+		// console.log(response.headers);
 	});
 
 	const onRequest = () => {
@@ -31,23 +32,27 @@ const ClinicsCardsList = () => {
 		onRequest();
 	}, []);
 
-	const loadMorePosts = () => {
-		onRequest();
-	};
+	// const loadMorePosts = () => {
+	// 	onRequest();
+	// };
 
 	const content = !(!isPostsLoading && !postError && posts.length === 0)
 		? posts.map((post) => (
 			<ClinicsCardsItem post={post} key={post.id} />
 		))
-		: <h3 className='articles-item__title' style={{ margin: 'auto', textAlign: 'center' }}>Нет клиник</h3>;
+		: <h3 className='component-content-text'>Нет клиник</h3>;
 
-	const error = postError ? <h3 className='articles-item__title' style={{ textAlign: 'center' }}>Ошибка: {postError}</h3> : null;
-
-	const spinner = isPostsLoading ? <Spinner /> : null;
-
-	const button = totalCount > posts.length || error || spinner
-		? <OutlineButton className='articles__button' style={{ margin: 'auto' }} onClick={loadMorePosts}>Показать ещё</OutlineButton>
+	const error = postError
+		? <h3 className='component-error-text'>Ошибка: {postError}</h3>
 		: null;
+
+	const spinner = isPostsLoading
+		? <Spinner />
+		: null;
+
+	// const button = totalCount > posts.length || error || spinner
+	// 	? <OutlineButton className='component-button-text' onClick={loadMorePosts}>Показать ещё</OutlineButton>
+	// 	: null;
 
 	return (
 		<section className='clinics-cards-list'>
@@ -58,7 +63,7 @@ const ClinicsCardsList = () => {
 				</ul>
 				{error}
 				{spinner}
-				{button}
+				{/* {button} */}
 			</div>
 		</section>
 	);
