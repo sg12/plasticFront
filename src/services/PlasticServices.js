@@ -9,8 +9,8 @@ class PlasticServices {
 	// 	return response;
 	// }
 
-	static async getAllArticles() {
-		const response = await axios.get(`${_apiBase}/articles`);
+	static async getAllArticles(offset = 0) {
+		const response = await axios.get(`${_apiBase}/articles?limit=6&offset=${offset}`);
 		return response;
 	}
 

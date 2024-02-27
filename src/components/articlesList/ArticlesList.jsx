@@ -5,26 +5,22 @@ import { useState, useEffect } from 'react';
 import PlasticServices from '../../services/PlasticServices';
 
 import ArticlesItem from '../articlesItem/ArticlesItem';
-// import OutlineButton from '../UI/buttons/outlineButton/OutlineButton';
+import OutlineButton from '../UI/buttons/outlineButton/OutlineButton';
 import Spinner from '../spinner/Spinner';
 
 import { useFetching } from '../../hooks/useFetching';
 
-//!!! дождаться изменений от Димы
-//!!! убрать лишние комментарии
-//!!! заменить page на offset
-
 const ArticlesList = () => {
 
 	const [posts, setPosts] = useState([]);
-	// const [page, setPage] = useState(1);
-	// const [totalCount, setTotalCount] = useState(0);
+	const [offset, setOffset] = useState(0);
+	const [totalCount, setTotalCount] = useState(0);
 
 	const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
-		const response = await PlasticServices.getAllArticles();
+		const response = await PlasticServices.getAllArticles(offset);
 		setPosts([...posts, ...response.data]);
-		// setPage(page + 1);
-		// setTotalCount(response.headers['x-total-count']);
+		setOffset(offset + 6);
+		setTotalCount(response.headers['x-total-count']);
 	});
 
 	const onRequest = () => {
@@ -35,9 +31,9 @@ const ArticlesList = () => {
 		onRequest();
 	}, []);
 
-	// const loadMorePosts = () => {
-	// 	onRequest();
-	// };
+	const loadMorePosts = () => {
+		onRequest();
+	};
 
 	const content = !(!isPostsLoading && !postError && posts.length === 0)
 		? posts.map((post) => (
@@ -53,10 +49,9 @@ const ArticlesList = () => {
 		? <Spinner />
 		: null;
 
-	//!!! заменить класс articles__button на универсальные стили
-	// const button = totalCount > posts.length || error || spinner
-	// 	? <OutlineButton className='articles__button' style={{ margin: 'auto' }} onClick={loadMorePosts}>Показать ещё</OutlineButton>
-	// 	: null;
+	const button = totalCount > posts.length || error || spinner
+		? <OutlineButton className='component-button-text' onClick={loadMorePosts}>Показать ещё</OutlineButton>
+		: null;
 
 	return (
 		<section className='articles'>
@@ -67,7 +62,7 @@ const ArticlesList = () => {
 				</ul>
 				{error}
 				{spinner}
-				{/* {button} */}
+				{button}
 			</div>
 		</section>
 	);

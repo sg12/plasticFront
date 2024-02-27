@@ -21,7 +21,6 @@ const ClinicsCardsList = () => {
 		setPosts([...posts, ...response.data]);
 		setOffset(offset + 6);
 		setTotalCount(response.headers['x-total-count']);
-		console.log(response.headers['x-total-count']);
 	});
 
 	const onRequest = () => {
