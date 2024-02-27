@@ -23,7 +23,7 @@ const DoctorDetailedItem = (props) => {
 			<div className='doctor-detailed-item__box-title'>
 				<img src={doctorImg} alt="доктор" />
 				<Review />
-				<h2>{props.post.title}</h2>
+				<h2>{props.post.user.username}</h2>
 			</div>
 			<div className='doctor-detailed-item__wrapper-first'>
 				<div className='doctor-detailed-item__wrapper-first-left'>
@@ -59,7 +59,7 @@ const DoctorDetailedItem = (props) => {
 						<CenterModal visible={modal} setVisible={setModal}>
 							<div className='doctor-detailed-item__modal'>
 								<h3 className='doctor-detailed-item__modal-title'>ЛИЦЕНЗИЯ</h3>
-								<p className='doctor-detailed-item__modal-descr'>*нажмите на изображение для его увеличения</p>
+								<p className='doctor-detailed-item__modal-description'>*нажмите на изображение для его увеличения</p>
 								<div>
 									<img className='doctor-detailed-item__modal-license-img' src={licenseImg} alt="Лицензия" onClick={() => setModal2(true)} />
 									<img className='doctor-detailed-item__modal-license-img' src={licenseImg} alt="Лицензия" onClick={() => setModal2(true)} />
@@ -88,7 +88,7 @@ const DoctorDetailedItem = (props) => {
 			</div>
 			<div className='doctor-detailed-item__description'>
 				<h3>СПЕЦИАЛИЗАЦИЯ</h3>
-				<p>{props.post.body}</p>
+				<p>{props.post.description}</p>
 			</div>
 			<div className='doctor-detailed-item__wrapper-second'>
 				<div className='doctor-detailed-item__wrapper-second-left'>
@@ -126,9 +126,11 @@ const DoctorDetailedItem = (props) => {
 
 DoctorDetailedItem.propTypes = {
 	post: PropTypes.shape({
+		user: PropTypes.shape({
+			username: PropTypes.string.isRequired,
+		}).isRequired,
 		id: PropTypes.number.isRequired,
-		title: PropTypes.string.isRequired,
-		body: PropTypes.string.isRequired,
+		description: PropTypes.string.isRequired,
 	}).isRequired,
 };
 

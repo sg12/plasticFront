@@ -11,13 +11,6 @@ import OutlineButton from '../UI/buttons/outlineButton/OutlineButton';
 
 import { useFetching } from '../../hooks/useFetching';
 
-//! https://www.youtube.com/watch?v=GNrdg3PzpJQ&list=WL&index=24&t=7483s
-// 1.24.00 - модальное окно
-// 1.54.00 - страницы для постов
-// 2.22.06 - открытие конкретный пост
-// 2.33.00 - ограниченная навигация + глобальные данные
-//* 2.27.50 - остановился
-
 const DoctorDetailedList = () => {
 
 	const [doctor, setDoctor] = useState([]);
@@ -39,14 +32,18 @@ const DoctorDetailedList = () => {
 		? doctor.map((post) => (
 			<DoctorDetailedItem post={post} key={post.id} />
 		))
-		: <h3 className='articles-item__title' style={{ margin: 'auto', textAlign: 'center' }}>Нет врача</h3>;
+		: <h3 className='component-content-text'>Нет врача</h3>;
 
-	const error = postError ? <h3 className='articles-item__title' style={{ textAlign: 'center' }}>Ошибка: {postError}</h3> : null;
+	const error = postError
+		? <h3 className='component-error-text'>Ошибка: {postError}</h3>
+		: null;
 
-	const spinner = isPostsLoading ? <Spinner /> : null;
+	const spinner = isPostsLoading
+		? <Spinner />
+		: null;
 
 	const button = error || spinner
-		? <OutlineButton className='articles__button' style={{ margin: 'auto' }} onClick={() => navigate(-1)}>Вернутся назад</OutlineButton>
+		? <OutlineButton className='component-button-text' onClick={() => navigate(-1)}>Вернутся назад</OutlineButton>
 		: null;
 
 	return (
