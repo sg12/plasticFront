@@ -9,19 +9,28 @@ import OutlineButton from '../UI/buttons/outlineButton/OutlineButton';
 import Spinner from '../spinner/Spinner';
 
 import { useFetching } from '../../hooks/useFetching';
+import { getPageArray, getPageCount } from '../../utils/pagesPosts/PagesPosts';
 
 const ClinicsCardsList = () => {
 
 	const [posts, setPosts] = useState([]);
+	const [limit, setLimit] = useState(6);
 	const [offset, setOffset] = useState(0);
 	const [totalCount, setTotalCount] = useState(0);
+
+	const [totalPages, setTotalPages] = useState(0);
 
 	const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
 		const response = await PlasticServices.getAllClinics(offset);
 		setPosts([...posts, ...response.data]);
 		setOffset(offset + 6);
 		setTotalCount(response.headers['x-total-count']);
+		setTotalPages(getPageCount(totalCount, limit));
 	});
+	console.log('страницы клиник', totalPages);
+
+	let pagesArray = getPageArray(totalPages);
+	console.log('массив страниц', pagesArray);
 
 	const onRequest = () => {
 		fetchPosts();
@@ -62,7 +71,16 @@ const ClinicsCardsList = () => {
 				</ul>
 				{error}
 				{spinner}
-				{button}
+				{/* {button} */}
+				{pagesArray.map((page) => (
+					<OutlineButton
+						key={page}
+						// className='component-button-text'
+						onClick={() => setOffset(page)}
+					>
+						{page}
+					</OutlineButton>
+				))}
 			</div>
 		</section>
 	);

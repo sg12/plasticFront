@@ -16,7 +16,7 @@ class PlasticServices {
 	}
 
 	static async getAllClinics(offset = 0) {
-		const response = await axios.get(`${_apiBase}/clinics?limit=6&offset=${offset}`);
+		const response = await axios.get(`${_apiBase}/surgeons?limit=6&offset=${offset}`);
 		return response;
 	}
 
@@ -25,8 +25,14 @@ class PlasticServices {
 		return response;
 	}
 
-	static async getAllDoctors(offset = 0) {
-		const response = await axios.get(`${_apiBase}/surgeons?limit=6&offset=${offset}`);
+	// static async getAllDoctors(offset = 0) {
+	// 	const response = await axios.get(`${_apiBase}/surgeons?limit=6&offset=${offset}`);
+	// 	return response;
+	// }
+
+	static async getAllDoctors(offset, { ...filter }) {
+		console.log('гет доктор', filter);
+		const response = await axios.get(`${_apiBase}/clinics?limit=${filter.limit}&offset=${offset}&specialtie=${filter.specialtie}&gender=${filter.gender}&category=${filter.category}&rating=${filter.rating}&reception=${filter.reception}&sort=${filter.sort}`);
 		return response;
 	}
 
