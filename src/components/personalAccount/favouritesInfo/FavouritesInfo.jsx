@@ -55,7 +55,8 @@ const FavouritesInfo = () => {
             filterValue={filterValue}
             setFilterValue={setFilterValue}
             searchData={favorites}
-            children="Имя или направление"
+            disabledSearch={false}
+            placeholder={"Поиск"}
           />
         )}
       </div>
