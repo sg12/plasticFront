@@ -1,44 +1,52 @@
 import { useState } from "react";
 import "./ReviewsItem.scss";
-import Review from "../../review/Review";
 
-const ReviewsItem = ({ text, name, date }) => {
+const ReviewsItem = ({
+  text,
+  name,
+  rating,
+  userType,
+  engStatus,
+  rusStatus,
+  date,
+  onSave,
+  onCancel,
+}) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editedText, setEditedText] = useState(text);
 
-  const toggleExpand = () => {
-    setIsExpanded(!isExpanded);
-  };
-
-  const handleEditClick = () => {
-    setIsEditing(true);
-  };
-
   const handleSaveClick = () => {
-    // Здесь вы можете добавить логику сохранения отредактированного текста, например, отправив его на сервер
-    // После сохранения вы можете установить isEditing в false
+    onSave(editedText);
     setIsEditing(false);
   };
 
   const handleCancelClick = () => {
-    // Если пользователь отменяет редактирование, вернуться к оригинальному тексту
+    onCancel();
     setEditedText(text);
     setIsEditing(false);
   };
 
   return (
-    <div className="reviews">
+    <div className={`reviews ${isEditing ? "editing" : ""}`}>
       <div className="reviews__header">
-        <div className="reviews__header-left">
-          <span className="reviews__header-name">
-            {...name || "Васильев Семен Семёнович"}
+        <div className="reviews__header-upper">
+          <div className="reviews__header-info">
+            <span className="reviews__header-name">{name || "FULLNAME"}</span>
+            <span className="reviews__header-userType">
+              [{userType || "FULLNAME"}]
+            </span>
+          </div>
+          <span className="reviews__header-date">{date || "DATE"}</span>
+        </div>
+        <div className="reviews__header-bottom">
+          <span className="reviews__header-rating">
+            Рейтинг: {rating || "FULLNAME"}
           </span>
-          <span>
-            {/* <Review /> */}
+          <span className="reviews__header-rating">
+            {rusStatus || "FULLNAME"}
           </span>
         </div>
-        <span className="reviews__header-date">{...date || "10.02.2023"}</span>
       </div>
       <hr className="reviews__hr" />
       <div className="reviews__main">
@@ -50,9 +58,16 @@ const ReviewsItem = ({ text, name, date }) => {
             />
           ) : (
             <p>
-              {isExpanded ? editedText : `${editedText?.slice(0, 150)}...`}
-              {!isExpanded && (
-                <span className="read-more" onClick={toggleExpand}>
+              {isExpanded
+                ? editedText
+                : editedText.length > 100
+                ? `${editedText.slice(0, 100)}...`
+                : editedText}
+              {!isExpanded && editedText.length > 100 && (
+                <span
+                  className="read-more"
+                  onClick={() => setIsExpanded(!isExpanded)}
+                >
                   Читать дальше...
                 </span>
               )}
@@ -72,7 +87,7 @@ const ReviewsItem = ({ text, name, date }) => {
               </button>
             </>
           ) : (
-            <button className="edit" onClick={handleEditClick}>
+            <button className="edit" onClick={() => setIsEditing(true)}>
               Редактировать отзыв
             </button>
           )}

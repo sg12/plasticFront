@@ -1,11 +1,18 @@
 .reviews {
-    &__info {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-    }
-    &__title {
-        font-size: var(--title-font-size);
-        font-weight: 700;
-    }
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  &__list {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    width: 100%;
+  }
+  &__title {
+    font-size: var(--title-font-size);
+    font-weight: 700;
+  }
 }
