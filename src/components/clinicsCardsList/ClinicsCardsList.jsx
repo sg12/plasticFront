@@ -56,7 +56,7 @@ const ClinicsCardsList = () => {
 	return (
 		<section className='clinics-cards-list'>
 			<div className='clinics-cards-list__container container'>
-				<h2 className='clinics-cards-list__title'>КЛИНИКИ</h2>
+				<h2 className='title-h2'>КЛИНИКИ</h2>
 				<ul className='clinics-cards-list__box'>
 					{content}
 				</ul>
