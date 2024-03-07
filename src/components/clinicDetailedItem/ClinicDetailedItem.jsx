@@ -44,7 +44,7 @@ const ClinicDetailedItem = (props) => {
 			</div>
 			<CenterModal visible={modal3} setVisible={setModal3}>
 				<div className='doctor-detailed-item__modal-send-review'>
-					<h3 className='doctor-detailed-item__modal-send-review-title'>Оставить отзыв о враче</h3>
+					<h3 className='doctor-detailed-item__modal-send-review-title'>Оставить отзыв о клинике</h3>
 					<div className='doctor-detailed-item__modal-send-review-block'>
 						<p className='doctor-detailed-item__modal-send-review-description'>Здание и помещения</p>
 						<Stars totalStars={5} onChange={(rating) => handleReviewChange(0, rating, "Здание и помещения")} />
