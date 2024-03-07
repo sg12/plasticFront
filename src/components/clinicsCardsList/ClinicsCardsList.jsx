@@ -13,15 +13,19 @@ import { getPageArray, getPageCount } from '../../utils/pagesPosts/PagesPosts';
 
 const ClinicsCardsList = () => {
 
+	//1.55.00 https://www.youtube.com/watch?v=GNrdg3PzpJQ&list=WL&index=26&t=7328s
+
 	const [posts, setPosts] = useState([]);
 	const [limit, setLimit] = useState(6);
 	const [offset, setOffset] = useState(0);
 	const [totalCount, setTotalCount] = useState(0);
+	console.log('тотал каунт', totalCount);
+	console.log('лимит', limit);
 
 	const [totalPages, setTotalPages] = useState(0);
 
 	const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
-		const response = await PlasticServices.getAllClinics(offset);
+		const response = await PlasticServices.getAllClinics(limit, offset);
 		setPosts([...posts, ...response.data]);
 		setOffset(offset + 6);
 		setTotalCount(response.headers['x-total-count']);
@@ -39,6 +43,10 @@ const ClinicsCardsList = () => {
 	useEffect(() => {
 		onRequest();
 	}, []);
+
+	// useEffect(() => {
+	// 	onRequest(limit, offset);
+	// }, []);
 
 	const loadMorePosts = () => {
 		onRequest();
@@ -58,9 +66,9 @@ const ClinicsCardsList = () => {
 		? <Spinner />
 		: null;
 
-	const button = totalCount > posts.length || error || spinner
-		? <OutlineButton className='component-button-text' onClick={loadMorePosts}>Показать ещё</OutlineButton>
-		: null;
+	// const button = totalCount > posts.length || error || spinner
+	// 	? <OutlineButton className='component-button-text' onClick={loadMorePosts}>Показать ещё</OutlineButton>
+	// 	: null;
 
 	return (
 		<section className='clinics-cards-list'>
@@ -72,7 +80,7 @@ const ClinicsCardsList = () => {
 				{error}
 				{spinner}
 				{/* {button} */}
-				{pagesArray.map((page) => (
+				{/* {pagesArray.map((page) => (
 					<OutlineButton
 						key={page}
 						// className='component-button-text'
@@ -80,7 +88,7 @@ const ClinicsCardsList = () => {
 					>
 						{page}
 					</OutlineButton>
-				))}
+				))} */}
 			</div>
 		</section>
 	);
