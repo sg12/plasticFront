@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, NavLink } from 'react-router-dom';
+import { getUserData } from '../../services/UserData';
 import './Header.scss';
 import logo from '../../assets/icons/logo.png';
 
@@ -15,7 +16,7 @@ const Header = () => {
 	const [isServicesMenuOpen, setServicesMenuOpen] = useState(false);
 	const [selectedCategory, setSelectedCategory] = useState(null);
 	const [activeLink, setActiveLink] = useState(null);
-
+	const userData = getUserData();
 	const location = useLocation();
 	const menuRef = useRef(null);
 
