@@ -1,6 +1,6 @@
 import MyCarousel from '../components/myCarousel/MyCarousel';
 import SearchBar from '../components/searchBar/SearchBar';
-// import ArticlesList from '../components/articlesList/ArticlesList';
+// import ConstructorComp from '../components/constructor/ConstructorComp';
 
 const MainPage = () => {
 
@@ -8,7 +8,7 @@ const MainPage = () => {
 		<>
 			<MyCarousel />
 			<SearchBar />
-			{/* <ArticlesList /> */}
+			{/* <ConstructorComp /> */}
 		</>
 	);
 };
