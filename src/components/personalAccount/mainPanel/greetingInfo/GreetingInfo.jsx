@@ -31,7 +31,7 @@ const GreetingInfo = () => {
   return (
     <div className="greeting">
       <span className="greeting__title">
-        {greeting}, {userData?.user?.username.split(' ')[1] || "Неизвестно"}
+        {greeting}, {userData?.user?.username?.split(' ')[1] || "Новый пользователь"}
       </span>
       <Link to="/account/profile" className="greeting__link">
         Перейти в профиль

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { useState } from 'react';
 
@@ -13,6 +13,7 @@ import Cookies from 'js-cookie';
 import './RegisterClient.scss';
 
 const RegisterClient = () => {
+    const navigate = useNavigate();
     const [referralCode, setReferralCode] = useState('');
 
     const {register, formState: { errors }, handleSubmit, watch} = useForm({
@@ -38,6 +39,7 @@ const RegisterClient = () => {
         const respData = await PlasticServices.registerUser(data, type);
         console.log(respData);
         Cookies.set('token', respData.token);
+        navigate("/account",setTimeout ( () => window.location.reload(), 0));
     };
     
     
