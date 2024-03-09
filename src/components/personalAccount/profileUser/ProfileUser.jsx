@@ -18,7 +18,7 @@ const ProfileUser = () => {
       case "clinic":
         profileInfoComponent = <ProfileClinicInfo userData={userData} />;
         break;
-      case "doctor":
+      case "surgeon":
         profileInfoComponent = <ProfileDoctorInfo userData={userData} />;
         break;
       default:
