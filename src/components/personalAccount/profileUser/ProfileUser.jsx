@@ -6,19 +6,19 @@ import ProfileDoctorInfo from "../profileDoctorInfo/ProfileDoctorInfo";
 import { Slide, ToastContainer } from "react-toastify";
 
 const ProfileUser = () => {
-  const { userData, userType } = useUser();
-  console.log(userData, userType);
+  const { userData } = useUser();
+  console.log("ProfileUser", userData?.user?.type);
 
   let profileInfoComponent;
   if (userData) {
-    switch (userType) {
-      case "clients":
+    switch (userData?.user?.type) {
+      case "client":
         profileInfoComponent = <ProfileClientInfo userData={userData} />;
         break;
-      case "clinics":
+      case "clinic":
         profileInfoComponent = <ProfileClinicInfo userData={userData} />;
         break;
-      case "doctors":
+      case "doctor":
         profileInfoComponent = <ProfileDoctorInfo userData={userData} />;
         break;
       default:
