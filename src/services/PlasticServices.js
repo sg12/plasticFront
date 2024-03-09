@@ -1,7 +1,21 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 
 // const _apiBase = "https://jsonplaceholder.typicode.com/";
 const _apiBase = "http://localhost:8000/api/v1";
+
+// Функция для создания экземпляра axios с токеном из куки
+const createAxiosInstance = () => {
+	return axios.create({
+	  baseURL: _apiBase,
+	  headers: {
+		"Authorization": `Token ${Cookies.get("token")}`,
+		"Content-Type": "application/json",
+	  },
+	});
+  };
+
+  const axiosInstance = createAxiosInstance();
 
 class PlasticServices {
 	static async getAllArticles(offset = 0) {
@@ -35,15 +49,16 @@ class PlasticServices {
 		return response;
 	}
 
-	static async getUsers(userID, userType) {
-		const response = await axios.get(`${_apiBase}/${userType}/${userID}/`);
-		return response;
-	}
+	static async getUser() {
+    	const response = await axiosInstance.get("/account/");
+    	return response;
+  	}
 
-	static async patchUser() {
-		const response = await axios.patch(`${_apiBase}/account/`);
-		return response;
-	}
+  	static async patchUser(editedData) {
+    	const response = await axiosInstance.patch("/account/", {user: editedData}, {data: editedData?.date_born});
+		console.log("RESPONSE",response, "EDITEDDATA", editedData);
+    	return response;
+  	}
 
 	static async getFaq() {
 		const response = await axios.get(`${_apiBase}/faq/`);
