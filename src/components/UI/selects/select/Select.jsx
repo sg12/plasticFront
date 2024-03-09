@@ -1,27 +1,14 @@
 import styles from "./Select.module.scss";
 
-const Select = ({
-  userData,
-  htmlFor,
-  children,
-  id,
-  name,
-  options,
-  value,
-  onChange,
-  ...props
-}) => {
+const Select = ({ children, id, name, options, value, onChange, ...props }) => {
   return (
     <form className={styles.select}>
-      <label className={styles.select__label} htmlFor={htmlFor}>
-        {children}
-      </label>
+      <label className={styles.select__label}>{children}</label>
       <select
         className={styles.select__select}
         name={name}
         id={id}
         value={value}
-        placeholder={userData || "Неизвестно"}
         onChange={onChange}
         {...props} // Проксирование дополнительных свойств
       >
