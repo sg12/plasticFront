@@ -27,7 +27,7 @@ const EnterClient = () => {
         const respData = await PlasticServices.loginUser(data);
         console.log(respData);
         Cookies.set('token', respData.token);
-        navigate("/account")
+        navigate("/account",setTimeout ( () => window.location.reload(), 0));
     };
 
     return (

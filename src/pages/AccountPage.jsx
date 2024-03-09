@@ -2,6 +2,7 @@
 // import { Navigate } from "react-router-dom";
 import { useEffect } from "react";
 import PersonalAccount from "../components/personalAccount/PersonalAccount";
+import { UserProvider } from "../context/UserContext";
 
 const AccountPage = () => {
   // const { state } = useAuth();
@@ -21,7 +22,9 @@ const AccountPage = () => {
 
   return (
     <>
-      <PersonalAccount />
+      <UserProvider>
+        <PersonalAccount />
+      </UserProvider>
     </>
   );
 };

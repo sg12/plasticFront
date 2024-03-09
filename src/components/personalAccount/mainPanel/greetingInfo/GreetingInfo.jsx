@@ -4,7 +4,8 @@ import { useUser } from "../../../../context/UserContext";
 import { useEffect, useState } from "react";
 
 const GreetingInfo = () => {
-  const { userData, userType } = useUser();
+  const { userData } = useUser();
+  console.log(userData)
   const [time, setTime] = useState(new Date());
   // console.log(time);
 
@@ -30,7 +31,7 @@ const GreetingInfo = () => {
   return (
     <div className="greeting">
       <span className="greeting__title">
-        {greeting}, {userData?.name || "Неизвестно"}
+        {greeting}, {userData?.user?.username.split(' ')[1] || "Неизвестно"}
       </span>
       <Link to="/account/profile" className="greeting__link">
         Перейти в профиль
