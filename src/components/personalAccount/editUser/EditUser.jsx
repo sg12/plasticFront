@@ -73,8 +73,7 @@ const EditUser = ({ userData, toggleEditingMode }) => {
               error: "Ошибка при сохранении данных",
             }
           );
-          // console.log("PATCH", response);
-          // toggleEditingMode(false);
+          toggleEditingMode(false);
         } catch (err) {
           toast.warn("Произошла ошибка при сохранении данных");
         }
@@ -88,12 +87,6 @@ const EditUser = ({ userData, toggleEditingMode }) => {
 
   const fullName = [{ name: "username", placeholder: "ФИО", type: "text" }];
 
-  // const genderOptions = [
-  //   { value: 'male', label: 'Мужчина' },
-  //   { value: 'female', label: 'Женщина' },
-  //   { value: 'not specified', label: 'Не указан' },
-  // ];
-
   const extra = [
     { name: "email", placeholder: "Email", type: "email", disabled: true },
     { name: "phone", placeholder: "Телефон", type: "tel" },
@@ -102,7 +95,11 @@ const EditUser = ({ userData, toggleEditingMode }) => {
       name: "gender",
       placeholder: "Пол",
       type: "select",
-      options: ["Мужчина", "Женщина", "Не указан"],
+      options: [
+        { value: "male", label: "Мужчина" },
+        { value: "female", label: "Женщина" },
+        { value: "", label: "Не указан" },
+      ],
     },
     { name: "date_born", placeholder: "Дата рождения", type: "date" },
   ];
@@ -143,10 +140,7 @@ const EditUser = ({ userData, toggleEditingMode }) => {
                 name={field.name}
                 value={editedData[field.name]}
                 onChange={handleChange}
-                options={field.options.map((option) => ({
-                  value: option,
-                  label: option,
-                }))}
+                options={field.options}
                 placeholder={field.placeholder}
               />
             ) : (
