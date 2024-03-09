@@ -55,8 +55,7 @@ class PlasticServices {
   	}
 
   	static async patchUser(editedData) {
-    	const response = await axiosInstance.patch("/account/", {user: editedData}, {data: editedData?.date_born});
-		console.log("RESPONSE",response, "EDITEDDATA", editedData);
+    	const response = await axiosInstance.patch("/account/", {user: editedData}, {date_born: editedData?.date_born});
     	return response;
   	}
 
@@ -84,6 +83,12 @@ class PlasticServices {
 			console.error('Ошибка при авторизации:', error);
 		}
 	}
+
+	static async logoutUser() {
+		const response = await axiosInstance.get("/auth/logout/");
+		Cookies.remove("token");
+		return response;
+	  }
 }
 
 export default PlasticServices;
