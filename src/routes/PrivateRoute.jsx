@@ -39,15 +39,16 @@ const PrivateRoute = () => {
       });
   }, [token]);
 
-  if (loading) {
-    return <Preloader isLoading={loading} isDataLoaded={userData} />;
-  }
-
   if (!token) {
     return <Navigate to="/enterPage" />;
   }
 
-  return <Outlet />;
+  return (
+    <>
+      <Preloader isLoading={loading} isDataLoaded={userData} />
+      <Outlet />
+    </>
+  );
 };
 
 export default PrivateRoute;
