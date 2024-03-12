@@ -1,5 +1,6 @@
 import MyCarousel from '../components/myCarousel/MyCarousel';
 import SearchBar from '../components/searchBar/SearchBar';
+import ConstructorPage from "../pages/Constructor";
 // import ArticlesList from '../components/articlesList/ArticlesList';
 
 const MainPage = () => {
@@ -8,6 +9,7 @@ const MainPage = () => {
 		<>
 			<MyCarousel />
 			<SearchBar />
+			<ConstructorPage/>
 			{/* <ArticlesList /> */}
 		</>
 	);
