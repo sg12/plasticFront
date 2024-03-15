@@ -1,6 +1,6 @@
-import WOMAN_FACE_EUROPEAN from "../../assets/imgs/woman-face-european.png";
-import WOMAN_FACE_ASIAN from "../../assets/imgs/woman-face-asian.png";
-
+import WOMAN_FACE_EUROPEAN from "../../assets/imgs/woman-face-european2.png";
+import WOMAN_FACE_ASIAN from "../../assets/imgs/woman-face-asian2.png";
+import MAN_FACE_EUROPEAN from "../../assets/imgs/man-face-european.png";
 // Presets:
 // woman - man
 // european - asian
@@ -147,7 +147,7 @@ const FacesConfig = {
   },
   man: {
     european: {
-      image: WOMAN_FACE_EUROPEAN,
+      image: MAN_FACE_EUROPEAN,
       lines: {
         forehead: {
           width: "175",
