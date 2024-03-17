@@ -1,8 +1,10 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
+const _apiBase = import.meta.env.VITE_API_URL;
+
 // const _apiBase = "https://jsonplaceholder.typicode.com/";
-const _apiBase = "http://localhost:8000/api/v1";
+// const _apiBase = "http://localhost:8000/api/v1";
 
 // Функция для создания экземпляра axios с токеном из куки
 const createAxiosInstance = () => {
