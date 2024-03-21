@@ -3,7 +3,7 @@ import './ConstructorFilter.scss';
 import { useState } from 'react';
 
 import CenterModal from '../UI/modals/centerModal/CenterModal';
-import ConstructorButton from '../UI/buttons/constructorButton/ConstructorButton';
+import OutlineButton from '../UI/buttons/OutlineButton/OutlineButton';
 
 import instruction1 from '../../assets/imgs/instruction-1.png';
 import instruction2 from '../../assets/imgs/instruction-2.png';
@@ -43,19 +43,19 @@ const ConstructorFilter = ({ setActiveFace, setActiveFaceStyle }) => {
         <div className='constructor-filter__container'>
             <div className='constructor-filter__container-flex'>
                 <div className='constructor-filter__buttons'>  
-                    <ConstructorButton 
+                    <OutlineButton 
                         className='constructor-filter__button-woman'
                         onClick={() => handleGenderButtonClick('Женский')}
                     >
                         Женщина
-                    </ConstructorButton>
+                    </OutlineButton>
                     
-                    <ConstructorButton 
+                    <OutlineButton 
                         className='constructor-filter__button-man'
                         onClick={() => handleGenderButtonClick('Мужской')}
                     >
                         Мужчина
-                    </ConstructorButton>
+                    </OutlineButton>
                 </div>
                 <div className='constructor-filter__select-bg'>
                     <select
