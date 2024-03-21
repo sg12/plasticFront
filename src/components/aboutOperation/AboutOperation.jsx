@@ -2,6 +2,7 @@ import './AboutOperation.scss';
 
 import question from "../../assets/imgs/question.png";
 import plug_image from "../../assets/imgs/plug_image.png";
+import ConstructorButton from '../UI/buttons/constructorButton/ConstructorButton';
 
 
 const data = [
@@ -88,23 +89,24 @@ const Not_face = () => {
 	)
 }
 
-const Click_on_window = (event) => {
-	const clickedElement = event.target;
-	if (clickedElement.tagName === 'svg' || clickedElement.classList.contains('svg-line-path')) {
-		document.querySelectorAll('.about-operation__parents').forEach(element => {
-			element.style.display = 'block';
-		});
-	}
-	else {
-		document.querySelectorAll('.about-operation__parents').forEach(element => {
-			element.style.display = 'none';
-		});
-	}
-}
+// const Click_on_window = (event) => {
+// 	const clickedElement = event.target;
+// 	if (clickedElement.tagName === 'svg' || clickedElement.classList.contains('svg-line-path')) {
+// 		document.querySelectorAll('.about-operation__parents').forEach(element => {
+// 			element.style.display = 'block';
+// 		});
+// 	}
+// 	else {
+// 		document.querySelectorAll('.about-operation__parents').forEach(element => {
+// 			element.style.display = 'none';
+// 		});
+// 	}
+// }
 
-document.addEventListener('click', Click_on_window);
+// document.addEventListener('click', Click_on_window);
 
 const About_operation = ({ activeLine }) => {
+	console.log('activeLine',activeLine);
 	if (activeLine) {
 		let id;
 		if (activeLine == 'forehead') {
@@ -153,12 +155,11 @@ const About_operation = ({ activeLine }) => {
 					</p>
 					<p className='about-operation__text2'>УСЛУГИ ПО ВЫБРАННОЙ ОБЛАСТИ</p>
 					<div className='about-operation__parents-buttons'>
-						<button className='about-operation__button'>{data[id].button1}</button>
-						{/* <img  className='about-operation__hint' src={HINT}>Подсказка 1</img> */}
-						<button className='about-operation__button'>{data[id].button2}</button>
-						{/* <img src={HINT} className='about-operation__hint'>Подсказка 2</img> */}
-						<button className='about-operation__button'>{data[id].button3}</button>
-						{/* <img src={HINT} className='about-operation__hint'>Подсказка 3</img> */}
+						<ConstructorButton className='about-operation__button'>{data[id].button1}</ConstructorButton>
+						<ConstructorButton className='about-operation__button'>{data[id].button2}</ConstructorButton>
+						<ConstructorButton className='about-operation__button'>{data[id].button3}</ConstructorButton>
+						{/* <button className='about-operation__button'>{data[id].button2}</button>
+						<button className='about-operation__button'>{data[id].button3}</button> */}
 					</div>
 				</div>
 

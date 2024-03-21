@@ -3,7 +3,7 @@ import './ConstructorFilter.scss';
 import { useState } from 'react';
 
 import CenterModal from '../UI/modals/centerModal/CenterModal';
-import OutlineButton from '../UI/buttons/outlineButton/OutlineButton';
+import ConstructorButton from '../UI/buttons/constructorButton/ConstructorButton';
 
 import instruction1 from '../../assets/imgs/instruction-1.png';
 import instruction2 from '../../assets/imgs/instruction-2.png';
@@ -13,17 +13,29 @@ import instruction5 from '../../assets/imgs/instruction-5.png';
 import instruction6 from '../../assets/imgs/instruction-6.png';
 
 
-const ConstructorFilter = () => {
+const ConstructorFilter = ({ setActiveFace, setActiveFaceStyle }) => {
     const [modal, setModal] = useState(false);
     const [selectedOption, setSelectedOption] = useState('');
 
     const handleGenderButtonClick = (gender) => {
+        if (gender=='Мужской'){
+            setActiveFace('man');
+        }
+        if (gender=='Женский'){
+            setActiveFace('woman');
+        }
         console.log(gender);
     };
 
     const handleSelectChange = (event) => {
         const selectedValue = event.target.value;
         setSelectedOption(selectedValue);
+        if (selectedValue=='Азиатский'){
+            setActiveFaceStyle('asian'); 
+        }
+        if (selectedValue=='Европейский'){
+            setActiveFaceStyle('european'); 
+        }
         console.log(selectedValue);
     };
 
@@ -31,19 +43,19 @@ const ConstructorFilter = () => {
         <div className='constructor-filter__container'>
             <div className='constructor-filter__container-flex'>
                 <div className='constructor-filter__buttons'>  
-                    <OutlineButton 
+                    <ConstructorButton 
                         className='constructor-filter__button-woman'
                         onClick={() => handleGenderButtonClick('Женский')}
                     >
                         Женщина
-                    </OutlineButton>
+                    </ConstructorButton>
                     
-                    <OutlineButton 
+                    <ConstructorButton 
                         className='constructor-filter__button-man'
                         onClick={() => handleGenderButtonClick('Мужской')}
                     >
                         Мужчина
-                    </OutlineButton>
+                    </ConstructorButton>
                 </div>
                 <div className='constructor-filter__select-bg'>
                     <select
