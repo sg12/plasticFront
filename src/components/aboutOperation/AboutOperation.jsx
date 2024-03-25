@@ -2,7 +2,7 @@ import './AboutOperation.scss';
 
 import question from "../../assets/imgs/question.png";
 import plug_image from "../../assets/imgs/plug_image.png";
-import ConstructorButton from '../UI/buttons/constructorButton/ConstructorButton';
+import OutlineButton from '../UI/buttons/OutlineButton/OutlineButton';
 
 
 const data = [
@@ -155,9 +155,9 @@ const About_operation = ({ activeLine }) => {
 					</p>
 					<p className='about-operation__text2'>УСЛУГИ ПО ВЫБРАННОЙ ОБЛАСТИ</p>
 					<div className='about-operation__parents-buttons'>
-						<ConstructorButton className='about-operation__button'>{data[id].button1}</ConstructorButton>
-						<ConstructorButton className='about-operation__button'>{data[id].button2}</ConstructorButton>
-						<ConstructorButton className='about-operation__button'>{data[id].button3}</ConstructorButton>
+						<OutlineButton className='about-operation__button'>{data[id].button1}</OutlineButton>
+						<OutlineButton className='about-operation__button'>{data[id].button2}</OutlineButton>
+						<OutlineButton className='about-operation__button'>{data[id].button3}</OutlineButton>
 						{/* <button className='about-operation__button'>{data[id].button2}</button>
 						<button className='about-operation__button'>{data[id].button3}</button> */}
 					</div>
