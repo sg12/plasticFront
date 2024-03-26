@@ -13,28 +13,31 @@ import { getPageArray, getPageCount } from '../../utils/pagesPosts/PagesPosts';
 
 const ClinicsCardsList = () => {
 
-	//1.55.00 https://www.youtube.com/watch?v=GNrdg3PzpJQ&list=WL&index=26&t=7328s
+	//2.05.00 - https://www.youtube.com/watch?v=GNrdg3PzpJQ&list=WL&index=26&t=7328s
 
 	const [posts, setPosts] = useState([]);
 	const [limit, setLimit] = useState(6);
-	const [offset, setOffset] = useState(0);
-	const [totalCount, setTotalCount] = useState(0);
-	console.log('тотал каунт', totalCount);
 	console.log('лимит', limit);
+	const [page, setPage] = useState(1);
+	console.log('страница', page);
+	// const [offset, setOffset] = useState(0);
+	// const [totalCount, setTotalCount] = useState(0);
+	// console.log('тотал каунт', totalCount);
 
 	const [totalPages, setTotalPages] = useState(0);
 
 	const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
-		const response = await PlasticServices.getAllClinics(limit, offset);
+		const response = await PlasticServices.getAllClinics(limit, page);
 		setPosts([...posts, ...response.data]);
-		setOffset(offset + 6);
-		setTotalCount(response.headers['x-total-count']);
+		// setOffset(offset + 6);
+		const totalCount = response.headers['x-total-count'];
 		setTotalPages(getPageCount(totalCount, limit));
 	});
 	console.log('страницы клиник', totalPages);
 
+	//!!! использовать useMemo, чтобы не пересчитывать
 	let pagesArray = getPageArray(totalPages);
-	console.log('массив страниц', pagesArray);
+	console.log('массив страниц', [pagesArray]);
 
 	const onRequest = () => {
 		fetchPosts();
@@ -51,6 +54,8 @@ const ClinicsCardsList = () => {
 	const loadMorePosts = () => {
 		onRequest();
 	};
+
+	console.log('---------------------------------');
 
 	const content = !(!isPostsLoading && !postError && posts.length === 0)
 		? posts.map((post) => (
@@ -80,15 +85,17 @@ const ClinicsCardsList = () => {
 				{error}
 				{spinner}
 				{/* {button} */}
-				{/* {pagesArray.map((page) => (
-					<OutlineButton
-						key={page}
-						// className='component-button-text'
-						onClick={() => setOffset(page)}
-					>
-						{page}
-					</OutlineButton>
-				))} */}
+				<div className='component-page'>
+					{pagesArray.map((i) => (
+						<OutlineButton
+							key={i}
+							onClick={() => setPage(i)}
+							className={page === i ? 'component-page__button component-page__button_active' : 'component-page__button'}
+						>
+							{i}
+						</OutlineButton>
+					))}
+				</div>
 			</div>
 		</section>
 	);

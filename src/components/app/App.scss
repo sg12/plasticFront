@@ -94,6 +94,24 @@ html {
 	margin: auto;
 }
 
+.component-page {
+	display: flex;
+	justify-content: center;
+
+	&__button {
+		margin-right: 20px;
+
+		&:last-child {
+			margin-right: 0;
+		}
+
+		&_active {
+			color: red !important;
+			border: 1px solid red !important;
+		}
+	}
+}
+
 .form {
 	&__span {
 		margin-top: 4px;

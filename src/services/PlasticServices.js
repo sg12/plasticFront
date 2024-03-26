@@ -15,8 +15,13 @@ class PlasticServices {
 		return response;
 	}
 
-	static async getAllClinics(limit = 6, offset = 0) {
-		const response = await axios.get(`${_apiBase}/surgeons?limit=${limit}&offset=${offset}`);
+	// static async getAllClinics(limit = 6, offset = 0) {
+	// 	const response = await axios.get(`${_apiBase}/surgeons?limit=${limit}&offset=${offset}`);
+	// 	return response;
+	// }
+
+	static async getAllClinics(limit = 6, page = 1) {
+		const response = await axios.get(`https://jsonplaceholder.typicode.com/posts?_limit=${limit}&_page=${page}`);
 		return response;
 	}
 
