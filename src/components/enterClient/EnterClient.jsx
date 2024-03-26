@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
 
+import { useNavigate } from 'react-router-dom';
+
 import FieldButton from '../UI/buttons/fieldButton/FieldButton';
 
 import { useForm } from 'react-hook-form';
@@ -11,6 +13,7 @@ import Cookies from 'js-cookie';
 import './EnterClient.scss';
 
 const EnterClient = () => {
+    const navigate = useNavigate();
 
     const {register, formState: { errors }, handleSubmit } = useForm({
         defaultValues:{
@@ -24,6 +27,7 @@ const EnterClient = () => {
         const respData = await PlasticServices.loginUser(data);
         console.log(respData);
         Cookies.set('token', respData.token);
+        navigate("/account",setTimeout ( () => window.location.reload(), 0));
     };
 
     return (

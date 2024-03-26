@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useUser } from "../../../context/UserContext";
 // import Search from "../../UI/inputs/searchInput/SearchInput";
-import CardsItem from "../cardsItem/cardsItem";
+import CardsItem from "../cardsItem/CardsItem";
 
 import "./FavouritesInfo.scss";
 import FilterModal from "../../UI/modals/filterModal/FilterModal";
@@ -55,7 +55,8 @@ const FavouritesInfo = () => {
             filterValue={filterValue}
             setFilterValue={setFilterValue}
             searchData={favorites}
-            children="Имя или направление"
+            disabledSearch={false}
+            placeholder={"Поиск"}
           />
         )}
       </div>

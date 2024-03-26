@@ -22,18 +22,18 @@ const ClinicDetailedItem = (props) => {
 			<div className='clinic-detailed-item__box-title'>
 				<img src={clinicImg} alt="клиника" />
 				<Review />
-				<h2>{props.post.title}</h2>
+				<h2>{props.post.user.username}</h2>
 			</div>
 			<div className='clinic-detailed-item__wrapper-first'>
 				<div className='clinic-detailed-item__wrapper-first-left'>
 					<div className='clinic-detailed-item__wrapper-first-item'>
 						<div className='clinic-detailed-item__description-first'>
 							<h3>ОФИЦИАЛЬНОЕ НАЗВАНИЕ</h3>
-							<p>{props.post.id}</p>
+							<p>{props.post.id} {props.post.official_name}</p>
 						</div>
 						<div className='clinic-detailed-item__description-first'>
 							<h3>РУКОВОДИТЕЛЬ</h3>
-							<p>Дунаева Тамара Ивановна</p>
+							<p>{props.post.director}</p>
 						</div>
 					</div>
 					<div className='clinic-detailed-item__wrapper-first-item'>
@@ -54,7 +54,7 @@ const ClinicDetailedItem = (props) => {
 						<CenterModal visible={modal} setVisible={setModal}>
 							<div className='doctor-detailed-item__modal'>
 								<h3 className='doctor-detailed-item__modal-title'>ЛИЦЕНЗИЯ</h3>
-								<p className='doctor-detailed-item__modal-descr'>*нажмите на изображение для его увеличения</p>
+								<p className='doctor-detailed-item__modal-description'>*нажмите на изображение для его увеличения</p>
 								<div>
 									<img className='doctor-detailed-item__modal-license-img' src={licenseImg} alt="Лицензия" onClick={() => setModal2(true)} />
 									<img className='doctor-detailed-item__modal-license-img' src={licenseImg} alt="Лицензия" onClick={() => setModal2(true)} />
@@ -98,7 +98,7 @@ const ClinicDetailedItem = (props) => {
 			</div>
 			<div className='clinic-detailed-item__description'>
 				<h3>СПЕЦИАЛИЗАЦИЯ</h3>
-				<p>{props.post.body}</p>
+				<p>{props.post.description}</p>
 			</div>
 			<div className='clinic-detailed-item__wrapper-second'>
 				<div className='clinic-detailed-item__wrapper-second-left'>
@@ -132,9 +132,13 @@ const ClinicDetailedItem = (props) => {
 
 ClinicDetailedItem.propTypes = {
 	post: PropTypes.shape({
+		user: PropTypes.shape({
+			username: PropTypes.string.isRequired,
+		}).isRequired,
 		id: PropTypes.number.isRequired,
-		title: PropTypes.string.isRequired,
-		body: PropTypes.string.isRequired,
+		director: PropTypes.string.isRequired,
+		official_name: PropTypes.string.isRequired,
+		description: PropTypes.string.isRequired,
 	}).isRequired,
 };
 

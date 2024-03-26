@@ -1,18 +1,18 @@
+import './ArticlesItem.scss';
+
 import PropTypes from 'prop-types';
 
 import { useNavigate } from 'react-router-dom';
-
-import './ArticlesItem.scss';
 
 import articles1 from '../../assets/imgs/articles-1.png';
 
 const ArticlesItem = (props) => {
 
-    const navigate = useNavigate();
+	const navigate = useNavigate();
 
-    const toArticlesMore = () =>{
-        navigate(`/articles/${props.post.id}`);
-    };
+	const toArticlesMore = () => {
+		navigate(`/articles/${props.post.id}`);
+	};
 
 	return (
 		<li className='articles__item articles-item'>
@@ -22,9 +22,9 @@ const ArticlesItem = (props) => {
 					<p className='articles-item__theme'>Болезни и лечение</p>
 					<p className='articles-item__date'>{props.post.id}</p>
 				</div>
-				<h3 className='articles-item__title'>{props.post.title.slice(0, 300)} ...</h3>
+				<h3 className='articles-item__title'>{props.post.name.slice(0, 300)} ...</h3>
 				<p className='articles-item__text'>
-					{props.post.body.slice(0, 300)} ...
+					{props.post.description.slice(0, 300)} ...
 				</p>
 				<button onClick={toArticlesMore} className='articles-item__button'>Читать дальше</button>
 			</div>
@@ -35,8 +35,8 @@ const ArticlesItem = (props) => {
 ArticlesItem.propTypes = {
 	post: PropTypes.shape({
 		id: PropTypes.number.isRequired,
-		title: PropTypes.string.isRequired,
-		body: PropTypes.string.isRequired,
+		name: PropTypes.string.isRequired,
+		description: PropTypes.string.isRequired,
 	}).isRequired,
 };
 

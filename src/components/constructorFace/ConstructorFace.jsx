@@ -3,14 +3,20 @@ import SvgLine from "./SvgLine";
 import facesConfig from "./FacesConfig";
 import { useEffect, useRef } from "react";
 
+import ConstructorFilter from "../constructorFilter/ConstructorFilter";
+import AboutOperation from "../aboutOperation/AboutOperation";
+
+
 const ConstructorFace = ({
-  activeFace = "woman", // woman or man
-  activeFaceStyle = "european", // asian or european
+  activeFace,
+  activeFaceStyle,
   activeLine,
   setActiveLine,
+  setActiveFace,
+  setActiveFaceStyle
 }) => {
   console.log(activeFace, activeFaceStyle, activeLine);
-
+  
   const handleMouseEnter = (lineId, groupId) => {
     const activeId = groupId || lineId;
     setActiveLine(activeId);
@@ -18,13 +24,16 @@ const ConstructorFace = ({
 
   const getLineClassName = (lineId, groupId) => {
     const isActive = groupId ? activeLine === groupId : activeLine === lineId;
-    return `constructor-face__line ${lineId} ${isActive ? "active" : ""}`;
+    //return `constructor-face__line ${lineId} ${isActive ? "active" : ""}`;
+    const faceStyleClass = `${activeFace}-${activeFaceStyle}`; // Генерируем класс на основе значений activeFace и activeFaceStyle
+    return `constructor-face__line ${lineId} ${isActive ? "active" : ""} ${faceStyleClass}`;
   };
 
   const getGroupClassName = (groupId) => {
-    return `constructor-face__group ${groupId} ${
-      activeLine === groupId ? "active" : ""
-    }`;
+    //return `constructor-face__group ${groupId} ${activeLine === groupId ? "active" : ""}`;
+    const faceStyleClass = `${activeFace}-${activeFaceStyle}`;
+    const activeClass = activeLine === groupId ? "active" : "";
+    return `constructor-face__group ${groupId} ${activeClass} ${faceStyleClass}`;
   };
 
   const renderLineGroup = (groupId, group) => {
@@ -80,13 +89,16 @@ const ConstructorFace = ({
   const currentFaceConfig = facesConfig[activeFace][activeFaceStyle];
 
   const containerRef = useRef(null);
+  const containerRef2 = useRef(null);
 
   useEffect(() => {
     // Обработчик клика на всей странице
     const handleClickOutside = (event) => {
+      console.log(containerRef2.current);
       if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target)
+        (containerRef2.current &&
+          !containerRef2.current.contains(event.target) &&
+          !containerRef.current.contains(event.target))
       ) {
         setActiveLine(null); // Убираем активный класс
       }
@@ -97,11 +109,15 @@ const ConstructorFace = ({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [containerRef, setActiveLine]);
+  }, [containerRef, containerRef2, setActiveLine]);
 
   return (
     <div className="constructor-face__container">
       <div className="constructor-face__wrapper">
+        <div ref={containerRef2} >
+          <ConstructorFilter setActiveFace={setActiveFace} setActiveFaceStyle={setActiveFaceStyle}/>
+          <AboutOperation activeLine={activeLine} />
+        </div>
         <div className="constructor-face__image">
           <img
             src={currentFaceConfig.image}
@@ -109,9 +125,11 @@ const ConstructorFace = ({
             alt="face"
           />
         </div>
+
         <div ref={containerRef} className="constructor-face__lines">
           {renderLines(currentFaceConfig.lines)}
         </div>
+
       </div>
     </div>
   );

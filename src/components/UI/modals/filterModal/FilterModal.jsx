@@ -48,7 +48,7 @@ const FilterModal = ({
       <div className={modalClass}>
         {/* {title} */}
         <span className={styles.modal__title}>Фильтрация</span>
-        {disabledSearch && (
+        {disabledSearch == false && (
           <input
             placeholder={placeholder}
             type="text"

@@ -4,10 +4,26 @@
   border-radius: 8px;
   box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.25);
   padding: 16px;
+  flex: 1 1 45%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  transition: all 1s ease-out;
   &__header {
     display: flex;
-    justify-content: space-between;
-    &-left {
+    flex-direction: column;
+    gap: 4px;
+    &-upper {
+      display: flex;
+      justify-content: space-between;
+    }
+    &-bottom {
+      display: flex;
+      justify-content: space-between;
+    }
+    &-info {
       display: flex;
       gap: 16px;
     }
@@ -18,12 +34,14 @@
     &-rating {
       opacity: 0.5;
     }
+    &-userType {
+      opacity: 0.5;
+    }
     &-date {
       opacity: 0.5;
     }
   }
   &__main {
-    margin-bottom: 16px;
     &-text {
       textarea {
         border: none;
@@ -83,5 +101,9 @@
     opacity: 0.5;
     height: 1px;
     border: none;
+    margin: 0;
   }
 }
+
+// .editing {
+// }

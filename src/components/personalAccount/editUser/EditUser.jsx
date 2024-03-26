@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TextInput from "../../UI/inputs/textInput/TextInput";
 import Select from "../../UI/selects/select/Select";
 import "./EditUser.scss";
@@ -6,179 +6,182 @@ import Checkbox from "../../UI/inputs/checkbox/Checkbox";
 
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import axios from "axios";
-import { useFetching } from "../../../hooks/useFetching";
 import PlasticServices from "../../../services/PlasticServices";
 
 const EditUser = ({ userData, toggleEditingMode }) => {
   const [editedData, setEditedData] = useState({
-    email: userData?.user?.email || "",
-    address: userData?.user?.address || "",
-    username: userData?.user?.username || "",
-    birthday: userData?.date_born || "",
-    phone: userData?.user?.phone || "",
-    gender: userData?.user?.gender || "",
+    email: "",
+    address: "",
+    username: "",
+    date_born: "",
+    phone: "",
+    gender: "",
+    consentToPrivacyPolicy: false,
+    consentToDataProcessing: false,
   });
-  const [politicy1Checked, setPoliticy1Checked] = useState(false);
-  const [politicy2Checked, setPoliticy2Checked] = useState(false);
+  console.log("editedData", editedData);
 
-  const sendUserData = async () => {
-    try {
-      const response = await PlasticServices.patchUser(editedData);
-      return response.data;
-    } catch (error) {
-      throw error;
+  useEffect(() => {
+    if (userData) {
+      setEditedData({
+        email: userData?.user?.email || "",
+        address: userData?.user?.address || "",
+        username: userData?.user?.username || "",
+        date_born: userData?.date_born || "",
+        phone: userData?.user?.phone || "",
+        gender: userData?.user?.gender || "",
+        consentToPrivacyPolicy: userData?.consentToPrivacyPolicy || false,
+        consentToDataProcessing: userData?.consentToDataProcessing || false,
+      });
+    }
+  }, [userData]);
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    if (type === "checkbox") {
+      setEditedData((prevData) => ({
+        ...prevData,
+        [name]: checked,
+      }));
+    } else {
+      setEditedData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
     }
   };
 
-  const [sendPostRequest, isSendingData, sendPostError] =
-    useFetching(sendUserData);
+  const hasFormDataChanged = () => {
+    return Object.keys(editedData).some(
+      (key) => editedData[key] !== userData[key]
+    );
+  };
 
-  const handleSave = async () => {
-    try {
-      if (politicy1Checked && politicy2Checked) {
-        console.log(editedData);
-
-        // Отправляем POST-запрос с данными
-        const response = await sendPostRequest(editedData);
-
-        if (response) {
-          // Обрабатываем успешный ответ
-          toast.success(
-            `Данные успешно сохранились ${new Date().toLocaleDateString()} в ${new Date().toLocaleTimeString()}`
+  const handleSave = async (e) => {
+    e.preventDefault();
+    if (
+      editedData.consentToPrivacyPolicy &&
+      editedData.consentToDataProcessing
+    ) {
+      if (hasFormDataChanged()) {
+        try {
+          const response = await toast.promise(
+            PlasticServices.patchUser(editedData),
+            {
+              pending: "Сохранение данных...",
+              success: "Данные успешно сохранились",
+              error: "Ошибка при сохранении данных",
+            }
           );
-          // Закрываем режим редактирования
           toggleEditingMode(false);
-        } else {
-          toast.error("Ошибка при сохранении данных");
-          console.error("Некорректный ответ от сервера");
+        } catch (err) {
+          toast.warn("Произошла ошибка при сохранении данных");
         }
       } else {
-        toast.warn("Проставьте обе галочки перед сохранением.");
-        console.error("Пожалуйста, поставьте обе галочки перед сохранением.");
+        toast.warn("Данные не изменились.");
       }
-    } catch (error) {
-      toast.error("Ошибка при сохранении данных");
-      console.error("Ошибка при сохранении данных:", error);
+    } else {
+      toast.warn("Проставьте обе галочки перед сохранением.");
     }
   };
 
-  const handleInputChange = (fieldName, value) => {
-    setEditedData((prevData) => ({
-      ...prevData,
-      [fieldName]: value,
-    }));
-  };
+  const fullName = [{ name: "username", placeholder: "ФИО", type: "text" }];
 
-  const handleCheckboxChange = (checkboxName, checked) => {
-    if (checkboxName === "politicy1") {
-      setPoliticy1Checked(checked);
-    } else if (checkboxName === "politicy2") {
-      setPoliticy2Checked(checked);
-    }
-  };
+  const extra = [
+    { name: "email", placeholder: "Email", type: "email", disabled: true },
+    { name: "phone", placeholder: "Телефон", type: "tel" },
+    { name: "address", placeholder: "Адрес", type: "text" },
+    {
+      name: "gender",
+      placeholder: "Пол",
+      type: "select",
+      options: [
+        { value: "male", label: "Мужчина" },
+        { value: "female", label: "Женщина" },
+        { value: "", label: "Не указан" },
+      ],
+    },
+    { name: "date_born", placeholder: "Дата рождения", type: "date" },
+  ];
+
+  const checkboxFields = [
+    {
+      name: "consentToPrivacyPolicy",
+      label: "Я ознакомлен с Политикой Конфиденциальности",
+    },
+    {
+      name: "consentToDataProcessing",
+      label: "Я даю Согласие на обработку персональных данных",
+    },
+  ];
 
   return (
-    <div className="edit">
-      <span className="edit__title">Персональные данные</span>
-      <div className="edit__info">
-        <TextInput
-          htmlFor="email"
-          id="email"
-          type="email"
-          name="email"
-          userData={userData?.user?.email || "Неизвестно"}
-          onChange={(e) => handleInputChange("email", e.target.value)}
-          disabled
-        >
-          Email
-        </TextInput>
-        <TextInput
-          htmlFor="text"
-          id="text"
-          type="text"
-          name="address"
-          userData={userData?.user?.address || "Неизвестно"}
-          onChange={(e) => handleInputChange("address", e.target.value)}
-        >
-          Адрес
-        </TextInput>
-        <TextInput
-          htmlFor="text"
-          id="text"
-          type="text"
-          name="name"
-          userData={userData?.user?.username || "Неизвестно"}
-          onChange={(e) => handleInputChange("name", e.target.value)}
-        >
-          ФИО
-        </TextInput>
-        <TextInput
-          htmlFor="date"
-          id="date"
-          type="date"
-          name="birthday"
-          userData={userData?.date_born || "Неизвестно"}
-          onChange={(e) => handleInputChange("birthday", e.target.value)}
-          disabled
-        >
-          Дата рождения
-        </TextInput>
-        <TextInput
-          htmlFor="tel"
-          id="tel"
-          type="tel"
-          name="phone"
-          userData={userData?.user?.phone || "Неизвестно"}
-          onChange={(e) => handleInputChange("phone", e.target.value)}
-        >
-          Телефон
-        </TextInput>
-        <Select
-          htmlFor="gender"
-          id="gender"
-          name="gender"
-          value={userData?.user?.gender}
-          onChange={(e) => handleInputChange("gender", e.target.value)}
-          options={[
-            { label: "Мужской", value: "male" },
-            { label: "Женский", value: "female" },
-          ]}
-        >
-          Пол
-        </Select>
-      </div>
-      <span className="edit__title">Согласие пользователя</span>
-      <div className="edit__checkbox">
-        <Checkbox
-          htmlFor="politicy1"
-          id="politicy1"
-          name="politicy1"
-          checked={politicy1Checked}
-          onChange={(e) => handleCheckboxChange("politicy1", e.target.checked)}
-        >
-          Пользователь ознакомлен с Политикой Конфиденциальности
-        </Checkbox>
-        <Checkbox
-          htmlFor="politicy2"
-          id="politicy2"
-          name="politicy2"
-          checked={politicy2Checked}
-          onChange={(e) => handleCheckboxChange("politicy2", e.target.checked)}
-        >
-          Пользователь даёт Согласие на обработку персональных данных
-        </Checkbox>
-      </div>
-      <hr className="profile__divider" />
-      <div className="edit__action-button">
-        <button type="button" className="save" onClick={handleSave}>
-          Сохранить
-        </button>
-        <button type="button" className="cancel" onClick={toggleEditingMode}>
-          Отмена
-        </button>
-      </div>
-    </div>
+    <>
+      <form onSubmit={handleSave} className="edit">
+        <span className="edit__title">Персональные данные</span>
+        <form className="edit__info">
+          {fullName.map((field) => (
+            <TextInput
+              key={field.name}
+              type={field.type}
+              disabled={field.disabled}
+              name={field.name}
+              value={editedData[field.name]}
+              onChange={handleChange}
+              required
+              autoComplete="none"
+              placeholder={field.placeholder}
+            />
+          ))}
+          {extra.map((field) =>
+            field.type === "select" ? (
+              <Select
+                key={field.name}
+                name={field.name}
+                value={editedData[field.name]}
+                onChange={handleChange}
+                options={field.options}
+                placeholder={field.placeholder}
+              />
+            ) : (
+              <TextInput
+                key={field.name}
+                type={field.type}
+                disabled={field.disabled}
+                name={field.name}
+                value={editedData[field.name]}
+                onChange={handleChange}
+                required
+                autoComplete="none"
+                placeholder={field.placeholder}
+              />
+            )
+          )}
+        </form>
+        <span className="edit__title">Согласие пользователя</span>
+        <div className="edit__checkbox">
+          {checkboxFields.map((field) => (
+            <Checkbox
+              key={field.name}
+              name={field.name}
+              checked={editedData[field.name]}
+              onChange={handleChange}
+            >
+              {field.label}
+            </Checkbox>
+          ))}
+        </div>
+        <hr className="profile__divider" />
+        <div className="edit__action-button">
+          <button type="sumbit" className="save">
+            Сохранить
+          </button>
+          <button type="button" className="cancel" onClick={toggleEditingMode}>
+            Отмена
+          </button>
+        </div>
+      </form>
+    </>
   );
 };
 

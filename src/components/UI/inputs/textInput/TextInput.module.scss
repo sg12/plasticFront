@@ -3,6 +3,9 @@
   flex-direction: column;
   gap: 4px;
   &__label {
+    position: absolute;
+    opacity: .5;
+    padding: 4px;
     font-size: 14px;
   }
   &__input {

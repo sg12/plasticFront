@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import styles from "./Radio.module.scss";
 
-const Radio = ({ options, onChange }) => {
+import styles from "./Radios.module.scss";
+
+const Radios = ({ options, onChange }) => {
   const [selectedOption, setSelectedOption] = useState(null);
 
   const handleOptionChange = (value) => {
@@ -27,4 +28,4 @@ const Radio = ({ options, onChange }) => {
   );
 };
 
-export default Radio;
+export default Radios;

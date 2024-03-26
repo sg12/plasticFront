@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import FieldButton from '../UI/buttons/fieldButton/FieldButton';
 
@@ -11,6 +11,8 @@ import Cookies from 'js-cookie';
 import './RegisterClinic.scss';
 
 const RegisterClinic = () => {
+    const navigate = useNavigate();
+
     const {register, formState: { errors }, handleSubmit, watch} = useForm({
         defaultValues:{
             email:'',
@@ -33,6 +35,7 @@ const RegisterClinic = () => {
         const respData = await PlasticServices.registerUser(data, type);
         console.log(respData);
         Cookies.set('token', respData.token);
+        navigate("/account",setTimeout ( () => window.location.reload(), 0));
     };
 
     return (

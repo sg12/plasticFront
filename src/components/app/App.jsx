@@ -24,7 +24,7 @@ import ClinicPage from '../../pages/ClinicPage';
 // import StocksPage from '../../pages/StocksPage';
 import ArticlesPage from "../../pages/ArticlesPage";
 import NotFound from "../notFound/NotFound";
-import ConstructorPage from "../../pages/Constructor";
+import ConstructorPage from "../../pages/ConstructorPage";
 
 import EnterItem from "../enterItem/EnterItem";
 import EnterClient from "../enterClient/EnterClient";
@@ -37,6 +37,7 @@ import NewPassword from "../newPassword/NewPassword";
 import EnterPage from "../../pages/EnterPage";
 import AccountPage from "../../pages/AccountPage";
 import ArticleDetailedPage from "../../pages/ArticleDetailedPage";
+import PrivateRoute from "../../routes/PrivateRoute";
 
 function App() {
 	return (
@@ -53,7 +54,7 @@ function App() {
 					<Route path="articles" element={<ArticlesPage />}></Route>
 					<Route path="articles/:id" element={<ArticleDetailedPage />}></Route>
 					<Route path="*" element={<NotFound />}></Route>
-                    <Route path="constructor" element={<ConstructorPage/>}></Route>
+					<Route path="constructor" element={<ConstructorPage />}></Route>
 				</Route>
 				<Route path="enterPage" element={<EnterPage />}>
 					<Route index element={<EnterItem />}></Route>
@@ -65,16 +66,18 @@ function App() {
 					<Route path="forgotPassword" element={<ForgotPassword />}></Route>
 					<Route path="newPassword" element={<NewPassword />}></Route>
 				</Route>
-				<Route path="account" element={<AccountPage />}>
-					<Route path="profile" element={<ProfileUser />} />
-					<Route path="reviews" element={<ReviewsInfo />} />
-					<Route path="help" element={<HelpInfo />} />
-					<Route path="support" element={<SupportInfo />} />
-					<Route path="clinic" element={<ClinicsInfo />} />
-					<Route path="service" element={<ServicesInfo />} />
-					<Route path="specialist" element={<SpecialistInfo />} />
-					<Route path="settings" element={<SettingsInfo />} />
-					<Route path="favourites" element={<FavouritesInfo />} />
+				<Route element={<PrivateRoute />}>
+					<Route path="account" element={<AccountPage />}>
+						<Route path="profile" element={<ProfileUser />} />
+						<Route path="reviews" element={<ReviewsInfo />} />
+						<Route path="help" element={<HelpInfo />} />
+						<Route path="support" element={<SupportInfo />} />
+						<Route path="clinic" element={<ClinicsInfo />} />
+						<Route path="service" element={<ServicesInfo />} />
+						<Route path="specialist" element={<SpecialistInfo />} />
+						<Route path="settings" element={<SettingsInfo />} />
+						<Route path="favourites" element={<FavouritesInfo />} />
+					</Route>
 				</Route>
 			</Routes>
 		</>
