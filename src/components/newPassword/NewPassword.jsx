@@ -2,7 +2,7 @@ import FieldButton from "../UI/buttons/fieldButton/FieldButton";
 
 import { useForm } from 'react-hook-form';
 
-import './newPassword.scss';
+import './NewPassword.scss';
 import { Link } from "react-router-dom";
 
 const NewPassword = () => {

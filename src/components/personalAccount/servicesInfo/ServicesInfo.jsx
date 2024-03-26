@@ -3,7 +3,7 @@ import Table from "../../UI/table/Table";
 import "./ServicesInfo.scss";
 import FilterModal from "../../UI/modals/filterModal/FilterModal";
 import { useState } from "react";
-import Radio from "../../UI/radios/radio";
+import Radios from "../../UI/radios/Radios";
 
 const ServicesInfo = () => {
   const options = [
@@ -126,7 +126,7 @@ const ServicesInfo = () => {
               </div>
               <span className="services__title">Статус</span>
               <div className="services__radio">
-                <Radio options={options} onChange={handleOptionChange} />
+                <Radios options={options} onChange={handleOptionChange} />
               </div>
             </FilterModal>
           )}

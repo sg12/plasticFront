@@ -26,14 +26,14 @@ import ArticlesPage from "../../pages/ArticlesPage";
 import NotFound from "../notFound/NotFound";
 import ConstructorPage from "../../pages/ConstructorPage";
 
-import EnterItem from "../enterItem/enterItem";
+import EnterItem from "../enterItem/EnterItem";
 import EnterClient from "../enterClient/EnterClient";
 import RegisterClient from "../registerClient/RegisterClient";
 import EnterPartner from "../enterPartner/EnterPartner";
 import RegisterDoctor from "../registerDoctor/RegisterDoctor";
 import RegisterClinic from "../registerClinic/RegisterClinic";
 import ForgotPassword from "../forgotPassword/ForgotPassword";
-import NewPassword from "../newPassword/newPassword";
+import NewPassword from "../newPassword/NewPassword";
 import EnterPage from "../../pages/EnterPage";
 import AccountPage from "../../pages/AccountPage";
 import ArticleDetailedPage from "../../pages/ArticleDetailedPage";
