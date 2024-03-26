@@ -1,0 +1,17 @@
+.paginationPage {
+	display: flex;
+	justify-content: center;
+
+	&__button {
+		margin-right: 20px;
+
+		&:last-child {
+			margin-right: 0;
+		}
+
+		&_active {
+			color: red;
+			border: 1px solid red;
+		}
+	}
+}
