@@ -67,7 +67,7 @@ const ServicesInfo = () => {
               animationTime={400}
               filterValue={serviceData}
               setFilterValue={setServiceData}
-              disabledSearch={false}
+              disabledSearch={true}
               save={handleSave}
             >
               <input

@@ -4,7 +4,7 @@ import "./ClinicsInfo.scss";
 
 const ClinicsInfo = () => {
   const { userData } = useUser();
-  const [hasDoctorCard, setHasDoctorCard] = useState(true);
+  const [hasDoctorCard, setHasDoctorCard] = useState(false);
 
   return (
     <div className="clinic">
@@ -26,7 +26,7 @@ const ClinicCard = ({ userData }) => {
     <div className="clinic-card">
       <div className="clinic-card__block">
         <span className="clinic-card__block-name">Клиника "Ольга"</span>
-        {/* <div className="clinic-card__block-control">
+        <div className="clinic-card__block-control">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -42,7 +42,7 @@ const ClinicCard = ({ userData }) => {
               strokeLinejoin="round"
             />
           </svg>
-        </div> */}
+        </div>
       </div>
       <hr className="clinic-card__divider" />
       <div className="clinic-card__info">
@@ -55,6 +55,7 @@ const ClinicCard = ({ userData }) => {
               Руководитель
             </span>
             <span className="clinic-card__info-personal-position-director">
+              Директор: Ольга Ивановна
               {/* {userData.name} */}
             </span>
           </div>
@@ -63,6 +64,7 @@ const ClinicCard = ({ userData }) => {
               Адрес
             </span>
             <span className="clinic-card__info-personal-address-street">
+              ул. Пушкина, д. 17
               {/* {userData.address.street} */}
             </span>
           </div>

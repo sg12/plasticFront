@@ -52,6 +52,7 @@ const EditUser = ({ userData, toggleEditingMode }) => {
   };
 
   const hasFormDataChanged = () => {
+    if (!userData) return false;
     return Object.keys(editedData).some(
       (key) => editedData[key] !== userData[key]
     );
@@ -74,6 +75,7 @@ const EditUser = ({ userData, toggleEditingMode }) => {
             }
           );
           toggleEditingMode(false);
+          window.location.reload();
         } catch (err) {
           toast.warn("Произошла ошибка при сохранении данных");
         }
