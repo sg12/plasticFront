@@ -26,7 +26,7 @@ const ClinicCard = ({ userData }) => {
     <div className="clinic-card">
       <div className="clinic-card__block">
         <span className="clinic-card__block-name">Клиника "Ольга"</span>
-        <div className="clinic-card__block-control">
+        {/* <div className="clinic-card__block-control">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -42,7 +42,7 @@ const ClinicCard = ({ userData }) => {
               strokeLinejoin="round"
             />
           </svg>
-        </div>
+        </div> */}
       </div>
       <hr className="clinic-card__divider" />
       <div className="clinic-card__info">

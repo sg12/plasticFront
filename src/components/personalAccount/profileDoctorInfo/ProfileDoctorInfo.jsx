@@ -33,19 +33,23 @@ const UserProfileDetails = ({ userData }) => (
 
 // Выносим компонент для отображения футера профиля
 const UserProfileFooter = ({ userData }) => (
-  <div className="profile__additionally">
-    {fieldsFooter.map((section, index) => (
-      <div key={index} className={`profile__${section.value}`}>
-        <Field label={section.label} value={userData?.[section.value]} />
-        <div className="profile__action-button">
-          <button className="add" type="button">
-            Добавить
-          </button>
+  <InDev>
+    <div className="profile__additionally">
+      {fieldsFooter.map((section, index) => (
+        <div key={index} className={`profile__${section.value}`}>
+          <Field label={section.label} value={userData?.[section.value]} />
+          <div className="profile__action-button">
+            <button className="add" type="button">
+              Добавить
+            </button>
+          </div>
+          {index < fieldsFooter.length - 1 && (
+            <hr className="profile__divider" />
+          )}
         </div>
-        {index < fieldsFooter.length - 1 && <hr className="profile__divider" />}
-      </div>
-    ))}
-  </div>
+      ))}
+    </div>
+  </InDev>
 );
 
 const UserProfileAction = ({ toggleEditingMode, handleDelete }) => (
