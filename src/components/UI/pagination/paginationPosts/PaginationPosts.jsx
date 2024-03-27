@@ -1,4 +1,4 @@
-import classes from './PaginationPage.module.scss';
+import classes from './PaginationPosts.module.scss';
 
 import PropTypes from 'prop-types';
 
@@ -6,19 +6,19 @@ import OutlineButton from '../../buttons/outlineButton/OutlineButton';
 
 import { getPageArray } from '../../../../utils/pagesPosts/PagesPosts';
 
-const PaginationPage = ({ totalPages, page, changePage, ...props }) => {
+const PaginationPosts = ({ totalPages, page, changePage, ...props }) => {
 
 	let pagesArray = getPageArray(totalPages);
 
 	return (
-		<div {...props} className={`${classes.paginationPage} ${props.className}`}>
+		<div {...props} className={`${classes.paginationPosts} ${props.className}`}>
 			{pagesArray.map((i) => (
 				<OutlineButton
 					key={i}
 					onClick={() => changePage(i)}
 					className={page === i
-						? `${classes.paginationPage__button} ${classes.paginationPage__button_active}`
-						: `${classes.paginationPage__button}`}
+						? `${classes.paginationPosts__button} ${classes.paginationPosts__button_active}`
+						: `${classes.paginationPosts__button}`}
 				>
 					{i}
 				</OutlineButton>
@@ -27,11 +27,11 @@ const PaginationPage = ({ totalPages, page, changePage, ...props }) => {
 	);
 };
 
-PaginationPage.propTypes = {
+PaginationPosts.propTypes = {
 	className: PropTypes.string,
 	totalPages: PropTypes.number,
 	page: PropTypes.number,
 	changePage: PropTypes.func,
 };
 
-export default PaginationPage;
+export default PaginationPosts;

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 
 import PlasticServices from '../../services/PlasticServices';
 
-import PaginationPage from '../UI/pagination/paginationPage/PaginationPage';
+import PaginationPosts from '../UI/pagination/paginationPosts/PaginationPosts';
 
 import ClinicsCardsItem from '../clinicsCardsItem/ClinicsCardsItem';
 import Spinner from '../spinner/Spinner';
@@ -23,6 +23,7 @@ const ClinicsCardsList = () => {
 	console.log('страница', page);
 
 	const [totalPages, setTotalPages] = useState(0);
+	console.log('страницы клиник', totalPages);
 
 	const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
 		const response = await PlasticServices.getAllClinics(limit, page);
@@ -30,7 +31,6 @@ const ClinicsCardsList = () => {
 		const totalCount = response.headers['x-total-count'];
 		setTotalPages(getPageCount(totalCount, limit));
 	});
-	console.log('страницы клиник', totalPages);
 
 	//!!! использовать useMemo, чтобы не пересчитывать
 	// let pagesArray = getPageArray(totalPages);
@@ -81,7 +81,7 @@ const ClinicsCardsList = () => {
 				</ul>
 				{error}
 				{spinner}
-				<PaginationPage
+				<PaginationPosts
 					totalPages={totalPages}
 					page={page}
 					changePage={changePage}
