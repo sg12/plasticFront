@@ -9,42 +9,23 @@ import CenterModal from '../UI/modals/centerModal/CenterModal';
 // import SortDropdowns from '../UI/dropdowns/sortDropdowns/SortDropdowns';
 import OutlineButton from '../UI/buttons/outlineButton/OutlineButton';
 
-const FilterCards = ({ filter, setFilter, onUpdate }) => {
-	// const [modal, setModal] = useState(false);
+const FilterCards = ({ filter, setFilter }) => {
+
 	const [modal, setModal] = useState(false);
 
-	// const [specialty, setSpecialty] = useState('');
-	// const [gender, setGender] = useState('');
-	// const [category, setCategory] = useState('');
-	// const [rating, setRating] = useState('');
-	// const [reception, setReception] = useState('');
+	const [tempFilter, setTempFilter] = useState(filter);
 
-	// const [sort, setSort] = useState('');
+	const handleLimitChange = (selectedLimit) => {
+		setTempFilter({ ...tempFilter, limit: selectedLimit });
+	};
 
-	// const specialtyChange = (e) => {
-	// 	setSpecialty(e.target.value);
-	// };
+	const applyFilter = () => {
+		setFilter(tempFilter);
+	};
 
-	// const genderChange = (e) => {
-	// 	setGender(e.target.value);
-	// };
-
-	// const categoryChange = (e) => {
-	// 	setCategory(e.target.value);
-	// };
-
-	// const ratingChange = (e) => {
-	// 	setRating(e.target.value);
-	// };
-
-	// const receptionChange = (e) => {
-	// 	setReception(e.target.value);
-	// };
-
-	// const sortChange = (e) => {
-	// 	setSort(e.target.value);
-	// };
-	// // console.log(sort);
+	const resetFilter = () => {
+		setTempFilter(filter);
+	};
 
 	return (
 		<div className='filter-cards'>
@@ -72,7 +53,7 @@ const FilterCards = ({ filter, setFilter, onUpdate }) => {
 							]}
 						/>
 					</div> */}
-					<div className='filter-cards__item'>
+					{/* <div className='filter-cards__item'>
 						<p>Лимит</p>
 						<CardsSelect
 							value={filter.limit}
@@ -85,8 +66,22 @@ const FilterCards = ({ filter, setFilter, onUpdate }) => {
 								{ value: '6', name: 'Шесть' },
 							]}
 						/>
-					</div>
+					</div> */}
 					<div className='filter-cards__item'>
+						<p>Лимит</p>
+						<CardsSelect
+							value={tempFilter.limit}
+							onChange={handleLimitChange}
+							defaultValue='Выберите лимит'
+							options={[
+								{ value: '1', name: 'Один' },
+								{ value: '2', name: 'Два' },
+								{ value: '3', name: 'Три' },
+								{ value: '6', name: 'Шесть' },
+							]}
+						/>
+					</div>
+					{/* <div className='filter-cards__item'>
 						<p>Пол</p>
 						<CardsSelect
 							value={filter.gender}
@@ -98,8 +93,8 @@ const FilterCards = ({ filter, setFilter, onUpdate }) => {
 								{ value: 'male', name: 'Мужской' },
 							]}
 						/>
-					</div>
-					<div className='filter-cards__item'>
+					</div> */}
+					{/* <div className='filter-cards__item'>
 						<p>Категория</p>
 						<CardsSelect
 							value={filter.category}
@@ -112,8 +107,8 @@ const FilterCards = ({ filter, setFilter, onUpdate }) => {
 								{ value: 'higher', name: 'Высшая' },
 							]}
 						/>
-					</div>
-					<div className='filter-cards__item'>
+					</div> */}
+					{/* <div className='filter-cards__item'>
 						<p>Оценка</p>
 						<CardsSelect
 							value={filter.rating}
@@ -129,8 +124,8 @@ const FilterCards = ({ filter, setFilter, onUpdate }) => {
 								{ value: '5', name: 'От 5' },
 							]}
 						/>
-					</div>
-					<div className='filter-cards__item'>
+					</div> */}
+					{/* <div className='filter-cards__item'>
 						<p>Тип приёма</p>
 						<CardsSelect
 							value={filter.reception}
@@ -142,7 +137,7 @@ const FilterCards = ({ filter, setFilter, onUpdate }) => {
 								{ value: 'home', name: 'Частная практика' },
 							]}
 						/>
-					</div>
+					</div> */}
 					{/* <div className='filter-cards__item'>
 						<p>Тип приёма</p>
 						<select name="reception" value={reception} onChange={receptionChange}>
@@ -153,13 +148,13 @@ const FilterCards = ({ filter, setFilter, onUpdate }) => {
 						</select>
 					</div> */}
 					<div className='filter-cards__item'>
-						<button onClick={onUpdate}>Применить</button>
-						<button>Сбросить</button>
+						<button onClick={applyFilter}>Применить</button>
+						<button onClick={resetFilter}>Сбросить</button>
 					</div>
 				</div>
 			</CenterModal>
 			<div className='filter-cards__hr' />
-			<CardsSelect
+			{/* <CardsSelect
 				value={filter.sort}
 				onChange={selectedSort => setFilter({ ...filter, sort: selectedSort })}
 				defaultValue='Выберите сортировку'
@@ -168,7 +163,7 @@ const FilterCards = ({ filter, setFilter, onUpdate }) => {
 					{ value: 'rating', name: 'По рейтингу' },
 					{ value: 'reviews', name: 'По количеству отзывов' },
 				]}
-			/>
+			/> */}
 			{/* <select name="sort" value={sort} onChange={sortChange}>
 				<option value="" disabled hidden>Выберите сортировку</option>
 				<option value="rating">По рейтингу</option>

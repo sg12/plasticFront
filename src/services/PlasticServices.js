@@ -20,7 +20,7 @@ class PlasticServices {
 	// 	return response;
 	// }
 
-	static async getAllClinics(limit = 6, page = 1) {
+	static async getAllClinics(limit, page) {
 		const response = await axios.get(`https://jsonplaceholder.typicode.com/posts?_limit=${limit}&_page=${page}`);
 		return response;
 	}

@@ -1,6 +1,7 @@
 .paginationPosts {
 	display: flex;
 	justify-content: center;
+	flex-wrap: wrap;
 
 	&__button {
 		margin-right: 20px;

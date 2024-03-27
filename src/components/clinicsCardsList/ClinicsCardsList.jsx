@@ -8,28 +8,31 @@ import PaginationPosts from '../UI/pagination/paginationPosts/PaginationPosts';
 
 import ClinicsCardsItem from '../clinicsCardsItem/ClinicsCardsItem';
 import Spinner from '../spinner/Spinner';
+import FilterCards from '../filterCards/FilterCards';
 
 import { useFetching } from '../../hooks/useFetching';
 import { getPageCount } from '../../utils/pagesPosts/PagesPosts';
 
 const ClinicsCardsList = () => {
 
-	//!!! 2.57.00 (лимиты) - https://www.youtube.com/watch?v=GNrdg3PzpJQ&list=WL&index=26&t=7328s
-
 	const [posts, setPosts] = useState([]);
-	const [limit, setLimit] = useState(6);
-	console.log('лимит', limit);
+	// const [limit, setLimit] = useState(6);
+	// console.log('лимит', limit);
 	const [page, setPage] = useState(1);
 	console.log('страница', page);
 
 	const [totalPages, setTotalPages] = useState(0);
 	console.log('страницы клиник', totalPages);
 
+	// const [filter, setFilter] = useState({ limit: '1', specialtie: '', gender: '', category: '', rating: '', reception: '', sort: '' });
+	const [filter, setFilter] = useState({ limit: '1' });
+	console.log('глобальный фильтр', filter);
+
 	const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
-		const response = await PlasticServices.getAllClinics(limit, page);
+		const response = await PlasticServices.getAllClinics(filter.limit, page);
 		setPosts(response.data);
 		const totalCount = response.headers['x-total-count'];
-		setTotalPages(getPageCount(totalCount, limit));
+		setTotalPages(getPageCount(totalCount, filter.limit));
 	});
 
 	//!!! использовать useMemo, чтобы не пересчитывать
@@ -46,7 +49,7 @@ const ClinicsCardsList = () => {
 
 	useEffect(() => {
 		fetchPosts();
-	}, [page]);
+	}, [page, filter]);
 
 	// const loadMorePosts = () => {
 	// 	onRequest();
@@ -76,6 +79,7 @@ const ClinicsCardsList = () => {
 		<section className='clinics-cards-list'>
 			<div className='clinics-cards-list__container container'>
 				<h2 className='clinics-cards-list__title'>КЛИНИКИ</h2>
+				<FilterCards filter={filter} setFilter={setFilter} />
 				<ul className='clinics-cards-list__box'>
 					{content}
 				</ul>
