@@ -14,6 +14,7 @@ import Stars from '../UI/stars/Stars';
 import doctorImg from '../../assets/imgs/doctor-1.png';
 import licenseImg from '../../assets/imgs/license.png';
 import licenseBigImg from '../../assets/imgs/license-big.png';
+import FieldButton from '../UI/buttons/fieldButton/FieldButton';
 
 const DoctorDetailedItem = (props) => {
 	const [modal, setModal] = useState(false);
@@ -40,7 +41,7 @@ const DoctorDetailedItem = (props) => {
 			<div className='doctor-detailed-item__box-title'>
 				<img src={doctorImg} alt="доктор" />
 				<Review />
-				<button onClick={() => setModal3(true)}>Оставить отзыв</button>
+				<button className='doctor-detailed-item__review-button' onClick={() => setModal3(true)}>Оставить отзыв</button>
 				<h2>{props.post.user.username}</h2>
 			</div>
 			<CenterModal visible={modal3} setVisible={setModal3}>
@@ -71,7 +72,7 @@ const DoctorDetailedItem = (props) => {
 						<Stars totalStars={5} onChange={(rating) => handleReviewChange(4, rating, "Посоветуете ли Вы врача?")} />
 					</div>
 
-					<button onClick={handleReviewSubmit}>Оставить отзыв</button>
+					<FieldButton className='doctor-detailed-item__modal-send-review-button' onClick={handleReviewSubmit}>Оставить отзыв</FieldButton>
 				</div>
 			</CenterModal>
 			<div className='doctor-detailed-item__wrapper-first'>
