@@ -10,6 +10,8 @@ import CenterModal from '../UI/modals/centerModal/CenterModal';
 // import SortDropdowns from '../UI/dropdowns/sortDropdowns/SortDropdowns';
 import OutlineButton from '../UI/buttons/outlineButton/OutlineButton';
 
+//!!! добавить стили для текста
+
 const FilterCards = ({ filter, setFilter }) => {
 
 	const [modal, setModal] = useState(false);
@@ -221,14 +223,15 @@ const FilterCards = ({ filter, setFilter }) => {
 							<option value="home">Частная практика</option>
 						</select>
 					</div> */}
-					<div className='filter-cards__item'>
-						<button onClick={applyFilter}>Применить</button>
-						<button onClick={resetFilter}>Сбросить</button>
+					<div className='filter-cards__buttons'>
+						<OutlineButton onClick={applyFilter}>Применить</OutlineButton>
+						<OutlineButton onClick={resetFilter}>Сбросить</OutlineButton>
 					</div>
 				</div>
 			</CenterModal>
 			<div className='filter-cards__hr' />
 			<CardsSelect
+				style={{ width: '300px' }}
 				value={tempFilter.sort}
 				// onChange={(selectedSort) => handleFilterChange('sort', selectedSort)}
 				// onChange={selectedSort => setFilter({ ...filter, sort: selectedSort })}

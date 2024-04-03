@@ -2,9 +2,9 @@ import classes from './CardsSelect.module.scss';
 
 import PropTypes from 'prop-types';
 
-const CardsSelect = ({ options, defaultValue, value, onChange }) => {
+const CardsSelect = ({ options, defaultValue, value, onChange, ...props }) => {
 	return (
-		<select className={classes.select} value={value} onChange={event => onChange(event.target.value)}>
+		<select {...props} className={`${classes.select} ${props.className}`} value={value} onChange={event => onChange(event.target.value)}>
 			<option disabled value="">{defaultValue}</option>
 			{options.map(option =>
 				<option value={option.value} key={option.value}>
@@ -16,6 +16,7 @@ const CardsSelect = ({ options, defaultValue, value, onChange }) => {
 };
 
 CardsSelect.propTypes = {
+	className: PropTypes.string,
 	options: PropTypes.array.isRequired,
 	defaultValue: PropTypes.string.isRequired,
 	value: PropTypes.string.isRequired,
