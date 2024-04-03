@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 
 import { useState } from 'react';
 
+import CardsInput from '../UI/inputs/cardsInput/CardsInput';
 import CardsSelect from '../UI/selects/cardsSelect/CardsSelect';
 import CenterModal from '../UI/modals/centerModal/CenterModal';
 // import SortDropdowns from '../UI/dropdowns/sortDropdowns/SortDropdowns';
@@ -15,8 +16,26 @@ const FilterCards = ({ filter, setFilter }) => {
 
 	const [tempFilter, setTempFilter] = useState(filter);
 
-	const handleLimitChange = (selectedLimit) => {
-		setTempFilter({ ...tempFilter, limit: selectedLimit });
+	// const handleLimitChange = (selectedLimit) => {
+	// 	setTempFilter({ ...tempFilter, limit: selectedLimit });
+	// };
+
+	// const handleFilterChange = (field, value) => {
+	// 	setTempFilter({ ...tempFilter, [field]: value });
+	// };
+
+	// const handleFilterChange = (field, value) => {
+	// 	setTempFilter(prevFilter => ({
+	// 		...prevFilter,
+	// 		[field]: value,
+	// 	}));
+	// };
+
+	const handleFilterChange = (field, value) => {
+		setTempFilter(prevFilter => ({
+			...prevFilter,
+			[field]: value,
+		}));
 	};
 
 	const applyFilter = () => {
@@ -67,17 +86,72 @@ const FilterCards = ({ filter, setFilter }) => {
 							]}
 						/>
 					</div> */}
+					{/* <div className='filter-cards__item'>
+						<p>Название клиники</p>
+						<CardsInput
+							value={tempFilter.search}
+							onChange={(e) => setTempFilter({ ...tempFilter, search: e.target.value })}
+						// onChange={(e) => handleFilterChange('search', e.target.value)}
+						// onChange={(selectedSort) => handleFilterChange('search', selectedSort)}
+						/>
+					</div> */}
 					<div className='filter-cards__item'>
 						<p>Лимит</p>
 						<CardsSelect
 							value={tempFilter.limit}
-							onChange={handleLimitChange}
+							// onChange={handleFilterChange}
+							// onChange={(selectedSort) => handleFilterChange('limit', selectedSort)}
+							// onChange={(e) => setTempFilter({ ...tempFilter, limit: e.target.value })}
+							onChange={(selectedLimit) => handleFilterChange('limit', selectedLimit)}
 							defaultValue='Выберите лимит'
 							options={[
 								{ value: '1', name: 'Один' },
 								{ value: '2', name: 'Два' },
 								{ value: '3', name: 'Три' },
 								{ value: '6', name: 'Шесть' },
+							]}
+						/>
+					</div>
+					<div className='filter-cards__item'>
+						<p>Услуги</p>
+						<CardsSelect
+							value={tempFilter.service}
+							// onChange={handleFilterChange}
+							// onChange={(selectedSort) => handleFilterChange('service', selectedSort)}
+							// onChange={(e) => setTempFilter({ ...tempFilter, service: e.target.value })}
+							onChange={(selectedService) => handleFilterChange('service', selectedService)}
+							defaultValue='Выберите услугу'
+							options={[
+								{ value: '', name: 'Любая' },
+								{ value: 'rinoplastic', name: 'Ринопластика' },
+								{ value: 'blephaplastic', name: 'Блефаропластика' },
+								{ value: 'liposakcia', name: 'Липосакция' },
+								{ value: 'lifting', name: 'Подтяжка' },
+								{ value: 'mammoplastic', name: 'Маммопластика' },
+								{ value: 'lipophiling', name: 'Липофилинг' },
+								{ value: 'genioplastic', name: 'Гениопластичный' },
+								{ value: 'genitoplastic', name: 'Генитопластика' },
+								{ value: 'feiclifting', name: 'поднятие тяжестей ???' },
+								{ value: 'ginekomastia', name: 'Гинекомастия' },
+								{ value: 'ymenshenie_jelez', name: 'изменение климата ???' },
+								{ value: 'plastic_yagodic', name: 'пластиковая ягодка ???' },
+								{ value: 'plastic_sheya', name: 'пластиковая шейя ???' },
+							]}
+						/>
+					</div>
+					<div className='filter-cards__item'>
+						<p>Тип клиники</p>
+						<CardsSelect
+							value={tempFilter.reception}
+							// onChange={handleFilterChange}
+							// onChange={(selectedSort) => handleFilterChange('service', selectedSort)}
+							// onChange={(e) => setTempFilter({ ...tempFilter, service: e.target.value })}
+							onChange={(selectedReception) => handleFilterChange('reception', selectedReception)}
+							defaultValue='Выберите тип клиники'
+							options={[
+								{ value: '', name: 'Любая' },
+								{ value: 'clinic', name: 'Государственная' },
+								{ value: 'private', name: 'Частная' },
 							]}
 						/>
 					</div>
@@ -154,6 +228,21 @@ const FilterCards = ({ filter, setFilter }) => {
 				</div>
 			</CenterModal>
 			<div className='filter-cards__hr' />
+			<CardsSelect
+				value={tempFilter.sort}
+				// onChange={(selectedSort) => handleFilterChange('sort', selectedSort)}
+				// onChange={selectedSort => setFilter({ ...filter, sort: selectedSort })}
+				onChange={(selectedSort) => {
+					handleFilterChange('sort', selectedSort);
+					setFilter({ ...filter, sort: selectedSort });
+				}}
+				defaultValue='Выберите сортировку'
+				options={[
+					{ value: '', name: 'По умолчанию' },
+					{ value: 'rating', name: 'По рейтингу' },
+					{ value: 'reviews', name: 'По количеству отзывов' },
+				]}
+			/>
 			{/* <CardsSelect
 				value={filter.sort}
 				onChange={selectedSort => setFilter({ ...filter, sort: selectedSort })}

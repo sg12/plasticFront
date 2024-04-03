@@ -20,8 +20,8 @@ class PlasticServices {
 	// 	return response;
 	// }
 
-	static async getAllClinics(limit, page) {
-		const response = await axios.get(`https://jsonplaceholder.typicode.com/posts?_limit=${limit}&_page=${page}`);
+	static async getAllClinics(limit, page, search, service, reception, sort) {
+		const response = await axios.get(`${_apiBase}/clinics?limit=${limit}&page=${page}&search=${search}&service=${service}&reception=${reception}&sort=${sort}`);
 		return response;
 	}
 

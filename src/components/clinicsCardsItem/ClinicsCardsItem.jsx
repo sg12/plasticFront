@@ -29,12 +29,12 @@ const ClinicsCardsItem = (props) => {
 				</div>
 				<div className='clinics-cards-item__wrapper-center'>
 					<div className='clinics-cards-item__wrapper-center-box'>
-						{/* <button onClick={toDetailedPage}>{props.post.user.username}</button> */}
-						<button onClick={toDetailedPage}>{props.post.title}</button>
+						<button onClick={toDetailedPage}>{props.post.official_name}</button>
+						{/* <button onClick={toDetailedPage}>{props.post.title}</button> */}
 						<p>{props.post.id}</p>
 						<h4>Услуги</h4>
-						{/* <p>{props.post.description}</p> */}
-						<p>{props.post.body}</p>
+						<p>{props.post.description}</p>
+						{/* <p>{props.post.body}</p> */}
 					</div>
 				</div>
 				<div className='clinics-cards-item__wrapper-right'>
@@ -48,14 +48,12 @@ const ClinicsCardsItem = (props) => {
 	);
 };
 
-// ClinicsCardsItem.propTypes = {
-// 	post: PropTypes.shape({
-// 		user: PropTypes.shape({
-// 			username: PropTypes.string.isRequired,
-// 		}).isRequired,
-// 		id: PropTypes.number.isRequired,
-// 		description: PropTypes.string.isRequired,
-// 	}).isRequired,
-// };
+ClinicsCardsItem.propTypes = {
+	post: PropTypes.shape({
+		id: PropTypes.number.isRequired,
+		official_name: PropTypes.string.isRequired,
+		description: PropTypes.string.isRequired,
+	}).isRequired,
+};
 
 export default ClinicsCardsItem;
