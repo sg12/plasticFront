@@ -11,8 +11,8 @@ const ConstructorComp = () => {
 	const [activeFace, setActiveFace] = useState('woman');
   	const [activeFaceStyle, setActiveFaceStyle] = useState('european');
 	return (
-		<div>
-			<h1 className="head">Не бойся меняться!</h1>
+		<div >
+			<h1 className="head" id='constructor'>Не бойся меняться!</h1>
 			{/* <ConstructorFilter /> */}
 			<ConstructorFace activeLine={activeLine} setActiveLine={setActiveLine} setActiveFace={setActiveFace} activeFace={activeFace} activeFaceStyle={activeFaceStyle} setActiveFaceStyle={setActiveFaceStyle}/>
 			{/* <AboutOperation activeLine={activeLine} /> */}

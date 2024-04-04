@@ -17,11 +17,11 @@ const Slides = ({ data }) => {
 				<div className="AI-text title-h3">
 					<p>{aiText}</p>
 				</div>
-				<Link to={'constructor'} className="button-item">
+				<a href="#constructor" className="button-item">
 					{/* <div className="button-item" id="button-slide"> */}
 					<p>{buttonText}</p>
 					{/* </div> */}
-				</Link>
+				</a>
 			</div>
 		</div>
 	);
