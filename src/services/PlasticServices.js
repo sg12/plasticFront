@@ -4,8 +4,8 @@ import axios from "axios";
 const _apiBase = "http://localhost:8000/api/v1";
 
 class PlasticServices {
-	static async getAllArticles(offset = 0) {
-		const response = await axios.get(`${_apiBase}/articles?limit=6&offset=${offset}`);
+	static async getAllArticles(page) {
+		const response = await axios.get(`${_apiBase}/articles?limit=6&page=${page}`);
 		return response;
 	}
 
