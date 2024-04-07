@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import { useState } from 'react';
 
-import CardsInput from '../UI/inputs/cardsInput/CardsInput';
+// import CardsInput from '../UI/inputs/cardsInput/CardsInput';
 import CardsSelect from '../UI/selects/cardsSelect/CardsSelect';
 import CenterModal from '../UI/modals/centerModal/CenterModal';
 // import SortDropdowns from '../UI/dropdowns/sortDropdowns/SortDropdowns';
@@ -12,7 +12,7 @@ import OutlineButton from '../UI/buttons/outlineButton/OutlineButton';
 
 //!!! добавить стили для текста
 
-const FilterCards = ({ filter, setFilter }) => {
+const FilterCards = ({ filter, setFilter, ...props }) => {
 
 	const [modal, setModal] = useState(false);
 	const [tempFilter, setTempFilter] = useState(filter);
@@ -29,46 +29,18 @@ const FilterCards = ({ filter, setFilter }) => {
 		setTempFilter(filter);
 	};
 
+	const filters = (props.doctors === 'doctors')
+		? <DoctorFilter />
+		: (props.clinics === 'clinics')
+			? <ClinicFilter />
+			: null;
+
 	return (
+
 		<div className='filter-cards'>
 			<OutlineButton onClick={() => setModal(true)}>Фильтр</OutlineButton>
 			<CenterModal visible={modal} setVisible={setModal}>
 				<div className='filter-cards__box'>
-					{/* <div className='filter-cards__item'>
-						<p>Специальность</p>
-						<CardsSelect
-							value={filter.specialty}
-							onChange={selectedSort => setFilter({ ...filter, specialty: selectedSort })}
-							defaultValue='Выберите специальность'
-							options={[
-								{ value: 'any', name: 'Любая' },
-								{ value: '1', name: 'Первая' },
-								{ value: '2', name: 'Вторая' },
-								{ value: '3', name: 'Третья' },
-								{ value: '4', name: 'Четвёртая' },
-								{ value: '5', name: 'Пятая' },
-								{ value: '6', name: 'Шестая' },
-								{ value: '7', name: 'Седьмая' },
-								{ value: '8', name: 'Восьмая' },
-								{ value: '9', name: 'Девятая' },
-								{ value: '10', name: 'Десятая' },
-							]}
-						/>
-					</div> */}
-					{/* <div className='filter-cards__item'>
-						<p>Лимит</p>
-						<CardsSelect
-							value={filter.limit}
-							onChange={selectedSort => setFilter({ ...filter, limit: selectedSort })}
-							defaultValue='Выберите лимит'
-							options={[
-								{ value: '1', name: 'Один' },
-								{ value: '2', name: 'Два' },
-								{ value: '3', name: 'Три' },
-								{ value: '6', name: 'Шесть' },
-							]}
-						/>
-					</div> */}
 					{/* <div className='filter-cards__item'>
 						<p>Название клиники</p>
 						<CardsInput
@@ -76,6 +48,36 @@ const FilterCards = ({ filter, setFilter }) => {
 							onChange={(e) => setTempFilter({ ...tempFilter, search: e.target.value })}
 						// onChange={(e) => handleFilterChange('search', e.target.value)}
 						// onChange={(selectedSort) => handleFilterChange('search', selectedSort)}
+						/>
+					</div> */}
+					{/* <div className='filter-cards__item'>
+						<p>Оценка</p>
+						<CardsSelect
+							value={filter.rating}
+							onChange={selectedSort => setFilter({ ...filter, rating: selectedSort })}
+							defaultValue='Выберите оценку'
+							options={[
+								{ value: '', name: 'Любая' },
+								{ value: '0', name: 'От 0' },
+								{ value: '1', name: 'От 1' },
+								{ value: '2', name: 'От 2' },
+								{ value: '3', name: 'От 3' },
+								{ value: '4', name: 'От 4' },
+								{ value: '5', name: 'От 5' },
+							]}
+						/>
+					</div> */}
+					{/* <div className='filter-cards__item'>
+						<p>Тип приёма</p>
+						<CardsSelect
+							value={filter.reception}
+							onChange={selectedSort => setFilter({ ...filter, reception: selectedSort })}
+							defaultValue='Выберите тип приёма'
+							options={[
+								{ value: '', name: 'Любая' },
+								{ value: 'clinic', name: 'В клинике' },
+								{ value: 'home', name: 'На дому' },
+							]}
 						/>
 					</div> */}
 					<div className='filter-cards__item'>
@@ -93,30 +95,6 @@ const FilterCards = ({ filter, setFilter }) => {
 						/>
 					</div>
 					<div className='filter-cards__item'>
-						<p>Услуги</p>
-						<CardsSelect
-							value={tempFilter.service}
-							onChange={(selectedService) => handleFilterChange('service', selectedService)}
-							defaultValue='Выберите услугу'
-							options={[
-								{ value: '', name: 'Любая' },
-								{ value: 'rinoplastic', name: 'Ринопластика' },
-								{ value: 'blephaplastic', name: 'Блефаропластика' },
-								{ value: 'liposakcia', name: 'Липосакция' },
-								{ value: 'lifting', name: 'Подтяжка' },
-								{ value: 'mammoplastic', name: 'Маммопластика' },
-								{ value: 'lipophiling', name: 'Липофилинг' },
-								{ value: 'genioplastic', name: 'Гениопластичный' },
-								{ value: 'genitoplastic', name: 'Генитопластика' },
-								{ value: 'feiclifting', name: 'поднятие тяжестей ???' },
-								{ value: 'ginekomastia', name: 'Гинекомастия' },
-								{ value: 'ymenshenie_jelez', name: 'изменение климата ???' },
-								{ value: 'plastic_yagodic', name: 'пластиковая ягодка ???' },
-								{ value: 'plastic_sheya', name: 'пластиковая шейя ???' },
-							]}
-						/>
-					</div>
-					<div className='filter-cards__item'>
 						<p>Тип клиники</p>
 						<CardsSelect
 							value={tempFilter.reception}
@@ -129,72 +107,7 @@ const FilterCards = ({ filter, setFilter }) => {
 							]}
 						/>
 					</div>
-					{/* <div className='filter-cards__item'>
-						<p>Пол</p>
-						<CardsSelect
-							value={filter.gender}
-							onChange={selectedSort => setFilter({ ...filter, gender: selectedSort })}
-							defaultValue='Выберите пол'
-							options={[
-								{ value: 'any', name: 'Любая' },
-								{ value: 'female', name: 'Женский' },
-								{ value: 'male', name: 'Мужской' },
-							]}
-						/>
-					</div> */}
-					{/* <div className='filter-cards__item'>
-						<p>Категория</p>
-						<CardsSelect
-							value={filter.category}
-							onChange={selectedSort => setFilter({ ...filter, category: selectedSort })}
-							defaultValue='Выберите категорию'
-							options={[
-								{ value: 'any', name: 'Любая' },
-								{ value: 'first', name: 'Первая' },
-								{ value: 'second', name: 'Вторая' },
-								{ value: 'higher', name: 'Высшая' },
-							]}
-						/>
-					</div> */}
-					{/* <div className='filter-cards__item'>
-						<p>Оценка</p>
-						<CardsSelect
-							value={filter.rating}
-							onChange={selectedSort => setFilter({ ...filter, rating: selectedSort })}
-							defaultValue='Выберите оценку'
-							options={[
-								{ value: 'any', name: 'Любая' },
-								{ value: '0', name: 'От 0' },
-								{ value: '1', name: 'От 1' },
-								{ value: '2', name: 'От 2' },
-								{ value: '3', name: 'От 3' },
-								{ value: '4', name: 'От 4' },
-								{ value: '5', name: 'От 5' },
-							]}
-						/>
-					</div> */}
-					{/* <div className='filter-cards__item'>
-						<p>Тип приёма</p>
-						<CardsSelect
-							value={filter.reception}
-							onChange={selectedSort => setFilter({ ...filter, reception: selectedSort })}
-							defaultValue='Выберите тип приёма'
-							options={[
-								{ value: 'any', name: 'Любая' },
-								{ value: 'clinic', name: 'В клинике' },
-								{ value: 'home', name: 'Частная практика' },
-							]}
-						/>
-					</div> */}
-					{/* <div className='filter-cards__item'>
-						<p>Тип приёма</p>
-						<select name="reception" value={reception} onChange={receptionChange}>
-							<option value="" disabled hidden>Выберите тип приёма</option>
-							<option value="any">Любая</option>
-							<option value="clinic">В клинике</option>
-							<option value="home">Частная практика</option>
-						</select>
-					</div> */}
+					{filters}
 					<div className='filter-cards__buttons'>
 						<OutlineButton onClick={applyFilter}>Применить</OutlineButton>
 						<OutlineButton onClick={resetFilter}>Сбросить</OutlineButton>
@@ -218,9 +131,97 @@ const FilterCards = ({ filter, setFilter }) => {
 			/>
 		</div >
 	);
+	function ClinicFilter() {
+		return (
+			<>
+				<div className='filter-cards__item'>
+					<p>Услуги</p>
+					<CardsSelect
+						value={tempFilter.service}
+						onChange={(selectedService) => handleFilterChange('service', selectedService)}
+						defaultValue='Выберите услугу'
+						options={[
+							{ value: '', name: 'Любая' },
+							{ value: 'rinoplastic', name: 'Ринопластика' },
+							{ value: 'blephaplastic', name: 'Блефаропластика' },
+							{ value: 'liposakcia', name: 'Липосакция' },
+							{ value: 'lifting', name: 'Подтяжка' },
+							{ value: 'mammoplastic', name: 'Маммопластика' },
+							{ value: 'lipophiling', name: 'Липофилинг' },
+							{ value: 'genioplastic', name: 'Гениопластичный' },
+							{ value: 'genitoplastic', name: 'Генитопластика' },
+							{ value: 'feiclifting', name: 'поднятие тяжестей ???' },
+							{ value: 'ginekomastia', name: 'Гинекомастия' },
+							{ value: 'ymenshenie_jelez', name: 'изменение климата ???' },
+							{ value: 'plastic_yagodic', name: 'пластиковая ягодка ???' },
+							{ value: 'plastic_sheya', name: 'пластиковая шейя ???' },
+						]}
+					/>
+				</div>
+			</>
+		);
+	}
+
+	function DoctorFilter() {
+		return (
+			<>
+				<div className='filter-cards__item'>
+					<p>Специальность</p>
+					<CardsSelect
+						value={tempFilter.specialtie}
+						onChange={(selectedSpecialtie) => handleFilterChange('specialtie', selectedSpecialtie)}
+						defaultValue='Выберите специальность'
+						options={[
+							{ value: '', name: 'Любая' },
+							{ value: 'plasticheskiy-khirurg', name: 'пластический хирург' },
+							{ value: 'esteticheskiy-khirurg', name: 'эстетический-хирург' },
+							{ value: 'khirurg-po-rekonstruktsii-grudi', name: 'хирург-по-реконструкции-груди' },
+							{ value: 'liposaktsionnyy-khirurg', name: 'липосакционный хирург' },
+							{ value: 'rinoplasticheskiy-khirurg', name: 'ринопластический хирург' },
+							{ value: 'blefaroplasticheskiy-khirurg', name: 'блефаропластический хирург' },
+							{ value: 'mammoplasticheskiy-khirurg', name: 'маммопластический хирург' },
+							{ value: 'abdominoplasticheskiy-khirurg', name: 'абдоминопластический хирург' },
+							{ value: 'liftingovyy-khirurg', name: 'лифтинговый-хирург' },
+							{ value: 'lipofilingovyy-khirurg', name: 'липофилинговый хирург' },
+							{ value: 'brachioplasticheskiy-khirurg', name: 'брахиопластический хирург' },
+						]}
+					/>
+				</div>
+				<div className='filter-cards__item'>
+					<p>Пол</p>
+					<CardsSelect
+						value={tempFilter.gender}
+						onChange={(selectedGender) => handleFilterChange('gender', selectedGender)}
+						defaultValue='Выберите пол'
+						options={[
+							{ value: '', name: 'Любой' },
+							{ value: 'female', name: 'Женский' },
+							{ value: 'male', name: 'Мужской' },
+						]}
+					/>
+				</div>
+				{/* <div className='filter-cards__item'>
+					<p>Категория</p>
+					<CardsSelect
+						value={tempFilter.category}
+						onChange={(selectedCategory) => handleFilterChange('category', selectedCategory)}
+						defaultValue='Выберите категорию'
+						options={[
+							{ value: '', name: 'Любая' },
+							{ value: 'first', name: 'Первая' },
+							{ value: 'second', name: 'Вторая' },
+							{ value: 'higher', name: 'Высшая' },
+						]}
+					/>
+				</div> */}
+			</>
+		);
+	}
 };
 
 FilterCards.propTypes = {
+	doctors: PropTypes.string,
+	clinics: PropTypes.string,
 	filter: PropTypes.object.isRequired,
 	setFilter: PropTypes.func.isRequired,
 };
