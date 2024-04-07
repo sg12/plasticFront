@@ -15,11 +15,6 @@ class PlasticServices {
 		return response;
 	}
 
-	// static async getAllClinics(limit = 6, offset = 0) {
-	// 	const response = await axios.get(`${_apiBase}/surgeons?limit=${limit}&offset=${offset}`);
-	// 	return response;
-	// }
-
 	static async getAllClinics(limit, page, search, service, reception, sort) {
 		const response = await axios.get(`${_apiBase}/clinics?limit=${limit}&page=${page}&search=${search}&service=${service}&reception=${reception}&sort=${sort}`);
 		return response;

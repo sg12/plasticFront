@@ -15,29 +15,10 @@ import OutlineButton from '../UI/buttons/outlineButton/OutlineButton';
 const FilterCards = ({ filter, setFilter }) => {
 
 	const [modal, setModal] = useState(false);
-
 	const [tempFilter, setTempFilter] = useState(filter);
 
-	// const handleLimitChange = (selectedLimit) => {
-	// 	setTempFilter({ ...tempFilter, limit: selectedLimit });
-	// };
-
-	// const handleFilterChange = (field, value) => {
-	// 	setTempFilter({ ...tempFilter, [field]: value });
-	// };
-
-	// const handleFilterChange = (field, value) => {
-	// 	setTempFilter(prevFilter => ({
-	// 		...prevFilter,
-	// 		[field]: value,
-	// 	}));
-	// };
-
 	const handleFilterChange = (field, value) => {
-		setTempFilter(prevFilter => ({
-			...prevFilter,
-			[field]: value,
-		}));
+		setTempFilter({ ...tempFilter, [field]: value });
 	};
 
 	const applyFilter = () => {
@@ -101,9 +82,6 @@ const FilterCards = ({ filter, setFilter }) => {
 						<p>Лимит</p>
 						<CardsSelect
 							value={tempFilter.limit}
-							// onChange={handleFilterChange}
-							// onChange={(selectedSort) => handleFilterChange('limit', selectedSort)}
-							// onChange={(e) => setTempFilter({ ...tempFilter, limit: e.target.value })}
 							onChange={(selectedLimit) => handleFilterChange('limit', selectedLimit)}
 							defaultValue='Выберите лимит'
 							options={[
@@ -118,9 +96,6 @@ const FilterCards = ({ filter, setFilter }) => {
 						<p>Услуги</p>
 						<CardsSelect
 							value={tempFilter.service}
-							// onChange={handleFilterChange}
-							// onChange={(selectedSort) => handleFilterChange('service', selectedSort)}
-							// onChange={(e) => setTempFilter({ ...tempFilter, service: e.target.value })}
 							onChange={(selectedService) => handleFilterChange('service', selectedService)}
 							defaultValue='Выберите услугу'
 							options={[
@@ -145,9 +120,6 @@ const FilterCards = ({ filter, setFilter }) => {
 						<p>Тип клиники</p>
 						<CardsSelect
 							value={tempFilter.reception}
-							// onChange={handleFilterChange}
-							// onChange={(selectedSort) => handleFilterChange('service', selectedSort)}
-							// onChange={(e) => setTempFilter({ ...tempFilter, service: e.target.value })}
 							onChange={(selectedReception) => handleFilterChange('reception', selectedReception)}
 							defaultValue='Выберите тип клиники'
 							options={[
@@ -233,8 +205,6 @@ const FilterCards = ({ filter, setFilter }) => {
 			<CardsSelect
 				style={{ width: '300px' }}
 				value={tempFilter.sort}
-				// onChange={(selectedSort) => handleFilterChange('sort', selectedSort)}
-				// onChange={selectedSort => setFilter({ ...filter, sort: selectedSort })}
 				onChange={(selectedSort) => {
 					handleFilterChange('sort', selectedSort);
 					setFilter({ ...filter, sort: selectedSort });
@@ -246,21 +216,6 @@ const FilterCards = ({ filter, setFilter }) => {
 					{ value: 'reviews', name: 'По количеству отзывов' },
 				]}
 			/>
-			{/* <CardsSelect
-				value={filter.sort}
-				onChange={selectedSort => setFilter({ ...filter, sort: selectedSort })}
-				defaultValue='Выберите сортировку'
-				options={[
-					{ value: 'any', name: 'Любая' },
-					{ value: 'rating', name: 'По рейтингу' },
-					{ value: 'reviews', name: 'По количеству отзывов' },
-				]}
-			/> */}
-			{/* <select name="sort" value={sort} onChange={sortChange}>
-				<option value="" disabled hidden>Выберите сортировку</option>
-				<option value="rating">По рейтингу</option>
-				<option value="reviews">По количеству отзывов</option>
-			</select> */}
 		</div >
 	);
 };

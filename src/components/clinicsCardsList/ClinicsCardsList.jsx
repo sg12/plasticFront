@@ -16,56 +16,24 @@ import { getPageCount } from '../../utils/pagesPosts/PagesPosts';
 const ClinicsCardsList = () => {
 
 	const [posts, setPosts] = useState([]);
-	console.log('посты', posts);
-	// const [limit, setLimit] = useState(6);
-	// console.log('лимит', limit);
 	const [page, setPage] = useState(1);
-	console.log('страница', page);
-
 	const [totalPages, setTotalPages] = useState(0);
-	console.log('страницы клиник', totalPages);
-
-	// const [filter, setFilter] = useState({ limit: '1', specialtie: '', gender: '', category: '', rating: '', reception: '', sort: '' });
 	const [filter, setFilter] = useState({ limit: '6', search: '', service: '', reception: '', sort: '' });
-	console.log('глобальный фильтр', filter);
 
 	const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
 		const response = await PlasticServices.getAllClinics(filter.limit, page, filter.search, filter.service, filter.reception, filter.sort);
-		// console.log('респонс', response);
 		setPosts(response.data);
-		// console.log('длина постов', response.data.length);
-		//!!! страницы работают некорректно из-за фильтров и тотл каунта, сделать через length
 		const totalCount = response.headers['x-total-count'];
-		// const totalCount = posts.length;
-		console.log('тотл каунт', totalCount);
 		setTotalPages(getPageCount(totalCount, filter.limit));
 	});
-
-	//!!! использовать useMemo, чтобы не пересчитывать
-	// let pagesArray = getPageArray(totalPages);
-	// console.log('массив страниц', [pagesArray]);
-
-	// const onRequest = () => {
-	// 	fetchPosts();
-	// };
-
-	// useEffect(() => {
-	// 	onRequest();
-	// }, []);
 
 	useEffect(() => {
 		fetchPosts();
 	}, [page, filter]);
 
-	// const loadMorePosts = () => {
-	// 	onRequest();
-	// };
-
 	const changePage = (page) => {
 		setPage(page);
 	};
-
-	console.log('---------------------------------');
 
 	const content = !(!isPostsLoading && !postError && posts.length === 0)
 		? posts.map((post) => (

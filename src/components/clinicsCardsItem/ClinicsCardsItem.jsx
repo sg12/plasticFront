@@ -30,11 +30,9 @@ const ClinicsCardsItem = (props) => {
 				<div className='clinics-cards-item__wrapper-center'>
 					<div className='clinics-cards-item__wrapper-center-box'>
 						<button onClick={toDetailedPage}>{props.post.official_name}</button>
-						{/* <button onClick={toDetailedPage}>{props.post.title}</button> */}
 						<p>{props.post.id}</p>
 						<h4>Услуги</h4>
 						<p>{props.post.description}</p>
-						{/* <p>{props.post.body}</p> */}
 					</div>
 				</div>
 				<div className='clinics-cards-item__wrapper-right'>
