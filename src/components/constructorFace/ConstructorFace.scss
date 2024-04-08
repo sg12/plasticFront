@@ -1,6 +1,7 @@
 .constructor-face {
   &__container {
     position: relative;
+    padding-bottom:50px;
   }
   &__wrapper {
     position: relative;
@@ -10,7 +11,9 @@
     height: 100%;
   }
   &__img {
-    width: 100%;
+    padding-left:150px;
+    //width: 50%;
+    height: 600px;
   }
 
   &__lines {
@@ -24,25 +27,71 @@
         fill: rgba(217, 217, 217, 0.4);
       }
     }
-    &.forehead {
-      top: 120px;
-      left: 100px;
+    &.woman-european {
+      &.forehead {
+        top: 280px;
+        left: 370px;
+      }
+      &.nose {
+        top: 385px;
+        left: 435px;
+      }
+      &.lips {
+        top: 480px;
+        left: 423px;
+      }
+      &.ears {
+        top: 365px;
+        left: 215px;
+      }
+      &.chin {
+        top: 525px;
+        left: 430px;
+      }
     }
-    &.nose {
-      top: 220px;
-      left: 157px;
+    &.man-european {
+      &.forehead {
+        top: 240px;
+        left: 350px;
+      }
+      &.nose {
+        top: 340px;
+        left: 430px;
+      }
+      &.lips {
+        top: 440px;
+        left: 420px;
+      }
+      &.ears {
+        top: 340px;
+        left: 255px;
+      }
+      &.chin {
+        top: 495px;
+        left: 420px;
+      }
     }
-    &.lips {
-      top: 316px;
-      left: 143px;
-    }
-    &.ears {
-      top: 197px;
-      left: 697px;
-    }
-    &.chin {
-      top: 360px;
-      left: 155px;
+    &.woman-asian {
+      &.forehead {
+        top: 285px;
+        left: 320px;
+      }
+      &.nose {
+        top: 400px;
+        left: 373px;
+      }
+      &.lips {
+        top: 495px;
+        left: 355px;
+      }
+      &.ears {
+        top: 360px;
+        left: 170px;
+      }
+      &.chin {
+        top: 555px;
+        left: 360px;
+      }
     }
 
     .svg-line {
@@ -67,33 +116,87 @@
 }
 
 .constructor-face__group {
-  &.cheekbones {
-    .leftCheekbone {
-      top: 225px;
-      left: 75px;
-    }
-    .rightCheekbone {
-      transform: scale(-1, 1);
-      top: 225px;
-      left: 240px;
-    }
-  }
-  &.eyes {
-    .leftEye {
-      z-index: 1;
-      top: 208px;
-      left: 100px;
-    }
-    .rightEye {
-      z-index: 1;
-      transform: scale(-1, 1);
-      top: 208px;
-      left: 208px;
-    }
-  }
   &.active {
     .svg-line-path {
       fill: rgba(217, 217, 217, 0.4);
+    }
+  }
+  &.woman-european {
+    &.cheekbones {
+      .leftCheekbone {
+        top: 380px;
+        left: 275px;
+      }
+      // .rightCheekbone {
+      //   transform: scale(-1, 1);
+      //   top: 225px;
+      //   left: 240px;
+      // }
+    }
+    &.eyes {
+      .leftEye {
+        z-index: 1;
+        top: 375px;
+        left: 375px;
+      }
+      .rightEye {
+        z-index: 1;
+        //transform: scale(-1, 1);
+        top: 365px;
+        left: 470px;
+      }
+    }
+  }
+  &.woman-asian {
+    &.cheekbones {
+      .leftCheekbone {
+        top: 415px;
+        left: 265px;
+      }
+      // .rightCheekbone {
+      //   transform: scale(-1, 1);
+      //   top: 225px;
+      //   left: 240px;
+      // }
+    }
+    &.eyes {
+      .leftEye {
+        z-index: 1;
+        top: 380px;
+        left: 300px;
+      }
+      .rightEye {
+        z-index: 1;
+        //transform: scale(-1, 1);
+        top: 385px;
+        left: 420px;
+      }
+    }
+  }
+  &.man-european {
+    &.cheekbones {
+      .leftCheekbone {
+        top: 350px;
+        left: 320px;
+      }
+      // .rightCheekbone {
+      //   transform: scale(-1, 1);
+      //   top: 225px;
+      //   left: 240px;
+      // }
+    }
+    &.eyes {
+      .leftEye {
+        z-index: 1;
+        top: 330px;
+        left: 365px;
+      }
+      .rightEye {
+        z-index: 1;
+        //transform: scale(-1, 1);
+        top: 335px;
+        left: 470px;
+      }
     }
   }
 }

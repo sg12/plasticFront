@@ -3,8 +3,9 @@ import Table from "../../UI/table/Table";
 import "./ServicesInfo.scss";
 import FilterModal from "../../UI/modals/filterModal/FilterModal";
 import { useState } from "react";
-import Radios from "../../UI/radios/radio";
 import DATA from "../../UI/table/data.js";
+import Radios from "../../UI/radios/Radios";
+
 
 const ServicesInfo = () => {
   const options = [
@@ -145,15 +146,9 @@ const ServicesInfo = () => {
                   }
                 />
               </div>
-              <div className="services__reception-item-input">
-                <input
-                  type="button"
-                  value="В клинике"
-                  onClick={() => handleReceptionTypeChange("В клинике")}
-                  className={
-                    serviceData.receptionType === "В клинике" ? "active" : ""
-                  }
-                />
+              <span className="services__title">Статус</span>
+              <div className="services__radio">
+                <Radios options={options} onChange={handleOptionChange} />
               </div>
             </div>
             <span className="services__title">Статус</span>
