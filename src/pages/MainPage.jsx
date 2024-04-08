@@ -1,6 +1,7 @@
 import MyCarousel from '../components/myCarousel/MyCarousel';
 import SearchBar from '../components/searchBar/SearchBar';
 import ConstructorComp from '../components/constructor/ConstructorComp';
+import DoctorsCardsListMainPage from '../components/doctorsCardsListMainPage/DoctorsCardsListMainPage';
 
 const MainPage = () => {
 
@@ -8,7 +9,8 @@ const MainPage = () => {
 		<>
 			<MyCarousel />
 			<SearchBar />
-			<ConstructorComp />
+			<DoctorsCardsListMainPage/>
+			<ConstructorComp />		
 		</>
 	);
 };
