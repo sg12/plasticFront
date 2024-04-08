@@ -8,7 +8,7 @@ const SettingsInfo = () => {
   const handleLogout = async () => {
     try {
       await PlasticServices.logoutUser();
-      navigate("/enterPage");
+      navigate("/enterPage",setTimeout ( () => window.location.reload(), 0));
     } catch (error) {
       console.error("Ошибка при выходе из аккаунта:", error);
     }
