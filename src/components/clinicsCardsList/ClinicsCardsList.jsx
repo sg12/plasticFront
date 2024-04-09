@@ -19,7 +19,7 @@ const ClinicsCardsList = () => {
 	const [posts, setPosts] = useState([]);
 	const [page, setPage] = useState(1);
 	const [totalPages, setTotalPages] = useState(0);
-	const [filter, setFilter] = useState({ limit: '1', search: '', service: '', reception: '', sort: '' });
+	const [filter, setFilter] = useState({ limit: '6', search: '', service: '', reception: '', sort: '' });
 
 	const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
 		const response = await PlasticServices.getAllClinics(filter.limit, page, filter.search, filter.service, filter.reception, filter.sort);
