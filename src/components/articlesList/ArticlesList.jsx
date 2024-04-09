@@ -13,18 +13,18 @@ import { useFetching } from '../../hooks/useFetching';
 const ArticlesList = () => {
 
 	const [posts, setPosts] = useState([]);
-	const [offset, setOffset] = useState(0);
+	const [page, setPage] = useState(1);
 	const [totalCount, setTotalCount] = useState(0);
 
 	const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
-		const response = await PlasticServices.getAllArticles(offset);
+		const response = await PlasticServices.getAllArticles(page);
 		setPosts([...posts, ...response.data]);
-		setOffset(offset + 6);
 		setTotalCount(response.headers['x-total-count']);
 	});
 
 	const onRequest = () => {
 		fetchPosts();
+		setPage(page + 1);
 	};
 
 	useEffect(() => {

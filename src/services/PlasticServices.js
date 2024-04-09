@@ -20,8 +20,8 @@ const createAxiosInstance = () => {
   const axiosInstance = createAxiosInstance();
 
 class PlasticServices {
-	static async getAllArticles(offset = 0) {
-		const response = await axios.get(`${_apiBase}/articles?limit=6&offset=${offset}`);
+	static async getAllArticles(page) {
+		const response = await axios.get(`${_apiBase}/articles?limit=6&page=${page}`);
 		return response;
 	}
 
@@ -31,8 +31,9 @@ class PlasticServices {
 		return response;
 	}
 
-	static async getAllClinics(offset = 0) {
-		const response = await axios.get(`${_apiBase}/clinics?limit=6&offset=${offset}`);
+	//! прокидывать значение через функцию или цикл
+	static async getAllClinics(limit, page, search, service, reception, sort) {
+		const response = await axios.get(`${_apiBase}/clinics?limit=${limit}&page=${page}&search=${search}&service=${service}&reception=${reception}&sort=${sort}`);
 		return response;
 	}
 
@@ -41,8 +42,9 @@ class PlasticServices {
 		return response;
 	}
 
-	static async getAllDoctors(offset = 0) {
-		const response = await axios.get(`${_apiBase}/surgeons?limit=6&offset=${offset}`);
+	//! прокидывать значение через функцию или цикл
+	static async getAllDoctors(limit, page, search, specialtie, gender, category, rating, reception, sort) {
+		const response = await axios.get(`${_apiBase}/surgeons?limit=${limit}&page=${page}&search=${search}&specialtie=${specialtie}&gender=${gender}&category=${category}&rating=${rating}&reception=${reception}&sort=${sort}`);
 		return response;
 	}
 
