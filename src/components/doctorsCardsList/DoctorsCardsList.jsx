@@ -9,6 +9,7 @@ import PaginationPosts from '../UI/pagination/paginationPosts/PaginationPosts';
 import FilterCards from '../filterCards/FilterCards';
 import DoctorsCardsItem from '../doctorsCardsItem/DoctorsCardsItem';
 import Spinner from '../spinner/Spinner';
+import OutlineButton from '../UI/buttons/outlineButton/OutlineButton';
 
 import { useFetching } from '../../hooks/useFetching';
 import { getPageCount } from '../../utils/pagesPosts/PagesPosts';
@@ -49,6 +50,10 @@ const DoctorsCardsList = () => {
 		? <Spinner />
 		: null;
 
+	const reload = (postError && posts.length === 0)
+		? <OutlineButton className='component-button-text' onClick={() => fetchPosts()}>Обновить</OutlineButton>
+		: null;
+
 	return (
 		<section className='doctors-cards-list'>
 			<div className='doctors-cards-list__container container'>
@@ -59,6 +64,7 @@ const DoctorsCardsList = () => {
 				</ul>
 				{error}
 				{spinner}
+				{reload}
 				<PaginationPosts
 					totalPages={totalPages}
 					page={page}

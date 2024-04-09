@@ -9,6 +9,7 @@ import PaginationPosts from '../UI/pagination/paginationPosts/PaginationPosts';
 import ClinicsCardsItem from '../clinicsCardsItem/ClinicsCardsItem';
 import Spinner from '../spinner/Spinner';
 import FilterCards from '../filterCards/FilterCards';
+import OutlineButton from '../UI/buttons/outlineButton/OutlineButton';
 
 import { useFetching } from '../../hooks/useFetching';
 import { getPageCount } from '../../utils/pagesPosts/PagesPosts';
@@ -18,7 +19,7 @@ const ClinicsCardsList = () => {
 	const [posts, setPosts] = useState([]);
 	const [page, setPage] = useState(1);
 	const [totalPages, setTotalPages] = useState(0);
-	const [filter, setFilter] = useState({ limit: '6', search: '', service: '', reception: '', sort: '' });
+	const [filter, setFilter] = useState({ limit: '1', search: '', service: '', reception: '', sort: '' });
 
 	const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
 		const response = await PlasticServices.getAllClinics(filter.limit, page, filter.search, filter.service, filter.reception, filter.sort);
@@ -49,6 +50,10 @@ const ClinicsCardsList = () => {
 		? <Spinner />
 		: null;
 
+	const reload = (postError && posts.length === 0)
+		? <OutlineButton className='component-button-text' onClick={() => fetchPosts()}>Обновить</OutlineButton>
+		: null;
+
 	return (
 		<section className='clinics-cards-list'>
 			<div className='clinics-cards-list__container container'>
@@ -59,6 +64,7 @@ const ClinicsCardsList = () => {
 				</ul>
 				{error}
 				{spinner}
+				{reload}
 				<PaginationPosts
 					totalPages={totalPages}
 					page={page}
