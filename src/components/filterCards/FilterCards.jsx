@@ -12,7 +12,7 @@ import OutlineButton from '../UI/buttons/outlineButton/OutlineButton';
 
 //!!! добавить стили для текста
 
-const FilterCards = ({ filter, setFilter, ...props }) => {
+const FilterCards = ({ filter, setFilter, setPage, ...props }) => {
 
 	const [modal, setModal] = useState(false);
 	const [tempFilter, setTempFilter] = useState(filter);
@@ -23,6 +23,7 @@ const FilterCards = ({ filter, setFilter, ...props }) => {
 
 	const applyFilter = () => {
 		setFilter(tempFilter);
+		setPage(1);
 	};
 
 	const resetFilter = () => {
@@ -224,6 +225,7 @@ FilterCards.propTypes = {
 	clinics: PropTypes.string,
 	filter: PropTypes.object.isRequired,
 	setFilter: PropTypes.func.isRequired,
+	setPage: PropTypes.func.isRequired,
 };
 
 export default FilterCards;

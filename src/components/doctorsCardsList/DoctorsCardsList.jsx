@@ -53,7 +53,7 @@ const DoctorsCardsList = () => {
 		<section className='doctors-cards-list'>
 			<div className='doctors-cards-list__container container'>
 				<h2 className='doctors-cards-list__title'>ВРАЧИ</h2>
-				<FilterCards filter={filter} setFilter={setFilter} doctors={'doctors'} />
+				<FilterCards filter={filter} setFilter={setFilter} setPage={setPage} doctors={'doctors'} />
 				<ul className='doctors-cards-list__box'>
 					{content}
 				</ul>
