@@ -9,15 +9,15 @@ const _apiBase = import.meta.env.VITE_API_URL;
 // Функция для создания экземпляра axios с токеном из куки
 const createAxiosInstance = () => {
 	return axios.create({
-	  baseURL: _apiBase,
-	  headers: {
-		"Authorization": `Token ${Cookies.get("token")}`,
-		"Content-Type": "application/json",
-	  },
+		baseURL: _apiBase,
+		headers: {
+			"Authorization": `Token ${Cookies.get("token")}`,
+			"Content-Type": "application/json",
+		},
 	});
-  };
+};
 
-  const axiosInstance = createAxiosInstance();
+const axiosInstance = createAxiosInstance();
 
 class PlasticServices {
 	static async getAllArticles(page) {
@@ -54,14 +54,14 @@ class PlasticServices {
 	}
 
 	static async getUser() {
-    	const response = await axiosInstance.get("/account/");
-    	return response;
-  	}
+		const response = await axiosInstance.get("/account/");
+		return response;
+	}
 
-  	static async patchUser(editedData) {
-    	const response = await axiosInstance.patch("/account/", {user: editedData}, {date_born: editedData?.date_born});
-    	return response;
-  	}
+	static async patchUser(editedData) {
+		const response = await axiosInstance.patch("/account/", { user: editedData }, { date_born: editedData?.date_born });
+		return response;
+	}
 
 	static async getFaq() {
 		const response = await axios.get(`${_apiBase}/faq/`);
@@ -92,7 +92,7 @@ class PlasticServices {
 		const response = await axiosInstance.get("/auth/logout/");
 		Cookies.remove("token");
 		return response;
-	  }
+	}
 }
 
 export default PlasticServices;
