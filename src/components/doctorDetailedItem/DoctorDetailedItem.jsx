@@ -16,10 +16,22 @@ import licenseImg from '../../assets/imgs/license.png';
 import licenseBigImg from '../../assets/imgs/license-big.png';
 import FieldButton from '../UI/buttons/fieldButton/FieldButton';
 
+import Cookies from 'js-cookie';
+
 const DoctorDetailedItem = (props) => {
 	const [modal, setModal] = useState(false);
 	const [modal2, setModal2] = useState(false);
 	const [modal3, setModal3] = useState(false);
+
+	const token = Cookies.get("token")
+
+	const privateReviews = () => {
+		if (!token) {
+			alert("Авторизуйтесь, чтобы оставлять отзывы");
+		} else {
+			setModal3(true); 
+		}
+	}
 
 	const [reviews, setReviews] = useState([]);
 
@@ -41,7 +53,7 @@ const DoctorDetailedItem = (props) => {
 			<div className='doctor-detailed-item__box-title'>
 				<img src={doctorImg} alt="доктор" />
 				<Review />
-				<button className='doctor-detailed-item__review-button' onClick={() => setModal3(true)}>Оставить отзыв</button>
+				<button className='doctor-detailed-item__review-button' onClick={() => { privateReviews(); }}>Оставить отзыв</button>
 				<h2>{props.post.user.username}</h2>
 			</div>
 			<CenterModal visible={modal3} setVisible={setModal3}>
