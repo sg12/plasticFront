@@ -22,14 +22,14 @@ const ClinicDetailedItem = (props) => {
 			<div className='clinic-detailed-item__box-title'>
 				<img src={clinicImg} alt="клиника" />
 				<Review />
-				<h2>{props.post.user.username}</h2>
+				<h2>{props.post.official_name}</h2>
 			</div>
 			<div className='clinic-detailed-item__wrapper-first'>
 				<div className='clinic-detailed-item__wrapper-first-left'>
 					<div className='clinic-detailed-item__wrapper-first-item'>
 						<div className='clinic-detailed-item__description-first'>
 							<h3>ОФИЦИАЛЬНОЕ НАЗВАНИЕ</h3>
-							<p>{props.post.id} {props.post.official_name}</p>
+							<p>{props.post.id} {props.post.user.username}</p>
 						</div>
 						<div className='clinic-detailed-item__description-first'>
 							<h3>РУКОВОДИТЕЛЬ</h3>

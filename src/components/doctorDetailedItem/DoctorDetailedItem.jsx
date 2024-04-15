@@ -23,7 +23,7 @@ const DoctorDetailedItem = (props) => {
 			<div className='doctor-detailed-item__box-title'>
 				<img src={doctorImg} alt="доктор" />
 				<Review />
-				<h2>{props.post.user.username}</h2>
+				<h2>{props.post.clinic_name}</h2>
 			</div>
 			<div className='doctor-detailed-item__wrapper-first'>
 				<div className='doctor-detailed-item__wrapper-first-left'>
@@ -126,10 +126,8 @@ const DoctorDetailedItem = (props) => {
 
 DoctorDetailedItem.propTypes = {
 	post: PropTypes.shape({
-		user: PropTypes.shape({
-			username: PropTypes.string.isRequired,
-		}).isRequired,
 		id: PropTypes.number.isRequired,
+		clinic_name: PropTypes.string.isRequired,
 		description: PropTypes.string.isRequired,
 	}).isRequired,
 };

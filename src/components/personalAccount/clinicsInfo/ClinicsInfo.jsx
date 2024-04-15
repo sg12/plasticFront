@@ -4,7 +4,7 @@ import "./ClinicsInfo.scss";
 
 const ClinicsInfo = () => {
   const { userData } = useUser();
-  const [hasDoctorCard, setHasDoctorCard] = useState(true);
+  const [hasDoctorCard, setHasDoctorCard] = useState(false);
 
   return (
     <div className="clinic">
@@ -55,6 +55,7 @@ const ClinicCard = ({ userData }) => {
               Руководитель
             </span>
             <span className="clinic-card__info-personal-position-director">
+              Директор: Ольга Ивановна
               {/* {userData.name} */}
             </span>
           </div>
@@ -63,6 +64,7 @@ const ClinicCard = ({ userData }) => {
               Адрес
             </span>
             <span className="clinic-card__info-personal-address-street">
+              ул. Пушкина, д. 17
               {/* {userData.address.street} */}
             </span>
           </div>

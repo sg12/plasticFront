@@ -7,7 +7,7 @@ const SpecialistInfo = () => {
   return (
     <div className="specialist">
       <span className="specialist__title">Ваши специалисты</span>
-      <Table userType="clinic/specialists"/>
+      {/* <Table userType="clinic/specialists"/> */}
     </div>
   )
 }

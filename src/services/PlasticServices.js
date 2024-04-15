@@ -9,19 +9,19 @@ const _apiBase = import.meta.env.VITE_API_URL;
 // Функция для создания экземпляра axios с токеном из куки
 const createAxiosInstance = () => {
 	return axios.create({
-	  baseURL: _apiBase,
-	  headers: {
-		"Authorization": `Token ${Cookies.get("token")}`,
-		"Content-Type": "application/json",
-	  },
+		baseURL: _apiBase,
+		headers: {
+			"Authorization": `Token ${Cookies.get("token")}`,
+			"Content-Type": "application/json",
+		},
 	});
-  };
+};
 
-  const axiosInstance = createAxiosInstance();
+const axiosInstance = createAxiosInstance();
 
 class PlasticServices {
-	static async getAllArticles(offset = 0) {
-		const response = await axios.get(`${_apiBase}/articles?limit=6&offset=${offset}`);
+	static async getAllArticles(page) {
+		const response = await axios.get(`${_apiBase}/articles?limit=6&page=${page}`);
 		return response;
 	}
 
@@ -31,8 +31,9 @@ class PlasticServices {
 		return response;
 	}
 
-	static async getAllClinics(offset = 0) {
-		const response = await axios.get(`${_apiBase}/clinics?limit=6&offset=${offset}`);
+	//! прокидывать значение через функцию или цикл
+	static async getAllClinics(limit, page, search, service, reception, sort) {
+		const response = await axios.get(`${_apiBase}/clinics?limit=${limit}&page=${page}&search=${search}&service=${service}&reception=${reception}&sort=${sort}`);
 		return response;
 	}
 
@@ -41,8 +42,9 @@ class PlasticServices {
 		return response;
 	}
 
-	static async getAllDoctors(offset = 0) {
-		const response = await axios.get(`${_apiBase}/surgeons?limit=6&offset=${offset}`);
+	//! прокидывать значение через функцию или цикл
+	static async getAllDoctors(limit, page, search, specialtie, gender, category, rating, reception, sort) {
+		const response = await axios.get(`${_apiBase}/surgeons?limit=${limit}&page=${page}&search=${search}&specialtie=${specialtie}&gender=${gender}&category=${category}&rating=${rating}&reception=${reception}&sort=${sort}`);
 		return response;
 	}
 
@@ -52,14 +54,14 @@ class PlasticServices {
 	}
 
 	static async getUser() {
-    	const response = await axiosInstance.get("/account/");
-    	return response;
-  	}
+		const response = await axiosInstance.get("/account/");
+		return response;
+	}
 
-  	static async patchUser(editedData) {
-    	const response = await axiosInstance.patch("/account/", {user: editedData}, {date_born: editedData?.date_born});
-    	return response;
-  	}
+	static async patchUser(editedData) {
+		const response = await axiosInstance.patch("/account/", { user: editedData }, { date_born: editedData?.date_born });
+		return response;
+	}
 
 	static async getFaq() {
 		const response = await axios.get(`${_apiBase}/faq/`);
@@ -90,7 +92,7 @@ class PlasticServices {
 		const response = await axiosInstance.get("/auth/logout/");
 		Cookies.remove("token");
 		return response;
-	  }
+	}
 }
 
 export default PlasticServices;

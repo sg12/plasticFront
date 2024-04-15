@@ -1,22 +1,17 @@
 import React, { useMemo, useState, useRef } from "react";
 import styles from "./Table.module.scss";
-import EditableCell from "./EditableCell.jsx";
 import {
   useReactTable,
   getCoreRowModel,
   flexRender,
 } from "@tanstack/react-table";
-import DATA from "./data.js";
+// import DATA from "./data.js";
 import Checkbox from "../checkbox/Checkbox.jsx";
 import ServicesColumns from "./columns/ServiceColumns.jsx";
 import ClinicSpecialistsColumns from "./columns/ClinicSpecialistsColumns.jsx";
 
-const Table = ({ userType }) => {
-  const data = useMemo(() => DATA, []);
+const Table = ({ userType, userData }) => {
   const [rowSelection, setRowSelection] = useState({});
-  let table;
-
-  const moreButtonRef = useRef();
 
   const isAnyRowSelected = () => {
     return Object.values(rowSelection).some((isSelected) => isSelected);
@@ -57,16 +52,11 @@ const Table = ({ userType }) => {
     columns = ServicesColumns({ rowSelection, handleRowCheckboxChange });
   }
 
-  table = useReactTable({
-    data,
+  const table = useReactTable({
+    data: userData,
     columns,
-    state: {
-      rowSelection,
-    },
     enableRowSelection: true,
-    onRowSelectionChange: setRowSelection,
     getCoreRowModel: getCoreRowModel(),
-    debugTable: true,
   });
 
   return (

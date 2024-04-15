@@ -50,7 +50,7 @@ const AsidePanel = ({ userType }) => {
       case "clinic":
         return [
           { to: "profile", text: "Профиль (Клиника)", icon: profile },
-          { to: "specialist", text: "Специалисты", icon: specialist },
+          { to: "specialist", text: "Специалисты", icon: specialist, disabled: true, },
           { to: "service", text: "Услуги", icon: services },
           {
             to: "appointment",

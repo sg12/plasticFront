@@ -30,7 +30,7 @@ const DoctorsCardsItem = (props) => {
 				</div>
 				<div className='doctors-cards-item__wrapper-center'>
 					<div className='doctors-cards-item__wrapper-center-box'>
-						<button onClick={toDetailedPage}>{props.post.user.username}</button>
+						<button onClick={toDetailedPage}>{props.post.clinic_name}</button>
 						<p>{props.post.id}</p>
 						<h4>Услуги</h4>
 						<p>{props.post.description}</p>
@@ -50,10 +50,8 @@ const DoctorsCardsItem = (props) => {
 
 DoctorsCardsItem.propTypes = {
 	post: PropTypes.shape({
-		user: PropTypes.shape({
-			username: PropTypes.string.isRequired,
-		}).isRequired,
 		id: PropTypes.number.isRequired,
+		clinic_name: PropTypes.string.isRequired,
 		description: PropTypes.string.isRequired,
 	}).isRequired,
 };
