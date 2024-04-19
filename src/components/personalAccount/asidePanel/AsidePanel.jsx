@@ -16,7 +16,7 @@ import "./AsidePanel.scss";
 const AsidePanel = ({ userType }) => {
   const getLinkData = () => {
     switch (userType) {
-      case "clients":
+      case "client":
         return [
           { to: "profile", text: "Профиль (Клиент)", icon: profile },
           { to: "favourites", text: "Избранное", icon: favourites },
@@ -31,7 +31,7 @@ const AsidePanel = ({ userType }) => {
           { to: "help", text: "Помощь", icon: help },
           { to: "support", text: "Поддержка", icon: support },
         ];
-      case "doctors":
+      case "surgeon":
         return [
           { to: "profile", text: "Профиль (Доктор)", icon: profile },
           { to: "clinic", text: "Клиника", icon: specialist },
@@ -47,10 +47,10 @@ const AsidePanel = ({ userType }) => {
           { to: "help", text: "Помощь", icon: help },
           { to: "support", text: "Поддержка", icon: support },
         ];
-      case "clinics":
+      case "clinic":
         return [
           { to: "profile", text: "Профиль (Клиника)", icon: profile },
-          { to: "specialist", text: "Специалисты", icon: specialist },
+          { to: "specialist", text: "Специалисты", icon: specialist, disabled: true, },
           { to: "service", text: "Услуги", icon: services },
           {
             to: "appointment",
@@ -90,7 +90,7 @@ const AsidePanel = ({ userType }) => {
             <span className="aside-panel__text">{link.text}</span>
           </NavLink>
           {((userType === "client" &&
-            (index === 1 || index === 3 || (index + 1) === 0)) ||
+            (index === 1 || index === 3 || index + 1 === 0)) ||
             (userType !== "client" &&
               (index === 1 || (index + 2) % 3 === 0))) &&
             index !== linksData.length - 1 && (

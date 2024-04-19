@@ -1,0 +1,19 @@
+.filter-cards {
+	display: flex;
+	margin-bottom: 30px;
+
+	&__item {
+		margin-bottom: 30px;
+	}
+
+	&__buttons {
+		display: flex;
+		gap: 30px;
+	}
+
+	&__hr {
+		border: 1px solid gray;
+		border-radius: 20px;
+		margin: 0 30px;
+	}
+}

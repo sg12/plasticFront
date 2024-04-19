@@ -188,10 +188,8 @@ const DoctorDetailedItem = (props) => {
 
 DoctorDetailedItem.propTypes = {
 	post: PropTypes.shape({
-		user: PropTypes.shape({
-			username: PropTypes.string.isRequired,
-		}).isRequired,
 		id: PropTypes.number.isRequired,
+		clinic_name: PropTypes.string.isRequired,
 		description: PropTypes.string.isRequired,
 	}).isRequired,
 };

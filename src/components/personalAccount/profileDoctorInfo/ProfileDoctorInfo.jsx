@@ -2,68 +2,54 @@ import { useState } from "react";
 import EditUser from "../editUser/EditUser";
 import AlertModal from "../../UI/modals/alertModal/AlertModal";
 import InDev from "../inDev/InDev";
+import Field from "../../UI/fields/Field";
+
+const fieldsDetails = [
+  { label: "Пол", value: "gender" },
+  { label: "Дата рождения", value: "date_born" },
+  { label: "Адрес", value: "address" },
+  { label: "Официальный сайт", value: "site" },
+];
+
+const fieldsFooter = [
+  { label: "Лицензии и сертификаты", value: "licenses" },
+  { label: "Образование", value: "education" },
+  { label: "Повышение квалификации", value: "qualification" },
+  { label: "Опыт работы", value: "experience" },
+];
 
 // Выносим компонент для отображения информации о пользователе
 const UserProfileDetails = ({ userData }) => (
   <div className="profile__details">
-    <div className="profile__gender">
-      <span className="profile__darkened">Пол: </span>
-      {userData?.user?.gender || "Неизвестно"}
-    </div>
-    <div className="profile__birthdate">
-      <span className="profile__darkened">Дата рождения: </span>
-      {userData?.date_born || "Неизвестно"}
-    </div>
-    <div className="profile__address">
-      <span className="profile__darkened">Адрес: </span>
-      {userData?.user?.address || "Неизвестно"}
-    </div>
-    <div className="profile__site">
-      <span className="profile__darkened">Официальный сайт: </span>
-      {userData?.user?.site || "Неизвестно"}
-    </div>
+    {fieldsDetails.map((field, index) => (
+      <Field
+        key={index}
+        label={field.label}
+        value={userData?.user?.[field.value] || "Неизвестно"}
+      />
+    ))}
   </div>
 );
 
 // Выносим компонент для отображения футера профиля
 const UserProfileFooter = ({ userData }) => (
-  <div className="profile__footer">
-    <InDev>
-      <div className="profile__additionally">
-        <div className="profile__licenses">
-          <span className="profile__darkened">Лицензии и сертификаты</span>
-          {userData?.licenses || "Неизвестно"}
-          <button className="add" type="button">
-            Добавить
-          </button>
+  <InDev>
+    <div className="profile__additionally">
+      {fieldsFooter.map((section, index) => (
+        <div key={index} className={`profile__${section.value}`}>
+          <Field label={section.label} value={userData?.[section.value]} />
+          <div className="profile__action-button">
+            <button className="add" type="button">
+              Добавить
+            </button>
+          </div>
+          {index < fieldsFooter.length - 1 && (
+            <hr className="profile__divider" />
+          )}
         </div>
-        <hr className="profile__divider" />
-        <div className="profile__education">
-          <span className="profile__darkened">Образование</span>
-          {userData?.education || "Неизвестно"}
-          <button className="add" type="button">
-            Добавить
-          </button>
-        </div>
-        <hr className="profile__divider" />
-        <div className="profile__qualification">
-          <span className="profile__darkened">Повышение квалификации</span>
-          {userData?.qualification || "Неизвестно"}
-          <button className="add" type="button">
-            Добавить
-          </button>
-        </div>
-        <hr className="profile__divider" />
-        <div className="profile__experience">
-          <span className="profile__darkened">Опыт работы</span>
-          {userData?.experience || "Неизвестно"}
-          <button className="add" type="button">
-            Добавить
-          </button>
-        </div>
-      </div>
-    </InDev>
-  </div>
+      ))}
+    </div>
+  </InDev>
 );
 
 const UserProfileAction = ({ toggleEditingMode, handleDelete }) => (
@@ -168,7 +154,6 @@ const ProfileDoctorInfo = ({ userData }) => {
           {!isEditing && (
             <>
               <UserProfileFooter userData={userData} />
-              <hr className="profile__divider" />
               <UserProfileAction
                 toggleEditingMode={toggleEditingMode}
                 handleDelete={handleOpenModal}
