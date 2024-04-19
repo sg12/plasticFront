@@ -9,22 +9,84 @@ import Review from '../review/Review';
 import Contacts from '../contacts/Contacts';
 import Admission from '../admission/Admission';
 import WhiteButton from '../UI/buttons/whiteButton/WhiteButton';
+import Stars from '../UI/stars/Stars';
 
 import doctorImg from '../../assets/imgs/doctor-1.png';
 import licenseImg from '../../assets/imgs/license.png';
 import licenseBigImg from '../../assets/imgs/license-big.png';
+import FieldButton from '../UI/buttons/fieldButton/FieldButton';
+
+import Cookies from 'js-cookie';
 
 const DoctorDetailedItem = (props) => {
 	const [modal, setModal] = useState(false);
 	const [modal2, setModal2] = useState(false);
+	const [modal3, setModal3] = useState(false);
+
+	const token = Cookies.get("token")
+
+	const privateReviews = () => {
+		if (!token) {
+			alert("Авторизуйтесь, чтобы оставлять отзывы");
+		} else {
+			setModal3(true); 
+		}
+	}
+
+	const [reviews, setReviews] = useState([]);
+
+	const handleReviewSubmit = () => {
+		console.log("Отзывы:");
+		reviews.forEach((review, index) => {
+			console.log(`${review.text}: ${review.rating}`);
+		});
+	};
+
+	const handleReviewChange = (index, rating, text) => {
+		const updatedReviews = [...reviews];
+		updatedReviews[index] = { rating, text };
+		setReviews(updatedReviews);
+	};
 
 	return (
 		<div className='doctor-detailed-item'>
 			<div className='doctor-detailed-item__box-title'>
 				<img src={doctorImg} alt="доктор" />
 				<Review />
-				<h2>{props.post.clinic_name}</h2>
+				<button className='doctor-detailed-item__review-button' onClick={() => { privateReviews(); }}>Оставить отзыв</button>
+				<h2>{props.post.user.username}</h2>
 			</div>
+			<CenterModal visible={modal3} setVisible={setModal3}>
+				<div className='doctor-detailed-item__modal-send-review'>
+					<h3 className='doctor-detailed-item__modal-send-review-title'>Оставить отзыв о враче</h3>
+					<div className='doctor-detailed-item__modal-send-review-block'>
+						<p className='doctor-detailed-item__modal-send-review-description'>Тщательность обследования</p>
+						<Stars totalStars={5} onChange={(rating) => handleReviewChange(0, rating, "Тщательность обследования")} />
+					</div>
+
+					<div className='doctor-detailed-item__modal-send-review-block'>
+						<p className='doctor-detailed-item__modal-send-review-description'>Эффективность лечения</p>
+						<Stars totalStars={5} onChange={(rating) => handleReviewChange(1, rating, "Эффективность лечения")} />
+					</div>
+
+					<div className='doctor-detailed-item__modal-send-review-block'>
+						<p className='doctor-detailed-item__modal-send-review-description'>Отношение к пациенту</p>
+						<Stars totalStars={5} onChange={(rating) => handleReviewChange(2, rating, "Отношение к пациенту")} />
+					</div>
+
+					<div className='doctor-detailed-item__modal-send-review-block'>
+						<p className='doctor-detailed-item__modal-send-review-description'>Информирование пациента</p>
+						<Stars totalStars={5} onChange={(rating) => handleReviewChange(3, rating, "Информирование пациента")} />
+					</div>
+
+					<div className='doctor-detailed-item__modal-send-review-block'>
+						<p className='doctor-detailed-item__modal-send-review-description'>Посоветуете ли Вы врача?</p>
+						<Stars totalStars={5} onChange={(rating) => handleReviewChange(4, rating, "Посоветуете ли Вы врача?")} />
+					</div>
+
+					<FieldButton className='doctor-detailed-item__modal-send-review-button' onClick={handleReviewSubmit}>Оставить отзыв</FieldButton>
+				</div>
+			</CenterModal>
 			<div className='doctor-detailed-item__wrapper-first'>
 				<div className='doctor-detailed-item__wrapper-first-left'>
 					<div className='doctor-detailed-item__wrapper-first-item'>

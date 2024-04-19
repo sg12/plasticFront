@@ -58,6 +58,65 @@
 		align-items: flex-end;
 	}
 
+	&__review-button{
+		margin-top: 28px;
+		border-radius: 40px;
+		width: 228px;
+		height: 42px;
+		border: none;
+		background: #3066be;
+		font-family: Raleway;
+		font-weight: 400;
+		font-size: 20px;
+		text-transform: uppercase;
+		text-align: center;
+		color: #fff;
+		cursor: pointer;
+	}
+
+	&__modal-send-review-block{
+		margin-bottom: 32px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	&__modal-send-review{
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		min-width: 470px;
+	}
+
+	&__modal-send-review-title{
+		margin: 0;
+		padding-bottom: 32px;
+		margin-top: 34px;
+		margin-bottom: 64px;
+		border-bottom: 1px solid #3066be;
+		font-family: Raleway;
+		font-weight: 700;
+		font-size: 24px;
+		font-variant: small-caps;
+		text-align: center;
+		color: #000;
+	}
+
+	&__modal-send-review-description{
+		margin: 0;
+		margin-bottom: 25px;
+		font-family: Raleway;
+		font-weight: 400;
+		font-size: 20px;
+		font-variant: small-caps;
+		text-align: center;
+		color: #000;
+	}
+
+	&__modal-send-review-button{
+		margin-top: 32px;
+	}
+
 	&__modal {
 		padding: 34px;
 		width: 1144px;
