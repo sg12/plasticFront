@@ -15,12 +15,26 @@ import parkingImg from '../../assets/icons/parking.svg';
 import licenseImg from '../../assets/imgs/license.png';
 import licenseBigImg from '../../assets/imgs/license-big.png';
 
+import Cookies from 'js-cookie';
+import { Link } from 'react-router-dom';
+
 const ClinicDetailedItem = (props) => {
 	const [modal, setModal] = useState(false);
 	const [modal2, setModal2] = useState(false);
 	const [modal3, setModal3] = useState(false);
+	const [alertModal, setAlertModal] = useState(false);
 
 	const [reviews, setReviews] = useState([]);
+
+	const token = Cookies.get("token");
+
+	const privateReviews = () => {
+		if (!token) {
+			setAlertModal(true);
+		} else {
+			setModal3(true); 
+		}
+	};
 
 	const handleReviewSubmit = () => {
 		console.log("Отзывы:");
@@ -40,7 +54,11 @@ const ClinicDetailedItem = (props) => {
 			<div className='clinic-detailed-item__box-title'>
 				<img src={clinicImg} alt="клиника" />
 				<Review />
-				<button className='clinic-detailed-item__review-button' onClick={() => setModal3(true)}>Оставить отзыв</button>
+				<button className='clinic-detailed-item__review-button' onClick={() => { privateReviews(); }}>Оставить отзыв</button>
+				<CenterModal visible={alertModal} setVisible={setAlertModal}>
+					<h3 style={{display:"flex", alignItems:"center", justifyContent:"center"}}>Вам нужно авторизоваться, чтобы оставлять отзывы</h3>
+					<Link to={"/enterPage"} style={{ textDecoration: 'none', color: "white"}}><FieldButton>Войти</FieldButton></Link>
+				</CenterModal>
 				<h2>{props.post.user.username}</h2>
 			</div>
 			<CenterModal visible={modal3} setVisible={setModal3}>

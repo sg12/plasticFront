@@ -23,9 +23,9 @@ const DoctorDetailedItem = (props) => {
 	const [modal, setModal] = useState(false);
 	const [modal2, setModal2] = useState(false);
 	const [modal3, setModal3] = useState(false);
-	const [alertModal, setAlertModal] = useState(true);
+	const [alertModal, setAlertModal] = useState(false);
 
-	const token = Cookies.get("token")
+	const token = Cookies.get("token");
 
 	const privateReviews = () => {
 		if (!token) {
@@ -33,7 +33,7 @@ const DoctorDetailedItem = (props) => {
 		} else {
 			setModal3(true); 
 		}
-	}
+	};
 
 	const [reviews, setReviews] = useState([]);
 
