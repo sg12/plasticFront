@@ -190,3 +190,17 @@
 		}
 	}
 }
+
+.review-textarea {
+	resize: none;
+	min-width: 500px;
+	min-height: 100px;
+}
+
+.review-textarea:first-of-type {
+	min-height: 150px;
+}
+
+.review-textarea:not(:last-of-type) {
+	margin-bottom: 15px;
+}

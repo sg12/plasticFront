@@ -23,7 +23,9 @@ const DoctorDetailedItem = (props) => {
 	const [modal, setModal] = useState(false);
 	const [modal2, setModal2] = useState(false);
 	const [modal3, setModal3] = useState(false);
+	const [modal4, setModal4] = useState(false);
 	const [alertModal, setAlertModal] = useState(false);
+	const [reviews, setReviews] = useState([]);
 
 	const token = Cookies.get("token");
 
@@ -31,22 +33,25 @@ const DoctorDetailedItem = (props) => {
 		if (!token) {
 			setAlertModal(true);
 		} else {
-			setModal3(true); 
+			setModal3(true);
 		}
 	};
-
-	const [reviews, setReviews] = useState([]);
 
 	const handleReviewSubmit = () => {
 		console.log("Отзывы:");
 		reviews.forEach((review, index) => {
-			console.log(`${review.text}: ${review.rating}`);
+			if (index < 5) { // Проверяем, является ли текущий отзыв оценкой по звездному рейтингу
+				console.log(`${review.text}: ${review.rating}`);
+			} else {
+				console.log(`${review.text}: ${review.textReview}`);
+			}
 		});
+		// Здесь должна быть логика отправки отзывов на сервер
 	};
 
-	const handleReviewChange = (index, rating, text) => {
+	const handleReviewChange = (index, rating, text, textReview) => {
 		const updatedReviews = [...reviews];
-		updatedReviews[index] = { rating, text };
+		updatedReviews[index] = { rating, text, textReview };
 		setReviews(updatedReviews);
 	};
 
@@ -57,8 +62,8 @@ const DoctorDetailedItem = (props) => {
 				<Review />
 				<button className='doctor-detailed-item__review-button' onClick={() => { privateReviews(); }}>Оставить отзыв</button>
 				<CenterModal visible={alertModal} setVisible={setAlertModal}>
-					<h3 style={{display:"flex", alignItems:"center", justifyContent:"center"}}>Вам нужно авторизоваться, чтобы оставлять отзывы</h3>
-					<Link to={"/enterPage"} style={{ textDecoration: 'none', color: "white"}}><FieldButton>Войти</FieldButton></Link>
+					<h3 style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>Вам нужно авторизоваться, чтобы оставлять отзывы</h3>
+					<Link to={"/enterPage"} style={{ textDecoration: 'none', color: "white" }}><FieldButton>Войти</FieldButton></Link>
 				</CenterModal>
 				<h2>{props.post.user.username}</h2>
 			</div>
@@ -89,7 +94,17 @@ const DoctorDetailedItem = (props) => {
 						<p className='doctor-detailed-item__modal-send-review-description'>Посоветуете ли Вы врача?</p>
 						<Stars totalStars={5} onChange={(rating) => handleReviewChange(4, rating, "Посоветуете ли Вы врача?")} />
 					</div>
+					<FieldButton className='doctor-detailed-item__modal-send-review-button' onClick={() => { setModal3(false); setModal4(true); }}>Продолжить</FieldButton>
+				</div>
 
+			</CenterModal>
+			<CenterModal visible={modal4} setVisible={setModal4}>
+				{/* Модальное окно для ввода текстовых отзывов */}
+				<div className='doctor-detailed-item__modal-send-review'>
+					<h3 className='doctor-detailed-item__modal-send-review-title'>Добавить текстовый отзыв</h3>
+					<textarea className='review-textarea' placeholder="Ваша история" onChange={(event) => handleReviewChange(5, null, "Ваша история", event.target.value)} />
+					<textarea className='review-textarea' placeholder="Понравилось" onChange={(event) => handleReviewChange(6, null, "Понравилось", event.target.value)} />
+					<textarea className='review-textarea' placeholder="Не понравилось" onChange={(event) => handleReviewChange(7, null, "Не понравилось", event.target.value)} />
 					<FieldButton className='doctor-detailed-item__modal-send-review-button' onClick={handleReviewSubmit}>Оставить отзыв</FieldButton>
 				</div>
 			</CenterModal>
