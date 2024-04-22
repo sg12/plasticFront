@@ -49,7 +49,10 @@ const Table = ({ userType, userData }) => {
       handleRowCheckboxChange,
     });
   } else {
-    columns = ServicesColumns({ rowSelection, handleRowCheckboxChange });
+    columns = ServicesColumns({
+      rowSelection,
+      handleRowCheckboxChange,
+    });
   }
 
   const table = useReactTable({
