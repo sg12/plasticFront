@@ -49,7 +49,7 @@ const ArticlesList = () => {
 		? <Spinner />
 		: null;
 
-	const button = totalCount > posts.length || error || spinner
+	const button = totalCount > posts.length || error && !spinner
 		? <OutlineButton className='component-button-text' onClick={loadMorePosts}>Показать ещё</OutlineButton>
 		: null;
 
