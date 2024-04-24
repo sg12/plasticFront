@@ -60,7 +60,7 @@ const DoctorDetailedItem = (props) => {
 					<h3 style={{display:"flex", alignItems:"center", justifyContent:"center"}}>Вам нужно авторизоваться, чтобы оставлять отзывы</h3>
 					<Link to={"/enterPage"} style={{ textDecoration: 'none', color: "white"}}><FieldButton>Войти</FieldButton></Link>
 				</CenterModal>
-				<h2>{props.post.user.username}</h2>
+				<h2 className='title-doctor'>{props.post.user.username}</h2>
 			</div>
 			<CenterModal visible={modal3} setVisible={setModal3}>
 				<div className='doctor-detailed-item__modal-send-review'>

@@ -30,7 +30,7 @@ const DoctorsCardsItem = (props) => {
 				</div>
 				<div className='doctors-cards-item__wrapper-center'>
 					<div className='doctors-cards-item__wrapper-center-box'>
-						<button onClick={toDetailedPage}>{props.post.clinic_name}</button>
+						<button className='title-doctor' onClick={toDetailedPage}>{props.post.clinic_name}</button>
 						<p>{props.post.id}</p>
 						<h4>Услуги</h4>
 						<p>{props.post.description}</p>

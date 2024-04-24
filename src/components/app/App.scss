@@ -58,14 +58,26 @@ html {
 }
 
 .title-h2 {
-	font-size: 2rem;
+	font-family: 'Raleway';
+	font-style: normal;
 	font-weight: 700;
+	font-size: 2rem;
+	line-height: 56px;
+	text-transform: uppercase;
+	color: #000000;
 }
+.title-doctor{
 
-// .text-h2 {
-// 	font-size: 1rem;
-// }
+	font-family: 'Roboto';
+	font-style: normal;
+	font-weight: 700;
+	font-size: 1.6rem;
+	line-height: 47px;
+	text-align: center;
+	text-transform: uppercase;
+	color: #3066BE;
 
+}
 .title-h3 {
 	font-size: 1.3rem;
 	font-weight: 700;

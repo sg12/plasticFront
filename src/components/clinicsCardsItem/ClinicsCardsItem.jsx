@@ -29,7 +29,7 @@ const ClinicsCardsItem = (props) => {
 				</div>
 				<div className='clinics-cards-item__wrapper-center'>
 					<div className='clinics-cards-item__wrapper-center-box'>
-						<button onClick={toDetailedPage}>{props.post.official_name}</button>
+						<button className='title-doctor' onClick={toDetailedPage}>{props.post.official_name}</button>
 						<p>{props.post.id}</p>
 						<h4>Услуги</h4>
 						<p>{props.post.description}</p>

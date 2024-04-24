@@ -56,7 +56,7 @@ const ArticlesList = () => {
 	return (
 		<section className='articles'>
 			<div className='articles__container container'>
-				<h2 className='articles__title'>СТАТЬИ</h2>
+				<h2 className='title-h2'>СТАТЬИ</h2>
 				<ul className='articles__box'>
 					{content}
 				</ul>
