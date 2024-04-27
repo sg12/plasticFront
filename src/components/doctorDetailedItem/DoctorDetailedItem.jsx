@@ -97,23 +97,23 @@ const DoctorDetailedItem = (props) => {
 				<div className='doctor-detailed-item__wrapper-first-left'>
 					<div className='doctor-detailed-item__wrapper-first-item'>
 						<div className='doctor-detailed-item__description-first'>
-							<h3>Стаж</h3>
-							<p>{props.post.id} лет</p>
+							<h3 className='title-h3'>Стаж</h3>
+							<p className='text'>{props.post.id} лет</p>
 						</div>
 						<div className='doctor-detailed-item__description-first'>
-							<h3>Категория</h3>
-							<p>Высшая</p>
+							<h3 className='title-h3'>Категория</h3>
+							<p className='text'>Высшая</p>
 						</div>
 						<div className='doctor-detailed-item__description-first'>
-							<h3>Специализация</h3>
-							<p>Пластический хирург</p>
+							<h3 className='title-h3'>Специализация</h3>
+							<p className='text'>Пластический хирург</p>
 						</div>
 					</div>
 					<div className='doctor-detailed-item__wrapper-first-item'>
 						<div className='doctor-detailed-item__description-first'>
 							<div className='doctor-detailed-item__flex'>
 								<div>
-									<h3>ЛИЦЕНЗИЯ</h3>
+									<h3 className='title-h3'>ЛИЦЕНЗИЯ</h3>
 									<img className='doctor-detailed-item__license-img' src={licenseImg} alt="Лицензия" onClick={() => setModal2(true)} />
 									<img className='doctor-detailed-item__license-img' src={licenseImg} alt="Лицензия" onClick={() => setModal2(true)} />
 									<img className='doctor-detailed-item__license-img' src={licenseImg} alt="Лицензия" onClick={() => setModal2(true)} />
@@ -155,36 +155,36 @@ const DoctorDetailedItem = (props) => {
 				</div>
 			</div>
 			<div className='doctor-detailed-item__description'>
-				<h3>СПЕЦИАЛИЗАЦИЯ</h3>
-				<p>{props.post.description}</p>
+				<h3 className='title-h3'>СПЕЦИАЛИЗАЦИЯ</h3>
+				<p className='text'>{props.post.description}</p>
 			</div>
 			<div className='doctor-detailed-item__wrapper-second'>
 				<div className='doctor-detailed-item__wrapper-second-left'>
 					<div className='doctor-detailed-item__description-second doctor-detailed-item__description-second_nav'>
-						<h3>Навигация</h3>
-						<p>(Добавить список)</p>
+						<h3 className='title-h3'>Навигация</h3>
+						<p className='text'>(Добавить список)</p>
 					</div>
 				</div>
 				<div className='doctor-detailed-item__wrapper-second-right'>
 					<div className='doctor-detailed-item__description-second'>
 						<h3>Перечень услуг</h3>
-						<p>(Добавить компонент)</p>
+						<p className='text'>(Добавить компонент)</p>
 					</div>
 					<div className='doctor-detailed-item__description-second'>
-						<h3>Образование</h3>
-						<p>(Добавить компонент)</p>
+						<h3 className='title-h3'>Образование</h3>
+						<p className='text'>(Добавить компонент)</p>
 					</div>
 					<div className='doctor-detailed-item__description-second'>
-						<h3>Повышение квалификации</h3>
-						<p>(Добавить компонент)</p>
+						<h3 className='title-h3'>Повышение квалификации</h3>
+						<p className='text'>(Добавить компонент)</p>
 					</div>
 					<div className='doctor-detailed-item__description-second'>
-						<h3>Опыт работы</h3>
-						<p>(Добавить компонент)</p>
+						<h3 className='title-h3'>Опыт работы</h3>
+						<p className='text'>(Добавить компонент)</p>
 					</div>
 					<div className='doctor-detailed-item__description-second'>
-						<h3>Отзывы клиентов</h3>
-						<p>(Добавить компонент)</p>
+						<h3 className='title-h3'>Отзывы клиентов</h3>
+						<p className='text'>(Добавить компонент)</p>
 					</div>
 				</div>
 			</div>

@@ -66,7 +66,8 @@ html {
 	text-transform: uppercase;
 	color: #000000;
 }
-.title-doctor{
+
+.title-doctor {
 
 	font-family: 'Roboto';
 	font-style: normal;
@@ -76,16 +77,27 @@ html {
 	text-align: center;
 	text-transform: uppercase;
 	color: #3066BE;
-
 }
+
 .title-h3 {
-	font-size: 1.3rem;
+	font-family: 'Raleway';
+	font-style: normal;
 	font-weight: 700;
+	font-size: 1.1rem;
+	line-height: 23px;
+	color: #000000;
 }
 
-.text-h3 {
+.text {
+	font-family: 'Roboto';
+	font-style: normal;
+	font-weight: 400;
 	font-size: 1rem;
+	line-height: 23px;
+	color: #000000;
+
 }
+
 
 .component-content-text {
 	font-size: 1.5rem;
