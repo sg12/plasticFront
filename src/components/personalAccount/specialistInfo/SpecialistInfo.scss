@@ -1,8 +1,28 @@
 .specialist {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  &__title {
+    font-weight: 700;
+  }
+
+  &__cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
     gap: 16px;
-    &__title {
-        font-weight: 700;
-    }
+    width: 100%;
+    flex: 1 0 auto;
+  }
+  
+  &__tools {
+    display: flex;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .specialist__cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }

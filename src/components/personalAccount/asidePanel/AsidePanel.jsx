@@ -13,6 +13,8 @@ import help from "../../../assets/icons/help.svg";
 import support from "../../../assets/icons/support.svg";
 
 import "./AsidePanel.scss";
+import Divider from "../../UI/dividers/Divider";
+
 const AsidePanel = ({ userType }) => {
   const getLinkData = () => {
     switch (userType) {
@@ -50,7 +52,7 @@ const AsidePanel = ({ userType }) => {
       case "clinic":
         return [
           { to: "profile", text: "Профиль (Клиника)", icon: profile },
-          { to: "specialist", text: "Специалисты", icon: specialist, disabled: true, },
+          { to: "specialist", text: "Специалисты", icon: specialist },
           { to: "service", text: "Услуги", icon: services },
           {
             to: "appointment",
@@ -94,7 +96,7 @@ const AsidePanel = ({ userType }) => {
             (userType !== "client" &&
               (index === 1 || (index + 2) % 3 === 0))) &&
             index !== linksData.length - 1 && (
-              <hr className="aside-panel__divider" />
+              <Divider opacity={.25} />
             )}
         </React.Fragment>
       ))}

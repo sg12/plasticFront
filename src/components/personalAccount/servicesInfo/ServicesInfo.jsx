@@ -5,65 +5,65 @@ import FilterModal from "../../UI/modals/filterModal/FilterModal";
 import { useState } from "react";
 import DATA from "../../UI/table/data.js";
 import Radios from "../../UI/radios/Radios";
+import Divider from "../../UI/dividers/Divider";
 
 
 const ServicesInfo = () => {
-  const options = [
-    { value: "active", label: "Активная" },
-    { value: "inactive", label: "Неактивная" },
-  ];
+  // const options = [
+  //   { value: "active", label: "Активная" },
+  //   { value: "inactive", label: "Неактивная" },
+  // ];
 
-  const [selectedOption, setSelectedOption] = useState(null);
+  // const [selectedOption, setSelectedOption] = useState(null);
 
-  const handleOptionChange = (value) => {
-    setSelectedOption(value);
-  };
+  // const handleOptionChange = (value) => {
+  //   setSelectedOption(value);
+  // };
 
-  const [serviceData, setServiceData] = useState({
-    serviceName: "",
-    serviceCost: "",
-    serviceType: "",
-    receptionType: null,
-    status: null,
-  });
+  // const [serviceData, setServiceData] = useState({
+  //   serviceName: "",
+  //   serviceCost: "",
+  //   serviceType: "",
+  //   receptionType: null,
+  //   status: null,
+  // });
 
-  const handleInputChange = (field, value) => {
-    setServiceData((prevData) => ({
-      ...prevData,
-      [field]: value,
-    }));
-  };
+  // const handleInputChange = (field, value) => {
+  //   setServiceData((prevData) => ({
+  //     ...prevData,
+  //     [field]: value,
+  //   }));
+  // };
 
-  const handleReceptionTypeChange = (type) => {
-    handleInputChange("receptionType", type);
-  };
+  // const handleReceptionTypeChange = (type) => {
+  //   handleInputChange("receptionType", type);
+  // };
 
-  const handleSave = () => {
-    console.log("Service Data", serviceData);
-    addService(serviceData);
-    setServiceData({
-      serviceName: "",
-      serviceCost: "",
-      serviceType: "",
-      receptionType: null,
-      status: null,
-    });
-    setIsFilterOpen(false);
-  };
+  // const handleSave = () => {
+  //   console.log("Service Data", serviceData);
+  //   addService(serviceData);
+  //   setServiceData({
+  //     serviceName: "",
+  //     serviceCost: "",
+  //     serviceType: "",
+  //     receptionType: null,
+  //     status: null,
+  //   });
+  //   setIsFilterOpen(false);
+  // };
 
-  const addService = (service) => {
-    console.log("Add Service:", service);
-  };
+  // const addService = (service) => {
+  //   console.log("Add Service:", service);
+  // };
 
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const { userType } = useUser();
 
   return (
     <div className="services">
       <span className="services__title">Ваши услуги</span>
-      {DATA.length >= 1 ? (
+      {DATA && DATA?.length >= 1 ? (
         <>
-          <Table userType={userType} userData={DATA} />
+          <Table userData={DATA} />
           <div
             className="services__actions"
             style={{ display: "flex", justifyContent: "flex-end" }}
@@ -94,8 +94,8 @@ const ServicesInfo = () => {
           </div>
         </>
       )}
-      {/* <hr className="services__divider" /> */}
-      <div className="services__footer">
+      {/* <Divider opacity={.5}  /> */}
+      {/* <div className="services__footer">
         {isFilterOpen && (
           <FilterModal
             isFilterOpen={isFilterOpen}
@@ -162,7 +162,7 @@ const ServicesInfo = () => {
             </div>
           </FilterModal>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };
