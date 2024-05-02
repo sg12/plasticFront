@@ -3,6 +3,8 @@ import OutlineButton from "../../buttons/outlineButton/OutlineButton";
 import Tag from "../../tags/Tag";
 import styles from "./EmployeeСard.module.scss";
 import ContextMenu from "../../contextMenu/ContextMenu";
+import { FaWhatsappSquare } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 // Номер, ФИО, Специальность, Статус // Фильтрация, Доп - Удаление, Изменение, Сохранение, Переход в лк врача
 
@@ -62,15 +64,12 @@ const EmployeeСard = ({ userData }) => {
         <span className={styles.employee__position}>
           {userData?.specialization || "Специализация"}
         </span>
-        <OutlineButton
-          onClick={() =>
-            alert(
-              "TODO: Реализовать переход на страницу врача. Можно сделать в виде модального окна"
-            )
-          }
-        >
-          Страница врача
-        </OutlineButton>
+
+        <Link style={{textDecoration:"none"}} target="_blank" to={"https://t.me/valtrsv"}>
+          <OutlineButton style={{width:"100%"}} onClick={() => console.log(`Переход в телеграм - https://t.me/valtrsv ${"\n"}Изменить на ссылки пользователей`)}>
+            Перейти в мессенджер
+          </OutlineButton>
+        </Link>
       </div>
     </div>
   );

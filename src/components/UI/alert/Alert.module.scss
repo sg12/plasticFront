@@ -1,0 +1,30 @@
+.alert {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid #3066be;
+  border-radius: 8px;
+  padding: 8px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: width 0.3s ease;
+}
+
+.expanded {
+  width: auto;
+}
+
+.collapsed {
+  width: 39px;
+}
+
+.icon {
+  font-size: 21px;
+  flex-shrink: 0;
+}
+
+.label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
