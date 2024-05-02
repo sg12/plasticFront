@@ -46,7 +46,7 @@ const PrivateRoute = () => {
   return (
     <>
       <Preloader isLoading={loading} isDataLoaded={userData} />
-      <Outlet />
+      {userData && <Outlet />}
     </>
   );
 };
