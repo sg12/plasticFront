@@ -15,7 +15,7 @@ const SearchBar = () => {
 
     return (
         <div className="search_bar">
-            <div className="search_container">
+            <div className="search_container container">
             <input
                 type="text"
                 placeholder="поиск врача, услуги, клиники..."

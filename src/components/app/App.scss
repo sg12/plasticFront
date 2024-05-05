@@ -177,3 +177,51 @@ html {
 		outline: 2px solid #BE3030;
 	}
 }
+
+// @media (max-width: 1920px) {
+// 	.container {
+// 		width: 1700px;
+// 	}
+// }
+// ! доделать
+//* ПК
+@media (max-width: 1800px) {
+	.container {
+		width: 1300px;
+	}
+}
+
+//* ПК
+@media (max-width: 1440px) {
+	.container {
+		width: 1000px;
+	}
+}
+
+//* Планшет
+@media (max-width: 1120px) {
+	.container {
+		width: 800px;
+	}
+}
+
+//* Планшет
+@media (max-width: 920px) {
+	.container {
+		width: 600px;
+	}
+}
+
+//* Телефон
+@media (max-width: 720px) {
+	.container {
+		width: 100%;
+	}
+}
+
+//* Телефон
+@media (max-width: 320px) {
+	.container {
+		width: 100%;
+	}
+}

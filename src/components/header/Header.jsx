@@ -137,78 +137,80 @@ const Header = () => {
 	const renderSubMenu = (subMenuItems) => {
 		return (
 			<div className='sub-menu'>
-			<ul className="sub-menu_ul">
-				{subMenuItems.map((item, index) => (
-					<li key={index} className='sub-menu_li'>
-						<Link to={item.url}style={{color:"black"}}>{item.name}</Link>
-					</li>
-				))}
-			</ul>
+				<ul className="sub-menu_ul">
+					{subMenuItems.map((item, index) => (
+						<li key={index} className='sub-menu_li'>
+							<Link to={item.url} style={{ color: "black" }}>{item.name}</Link>
+						</li>
+					))}
+				</ul>
 			</div>
 		);
 	};
 
 	return (
 		<header className="header">
-			<div className="header__logo">
-				<NavLink to="/">
-					{' '}
-					<img className="logo__img" src={logo} alt="лого" />
-				</NavLink>
-			</div>
-			<ul className="header__links">
-				{links.map((link, index) => (
-					<li key={index} className={link.text === activeLink ? 'active' : ''}>
-						{link.text === 'Услуги' ? (
-							<div onClick={handleServicesClick} ref={menuRef} className='services'>
-								<a>{link.text}</a>
-								{isServicesMenuOpen && (
-									<div className="services-menu">
-										<ul>
-											{categoriesData.map((title, index) => (
-												<li
-													className="services-menu__li"
-													key={index}
-													onMouseEnter={() => handleCategoryHover(title)}
-												>
-													{title.title}
-													<svg width="12" height="20" viewBox="0 0 12 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-														<path d="M2 2L9.29289 9.29289C9.68342 9.68342 9.68342 10.3166 9.29289 10.7071L2 18" stroke="black" strokeWidth="3" strokeLinecap="round" />
-													</svg>
-												</li>
-											))}
-										</ul>
-										{selectedCategory && (
-											<div className="services-list">
-												<h2>{selectedCategory}</h2>
-												<ul className='services-list__ul'>
-													{categoriesData
-														.find((title) => title.title === selectedCategory)
-														.category.map((category, index) => (
-															<li key={index} className='services-list__li'>
-																<Link to={category.url} style={{"font-weight":"800","color":"black"}}>{category.name}</Link>
-																{category.items && category.items.length > 0 && renderSubMenu(category.items)}
-															</li>
-														))}
-												</ul>
-											</div>
-										)}
-									</div>
-								)}
-							</div>
-						) : (
-							<NavLink to={link.to} onClick={() => handleLinkClick(link)}>
-								{link.text}
-							</NavLink>
-						)}
+			<div className='header__container container'>
+				<div className="header__logo">
+					<NavLink to="/">
+						{' '}
+						<img className="logo__img" src={logo} alt="лого" />
+					</NavLink>
+				</div>
+				<ul className="header__links">
+					{links.map((link, index) => (
+						<li key={index} className={link.text === activeLink ? 'active' : ''}>
+							{link.text === 'Услуги' ? (
+								<div onClick={handleServicesClick} ref={menuRef} className='services'>
+									<a>{link.text}</a>
+									{isServicesMenuOpen && (
+										<div className="services-menu">
+											<ul>
+												{categoriesData.map((title, index) => (
+													<li
+														className="services-menu__li"
+														key={index}
+														onMouseEnter={() => handleCategoryHover(title)}
+													>
+														{title.title}
+														<svg width="12" height="20" viewBox="0 0 12 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+															<path d="M2 2L9.29289 9.29289C9.68342 9.68342 9.68342 10.3166 9.29289 10.7071L2 18" stroke="black" strokeWidth="3" strokeLinecap="round" />
+														</svg>
+													</li>
+												))}
+											</ul>
+											{selectedCategory && (
+												<div className="services-list">
+													<h2>{selectedCategory}</h2>
+													<ul className='services-list__ul'>
+														{categoriesData
+															.find((title) => title.title === selectedCategory)
+															.category.map((category, index) => (
+																<li key={index} className='services-list__li'>
+																	<Link to={category.url} style={{ "font-weight": "800", "color": "black" }}>{category.name}</Link>
+																	{category.items && category.items.length > 0 && renderSubMenu(category.items)}
+																</li>
+															))}
+													</ul>
+												</div>
+											)}
+										</div>
+									)}
+								</div>
+							) : (
+								<NavLink to={link.to} onClick={() => handleLinkClick(link)}>
+									{link.text}
+								</NavLink>
+							)}
+						</li>
+					))}
+					<li>
+						<Link to={'enterPage'} className="header__button-item" style={{ color: 'white' }}>
+							<p>Войти</p>
+						</Link>
 					</li>
-				))}
-				<li>
-					<Link to={'enterPage'} className="header__button-item" style={{ color: 'white' }}>
-						<p>Войти</p>
-					</Link>
-				</li>
-			</ul>
+				</ul>
+			</div>
 		</header>
 	);
 };
