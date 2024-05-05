@@ -44,7 +44,8 @@ class MyCarousel extends Component {
 	];
 
 	componentDidMount() {
-		this.interval = setInterval(this.nextSlide, 5000);
+		// this.interval = setInterval(this.nextSlide, 5000);
+		this.interval = setInterval(this.nextSlide, 500000000000);
 	}
 
 	componentWillUnmount() {
@@ -72,7 +73,7 @@ class MyCarousel extends Component {
 				itemsToShow={1}
 				itemsToScroll={1}
 				swipeTreshold={80}
-				// speed={1000}
+				speed={1000}
 				forwardBtnProps={{
 					style: {
 						display: "none",
