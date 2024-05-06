@@ -27,18 +27,16 @@ const HeaderPanel = ({ onToggleAside, userData }) => {
   return (
     <header>
       <div className="account__header">
-        <div className="header__logoAccount-burger">
-          <div className="header__burger-icon" onClick={onToggleAside}>
-            {burger}
-          </div>
-          <div className="header__logoAccount">
-            <Link className="header__logoAccount-link" to={"/"}>
-              <img src={logo} alt="logo" />
-            </Link>
-            {/* <Link className="header__logo-link" to={"/"}>
+        <div className="header__burger-icon" onClick={onToggleAside}>
+          {burger}
+        </div>
+        <div className="header__logoAccount">
+          <Link className="header__logoAccount-link" to={"/"}>
+            <img src={logo} alt="logo" />
+          </Link>
+          {/* <Link className="header__logo-link" to={"/"}>
               <span className="header__logo-link">На главную</span>
             </Link> */}
-          </div>
         </div>
         <div className="header__account">
           {/* <div className="header__notification">
