@@ -63,3 +63,19 @@
 		text-decoration: none;
 	}
 }
+
+//* ПК
+@media (max-width: 1280px) {
+	.articles-item {
+		width: 48%;
+		margin-bottom: 30px;
+	}
+}
+
+//* Планшет
+@media (max-width: 768px) {
+	.articles-item {
+		width: 100%;
+		margin-bottom: 10px;
+	}
+}

@@ -64,8 +64,36 @@
 
 	&__box {
 		&_network {
-			display: flex;
-			justify-content: space-between;
+			a {
+				margin-right: 20px;
+
+				&:last-child {
+					margin-right: 0;
+				}
+			}
+		}
+	}
+}
+
+//* ПК
+@media (max-width: 1280px) {
+	.footer {
+		&__box {
+			flex-wrap: wrap;
+		}
+	}
+
+	.footer-item {
+		margin-right: 60px;
+	}
+}
+
+//* Планшет
+@media (max-width: 768px) {
+	.footer {
+		&__box {
+			margin: 0 10px;
+			flex-direction: column;
 		}
 	}
 }

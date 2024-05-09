@@ -8,7 +8,7 @@ const MainPage = () => {
 		<>
 			<MyCarousel />
 			<SearchBar />
-			<ConstructorComp />
+			{/* <ConstructorComp /> */}
 		</>
 	);
 };
