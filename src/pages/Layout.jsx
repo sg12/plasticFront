@@ -22,7 +22,7 @@ const Layout = () => {
 
 	return (
 		<>
-			<div>
+			<div className='headers'>
 				{isMobile ? <HeaderMobile /> : <Header />}
 			</div>
 			<div className='outlet' style={{ minHeight: '60vh' }}>

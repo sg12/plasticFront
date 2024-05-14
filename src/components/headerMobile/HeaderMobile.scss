@@ -2,5 +2,86 @@
 	&__container {
 		display: flex;
 		justify-content: space-between;
+		align-items: center;
+	}
+
+	&__hamburger {
+		background: none;
+		border-radius: 50px;
+		width: 50px;
+		height: 50px;
+		border: none;
+		cursor: pointer;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+
+		&:hover {
+			background-color: rgb(200, 200, 200);
+		}
+
+		&:active {
+			background-color: rgb(134, 132, 132);
+		}
+
+		span {
+			display: block;
+			width: 30px;
+			height: 3px;
+			margin: 3px 0;
+			background-color: #3066BE;
+		}
+	}
+
+	&__search {
+		background: none;
+		border-radius: 50px;
+		border: none;
+		cursor: pointer;
+		width: 50px;
+		height: 50px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+
+		&:hover {
+			background-color: rgb(200, 200, 200);
+		}
+
+		&:active {
+			background-color: rgb(134, 132, 132);
+		}
+	}
+
+	&__nav {
+		background: white;
+		width: 70%;
+		height: 100vh;
+		position: absolute;
+		z-index: 2;
+		border: 1px solid #3066BE;
+		border-left: 0;
+	}
+
+	&__list {
+		padding-left: 0;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	&__link {
+		list-style-type: none;
+	}
+
+	&__a {
+		text-decoration: none;
+		color: black;
+
+		&_active {
+			color: #3066BE;
+		}
 	}
 }
