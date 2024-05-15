@@ -17,12 +17,8 @@
 		align-items: center;
 		justify-content: center;
 
-		&:hover {
-			background-color: rgb(200, 200, 200);
-		}
-
 		&:active {
-			background-color: rgb(134, 132, 132);
+			background-color: rgb(200, 200, 200);
 		}
 
 		span {
@@ -79,9 +75,5 @@
 	&__a {
 		text-decoration: none;
 		color: black;
-
-		&_active {
-			color: #3066BE;
-		}
 	}
 }

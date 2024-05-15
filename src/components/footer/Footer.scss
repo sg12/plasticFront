@@ -2,7 +2,19 @@
 	background: #F2F2F2;
 	padding: 30px 0;
 
-	&__box {
+	&__wrapper {
+		display: flex;
+		justify-content: space-between;
+	}
+
+	&__wrapper-left {
+		width: 45%;
+		display: flex;
+		justify-content: space-between;
+	}
+
+	&__wrapper-right {
+		width: 45%;
 		display: flex;
 		justify-content: space-between;
 	}
@@ -56,10 +68,6 @@
 
 	&__a {
 		color: #000;
-
-		&_active {
-			color: blue;
-		}
 	}
 
 	&__box {
@@ -78,21 +86,38 @@
 //* ПК
 @media (max-width: 1280px) {
 	.footer {
-		&__box {
-			flex-wrap: wrap;
+		&__wrapper {
+			flex-direction: column;
+		}
+
+		&__wrapper-left {
+			width: 82%;
+			margin-bottom: 20px;
+		}
+
+		&__wrapper-right {
+			width: 100%;
 		}
 	}
+}
 
-	.footer-item {
-		margin-right: 60px;
+//* Планшет
+@media (max-width: 1024px) {
+	.footer {
+		&__wrapper-left {
+			width: 77%;
+		}
 	}
 }
 
 //* Планшет
 @media (max-width: 768px) {
 	.footer {
-		&__box {
-			margin: 0 10px;
+		&__wrapper-left {
+			flex-direction: column;
+		}
+
+		&__wrapper-right {
 			flex-direction: column;
 		}
 	}
