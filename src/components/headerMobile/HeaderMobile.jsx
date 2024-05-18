@@ -7,6 +7,8 @@ import { links } from '../header/Header';
 import logo from '../../assets/icons/logo.png';
 import search from '../../assets/icons/search.png';
 
+import MobileButton from '../UI/buttons/mobileButton/MobileButton';
+
 import { Link, NavLink } from 'react-router-dom';
 
 const HeaderMobile = () => {
@@ -24,21 +26,22 @@ const HeaderMobile = () => {
 	return (
 		<header className="header-mobile">
 			<div className="header-mobile__container container">
-				<button className='header-mobile__hamburger' onClick={onOpenMobileNav}>
+				<MobileButton className='header-mobile__hamburger' onClick={onOpenMobileNav}>
 					<span></span>
 					<span></span>
 					<span></span>
-				</button>
+				</MobileButton>
 				<div className="header-mobile__logo">
 					<NavLink to="/">
 						{''}
 						<img className="logo__img" src={logo} alt="лого" />
 					</NavLink>
 				</div>
-				<button className="header-mobile__search">
-					{''}
-					<img className="search__img" src={search} alt="поиск" />
-				</button>
+				<NavLink to="/">
+					<MobileButton className="header-mobile__search">
+						<img className="search__img" src={search} alt="поиск" />
+					</MobileButton>
+				</NavLink>
 			</div>
 			{mobileNav && <MobileNav />}
 		</header>

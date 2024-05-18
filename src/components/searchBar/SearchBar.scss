@@ -37,7 +37,7 @@
 			position: absolute;
 			right: 0px;
 			top: 50%;
-			background-color: transparent;
+			background-color: white;
 			transform: translateY(-50%);
 			color: #fff;
 			border: 1px solid rgba(48, 102, 190, 1);
@@ -50,6 +50,19 @@
 			img {
 				width: 20px;
 				height: 20px;
+			}
+		}
+	}
+}
+
+//* Планшет
+@media (max-width: 768px) {
+
+	.search_bar {
+		.search_container {
+			button {
+				width: 60px;
+				right: 10px;
 			}
 		}
 	}
