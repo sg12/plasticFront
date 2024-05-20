@@ -127,6 +127,7 @@ const EditUser = ({ userData, toggleEditingMode }) => {
               key={field.name}
               type={field.type}
               disabled={field.disabled}
+              andClass="edit__input"
               name={field.name}
               value={editedData[field.name]}
               onChange={handleChange}
@@ -141,6 +142,7 @@ const EditUser = ({ userData, toggleEditingMode }) => {
                 key={field.name}
                 name={field.name}
                 value={editedData[field.name]}
+                andClass="edit__select"
                 onChange={handleChange}
                 options={field.options}
                 placeholder={field.placeholder}
@@ -150,6 +152,7 @@ const EditUser = ({ userData, toggleEditingMode }) => {
                 key={field.name}
                 type={field.type}
                 disabled={field.disabled}
+                andClass="edit__input"
                 name={field.name}
                 value={editedData[field.name]}
                 onChange={handleChange}

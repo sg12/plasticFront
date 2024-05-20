@@ -33,8 +33,12 @@ const PersonalAccount = () => {
   }, []);
 
   const onToggleAside = () => {
-    setAsideVisible(!isAsideVisible);
-    setOverlayVisible(!isOverlayVisible);
+    if (window.innerWidth < 1440) {
+      setAsideVisible(!isAsideVisible);
+      setOverlayVisible(!isOverlayVisible);
+    } else {
+      setAsideVisible(isAsideVisible);
+    }
   };
 
   return (
