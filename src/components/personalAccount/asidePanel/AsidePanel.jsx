@@ -15,7 +15,7 @@ import support from "../../../assets/icons/support.svg";
 import "./AsidePanel.scss";
 import Divider from "../../UI/dividers/Divider";
 
-const AsidePanel = ({ userType }) => {
+const AsidePanel = ({ userType, onClick }) => {
   const getLinkData = () => {
     switch (userType) {
       case "client":
@@ -79,7 +79,7 @@ const AsidePanel = ({ userType }) => {
   const linksData = getLinkData();
 
   return (
-    <aside className="aside-panel">
+    <aside className="aside-panel" onClick={onClick}>
       {linksData.map((link, index) => (
         <React.Fragment key={index}>
           <NavLink
