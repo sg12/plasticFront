@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, NavLink } from 'react-router-dom';
-import { getUserData } from '../../services/UserData';
+import { getUserData } from '../../services/userData';
 import Cookies from "js-cookie";
 import './Header.scss';
 import logo from '../../assets/icons/logo.png';
