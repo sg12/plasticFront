@@ -13,18 +13,18 @@ import { useFetching } from '../../hooks/useFetching';
 const ArticlesList = () => {
 
 	const [posts, setPosts] = useState([]);
-	const [offset, setOffset] = useState(0);
+	const [page, setPage] = useState(1);
 	const [totalCount, setTotalCount] = useState(0);
 
 	const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
-		const response = await PlasticServices.getAllArticles(offset);
+		const response = await PlasticServices.getAllArticles(page);
 		setPosts([...posts, ...response.data]);
-		setOffset(offset + 6);
 		setTotalCount(response.headers['x-total-count']);
 	});
 
 	const onRequest = () => {
 		fetchPosts();
+		setPage(page + 1);
 	};
 
 	useEffect(() => {
@@ -49,14 +49,14 @@ const ArticlesList = () => {
 		? <Spinner />
 		: null;
 
-	const button = totalCount > posts.length || error || spinner
+	const button = totalCount > posts.length || error && !spinner
 		? <OutlineButton className='component-button-text' onClick={loadMorePosts}>Показать ещё</OutlineButton>
 		: null;
 
 	return (
 		<section className='articles'>
 			<div className='articles__container container'>
-				<h2 className='articles__title'>СТАТЬИ</h2>
+				<h2 className='title-h2'>СТАТЬИ</h2>
 				<ul className='articles__box'>
 					{content}
 				</ul>

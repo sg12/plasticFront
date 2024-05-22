@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, NavLink } from 'react-router-dom';
+import { getUserData } from '../../services/UserData';
+import Cookies from "js-cookie";
 import './Header.scss';
 import logo from '../../assets/icons/logo.png';
 
@@ -15,6 +17,7 @@ const Header = () => {
 	const [isServicesMenuOpen, setServicesMenuOpen] = useState(false);
 	const [selectedCategory, setSelectedCategory] = useState(null);
 	const [activeLink, setActiveLink] = useState(null);
+	const userData = getUserData();
 
 	const location = useLocation();
 	const menuRef = useRef(null);
@@ -137,13 +140,13 @@ const Header = () => {
 	const renderSubMenu = (subMenuItems) => {
 		return (
 			<div className='sub-menu'>
-			<ul className="sub-menu_ul">
-				{subMenuItems.map((item, index) => (
-					<li key={index} className='sub-menu_li'>
-						<Link to={item.url}style={{color:"black"}}>{item.name}</Link>
-					</li>
-				))}
-			</ul>
+				<ul className="sub-menu_ul">
+					{subMenuItems.map((item, index) => (
+						<li key={index} className='sub-menu_li'>
+							<Link to={item.url} style={{ color: "black" }}>{item.name}</Link>
+						</li>
+					))}
+				</ul>
 			</div>
 		);
 	};
@@ -186,7 +189,7 @@ const Header = () => {
 														.find((title) => title.title === selectedCategory)
 														.category.map((category, index) => (
 															<li key={index} className='services-list__li'>
-																<Link to={category.url} style={{"font-weight":"800","color":"black"}}>{category.name}</Link>
+																<Link to={category.url} style={{ "font-weight": "800", "color": "black" }}>{category.name}</Link>
 																{category.items && category.items.length > 0 && renderSubMenu(category.items)}
 															</li>
 														))}
@@ -204,9 +207,15 @@ const Header = () => {
 					</li>
 				))}
 				<li>
-					<Link to={'enterPage'} className="header__button-item" style={{ color: 'white' }}>
-						<p>Войти</p>
-					</Link>
+					{Cookies.get("token") ? (
+						<Link to={'account/profile'} className="header__button-item" style={{ color: 'white' }}>
+							<p>ЛК</p>
+						</Link>
+					) : (
+						<Link to={'enterPage'} className="header__button-item" style={{ color: 'white'}}>
+							<p>Войти</p>
+						</Link>
+					)}
 				</li>
 			</ul>
 		</header>

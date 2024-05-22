@@ -52,6 +52,7 @@ const EditUser = ({ userData, toggleEditingMode }) => {
   };
 
   const hasFormDataChanged = () => {
+    if (!userData) return false;
     return Object.keys(editedData).some(
       (key) => editedData[key] !== userData[key]
     );
@@ -74,6 +75,7 @@ const EditUser = ({ userData, toggleEditingMode }) => {
             }
           );
           toggleEditingMode(false);
+          window.location.reload();
         } catch (err) {
           toast.warn("Произошла ошибка при сохранении данных");
         }
@@ -125,6 +127,7 @@ const EditUser = ({ userData, toggleEditingMode }) => {
               key={field.name}
               type={field.type}
               disabled={field.disabled}
+              andClass="edit__input"
               name={field.name}
               value={editedData[field.name]}
               onChange={handleChange}
@@ -139,6 +142,7 @@ const EditUser = ({ userData, toggleEditingMode }) => {
                 key={field.name}
                 name={field.name}
                 value={editedData[field.name]}
+                andClass="edit__select"
                 onChange={handleChange}
                 options={field.options}
                 placeholder={field.placeholder}
@@ -148,6 +152,7 @@ const EditUser = ({ userData, toggleEditingMode }) => {
                 key={field.name}
                 type={field.type}
                 disabled={field.disabled}
+                andClass="edit__input"
                 name={field.name}
                 value={editedData[field.name]}
                 onChange={handleChange}

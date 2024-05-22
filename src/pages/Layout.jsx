@@ -7,7 +7,9 @@ const Layout = () => {
 	return (
 		<>
 			<Header />
-			<Outlet />
+			<div style={{ minHeight: '60vh' }}>
+				<Outlet />
+			</div>
 			<Footer />
 		</>
 	);
