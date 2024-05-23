@@ -14,9 +14,11 @@ const PrivateRoute = () => {
       return;
     }
 
+    const URL = import.meta.env.VITE_API_URL;
+
     const tokenHeader = "Token " + token;
 
-    fetch("http://localhost:8000/api/v1/account/", {
+    fetch(`${URL}/account/`, {
       method: "GET",
       headers: {
         Authorization: tokenHeader,
