@@ -100,7 +100,7 @@ const RegisterClient = () => {
                     {errors?.ref && <span className='form__span'>{errors?.ref?.message}</span>}
                 </div>
                 <p className='form__ref'>Укажите персональный ID пользователя, который вас пригласил - вы получите 5% скидку</p>
-                <FieldButton type="submit">
+                <FieldButton type="submit" className="form__button">
                     Зарегистрироваться
                 </FieldButton>
                 <p className='form__confirmation'>Подтвердите адрес электронной почты. Письмо со ссылкой для подтверждения отправлено на указанную вами почту.</p>
