@@ -49,7 +49,7 @@ const NewPassword = () => {
                     />
                     {errors?.confirm_password && <span className='form__span'>{errors?.confirm_password?.message}</span>}
                 </div>
-                <FieldButton type="submit">
+                <FieldButton type="submit" className="form__button">
                     Отправить
                 </FieldButton>
                 <p className='form__message'>Не забудьте новый пароль.</p>

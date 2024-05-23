@@ -1,27 +1,37 @@
 .enter {
-    &__container {
-        justify-content: space-between;
-        min-height: 964px;
-        padding: 32px 0px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+    justify-content: space-between;
+    height: 100vh;
+    padding: 32px 0;
 
-    &__logo {
-        max-width: 234px;
-        margin: 0;
+    @media (max-width: 375px) {
+      padding: 0;
     }
+  }
 
-    &__copyright {
-        margin: 0;
-        color: #3066BE;
-        font-variant-numeric: lining-nums proportional-nums;
-        font-family: Raleway;
-        font-size: 24px;
-        font-style: normal;
-        font-weight: 400;
-        line-height: normal;
-        letter-spacing: -0.48px;
+  &__logo {
+    max-width: 234px;
+    margin: 0;
+
+    @media (max-width: 375px) {
+      max-width: 150px;
     }
+  }
+
+  &__copyright {
+    margin: 0;
+    color: #3066be;
+    font-variant-numeric: lining-nums proportional-nums;
+    font-family: Raleway;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: -0.48px;
+    text-align: center;
+  }
 }

@@ -8,18 +8,18 @@ const EnterItem = () => {
 		<div className='enter'>
 			<div className='enter__content content'>
 				<p className='enter__title'>Выберите тип входа</p>
-				<Link to={'enterClient'}>
-					<FieldButton>
+				<Link to={'enterClient'} className="enter__link">
+					<FieldButton className="enter__button">
 						Клиент
 					</FieldButton>
 				</Link>
 				<p className='enter__text'>или</p>
-				<Link to={'enterPartner'}>
-					<FieldButton>
+				<Link to={'enterPartner'} className="enter__link">
+					<FieldButton className="enter__button">
 						Партнер
 					</FieldButton>
 				</Link>
-				<Link to={'/'} className='enter__link'>Вернуться на главную</Link>
+				<Link to={'/'} className='enter__back'>Вернуться на главную</Link>
 			</div>
 		</div>
 	);
