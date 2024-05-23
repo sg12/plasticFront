@@ -3,6 +3,8 @@ import Cookies from "js-cookie";
 import { Navigate, Outlet } from "react-router-dom";
 import Preloader from "../components/UI/preloader/Preloader";
 
+const _apiBase = import.meta.env.VITE_API_URL;
+
 const PrivateRoute = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -14,11 +16,9 @@ const PrivateRoute = () => {
       return;
     }
 
-    const URL = import.meta.env.VITE_API_URL;
-
     const tokenHeader = "Token " + token;
 
-    fetch(`${URL}/account/`, {
+    fetch(`${_apiBase}/account/`, {
       method: "GET",
       headers: {
         Authorization: tokenHeader,
