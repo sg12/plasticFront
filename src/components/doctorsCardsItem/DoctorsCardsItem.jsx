@@ -34,10 +34,10 @@ const DoctorsCardsItem = (props) => {
 						<p>{props.post.id}</p>
 						<h4>Услуги</h4>
 						<p>{props.post.description}</p>
-						<Admission />
 					</div>
 				</div>
 				<div className='doctors-cards-item__wrapper-right'>
+					<Admission />
 					<Contacts />
 				</div>
 				<div className='doctors-cards-item__wrapper-like'>
