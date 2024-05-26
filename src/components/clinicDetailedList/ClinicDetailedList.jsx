@@ -48,7 +48,7 @@ const ClinicDetailedList = () => {
 
 	return (
 		<>
-			<section className='clinic-detailed-list'>
+			<section className='clinic-detailed-list section'>
 				<div className='clinic-detailed-list__container container'>
 					{content}
 					{error}

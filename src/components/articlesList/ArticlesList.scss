@@ -1,6 +1,5 @@
 .articles {
-	padding: 60px 0;
-
+	
 	&__title {
 		font-family: 'Raleway';
 		font-weight: 700;
@@ -11,26 +10,8 @@
 	&__box {
 		display: flex;
 		flex-wrap: wrap;
-		justify-content: space-between;
 		padding: 0;
+		gap: 2%;
+		margin: 0;
 	}
-
-	// &__button {
-	// 	font-family: 'Raleway';
-	// 	font-weight: 400;
-	// 	font-size: 1.5rem;
-	// 	border-radius: 20px;
-	// 	color: #3066BE;
-	// 	background: none;
-	// 	border: 3px solid #3066BE;
-	// 	cursor: pointer;
-	// 	padding: 18px 32px;
-	// 	display: block;
-	// 	margin: 0 auto;
-
-	// 	&:hover {
-	// 		background: #6D9DC5;
-	// 		color: #FFFFFF;
-	// 	}
-	// }
 }

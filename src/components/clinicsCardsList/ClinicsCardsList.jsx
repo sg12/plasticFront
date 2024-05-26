@@ -55,7 +55,7 @@ const ClinicsCardsList = () => {
 		: null;
 
 	return (
-		<section className='clinics-cards-list'>
+		<section className='clinics-cards-list section'>
 			<div className='clinics-cards-list__container container'>
 				<h2 className='clinics-cards-list__title'>КЛИНИКИ</h2>
 				<FilterCards filter={filter} setFilter={setFilter} setPage={setPage} clinics={'clinics'} />

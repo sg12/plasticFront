@@ -54,7 +54,7 @@ const ArticlesList = () => {
 		: null;
 
 	return (
-		<section className='articles'>
+		<section className='articles section'>
 			<div className='articles__container container'>
 				<h2 className='articles__title'>СТАТЬИ</h2>
 				<ul className='articles__box'>
