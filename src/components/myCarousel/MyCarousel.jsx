@@ -1,9 +1,5 @@
-import "./MyCarousel.scss";
-
-import { Component } from "react";
-
+import React, { Component } from "react";
 import Carousel from "react-simply-carousel";
-
 import Slides from "./slides/Slides";
 import image1 from "../../assets/imgs/image_44.png";
 import image2 from "../../assets/imgs/image44.png";
@@ -43,14 +39,24 @@ class MyCarousel extends Component {
 		},
 	];
 
+	timer = null;
+
 	componentDidMount() {
-		// this.interval = setInterval(this.nextSlide, 5000);
-		this.interval = setInterval(this.nextSlide, 500000000000);
+		this.startTimer();
 	}
 
 	componentWillUnmount() {
-		clearInterval(this.interval);
+		clearInterval(this.timer);
 	}
+
+	startTimer = () => {
+		this.timer = setInterval(this.nextSlide, 15000);
+	};
+
+	resetTimer = () => {
+		clearInterval(this.timer);
+		this.startTimer(); 
+	};
 
 	nextSlide = () => {
 		const { activeSlideIndex } = this.state;
@@ -63,6 +69,7 @@ class MyCarousel extends Component {
 		this.setState({
 			activeSlideIndex: newActiveSlideIndex,
 		});
+		this.resetTimer();
 	};
 
 	render() {
@@ -110,6 +117,8 @@ class MyCarousel extends Component {
 						},
 					},
 				}}
+				onMouseDown={this.resetTimer}
+				onTouchStart={this.resetTimer}
 			>
 				{this.slidesData.map((slide) => (
 					<Slides key={slide.id} data={slide} />

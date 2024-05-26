@@ -8,7 +8,7 @@ import home from '../../assets/icons/home.svg';
 const Admission = () => {
 	return (
 		<div className='admission'>
-			<h4>ТИП ПРИЁМА</h4>
+			<h3 className='title-h3'>ТИП ПРИЁМА</h3>
 			<div className='admission__box'>
 				<div className='admission__item'>
 					<img src={clinic} alt="клиника" />
@@ -19,8 +19,8 @@ const Admission = () => {
 					<p>ЧАСТНАЯ <br /> ПРАКТИКА</p>
 				</div>
 			</div>
-			<h4>ПЕРЕЙТИ НА СТРАНИЦУ КЛИНИКИ</h4>
-			<TransitionButton>(Добавить название)</TransitionButton>
+			<h3 className='title-h3'>ПЕРЕЙТИ НА СТРАНИЦУ КЛИНИКИ</h3>
+			<TransitionButton>(Добавить название клиники)</TransitionButton>
 		</div>
 	);
 };

@@ -1,11 +1,11 @@
 import styles from "./Select.module.scss";
 
-const Select = ({ children, id, name, options, value, onChange, ...props }) => {
+const Select = ({ children, id, name, options, value, onChange, andClass, ...props }) => {
   return (
-    <form className={styles.select}>
+    <form className={`${styles.select} ${andClass}`}>
       <label className={styles.select__label}>{children}</label>
       <select
-        className={styles.select__select}
+        className={`${styles.select__select} ${andClass}`}
         name={name}
         id={id}
         value={value}

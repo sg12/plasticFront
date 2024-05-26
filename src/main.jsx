@@ -14,6 +14,3 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 		</BrowserRouter>
 	</React.StrictMode>
 );
-
-//! убран конструктор
-//! отключён и убран карусель

@@ -13,23 +13,21 @@
 }
 
 .header {
-  &__logoAccount {
-    &-burger {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      gap: 32px;
-    }
+  &-burger {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 32px;
+  }
 
-    &-link {
+  &-link {
+    display: inline-flex;
+    width: 100%;
+
+    span {
       display: inline-flex;
       width: 100%;
-
-      span {
-        display: inline-flex;
-        width: 100%;
-        font-weight: 700;
-      }
+      font-weight: 700;
     }
   }
 
@@ -46,6 +44,10 @@
   &__account {
     display: flex;
     gap: 32px;
+
+    @media (max-width: 375px) {
+      display: none;
+    }
   }
 
   &__notification {

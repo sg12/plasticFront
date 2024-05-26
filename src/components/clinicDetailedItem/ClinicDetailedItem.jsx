@@ -59,7 +59,7 @@ const ClinicDetailedItem = (props) => {
 					<h3 style={{display:"flex", alignItems:"center", justifyContent:"center"}}>Вам нужно авторизоваться, чтобы оставлять отзывы</h3>
 					<Link to={"/enterPage"} style={{ textDecoration: 'none', color: "white"}}><FieldButton>Войти</FieldButton></Link>
 				</CenterModal>
-				<h2>{props.post.user.username}</h2>
+				<h2 className='title-doctor'>{props.post.user.username}</h2>
 			</div>
 			<CenterModal visible={modal3} setVisible={setModal3}>
 				<div className='clinic-detailed-item__modal-send-review'>
@@ -96,19 +96,19 @@ const ClinicDetailedItem = (props) => {
 				<div className='clinic-detailed-item__wrapper-first-left'>
 					<div className='clinic-detailed-item__wrapper-first-item'>
 						<div className='clinic-detailed-item__description-first'>
-							<h3>ОФИЦИАЛЬНОЕ НАЗВАНИЕ</h3>
-							<p>{props.post.id} {props.post.user.username}</p>
+							<h3 className='title-h3'>ОФИЦИАЛЬНОЕ НАЗВАНИЕ</h3>
+							<p className='text'>{props.post.id} {props.post.user.username}</p>
 						</div>
 						<div className='clinic-detailed-item__description-first'>
-							<h3>РУКОВОДИТЕЛЬ</h3>
-							<p>{props.post.director}</p>
+							<h3 className='title-h3'>РУКОВОДИТЕЛЬ</h3>
+							<p className='text'>{props.post.director}</p>
 						</div>
 					</div>
 					<div className='clinic-detailed-item__wrapper-first-item'>
 						<div className='clinic-detailed-item__description-first'>
 							<div className='clinic-detailed-item__flex'>
 								<div>
-									<h3>ЛИЦЕНЗИЯ</h3>
+									<h3 className='title-h3'>ЛИЦЕНЗИЯ</h3>
 									<img className='clinic-detailed-item__license-img' src={licenseImg} alt="Лицензия" onClick={() => setModal2(true)} />
 									<img className='clinic-detailed-item__license-img' src={licenseImg} alt="Лицензия" onClick={() => setModal2(true)} />
 									<img className='clinic-detailed-item__license-img' src={licenseImg} alt="Лицензия" onClick={() => setModal2(true)} />
@@ -165,32 +165,32 @@ const ClinicDetailedItem = (props) => {
 				</div>
 			</div>
 			<div className='clinic-detailed-item__description'>
-				<h3>СПЕЦИАЛИЗАЦИЯ</h3>
-				<p>{props.post.description}</p>
+				<h3 className='title-h3'>СПЕЦИАЛИЗАЦИЯ</h3>
+				<p className='text'>{props.post.description}</p>
 			</div>
 			<div className='clinic-detailed-item__wrapper-second'>
 				<div className='clinic-detailed-item__wrapper-second-left'>
 					<div className='clinic-detailed-item__description-second clinic-detailed-item__description-second_nav'>
-						<h3>Навигация</h3>
-						<p>(Добавить список)</p>
+						<h3 className='title-h3'>Навигация</h3>
+						<p className='text'>(Добавить список)</p>
 					</div>
 				</div>
 				<div className='clinic-detailed-item__wrapper-second-right'>
 					<div className='clinic-detailed-item__description-second'>
-						<h3>Перечень услуг</h3>
-						<p>(Добавить компонент)</p>
+						<h3 className='title-h3'>Перечень услуг</h3>
+						<p className='text'>(Добавить компонент)</p>
 					</div>
 					<div className='clinic-detailed-item__description-second'>
-						<h3>Достижения</h3>
-						<p>(Добавить компонент)</p>
+						<h3 className='title-h3'>Достижения</h3>
+						<p className='text'>(Добавить компонент)</p>
 					</div>
 					<div className='clinic-detailed-item__description-second'>
-						<h3>Фотографии</h3>
-						<p>(Добавить компонент)</p>
+						<h3 className='title-h3'>Фотографии</h3>
+						<p className='text'>(Добавить компонент)</p>
 					</div>
 					<div className='clinic-detailed-item__description-second'>
-						<h3>Отзывы клиентов</h3>
-						<p>(Добавить компонент)</p>
+						<h3 className='title-h3'>Отзывы клиентов</h3>
+						<p className='text'>(Добавить компонент)</p>
 					</div>
 				</div>
 			</div>

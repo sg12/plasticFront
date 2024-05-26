@@ -5,10 +5,10 @@ import CallButton from '../UI/buttons/callButton/CallButton';
 const Contacts = () => {
 	return (
 		<div className='contacts'>
-			<h4>(Название клиники на данном месте)</h4>
-			<p>ул. Военная, д. 4</p>
-			<h4>ЗАПИСАТЬСЯ НА ПРИЁМ:</h4>
-			<CallButton>(Добавить номер)</CallButton>
+			<h3 className='title-h3'>(Название клиники на данном месте)</h3>
+			<p className='text'>ул. Военная, д. 4</p>
+			<h3 className='title-h3'>ЗАПИСАТЬСЯ НА ПРИЁМ:</h3>
+			<CallButton>(Добавить номер телефона)</CallButton>
 		</div>
 	);
 };

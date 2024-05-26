@@ -61,7 +61,7 @@ const EnterClient = () => {
                 </div>
 
                 <Link to={'/enterPage/forgotPassword'} className='form__link'>Забыли пароль?</Link>
-                <FieldButton type="submit">
+                <FieldButton type="submit" className="form__button">
                     Войти
                 </FieldButton>
                 <p className='form__approval approval'>Нажимая кнопку “Войти”, вы соглашаешься с <a className='approval__link' href="#">Политикой Конфиденциальности</a> и даёте <a className='approval__link' href="#">Согласие на обработку персональных данных</a></p>
