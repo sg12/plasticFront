@@ -58,7 +58,7 @@
 		align-items: flex-end;
 	}
 
-	&__review-button{
+	&__review-button {
 		margin-top: 28px;
 		border-radius: 40px;
 		width: 228px;
@@ -74,21 +74,21 @@
 		cursor: pointer;
 	}
 
-	&__modal-send-review-block{
+	&__modal-send-review-block {
 		margin-bottom: 32px;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 	}
 
-	&__modal-send-review{
+	&__modal-send-review {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		min-width: 470px;
 	}
 
-	&__modal-send-review-title{
+	&__modal-send-review-title {
 		margin: 0;
 		padding-bottom: 32px;
 		margin-top: 34px;
@@ -102,7 +102,7 @@
 		color: #000;
 	}
 
-	&__modal-send-review-description{
+	&__modal-send-review-description {
 		margin: 0;
 		margin-bottom: 25px;
 		font-family: Raleway;
@@ -113,7 +113,7 @@
 		color: #000;
 	}
 
-	&__modal-send-review-button{
+	&__modal-send-review-button {
 		margin-top: 32px;
 	}
 
@@ -190,3 +190,68 @@
 		}
 	}
 }
+
+//* ПК
+@media (max-width: 1600px) {}
+
+//* ПК
+@media (max-width: 1440px) {}
+
+//* ПК
+@media (max-width: 1280px) {
+	.doctor-detailed-item {
+
+		&__box-title {
+			margin-bottom: 30px;
+		}
+
+		&__wrapper-first {
+			flex-direction: column;
+		}
+
+		&__wrapper-first-left {
+			width: 100%;
+			margin-bottom: 30px;
+		}
+
+		&__wrapper-first-center {
+			width: 100%;
+			margin-bottom: 30px;
+		}
+
+		&__wrapper-first-right {
+			width: 100%;
+		}
+	}
+}
+
+//* Планшет
+@media (max-width: 1024px) {}
+
+//* Планшет
+@media (max-width: 768px) {
+	.doctor-detailed-item {
+
+		&__wrapper-first-item {
+			flex-direction: column;
+		}
+
+		&__wrapper-second {
+			flex-direction: column;
+		}
+
+		&__wrapper-second-left {
+			width: 100%;
+		}
+
+		&__wrapper-second-right {
+			width: 100%;
+		}
+	}
+}
+
+//* Телефон
+@media (max-width: 360px) {}
+
+//* Телефон
+@media (max-width: 320px) {}

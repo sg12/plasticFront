@@ -38,6 +38,7 @@ const DoctorsCardsItem = (props) => {
 					</div>
 				</div>
 				<div className='doctors-cards-item__wrapper-right'>
+					<Admission />
 					<Contacts />
 				</div>
 				<div className='doctors-cards-item__wrapper-like'>

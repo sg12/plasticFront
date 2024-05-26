@@ -1,6 +1,8 @@
 .filter-cards {
 	display: flex;
+	flex-wrap: wrap;
 	margin-bottom: 30px;
+	gap: 10px;
 
 	&__item {
 		margin-bottom: 30px;
