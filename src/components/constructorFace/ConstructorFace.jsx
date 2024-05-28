@@ -113,17 +113,18 @@ const ConstructorFace = ({
 
   return (
     <div className="constructor-face__container">
-      <div className="constructor-face__wrapper">
-        <div ref={containerRef2} >
+      <div className="filter" ref={containerRef2} >
           <ConstructorFilter setActiveFace={setActiveFace} setActiveFaceStyle={setActiveFaceStyle}/>
-          <AboutOperation activeLine={activeLine} />
         </div>
-        <div className="constructor-face__image">
+      <div className="constructor-face__wrapper">
+      
+        <div className="constructor-face__image" ref={containerRef2}>
           <img
             src={currentFaceConfig.image}
             className="constructor-face__img"
             alt="face"
           />
+          <AboutOperation activeLine={activeLine}/>
         </div>
 
         <div ref={containerRef} className="constructor-face__lines">
