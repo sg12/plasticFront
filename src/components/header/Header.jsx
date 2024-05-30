@@ -7,12 +7,83 @@ import logo from "../../assets/icons/logo.png";
 
 export const links = [
   { text: "Главная", to: "" },
-  { text: "Услуги", to: "services" },
+  { text: "Услуги", to: "" },
   { text: "Врачи", to: "doctors" },
   { text: "Клиники", to: "clinics" },
   { text: "Статьи", to: "articles" },
 ];
-
+export const categoriesData = [
+  {
+    title: "Операция по коррекции лица и глаз",
+    url: "/clinics",
+    category: [
+      {
+        name: "Блефаропластика (глаза)",
+        url: "/clinics",
+        items: [
+          { name: "Изменение формы и разреза глаз", url: "/clinics" },
+          { name: "Устранение нависания века", url: "/clinics" },
+          { name: 'Устранение "мешков" под глазами', url: "/clinics" },
+          { name: "Коррекция возрастных изменений", url: "/clinics" },
+        ],
+      },
+      {
+        name: "Отопластика   (уши)",
+        url: "/clinics",
+        items: [
+          { name: "Коррекция лопоухости", url: "/clinics" },
+          { name: "Коррекция формы мочки уха", url: "/clinics" },
+          { name: "Изменение формы ушей", url: "/clinics" },
+        ],
+      },
+      {
+        name: "Ментопластика (подбородок)",
+        url: "/clinics",
+        items: [
+          { name: "Уменьшение подбородка", url: "/clinics" },
+          { name: "Увеличение подбородка", url: "/clinics" },
+          { name: "Коррекция формы подбородка", url: "/clinics" },
+        ],
+      },
+      {
+        name: "Хейлопластика (губы)",
+        url: "/clinics",
+        items: [
+          { name: "Коррекция объема и формы губ", url: "/clinics" },
+          { name: "Приподнятие уголков губ", url: "/clinics" },
+          { name: "Омоложение области рта", url: "/clinics" },
+        ],
+      },
+      {
+        name: "Фронтопластика (лоб)",
+        url: "/clinics",
+        items: [
+          { name: "Подтяжка бровей и лба", url: "/clinics" },
+          { name: "Устранение птоза мягких тканей ", url: "/clinics" },
+          { name: "Лифтинг лба и височной области", url: "/clinics" },
+        ],
+      },
+      {
+        name: "Малярпластика (скулы)",
+        url: "/clinics",
+        items: [
+          { name: "Коррекция внешнего вида скул", url: "/clinics" },
+          { name: "Реконструктивная пластика скул", url: "/clinics" },
+          { name: "Коррекция асимметрии скул", url: "/clinics" },
+        ],
+      },
+      {
+        name: "Ринопластика (нос)",
+        url: "/clinics",
+        items: [
+          { name: "Коррекция формы носа", url: "/clinics" },
+          { name: "Удаление горбинки", url: "/clinics" },
+          { name: "Выравнивание перегородки", url: "/clinics" },
+        ],
+      },
+    ],
+  },
+];
 const Header = () => {
   const [isServicesMenuOpen, setServicesMenuOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -22,78 +93,6 @@ const Header = () => {
   const location = useLocation();
   const menuRef = useRef(null);
 
-  const categoriesData = [
-    {
-      title: "Операция по коррекции лица и глаз",
-      url: "/clinics",
-      category: [
-        {
-          name: "Блефаропластика (глаза)",
-          url: "/clinics",
-          items: [
-            { name: "Изменение формы и разреза глаз", url: "/clinics" },
-            { name: "Устранение нависания века", url: "/clinics" },
-            { name: 'Устранение "мешков" под глазами', url: "/clinics" },
-            { name: "Коррекция возрастных изменений", url: "/clinics" },
-          ],
-        },
-        {
-          name: "Отопластика   (уши)",
-          url: "/clinics",
-          items: [
-            { name: "Коррекция лопоухости", url: "/clinics" },
-            { name: "Коррекция формы мочки уха", url: "/clinics" },
-            { name: "Изменение формы ушей", url: "/clinics" },
-          ],
-        },
-        {
-          name: "Ментопластика (подбородок)",
-          url: "/clinics",
-          items: [
-            { name: "Уменьшение подбородка", url: "/clinics" },
-            { name: "Увеличение подбородка", url: "/clinics" },
-            { name: "Коррекция формы подбородка", url: "/clinics" },
-          ],
-        },
-        {
-          name: "Хейлопластика (губы)",
-          url: "/clinics",
-          items: [
-            { name: "Коррекция объема и формы губ", url: "/clinics" },
-            { name: "Приподнятие уголков губ", url: "/clinics" },
-            { name: "Омоложение области рта", url: "/clinics" },
-          ],
-        },
-        {
-          name: "Фронтопластика (лоб)",
-          url: "/clinics",
-          items: [
-            { name: "Подтяжка бровей и лба", url: "/clinics" },
-            { name: "Устранение птоза мягких тканей ", url: "/clinics" },
-            { name: "Лифтинг лба и височной области", url: "/clinics" },
-          ],
-        },
-        {
-          name: "Малярпластика (скулы)",
-          url: "/clinics",
-          items: [
-            { name: "Коррекция внешнего вида скул", url: "/clinics" },
-            { name: "Реконструктивная пластика скул", url: "/clinics" },
-            { name: "Коррекция асимметрии скул", url: "/clinics" },
-          ],
-        },
-        {
-          name: "Ринопластика (нос)",
-          url: "/clinics",
-          items: [
-            { name: "Коррекция формы носа", url: "/clinics" },
-            { name: "Удаление горбинки", url: "/clinics" },
-            { name: "Выравнивание перегородки", url: "/clinics" },
-          ],
-        },
-      ],
-    },
-  ];
 
   const handleServicesClick = () => {
     setServicesMenuOpen(!isServicesMenuOpen);

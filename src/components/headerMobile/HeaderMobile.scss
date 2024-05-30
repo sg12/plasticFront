@@ -18,7 +18,8 @@
 	&__nav {
 		background: white;
 		width: 70%;
-		height: 100vh;
+		min-height:100vh;
+		height: auto;
 		position: absolute;
 		z-index: 2;
 		border: 1px solid #3066BE;
