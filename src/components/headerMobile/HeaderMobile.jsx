@@ -1,7 +1,7 @@
 import './HeaderMobile.scss';
 
 import { useState, useEffect, useRef } from 'react';
-
+import Cookies from "js-cookie";
 import { links } from '../header/Header';
 import { categoriesData } from '../header/Header';
 
@@ -15,10 +15,11 @@ import { Link, NavLink } from 'react-router-dom';
 const HeaderMobile = () => {
     const [mobileNav, setMobileNav] = useState(false);
     const [isServicesMenuOpen, setIsServicesMenuOpen] = useState(false);
-    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [openCategory, setOpenCategory] = useState(null);
 
     const menuRef = useRef(null);
     const servicesMenuRef = useRef(null);
+    const searchInputRef = useRef(null);
 
     const onOpenMobileNav = () => {
         setMobileNav(prevState => !prevState);
@@ -28,7 +29,7 @@ const HeaderMobile = () => {
         const nav = document.querySelector('.header-mobile__nav');
         const button = document.querySelector('.header-mobile__hamburger');
         if (
-            nav && !nav.contains(event.target) && 
+            nav && !nav.contains(event.target) &&
             button && !button.contains(event.target) &&
             servicesMenuRef.current && !servicesMenuRef.current.contains(event.target)
         ) {
@@ -53,16 +54,27 @@ const HeaderMobile = () => {
         setIsServicesMenuOpen(prevState => !prevState);
     };
 
-    const handleCategoryHover = (title) => {
-        setSelectedCategory(title.title);
+    const handleCategoryClick = (event, title) => {
+        event.stopPropagation();
+        setOpenCategory(prevCategory => prevCategory === title.title ? null : title.title);
+    };
+
+    const handleSearchClick = () => {
+        setMobileNav(false);
+
+        const searchInput = document.querySelector('.search');
+        if (searchInput) {
+            searchInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            searchInput.focus({ preventScroll: true });
+        }
     };
 
     const renderSubMenu = (subMenuItems) => {
         return (
-            <div className="sub-menu">
-                <ul className="sub-menu_ul">
+            <div className="header-mobile__sub-menu">
+                <ul className="header-mobile__sub-menu_ul">
                     {subMenuItems.map((item, index) => (
-                        <li key={index} className="sub-menu_li">
+                        <li key={index} className="header-mobile__sub-menu_li">
                             <Link to={item.url} style={{ color: "black" }}>
                                 {item.name}
                             </Link>
@@ -86,11 +98,9 @@ const HeaderMobile = () => {
                         <img className="logo__img" src={logo} alt="лого" />
                     </NavLink>
                 </div>
-                <NavLink to="/">
-                    <MobileButton className="header-mobile__search">
-                        <img className="search__img" src={search} alt="поиск" />
-                    </MobileButton>
-                </NavLink>
+                <MobileButton className="header-mobile__search" onClick={handleSearchClick}>
+                    <img className="search__img" src={search} alt="поиск" />
+                </MobileButton>
             </div>
             {mobileNav && <MobileNav />}
         </header>
@@ -100,6 +110,23 @@ const HeaderMobile = () => {
         return (
             <nav className='header-mobile__nav'>
                 <ul className='header-mobile__list'>
+                    <li className='header-mobile__link'>
+                        {Cookies.get("token") ? (
+                            <Link
+                                to={"account/profile"}
+                                className="header-mobile__button-item"
+                            >
+                                <p>ЛК</p>
+                            </Link>
+                        ) : (
+                            <Link
+                                to={"enterPage"}
+                                className="header-mobile__button-item"
+                            >
+                                <p>Войти</p>
+                            </Link>
+                        )}
+                    </li>
                     {links.map((link, index) => (
                         <li key={index} className='header-mobile__link'>
                             {link.text === "Услуги" ? (
@@ -110,38 +137,35 @@ const HeaderMobile = () => {
                                 >
                                     <span>{link.text}</span>
                                     {isServicesMenuOpen && (
-                                        <div className="services-menu">
+                                        <div className="header-mobile__services-menu">
                                             <ul>
                                                 {categoriesData.map((title, index) => (
                                                     <li
-                                                        className="services-menu__li"
+                                                        className="header-mobile__services-menu__li"
                                                         key={index}
-                                                        onMouseEnter={() => handleCategoryHover(title)}
+                                                        onClick={(event) => handleCategoryClick(event, title)}
                                                     >
                                                         {title.title}
                                                     </li>
                                                 ))}
                                             </ul>
-                                            {selectedCategory && (
-                                                <div className="services-list">
-                                                    <h2>{selectedCategory}</h2>
-                                                    <ul className="services-list__ul">
+                                            {openCategory && (
+                                                <div className="header-mobile__services-list">
+                                                    <ul className="header-mobile__services-list__ul">
                                                         {categoriesData
-                                                            .find((title) => title.title === selectedCategory)
+                                                            .find((title) => title.title === openCategory)
                                                             .category.map((category, index) => (
-                                                                <li key={index} className="services-list__li">
-                                                                    <NavLink
+                                                                <li key={index} className="header-mobile__services-list__li">
+                                                                    <Link
                                                                         to={category.url}
-                                                                        style={{
-                                                                            fontWeight: "800",
-                                                                            color: "black",
-                                                                        }}
+                                                                        onClick={(e) => e.stopPropagation()}
                                                                     >
                                                                         {category.name}
-                                                                    </NavLink>
+                                                                    </Link>
                                                                     {category.items &&
                                                                         category.items.length > 0 &&
-                                                                        renderSubMenu(category.items)}
+                                                                        renderSubMenu(category.items)
+                                                                    }
                                                                 </li>
                                                             ))}
                                                     </ul>
