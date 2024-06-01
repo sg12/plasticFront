@@ -7,12 +7,10 @@
   font-family: "Montserrat", "sans-serif";
   height: 80px;
   background-color: rgba(0, 0, 0, 0);
-  // padding: 0 7%;
   user-select: none;
 
   &__container {
     display: flex;
-    // flex-direction: row;
   }
 
   &__logo {
@@ -27,7 +25,6 @@
   &__links {
     margin: 0;
     padding: 0;
-    // height: 100%;
     width: 100%;
     display: flex;
 
@@ -94,7 +91,7 @@
       }
 
       &__li {
-        height: 5vh;
+        height: auto;
         width: 26vw;
         padding: 8px 15px;
         cursor: pointer;

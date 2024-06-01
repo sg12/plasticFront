@@ -6,7 +6,7 @@ const MainPage = () => {
 
 	return (
 		<>
-			{/* <MyCarousel /> */}
+			<MyCarousel />
 			<SearchBar />
 			{/* <ConstructorComp /> */}
 		</>
