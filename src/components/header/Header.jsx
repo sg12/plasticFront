@@ -4,13 +4,19 @@ import { getUserData } from "../../services/userData";
 import Cookies from "js-cookie";
 import "./Header.scss";
 import logo from "../../assets/icons/logo.png";
+import mainicon from "../../assets/icons/main-icon.png";
+import servicesicon from "../../assets/icons/services-icon.png";
+import doctorsicon from "../../assets/icons/doctors-icon.png";
+import clinicsicon from "../../assets/icons/clinics-icon.png";
+import articlesicon from "../../assets/icons/articles-icon.png";
+
 
 export const links = [
-  { text: "Главная", to: "" },
-  { text: "Услуги", to: "" },
-  { text: "Врачи", to: "doctors" },
-  { text: "Клиники", to: "clinics" },
-  { text: "Статьи", to: "articles" },
+  { text: "Главная", to: "" , icon:`${mainicon}`},
+  { text: "Услуги", to: "", icon:`${servicesicon}` },
+  { text: "Врачи", to: "doctors", icon:`${doctorsicon}`},
+  { text: "Клиники", to: "clinics", icon:`${clinicsicon}` },
+  { text: "Статьи", to: "articles", icon:`${articlesicon}` },
 ];
 export const categoriesData = [
   {

@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Cookies from "js-cookie";
 import { links } from '../header/Header';
 import { categoriesData } from '../header/Header';
-
+import entericon from "../../assets/icons/entericon.png";
 import logo from '../../assets/icons/logo.png';
 import search from '../../assets/icons/search.png';
 
@@ -116,13 +116,15 @@ const HeaderMobile = () => {
                                 to={"account/profile"}
                                 className="header-mobile__button-item"
                             >
+                                <img src={entericon} />
                                 <p>ЛК</p>
                             </Link>
                         ) : (
                             <Link
                                 to={"enterPage"}
                                 className="header-mobile__button-item"
-                            >
+                            >   
+                                <img src={entericon} />
                                 <p>Войти</p>
                             </Link>
                         )}
@@ -133,8 +135,9 @@ const HeaderMobile = () => {
                                 <div
                                     onClick={handleServicesClick}
                                     ref={servicesMenuRef}
-                                    className="services"
+                                    className="service"
                                 >
+                                    <img src={link.icon} />
                                     <span>{link.text}</span>
                                     {isServicesMenuOpen && (
                                         <div className="header-mobile__services-menu">
@@ -179,6 +182,7 @@ const HeaderMobile = () => {
                                     className={'header-mobile__a'}
                                     to={link.to}
                                 >
+                                    <img src={link.icon} />
                                     {link.text}
                                 </Link>)}
                         </li>
