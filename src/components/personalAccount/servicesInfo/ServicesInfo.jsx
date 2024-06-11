@@ -18,16 +18,17 @@ const ServicesInfo = () => {
   const [editIndex, setEditIndex] = useState(null);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [serviceData, setServiceData] = useState({
-    serviceName: "",
-    serviceCost: "",
-    serviceType: "",
-    receptionType: null,
+    services: "",
+    costs: "",
+    type: "",
+    reception: null,
     status: null,
   });
-  console.log("@", services)
+  console.log("@", serviceData);
 
   const handleOptionChange = (value) => {
     setSelectedOption(value);
+    handleInputChange("status", value);
   };
 
   const handleInputChange = (field, value) => {
@@ -38,7 +39,7 @@ const ServicesInfo = () => {
   };
 
   const handleReceptionTypeChange = (type) => {
-    handleInputChange("receptionType", type);
+    handleInputChange("reception", type);
   };
 
   const handleSave = () => {
@@ -54,10 +55,10 @@ const ServicesInfo = () => {
     }
 
     setServiceData({
-      serviceName: "",
-      serviceCost: "",
-      serviceType: "",
-      receptionType: null,
+      services: "",
+      costs: "",
+      type: "",
+      reception: null,
       status: null,
     });
     setIsFilterOpen(false);
@@ -114,20 +115,20 @@ const ServicesInfo = () => {
         >
           <input
             type="text"
-            onChange={(e) => handleInputChange("serviceName", e.target.value)}
+            onChange={(e) => handleInputChange("services", e.target.value)}
             placeholder="Наименование услуги"
-            value={serviceData?.serviceName}
+            value={serviceData?.services}
           />
           <input
             type="text"
-            onChange={(e) => handleInputChange("serviceCost", e.target.value)}
+            onChange={(e) => handleInputChange("costs", e.target.value)}
             placeholder="Стоимость"
-            value={serviceData?.serviceCost}
+            value={serviceData?.costs}
           />
           <select
             className="services__select"
-            onChange={(e) => handleInputChange("serviceType", e.target.value)}
-            value={serviceData?.serviceType}
+            onChange={(e) => handleInputChange("type", e.target.value)}
+            value={serviceData?.type}
           >
             <option value="">Выберите тип</option>
             <option value="1 тип">1 тип</option>
@@ -140,9 +141,7 @@ const ServicesInfo = () => {
               value="Частная практика"
               onClick={() => handleReceptionTypeChange("Частная практика")}
               className={
-                serviceData?.receptionType === "Частная практика"
-                  ? "active"
-                  : ""
+                serviceData?.reception === "Частная практика" ? "active" : ""
               }
             />
           </div>

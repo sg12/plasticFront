@@ -10,10 +10,10 @@ const ServicesColumns = ({ onEdit, onDelete }) => {
       header: "Стоимость",
       accessorKey: "costs",
     },
-    // {
-    //   header: "Тип услуги",
-    //   accessorKey: "serviceType",
-    // },
+    {
+      header: "Тип услуги",
+      accessorKey: "type",
+    },
     {
       header: "Тип приёма",
       accessorKey: "reception",
@@ -26,10 +26,10 @@ const ServicesColumns = ({ onEdit, onDelete }) => {
       header: "Действия",
       accessorKey: "actions",
       cell: ({ row }) => (
-        <>
+        <div style={{ display: "flex", gap: "8px" }}>
           <Action actionType="edit" onClick={() => onEdit(row.index)} />
           <Action actionType="delete" onClick={() => onDelete(row.index)} />
-        </>
+        </div>
       ),
     },
   ];
