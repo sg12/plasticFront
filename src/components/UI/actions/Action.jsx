@@ -1,12 +1,6 @@
-import { useState } from "react";
 import styles from "./Action.module.scss";
-import FilterModal from "../modals/filterModal/FilterModal";
-import ControlModal from "../modals/controlModal/ControlModal";
 
 const Action = ({ actionType, onClick }) => {
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [isControlOpen, setIsControlOpen] = useState(false);
-
   const getIcon = () => {
     switch (actionType) {
       case "refresh":
@@ -83,15 +77,37 @@ const Action = ({ actionType, onClick }) => {
         );
       case "edit":
         return (
-          <button className={styles.editButton} onClick={onClick}>
-            Редактировать
-          </button>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+          >
+            <path
+              d="M13.2217 6.68078L17.3148 10.7753M8.76313 19.0264L3.5 20.5L4.97366 15.2372C5.11325 14.7387 5.37947 14.2848 5.74644 13.9196L14.8029 4.90751C15.5846 4.12964 16.8485 4.1313 17.6281 4.91122L19.0897 6.37328C19.8692 7.15304 19.8706 8.41655 19.0928 9.19805L10.0807 18.2537C9.71554 18.6206 9.26163 18.8868 8.76313 19.0264Z"
+              stroke="#3066BE"
+              strokeWidth="2"
+              strokeLinejoin="round"
+            />
+          </svg>
         );
       case "delete":
         return (
-          <button className={styles.deleteButton} onClick={onClick}>
-            Удалить
-          </button>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+          >
+            <path
+              d="M9.95414 12V16.25M14.0459 12V16.25M14.5 6C14.5 5.44772 14.0523 5 13.5 5H10.5C9.94772 5 9.5 5.44772 9.5 6M5.86415 7.75003L6.70459 17.7512C6.83518 19.3052 8.13459 20.5 9.69405 20.5H14.307C15.8664 20.5 17.1659 19.3052 17.2964 17.7512L18.1369 7.75003M4.5 7.59802H19.5"
+              stroke="#3066BE"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+          </svg>
         );
       default:
         return null;
@@ -100,36 +116,9 @@ const Action = ({ actionType, onClick }) => {
 
   return (
     <div className={styles.action}>
-      <button
-        className={styles.button}
-        onMouseEnter={() => {
-          setIsControlOpen(true);
-        }}
-        onMouseLeave={() => {
-          setIsControlOpen(false);
-        }}
-        onClick={onClick}
-      >
+      <button onClick={onClick} className={`${styles.button}`}>
         {getIcon()}
       </button>
-      {actionType === "filter" && isFilterOpen && (
-        <FilterModal
-          isFilterOpen={isFilterOpen}
-          setIsFilterOpen={setIsFilterOpen}
-          style="right"
-          animationEnabled={true}
-          animationTime={400}
-        ></FilterModal>
-      )}
-      {actionType === "more" && isControlOpen && (
-        <ControlModal
-          onDelete={() => setIsControlOpen(false)}
-          onEdit={() => setIsControlOpen(false)}
-          onSave={() => setIsControlOpen(false)}
-          isControlOpen={isControlOpen}
-          setIsControlOpen={setIsControlOpen}
-        />
-      )}
     </div>
   );
 };
