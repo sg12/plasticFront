@@ -1,11 +1,10 @@
-import { useUser } from "../../../context/UserContext";
+import React, { useState } from "react";
 import Table from "../../UI/table/Table";
 import "./ServicesInfo.scss";
 import FilterModal from "../../UI/modals/filterModal/FilterModal";
-import { useState } from "react";
 import DATA from "../../UI/table/data.js";
 import Radios from "../../UI/radios/Radios";
-
+import ServicesColumns from "./ServiceColumns.jsx";
 
 const ServicesInfo = () => {
   const options = [
@@ -14,11 +13,10 @@ const ServicesInfo = () => {
   ];
 
   const [selectedOption, setSelectedOption] = useState(null);
-
-  const handleOptionChange = (value) => {
-    setSelectedOption(value);
-  };
-
+  const [services, setServices] = useState(DATA || []);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editIndex, setEditIndex] = useState(null);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [serviceData, setServiceData] = useState({
     serviceName: "",
     serviceCost: "",
@@ -26,6 +24,11 @@ const ServicesInfo = () => {
     receptionType: null,
     status: null,
   });
+  console.log("@", services)
+
+  const handleOptionChange = (value) => {
+    setSelectedOption(value);
+  };
 
   const handleInputChange = (field, value) => {
     setServiceData((prevData) => ({
@@ -39,8 +42,17 @@ const ServicesInfo = () => {
   };
 
   const handleSave = () => {
-    console.log("Service Data", serviceData);
-    addService(serviceData);
+    if (isEditing) {
+      const updatedServices = services.map((service, index) =>
+        index === editIndex ? serviceData : service
+      );
+      setServices(updatedServices);
+      setIsEditing(false);
+      setEditIndex(null);
+    } else {
+      setServices([...services, serviceData]);
+    }
+
     setServiceData({
       serviceName: "",
       serviceCost: "",
@@ -51,118 +63,100 @@ const ServicesInfo = () => {
     setIsFilterOpen(false);
   };
 
-  const addService = (service) => {
-    console.log("Add Service:", service);
+  const handleEdit = (index) => {
+    setServiceData(services[index]);
+    setIsEditing(true);
+    setEditIndex(index);
+    setIsFilterOpen(true);
   };
 
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const { userType } = useUser();
+  const handleDelete = (index) => {
+    const updatedServices = services.filter((_, i) => i !== index);
+    setServices(updatedServices);
+  };
+
+  const columns = ServicesColumns({
+    onEdit: handleEdit,
+    onDelete: handleDelete,
+  });
 
   return (
     <div className="services">
       <span className="services__title">Ваши услуги</span>
-      {DATA.length >= 1 ? (
-        <>
-          <Table userType={userType} userData={DATA} />
-          <div
-            className="services__actions"
-            style={{ display: "flex", justifyContent: "flex-end" }}
-          >
-            <button
-              onClick={() => setIsFilterOpen(!isFilterOpen)}
-              type="button"
-              className="add"
-            >
-              Добавить услугу
-            </button>
-          </div>
-        </>
+      {services && services.length >= 1 ? (
+        <Table columns={columns} data={services} />
       ) : (
-        <>
-          <div style={{ opacity: 0.5 }}>Нет услуг</div>
-          <div
-            className="services__actions"
-            style={{ display: "flex", justifyContent: "center" }}
-          >
-            <button
-              onClick={() => setIsFilterOpen(!isFilterOpen)}
-              type="button"
-              className="add"
-            >
-              Добавить услугу
-            </button>
-          </div>
-        </>
+        <div style={{ opacity: 0.5 }}>Нет услуг</div>
       )}
-      {/* <hr className="services__divider" /> */}
-      <div className="services__footer">
-        {isFilterOpen && (
-          <FilterModal
-            isFilterOpen={isFilterOpen}
-            setIsFilterOpen={setIsFilterOpen}
-            style="right"
-            animationEnabled={true}
-            animationTime={400}
-            filterValue={serviceData}
-            setFilterValue={setServiceData}
-            disabledSearch={true}
-            save={handleSave}
-          >
-            <input
-              type="text"
-              onChange={(e) => handleInputChange("serviceName", e.target.value)}
-              placeholder="Наименование услуги"
-              value={serviceData.serviceName}
-            />
-            <input
-              type="text"
-              onChange={(e) => handleInputChange("serviceCost", e.target.value)}
-              placeholder="Стоимость"
-              value={serviceData.serviceCost}
-            />
-            <select
-              className="services__select"
-              name=""
-              id=""
-              onChange={(e) => handleInputChange("serviceType", e.target.value)}
-              placeholder="Классификация типа услуги в общем списке"
-              value={serviceData.serviceType}
-            >
-              <option value="">1 тип</option>
-              <option value="">2 тип</option>
-            </select>
-
-            <span className="services__title">Тип приема</span>
-            <div className="services__reception">
-              <div className="services__reception-item-input">
-                <input
-                  type="button"
-                  value="Частная практика"
-                  onClick={() => handleReceptionTypeChange("Частная практика")}
-                  className={
-                    serviceData.receptionType === "Частная практика"
-                      ? "active"
-                      : ""
-                  }
-                />
-              </div>
-              <span className="services__title">Статус</span>
-              <div className="services__radio">
-                <Radios options={options} onChange={handleOptionChange} />
-              </div>
-            </div>
-            <span className="services__title">Статус</span>
-            <div className="services__radio">
-              <Radios
-                name="status"
-                options={options}
-                onChange={handleOptionChange}
-                selected={selectedOption}
-              />
-            </div>
-          </FilterModal>
-        )}
+      <div
+        className="services__actions"
+        style={{ display: "flex", justifyContent: "right" }}
+      >
+        <button
+          onClick={() => setIsFilterOpen(!isFilterOpen)}
+          type="button"
+          className="add"
+        >
+          Добавить услугу
+        </button>
       </div>
+      {isFilterOpen && (
+        <FilterModal
+          isFilterOpen={isFilterOpen}
+          setIsFilterOpen={setIsFilterOpen}
+          style="right"
+          animationEnabled={true}
+          animationTime={400}
+          filterValue={serviceData}
+          setFilterValue={setServiceData}
+          disabledSearch={true}
+          save={handleSave}
+        >
+          <input
+            type="text"
+            onChange={(e) => handleInputChange("serviceName", e.target.value)}
+            placeholder="Наименование услуги"
+            value={serviceData?.serviceName}
+          />
+          <input
+            type="text"
+            onChange={(e) => handleInputChange("serviceCost", e.target.value)}
+            placeholder="Стоимость"
+            value={serviceData?.serviceCost}
+          />
+          <select
+            className="services__select"
+            onChange={(e) => handleInputChange("serviceType", e.target.value)}
+            value={serviceData?.serviceType}
+          >
+            <option value="">Выберите тип</option>
+            <option value="1 тип">1 тип</option>
+            <option value="2 тип">2 тип</option>
+          </select>
+          <span className="services__title">Тип приема</span>
+          <div className="services__reception">
+            <input
+              type="button"
+              value="Частная практика"
+              onClick={() => handleReceptionTypeChange("Частная практика")}
+              className={
+                serviceData?.receptionType === "Частная практика"
+                  ? "active"
+                  : ""
+              }
+            />
+          </div>
+          <span className="services__title">Статус</span>
+          <div className="services__radio">
+            <Radios
+              name="status"
+              options={options}
+              onChange={handleOptionChange}
+              selected={selectedOption}
+            />
+          </div>
+        </FilterModal>
+      )}
     </div>
   );
 };

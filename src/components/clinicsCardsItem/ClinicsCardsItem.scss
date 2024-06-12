@@ -1,7 +1,7 @@
 .clinics-cards-item {
 	padding: 30px;
 	list-style-type: none;
-	border-radius: 15.381px;
+	border-radius: 15px;
 	background: var(--pallet-color-11005, #FFF);
 	box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.20);
 	margin-bottom: 30px;
@@ -12,16 +12,19 @@
 	}
 
 	&__wrapper-left {
-		width: 220px;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 	}
 
+	&__wrapper-left-img {
+		width: 200px;
+		padding: 0 10px;
+	}
+
 	&__wrapper-left-box {
 		border: 1px solid black;
 		border-radius: 30px;
-		width: 210px;
 		height: 240px;
 		display: flex;
 		align-items: center;
@@ -45,3 +48,98 @@
 		width: 400px;
 	}
 }
+
+//* ПК
+@media (max-width: 1600px) {
+	.clinics-cards-item {
+		&__wrapper-center {
+			width: 600px;
+		}
+	}
+}
+
+//* ПК
+@media (max-width: 1440px) {
+	.clinics-cards-item {
+
+		&__wrapper-left {
+			width: 200px;
+		}
+
+		&__wrapper-center {
+			width: 500px;
+		}
+
+		&__wrapper-right {
+			width: 300px;
+		}
+	}
+}
+
+//* ПК
+@media (max-width: 1280px) {
+	.clinics-cards-item {
+		padding: 20px;
+
+		&__wrapper-left {
+			width: 150px;
+		}
+
+		&__wrapper-left-box {
+			height: 150px;
+		}
+
+		&__wrapper-left-img {
+			width: 150px;
+		}
+
+		&__wrapper-center {
+			width: 350px;
+		}
+
+		&__wrapper-right {
+			width: 260px;
+		}
+	}
+}
+
+//* Планшет
+@media (max-width: 1024px) {
+	.clinics-cards-item {
+		position: relative;
+
+		&__wrapper {
+			flex-wrap: wrap;
+			justify-content: flex-start;
+		}
+
+		&__wrapper-left {
+			margin-right: 30px;
+		}
+
+		&__wrapper-center {
+			width: 400px;
+		}
+
+		&__wrapper-like {
+			position: absolute;
+			right: 20px;
+		}
+	}
+}
+
+//* Планшет
+@media (max-width: 768px) {
+	.clinics-cards-item {
+
+		&__wrapper-left {
+			margin-bottom: 20px;
+		}
+	}
+}
+
+//* Телефон
+@media (max-width: 360px) {}
+
+//* Телефон
+@media (max-width: 320px) {}

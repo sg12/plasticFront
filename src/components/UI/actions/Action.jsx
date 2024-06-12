@@ -3,7 +3,7 @@ import styles from "./Action.module.scss";
 import FilterModal from "../modals/filterModal/FilterModal";
 import ControlModal from "../modals/controlModal/ControlModal";
 
-const Action = ({ onRefresh, onMoreOptions, actionType }) => {
+const Action = ({ actionType, onClick }) => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isControlOpen, setIsControlOpen] = useState(false);
 
@@ -63,42 +63,38 @@ const Action = ({ onRefresh, onMoreOptions, actionType }) => {
             />
           </svg>
         );
-      // case "add":
+      case "add":
         return (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-            >
-              <path
-                d="M11 4.98273C10.9952 4.43571 11.4487 4 11.9978 4C12.5546 4 12.9927 4.43921 12.9999 4.96924L13 4.97822C13 5.51861 12.5524 5.95645 12 5.95645C11.4491 5.95645 11.0025 5.52104 11 4.98273ZM11 4.98273L11.0001 4.98721M11 4.98273L11 4.97822M11 11.5045C10.9952 10.9575 11.4487 10.5218 11.9978 10.5218C12.5546 10.5218 12.9927 10.961 12.9999 11.491L13 11.5C13 12.0404 12.5524 12.4782 12 12.4782C11.4491 12.4782 11.0025 12.0428 11 11.5045ZM11 11.5045L11.0001 11.509M11 11.5045L11 11.5M11 18.0263C10.9952 17.4793 11.4487 17.0436 11.9978 17.0436C12.5546 17.0436 12.9927 17.4828 12.9999 18.0128L13 18.0218C13 18.5622 12.5524 19 12 19C11.4491 19 11.0025 18.5646 11 18.0263ZM11 18.0263L11.0001 18.0308M11 18.0263L11 18.0218"
-                stroke="#3066BE"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+          >
+            <path
+              d="M11 4.98273C10.9952 4.43571 11.4487 4 11.9978 4C12.5546 4 12.9927 4.43921 12.9999 4.96924L13 4.97822C13 5.51861 12.5524 5.95645 12 5.95645C11.4491 5.95645 11.0025 5.52104 11 4.98273ZM11 4.98273L11.0001 4.98721M11 4.98273L11 4.97822M11 11.5045C10.9952 10.9575 11.4487 10.5218 11.9978 10.5218C12.5546 10.5218 12.9927 10.961 12.9999 11.491L13 11.5C13 12.0404 12.5524 12.4782 12 12.4782C11.4491 12.4782 11.0025 12.0428 11 11.5045ZM11 11.5045L11.0001 11.509M11 11.5045L11 11.5M11 18.0263C10.9952 17.4793 11.4487 17.0436 11.9978 17.0436C12.5546 17.0436 12.9927 17.4828 12.9999 18.0128L13 18.0218C13 18.5622 12.5524 19 12 19C11.4491 19 11.0025 18.5646 11 18.0263ZM11 18.0263L11.0001 18.0308M11 18.0263L11 18.0218"
+              stroke="#3066BE"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        );
+      case "edit":
+        return (
+          <button className={styles.editButton} onClick={onClick}>
+            Редактировать
+          </button>
+        );
+      case "delete":
+        return (
+          <button className={styles.deleteButton} onClick={onClick}>
+            Удалить
+          </button>
         );
       default:
         return null;
-    }
-  };
-
-  const handleButtonClick = () => {
-    switch (actionType) {
-      case "refresh":
-        onRefresh();
-        break;
-      case "filter":
-        setIsFilterOpen(true);
-        break;
-      case "more":
-        setIsControlOpen(!isControlOpen);
-        break;
-      default:
-        break;
     }
   };
 
@@ -106,13 +102,13 @@ const Action = ({ onRefresh, onMoreOptions, actionType }) => {
     <div className={styles.action}>
       <button
         className={styles.button}
-        onClick={handleButtonClick}
-        // onMouseEnter={() => {
-        //   setIsControlOpen(true);
-        // }}
-        // onMouseLeave={() => {
-        //   setIsControlOpen(false);
-        // }}
+        onMouseEnter={() => {
+          setIsControlOpen(true);
+        }}
+        onMouseLeave={() => {
+          setIsControlOpen(false);
+        }}
+        onClick={onClick}
       >
         {getIcon()}
       </button>

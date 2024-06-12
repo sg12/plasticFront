@@ -30,14 +30,14 @@ const DoctorsCardsItem = (props) => {
 				</div>
 				<div className='doctors-cards-item__wrapper-center'>
 					<div className='doctors-cards-item__wrapper-center-box'>
-						<button onClick={toDetailedPage}>{props.post.clinic_name}</button>
-						<p>{props.post.id}</p>
-						<h4>Услуги</h4>
-						<p>{props.post.description}</p>
-						<Admission />
+						<button className='title-doctor' onClick={toDetailedPage}>{props.post.clinic_name}</button>
+						<p className='text'>{props.post.id}</p>
+						<h3 className='title-h3'>Услуги</h3>
+						<p className='text'>{props.post.description}</p>
 					</div>
 				</div>
 				<div className='doctors-cards-item__wrapper-right'>
+					<Admission />
 					<Contacts />
 				</div>
 				<div className='doctors-cards-item__wrapper-like'>

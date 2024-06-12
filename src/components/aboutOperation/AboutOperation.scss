@@ -179,7 +179,9 @@
         position: relative;
         transform: scaleX(-1);
         height: 350px;
-        left:270px;
+        // left: 270px;
+		left: 50%;
+		z-index: -1;
         bottom: 100px;
 
 

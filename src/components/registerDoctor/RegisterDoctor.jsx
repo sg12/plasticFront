@@ -81,7 +81,7 @@ const RegisterDoctor = () => {
                     {errors?.re_password && <span className='form__span'>{errors?.re_password?.message}</span>}
                 </div>
 
-                <FieldButton type="submit">
+                <FieldButton type="submit" className="form__button">
                     Зарегистрироваться
                 </FieldButton>
                 <div className='form__registers'>

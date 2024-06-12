@@ -24,7 +24,8 @@
   }
 
   &__more {
-    width: 200px;
+    max-width: 200px;
+    width: 100%;
     display: flex;
     padding: 16px;
     flex-direction: column;
@@ -34,5 +35,11 @@
     border-radius: 8px;
     border: 2px solid #3066be;
     background: none;
+  }
+
+  @media (max-width: 720px) {
+    &__more {
+      max-width: 500px;
+    }
   }
 }

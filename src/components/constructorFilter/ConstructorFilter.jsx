@@ -3,7 +3,7 @@ import './ConstructorFilter.scss';
 import { useState } from 'react';
 
 import CenterModal from '../UI/modals/centerModal/CenterModal';
-import OutlineButton from '../UI/buttons/OutlineButton/OutlineButton';
+import OutlineButton from '../UI/buttons/outlineButton/OutlineButton';
 
 import instruction1 from '../../assets/imgs/instruction-1.png';
 import instruction2 from '../../assets/imgs/instruction-2.png';

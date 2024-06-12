@@ -1,5 +1,4 @@
 .article-detailed-item {
-	// padding: 60px 0;
 
 	&__link {
 		color: #3066BE;
@@ -14,9 +13,6 @@
 
 	&__up {
 		display: flex;
-		// margin-bottom: 32px;
-		// padding-bottom: 32px;
-		// border-bottom: 1px solid #DADADA;
 	}
 
 	&__left {
@@ -24,10 +20,8 @@
 	}
 
 	&__img {
-		margin-left: -10px;
-		margin-bottom: 32px;
-		min-width: 500px;
-		max-height: 375px;
+		width: 100%;
+		margin-bottom: 30px;
 	}
 
 	&__info {
@@ -131,3 +125,40 @@
 		margin-bottom: 24px;
 	}
 }
+
+//* ПК
+@media (max-width: 1600px) {}
+
+//* ПК
+@media (max-width: 1440px) {
+	.article-detailed-item {
+		&__info {
+			flex-direction: column;
+		}
+	}
+}
+
+//* ПК
+@media (max-width: 1280px) {}
+
+//* Планшет
+@media (max-width: 1024px) {
+	.article-detailed-item {
+		&__up {
+			flex-direction: column;
+		}
+
+		&__info {
+			margin-bottom: 20px;
+		}
+	}
+}
+
+//* Планшет
+@media (max-width: 768px) {}
+
+//* Телефон
+@media (max-width: 360px) {}
+
+//* Телефон
+@media (max-width: 320px) {}

@@ -59,7 +59,14 @@
     }
   }
 
-  &__error-message{
+  &__error-message {
     font-size: 12px;
   }
+
+  &__input, &__select {
+    @media (max-width: 430px) {
+      width: 100%;
+    }
+  }
+
 }

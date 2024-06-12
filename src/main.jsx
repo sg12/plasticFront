@@ -14,3 +14,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 		</BrowserRouter>
 	</React.StrictMode>
 );
+
+// ! убран слайдер
+// ! убран конструктор

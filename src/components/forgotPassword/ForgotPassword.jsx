@@ -33,7 +33,7 @@ const ForgotPassword = () => {
                     />
                     {errors?.email && <span className='form__span'>{errors?.email?.message}</span>}
                 </div>
-                <FieldButton type="submit">
+                <FieldButton type="submit" className="form__button">
                     Отправить
                 </FieldButton>
                 <p className='form__message'>На данную почту придёт сообщение с инструкцией по восстановлению пароля</p>

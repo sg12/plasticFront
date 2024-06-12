@@ -1,0 +1,57 @@
+.enter {
+  &__content {
+    display: flex;
+    width: 400px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: var(--corner-radius-r-16, 16px);
+
+    @media (min-width: 320px) and (max-width: 375px) {
+      width: 350px;
+    }
+  }
+
+  &__title {
+    margin: 0;
+    color: #3066be;
+    text-align: center;
+    font-family: Raleway;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+
+  &__text {
+    margin: 0;
+    color: #3066be;
+    text-align: start;
+    font-family: Raleway;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    opacity: 0.5;
+  }
+
+  &__back {
+    margin-right: auto;
+    color: #3066be;
+    font-family: Raleway;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    opacity: 0.5;
+    text-decoration: none;
+  }
+
+  &__link {
+    width: 100%;
+  }
+  &__button {
+    min-width: 0;
+    width: 100%;
+  }
+}

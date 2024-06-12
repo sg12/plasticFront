@@ -27,7 +27,7 @@ const Slides = ({ data }) => {
 	);
 };
 
-// PropTypes для проверки типов свойств
+
 Slides.propTypes = {
 	data: PropTypes.shape({
 		text: PropTypes.string.isRequired,

@@ -2,7 +2,7 @@ import './AboutOperation.scss';
 
 import question from "../../assets/imgs/question.png";
 import plug_image from "../../assets/imgs/plug_image.png";
-import OutlineButton from '../UI/buttons/OutlineButton/OutlineButton';
+import OutlineButton from '../UI/buttons/outlineButton/OutlineButton';
 
 
 const data = [

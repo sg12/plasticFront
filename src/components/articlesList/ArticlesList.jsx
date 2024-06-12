@@ -49,14 +49,14 @@ const ArticlesList = () => {
 		? <Spinner />
 		: null;
 
-	const button = totalCount > posts.length || error || spinner
+	const button = totalCount > posts.length || error && !spinner
 		? <OutlineButton className='component-button-text' onClick={loadMorePosts}>Показать ещё</OutlineButton>
 		: null;
 
 	return (
-		<section className='articles'>
+		<section className='articles section'>
 			<div className='articles__container container'>
-				<h2 className='articles__title'>СТАТЬИ</h2>
+				<h2 className='title-h2'>СТАТЬИ</h2>
 				<ul className='articles__box'>
 					{content}
 				</ul>

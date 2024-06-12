@@ -44,7 +44,8 @@ class MyCarousel extends Component {
 	];
 
 	componentDidMount() {
-		this.interval = setInterval(this.nextSlide, 5000);
+		// this.interval = setInterval(this.nextSlide, 5000);
+		this.interval = setInterval(this.nextSlide, 500000000000);
 	}
 
 	componentWillUnmount() {
@@ -87,8 +88,8 @@ class MyCarousel extends Component {
 					show: true,
 					itemBtnProps: {
 						style: {
-							height: 14,
-							width: 15,
+							height: 13,
+							width: 14,
 							background: "rgba(148, 194, 233, 1)",
 							border: 10,
 							borderRadius: "50%",
@@ -99,8 +100,8 @@ class MyCarousel extends Component {
 					},
 					activeItemBtnProps: {
 						style: {
-							height: 14,
-							width: 15,
+							height: 13,
+							width: 14,
 							border: 0,
 							borderRadius: "50%",
 							background: "rgba(75, 100, 189, 1)",

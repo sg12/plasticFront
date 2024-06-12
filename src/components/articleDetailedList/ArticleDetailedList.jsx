@@ -48,7 +48,7 @@ const ArticleDetailedList = () => {
 
 	return (
 		<>
-			<section className='article-detailed-list'>
+			<section className='article-detailed-list section'>
 				<div className='article-detailed-list__container container'>
 					{content}
 					{error}
