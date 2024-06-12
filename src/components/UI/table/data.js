@@ -23,7 +23,7 @@ export default [
     specialists: "Хирург",
     services: "Коррекция лопоухости",
     costs: "12 999" + " ₽",
-    status: "Активный",
+    status: "Неактивный",
     reception: "Частная практика",
   },
   {
@@ -32,7 +32,7 @@ export default [
     specialists: "Хирург",
     services: "Удаление атеромы",
     costs: "12 999" + " ₽",
-    status: "Активный",
+    status: "Неактивный",
     reception: "Частная практика",
   },
 ];
