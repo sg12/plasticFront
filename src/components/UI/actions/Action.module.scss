@@ -1,21 +1,17 @@
 .action {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
   .button {
     cursor: pointer;
     background: none;
     border-radius: 4px;
-    border: none;
+    border: 1px solid #dbe1e9;
     padding: 4px;
     transition: background 0.2s ease-in-out;
+
     svg {
       display: flex;
     }
-
     &:hover {
-      background: #eaf0f8;
+      background: #dbe1e9;
     }
   }
 }
