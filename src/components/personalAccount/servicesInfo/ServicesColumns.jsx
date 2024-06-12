@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import Action from "../../UI/actions/Action";
 
 const ServicesColumns = ({ onEdit, onDelete }) => {
-  const [isMobile, setIsMobile] = useState(true);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   console.log(isMobile);
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 600);
+      setIsMobile(window.innerWidth < 768);
     };
-    handleResize();
+
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
@@ -17,7 +17,6 @@ const ServicesColumns = ({ onEdit, onDelete }) => {
   }, []);
 
   function getStatus(status) {
-    console.log(status);
     return status === "Активный" || status === "active" ? (
       <>🟢</>
     ) : status === "Неактивный" || status === "inactive" ? (
@@ -29,6 +28,9 @@ const ServicesColumns = ({ onEdit, onDelete }) => {
     {
       header: "Услуга",
       accessorKey: "services",
+      // cell: ({ row }) => (
+      //   <div onClick={() => onEdit(row.index)}>{row.original.services}</div>
+      // ),
     },
     {
       header: "Стоимость",
