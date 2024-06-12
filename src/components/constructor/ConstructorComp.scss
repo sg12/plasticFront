@@ -7,3 +7,12 @@
 .constructor-face__image{
     display: flex;
 }
+
+@media only screen and (max-width: 1440px) {
+    .constructor-face__image {
+        flex-direction: column;
+        align-items: center;
+        border-left: none;
+
+    }
+}
