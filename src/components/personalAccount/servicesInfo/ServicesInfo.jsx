@@ -4,7 +4,7 @@ import "./ServicesInfo.scss";
 import FilterModal from "../../UI/modals/filterModal/FilterModal";
 import DATA from "../../UI/table/data.js";
 import Radios from "../../UI/radios/Radios";
-import ServicesColumns from "./ServiceColumns.jsx";
+import ServicesColumns from "./ServicesColumns.jsx";
 
 const ServicesInfo = () => {
   const options = [
@@ -24,7 +24,6 @@ const ServicesInfo = () => {
     reception: null,
     status: null,
   });
-  console.log("@", serviceData);
 
   const handleOptionChange = (value) => {
     setSelectedOption(value);
@@ -68,7 +67,7 @@ const ServicesInfo = () => {
     setServiceData(services[index]);
     setIsEditing(true);
     setEditIndex(index);
-    setIsFilterOpen(true);
+    setIsFilterOpen(true)
   };
 
   const handleDelete = (index) => {
@@ -94,7 +93,18 @@ const ServicesInfo = () => {
         style={{ display: "flex", justifyContent: "right" }}
       >
         <button
-          onClick={() => setIsFilterOpen(!isFilterOpen)}
+          onClick={() => (
+            setIsFilterOpen(!isFilterOpen),
+            setServiceData({
+              services: "",
+              costs: "",
+              type: "",
+              reception: null,
+              status: null,
+            }),
+            setIsEditing(false),
+            setEditIndex(null)
+          )}
           type="button"
           className="add"
         >
