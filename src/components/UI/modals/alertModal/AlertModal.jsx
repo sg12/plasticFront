@@ -1,4 +1,3 @@
-import OutlineButton from "../../buttons/outlineButton/OutlineButton";
 import styles from "./AlertModal.module.scss";
 
 const AlertModal = ({ isOpen, onClose, onAccept, message, title }) => {

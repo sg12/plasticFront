@@ -1,4 +1,3 @@
-import { useState } from "react";
 import OutlineButton from "../../buttons/outlineButton/OutlineButton";
 import Tag from "../../tags/Tag";
 import styles from "./EmployeeСard.module.scss";
