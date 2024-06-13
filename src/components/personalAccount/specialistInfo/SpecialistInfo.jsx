@@ -1,25 +1,21 @@
-import Alert from "../../UI/alert/Alert.jsx";
 import AddCard from "../../UI/cards/addCard/AddCard.jsx";
 import EmployeeСard from "../../UI/cards/employeeСard/EmployeeСard.jsx";
 import Tooltip from "../../UI/tooltips/Tooltip.jsx";
 import Filter from "../../UI/filter/Filter.jsx";
-import { IoIosAlert } from "react-icons/io";
 import { useState } from "react";
 import Modal from "../../UI/modals/modal/Modal.jsx";
 import Input from "../../UI/inputs/input/Input.jsx";
+import { toast } from "react-toastify";
 
 import "./SpecialistInfo.scss";
 
 export const SpecialistInfo = () => {
-  // const { userData } = useUser();
-  // TODO: Удалить userData, добавить данные из БД
-  const userData = [
+  const [userData, setUserData] = useState([
     {
       id: 1,
       avatar: "https://avatars.githubusercontent.com/u/10001001?v=4",
       username: "Петров Геннадий Иванович",
       specialization: "Хирург",
-      // tags: ["ID:1", "Активный", "В сети"],
       isActive: "Активный",
       isOnline: "В сети",
     },
@@ -28,7 +24,6 @@ export const SpecialistInfo = () => {
       avatar: "https://avatars.githubusercontent.com/u/10001001?v=4",
       username: "Иванова Мария Леонидовна",
       specialization: "Педиатр",
-      // tags: ["ID:2", "Неактивный", "В сети"],
       isActive: "Активный",
       isOnline: "Не в сети",
     },
@@ -37,7 +32,6 @@ export const SpecialistInfo = () => {
       avatar: "https://avatars.githubusercontent.com/u/10001001?v=4",
       username: "Сидоров Алексей Викторович",
       specialization: "Терапевт",
-      // tags: ["ID:3", "Неактивный", "Не в сети"],
       isActive: "Неактивный",
       isOnline: "В сети",
     },
@@ -46,19 +40,17 @@ export const SpecialistInfo = () => {
       avatar: "https://avatars.githubusercontent.com/u/10001001?v=4",
       username: "Сидоров Алексей Викторович",
       specialization: "Терапевт",
-      // tags: ["ID:3", "Неактивный", "Не в сети"],
       isActive: "Неактивный",
       isOnline: "В сети",
     },
-  ];
+  ]);
 
-  const [user, setUser] = useState({
-    id: "",
-  });
+  const [newUser, setNewUser] = useState({ id: "" });
+  console.log(newUser);
 
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-
   const [filter, setFilter] = useState("all");
+
   const userTypeFilters = [
     { value: "Все", name: "Все" },
     { value: "Активный", name: "Активные" },
@@ -82,18 +74,35 @@ export const SpecialistInfo = () => {
             case "Не в сети":
               return user.isOnline === "Не в сети";
             default:
-              return true; // или false, зависит от логики
+              return true;
           }
         });
+
+  const handleDelete = (id) => {
+    setUserData(userData.filter((user) => user.id !== id));
+  };
+
+  const handleSave = () => {
+    if (newUser.id.trim()) {
+      setUserData([...userData, newUser]);
+      setNewUser({ id: "" });
+      setIsFilterOpen(false);
+      toast.success("Сотрудник успешно добавлен");
+    } else {
+      toast.warn("Введите ID сотрудника");
+    }
+  };
 
   return (
     <div className="specialist">
       <span className="specialist__title">Ваши специалисты</span>
       <div className="specialist__tools">
-        <Alert
+        {/* <Alert
           icon={IoIosAlert}
-          label={"Для управления, нажмите правой кнопкой мыши на карточку"}
-        />
+          label={
+            "Для управления, нажмите правой кнопкой мыши на карточку или зажмите пальцем"
+          }
+        /> */}
         <Filter
           filter={filter}
           onFilterChange={(e) => setFilter(e.target.value)}
@@ -104,7 +113,11 @@ export const SpecialistInfo = () => {
       <div className="specialist__cards">
         {filteredUsers &&
           filteredUsers.map((user) => (
-            <EmployeeСard key={user.id} userData={user} />
+            <EmployeeСard
+              key={user.id}
+              userData={user}
+              onDelete={() => handleDelete(user.id)}
+            />
           ))}
 
         <Tooltip position={"bottom"} text={"Добавить врача"}>
@@ -116,16 +129,14 @@ export const SpecialistInfo = () => {
           title={"Добавление сотрудника"}
           isFilterOpen={isFilterOpen}
           setIsFilterOpen={setIsFilterOpen}
-          save={() => {
-            alert("TODO: Реализовать сохранение данных в БД");
-            console.log(user);
-          }}
+          save={handleSave}
         >
           <Input
             placeholder={"ID сотрудника"}
             name={"id"}
-            value={user?.id || ""}
-            onChange={(e) => setUser({ ...user, id: e.target.value })}
+            value={newUser.id}
+            onChange={(e) => setNewUser({ ...newUser, id: e.target.value })}
+            required
           />
         </Modal>
       )}

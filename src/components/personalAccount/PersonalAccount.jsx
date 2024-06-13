@@ -8,6 +8,7 @@ import "./PersonalAccount.scss";
 import "./root.scss";
 
 import { useUser } from "../../context/UserContext";
+import { Slide, ToastContainer } from "react-toastify";
 // import UserGuide from "./userGuide/UserGuide";
 
 const PersonalAccount = () => {
@@ -55,10 +56,25 @@ const PersonalAccount = () => {
         </main>
         {/* <UserGuide /> */}
       </div>
+
+      {/* Overlay - При нажатии на бургер экран затемняется */}
       <div
         className={`overlay ${isOverlayVisible ? "visible" : ""}`}
         onClick={onToggleAside}
       ></div>
+
+      <ToastContainer
+        stacked
+        position="bottom-right"
+        autoClose={5000}
+        limit={3}
+        hideProgressBar
+        closeOnClick
+        pauseOnFocusLoss
+        draggable={false}
+        pauseOnHover
+        transition={Slide}
+      />
     </>
   );
 };
