@@ -2,97 +2,23 @@ import React, { useState } from "react";
 import "../profileUser/ProfileUser.scss";
 import EditUser from "../editUser/EditUser";
 import AlertModal from "../../UI/modals/alertModal/AlertModal";
-import InDev from "../inDev/InDev";
+import ProfileUserHeader from "../profileUser/ProfileUserHeader";
+import ProfileUserAction from "../profileUser/ProfileUserAction";
+import ProfileUserDetails from "../profileUser/ProfileUserDetails";
+import ProfileUserFooter from "../profileUser/ProfileUserFooter";
 
-const UserProfileDetails = ({ userData }) => (
-  <div className="profile__details">
-    <div className="profile__site">
-      <span className="profile__darkened">Официальный сайт: </span>
-      {userData?.user?.site || "Неизвестно"}
-    </div>
-    <div className="profile__email">
-      <span className="profile__darkened">Почта: </span>
-      {userData?.user?.email || "Неизвестно"}
-    </div>
-    <div className="profile__address">
-      <span className="profile__darkened">Адрес: </span>
-      {userData?.user?.address || "Неизвестно"}
-    </div>
-  </div>
-);
+const fieldsDetails = [
+  { label: "Официальный сайт", value: "site" },
+  { label: "Почта", value: "email" },
+  { label: "Адрес", value: "address" },
+];
 
-const UserProfileFooter = ({ userData }) => (
-  <div className="profile__footer">
-    <InDev>
-      <div className="profile__additionally">
-        <div className="profile__licenses">
-          <span className="profile__darkened">Лицензии и сертификаты</span>
-          {userData?.licenses || "Неизвестно"}
-        </div>
-      </div>
-    </InDev>
-  </div>
-);
-
-const UserProfileAction = ({ toggleEditingMode, handleDelete }) => (
-  <div className="profile__action-button">
-    {/* <DeletePopup /> */}
-    <button type="button" className="edit" onClick={toggleEditingMode}>
-      Редактировать профиль
-    </button>
-    <button type="button" className="delete" onClick={handleDelete}>
-      Удалить учетную запись
-    </button>
-  </div>
-);
-
-const UserProfileHeader = ({ userData, imageSrc, handleFileChange }) => (
-  <div className="profile__header">
-    <div className="profile__user">
-      <div className="profile__photo">
-        <label htmlFor="uploadInput" className="profile__photo-label">
-          <img
-            src={userData?.user?.avatar || imageSrc}
-            alt="user image"
-            className="profile__photo-img"
-          />
-        </label>
-        <input
-          type="file"
-          id="uploadInput"
-          accept="image/*"
-          style={{ display: "none" }}
-          onChange={handleFileChange}
-        />
-      </div>
-      <div className="profile__details">
-        <h3 className="profile__user-name">
-          {userData?.user?.username || "Неизвестно"} (Clinic)
-        </h3>
-        <p className="profile__user-phone">
-          <span className="profile__darkened">Телефон: </span>
-          {userData?.user?.phone || "Неизвестно"}
-        </p>
-      </div>
-    </div>
-    <div className="profile__identification">
-      <div className="iden">
-        <div className="iden__id">
-          <span>Ваш ID:</span> {userData?.user?.id || "Неизвестно"}
-        </div>
-      </div>
-    </div>
-  </div>
-);
+const fieldsFooter = [{ label: "Лицензии и сертификаты", value: "licenses" }];
 
 const ProfileClinicInfo = ({ userData }) => {
   const [imageSrc, setImageSrc] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
-
-  const toggleEditingMode = () => {
-    setIsEditing((prev) => !prev);
-  };
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -105,8 +31,8 @@ const ProfileClinicInfo = ({ userData }) => {
     }
   };
 
-  const handleOpenModal = () => {
-    setModalOpen(true);
+  const toggleEditingMode = () => {
+    setIsEditing((prev) => !prev);
   };
 
   const handleDeleteAccount = () => {
@@ -117,28 +43,29 @@ const ProfileClinicInfo = ({ userData }) => {
     <div className="profile">
       {userData && (
         <>
-          <UserProfileHeader
+          <ProfileUserHeader
             userData={userData}
             imageSrc={imageSrc}
             handleFileChange={handleFileChange}
+            role="Client"
           />
           <hr className="profile__divider" />
-          {!isEditing && <UserProfileDetails userData={userData} />}
+          {!isEditing && (
+            <>
+              <ProfileUserDetails fields={fieldsDetails} userData={userData} />
+              <ProfileUserFooter fields={fieldsFooter} userData={userData} />
+              <ProfileUserAction
+                isEditing={isEditing}
+                toggleEditingMode={toggleEditingMode}
+                handleDelete={() => setModalOpen(true)}
+              />
+            </>
+          )}
           {isEditing && (
             <EditUser
               userData={userData}
               toggleEditingMode={toggleEditingMode}
             />
-          )}
-          {!isEditing && (
-            <>
-              <UserProfileFooter />
-              <hr className="profile__divider" />
-              <UserProfileAction
-                toggleEditingMode={toggleEditingMode}
-                handleDelete={handleOpenModal}
-              />
-            </>
           )}
           <AlertModal
             isOpen={isModalOpen}

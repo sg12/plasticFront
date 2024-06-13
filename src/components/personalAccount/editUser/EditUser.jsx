@@ -7,6 +7,7 @@ import Checkbox from "../../UI/inputs/checkbox/Checkbox";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PlasticServices from "../../../services/PlasticServices";
+import OutlineButton from "../../UI/buttons/outlineButton/OutlineButton";
 
 const EditUser = ({ userData, toggleEditingMode }) => {
   const [editedData, setEditedData] = useState({
@@ -19,7 +20,6 @@ const EditUser = ({ userData, toggleEditingMode }) => {
     consentToPrivacyPolicy: false,
     consentToDataProcessing: false,
   });
-  console.log("editedData", editedData);
 
   useEffect(() => {
     if (userData) {
@@ -176,14 +176,17 @@ const EditUser = ({ userData, toggleEditingMode }) => {
             </Checkbox>
           ))}
         </div>
-        <hr className="profile__divider" />
-        <div className="edit__action-button">
-          <button type="sumbit" className="save">
+        <div className="edit__actions">
+          <OutlineButton type="submit" className="save">
             Сохранить
-          </button>
-          <button type="button" className="cancel" onClick={toggleEditingMode}>
+          </OutlineButton>
+          <OutlineButton
+            type="button"
+            className="cancel"
+            onClick={toggleEditingMode}
+          >
             Отмена
-          </button>
+          </OutlineButton>
         </div>
       </form>
     </>

@@ -3,10 +3,10 @@ import { useUser } from "../../../context/UserContext";
 import ProfileClientInfo from "../profileClientInfo/ProfileClientInfo";
 import ProfileClinicInfo from "../profileClinicInfo/ProfileClinicInfo";
 import ProfileDoctorInfo from "../profileDoctorInfo/ProfileDoctorInfo";
+import AlertModal from "../../UI/modals/alertModal/AlertModal";
 
 const ProfileUser = () => {
   const { userData } = useUser();
-  console.log("ProfileUser", userData?.user?.type);
 
   let profileInfoComponent;
   if (userData) {
@@ -27,11 +27,7 @@ const ProfileUser = () => {
     profileInfoComponent = "Данные о пользователе не получены. Сервер в спячке";
   }
 
-  return (
-    <>
-      {profileInfoComponent}
-    </>
-  );
+  return <>{profileInfoComponent}</>;
 };
 
 export default ProfileUser;
