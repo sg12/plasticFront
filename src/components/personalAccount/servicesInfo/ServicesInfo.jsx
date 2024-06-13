@@ -5,6 +5,7 @@ import FilterModal from "../../UI/modals/filterModal/FilterModal";
 import DATA from "../../UI/table/data.js";
 import Radios from "../../UI/radios/Radios";
 import ServicesColumns from "./ServicesColumns.jsx";
+import { toast } from "react-toastify";
 
 const ServicesInfo = () => {
   const options = [
@@ -40,8 +41,28 @@ const ServicesInfo = () => {
   const handleReceptionTypeChange = (type) => {
     handleInputChange("reception", type);
   };
+  // const handleSave = () => {
+  //   if (newUser.id.trim()) {
+  //     setUserData([...userData, newUser]);
+  //     setNewUser({ id: "" });
+  //     setIsFilterOpen(false);
+  //     toast.success("Сотрудник успешно добавлен");
+  //   } else {
+  //     toast.warn("Введите ID сотрудника");
+  //   }
+  // };
 
   const handleSave = () => {
+    if (
+      !serviceData.services ||
+      !serviceData.costs ||
+      !serviceData.type ||
+      serviceData.reception === null ||
+      serviceData.status === null
+    ) {
+      toast.warn("Пожалуйста, заполните все поля!");
+      return;
+    }
     if (isEditing) {
       const updatedServices = services.map((service, index) =>
         index === editIndex ? serviceData : service
@@ -51,6 +72,7 @@ const ServicesInfo = () => {
       setEditIndex(null);
     } else {
       setServices([...services, serviceData]);
+      toast.success("Услуга успешна создалась!");
     }
 
     setServiceData({
@@ -67,12 +89,13 @@ const ServicesInfo = () => {
     setServiceData(services[index]);
     setIsEditing(true);
     setEditIndex(index);
-    setIsFilterOpen(true)
+    setIsFilterOpen(true);
   };
 
   const handleDelete = (index) => {
     const updatedServices = services.filter((_, i) => i !== index);
     setServices(updatedServices);
+    toast.success("Услуга удалена!");
   };
 
   const columns = ServicesColumns({
