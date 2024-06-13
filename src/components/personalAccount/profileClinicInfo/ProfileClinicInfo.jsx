@@ -47,7 +47,7 @@ const ProfileClinicInfo = ({ userData }) => {
             userData={userData}
             imageSrc={imageSrc}
             handleFileChange={handleFileChange}
-            role="Client"
+            role="Clinic"
           />
           <hr className="profile__divider" />
           {!isEditing && (
