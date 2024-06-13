@@ -72,18 +72,18 @@
   }
 
   &__close {
-    background-color: #f3f3f3;
-    transition: background-color .1s ease-out;
+    background: #f3f3f3;
+    transition: background .1s ease-out;
     &:hover {
-        background-color: #e6e6e6;
+        background: #e6e6e6;
     }
   }
   &__accept {
     color: rgb(206, 44, 49);
-    background-color: rgb(255, 219, 220);
-    transition: background-color .1s ease-out;
+    background: rgb(255, 219, 220);
+    transition: background .1s ease-out;
     &:hover {
-      background-color: rgb(255, 211, 211);
+      background: rgb(255, 211, 211);
     }
   }
 }
