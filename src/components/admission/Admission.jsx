@@ -20,7 +20,7 @@ const Admission = () => {
 				</div>
 			</div>
 			<h3 className='title-h3'>ПЕРЕЙТИ НА СТРАНИЦУ КЛИНИКИ</h3>
-			<TransitionButton>(Добавить название клиники)</TransitionButton>
+			<TransitionButton>(Добавить название)</TransitionButton>
 		</div>
 	);
 };

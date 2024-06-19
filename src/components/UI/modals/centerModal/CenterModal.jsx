@@ -20,7 +20,7 @@ const CenterModal = ({ children, visible, setVisible }) => {
 };
 
 CenterModal.propTypes = {
-	children: PropTypes.object.isRequired,
+	children: PropTypes.oneOfType([PropTypes.object, PropTypes.array]).isRequired,
 	visible: PropTypes.any.isRequired,
 	setVisible: PropTypes.any.isRequired,
 };

@@ -1,12 +1,6 @@
-import { useState } from "react";
 import styles from "./Action.module.scss";
-import FilterModal from "../modals/filterModal/FilterModal";
-import ControlModal from "../modals/controlModal/ControlModal";
 
-const Action = ({ onRefresh, onMoreOptions, actionType }) => {
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [isControlOpen, setIsControlOpen] = useState(false);
-
+const Action = ({ actionType, onClick }) => {
   const getIcon = () => {
     switch (actionType) {
       case "refresh":
@@ -63,77 +57,68 @@ const Action = ({ onRefresh, onMoreOptions, actionType }) => {
             />
           </svg>
         );
-      // case "add":
+      case "add":
         return (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-            >
-              <path
-                d="M11 4.98273C10.9952 4.43571 11.4487 4 11.9978 4C12.5546 4 12.9927 4.43921 12.9999 4.96924L13 4.97822C13 5.51861 12.5524 5.95645 12 5.95645C11.4491 5.95645 11.0025 5.52104 11 4.98273ZM11 4.98273L11.0001 4.98721M11 4.98273L11 4.97822M11 11.5045C10.9952 10.9575 11.4487 10.5218 11.9978 10.5218C12.5546 10.5218 12.9927 10.961 12.9999 11.491L13 11.5C13 12.0404 12.5524 12.4782 12 12.4782C11.4491 12.4782 11.0025 12.0428 11 11.5045ZM11 11.5045L11.0001 11.509M11 11.5045L11 11.5M11 18.0263C10.9952 17.4793 11.4487 17.0436 11.9978 17.0436C12.5546 17.0436 12.9927 17.4828 12.9999 18.0128L13 18.0218C13 18.5622 12.5524 19 12 19C11.4491 19 11.0025 18.5646 11 18.0263ZM11 18.0263L11.0001 18.0308M11 18.0263L11 18.0218"
-                stroke="#3066BE"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+          >
+            <path
+              d="M11 4.98273C10.9952 4.43571 11.4487 4 11.9978 4C12.5546 4 12.9927 4.43921 12.9999 4.96924L13 4.97822C13 5.51861 12.5524 5.95645 12 5.95645C11.4491 5.95645 11.0025 5.52104 11 4.98273ZM11 4.98273L11.0001 4.98721M11 4.98273L11 4.97822M11 11.5045C10.9952 10.9575 11.4487 10.5218 11.9978 10.5218C12.5546 10.5218 12.9927 10.961 12.9999 11.491L13 11.5C13 12.0404 12.5524 12.4782 12 12.4782C11.4491 12.4782 11.0025 12.0428 11 11.5045ZM11 11.5045L11.0001 11.509M11 11.5045L11 11.5M11 18.0263C10.9952 17.4793 11.4487 17.0436 11.9978 17.0436C12.5546 17.0436 12.9927 17.4828 12.9999 18.0128L13 18.0218C13 18.5622 12.5524 19 12 19C11.4491 19 11.0025 18.5646 11 18.0263ZM11 18.0263L11.0001 18.0308M11 18.0263L11 18.0218"
+              stroke="#3066BE"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        );
+      case "edit":
+        return (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+          >
+            <path
+              d="M13.2217 6.68078L17.3148 10.7753M8.76313 19.0264L3.5 20.5L4.97366 15.2372C5.11325 14.7387 5.37947 14.2848 5.74644 13.9196L14.8029 4.90751C15.5846 4.12964 16.8485 4.1313 17.6281 4.91122L19.0897 6.37328C19.8692 7.15304 19.8706 8.41655 19.0928 9.19805L10.0807 18.2537C9.71554 18.6206 9.26163 18.8868 8.76313 19.0264Z"
+              stroke="#3066BE"
+              strokeWidth="2"
+              strokeLinejoin="round"
+            />
+          </svg>
+        );
+      case "delete":
+        return (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+          >
+            <path
+              d="M9.95414 12V16.25M14.0459 12V16.25M14.5 6C14.5 5.44772 14.0523 5 13.5 5H10.5C9.94772 5 9.5 5.44772 9.5 6M5.86415 7.75003L6.70459 17.7512C6.83518 19.3052 8.13459 20.5 9.69405 20.5H14.307C15.8664 20.5 17.1659 19.3052 17.2964 17.7512L18.1369 7.75003M4.5 7.59802H19.5"
+              stroke="#3066BE"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+          </svg>
         );
       default:
         return null;
     }
   };
 
-  const handleButtonClick = () => {
-    switch (actionType) {
-      case "refresh":
-        onRefresh();
-        break;
-      case "filter":
-        setIsFilterOpen(true);
-        break;
-      case "more":
-        setIsControlOpen(!isControlOpen);
-        break;
-      default:
-        break;
-    }
-  };
-
   return (
     <div className={styles.action}>
-      <button
-        className={styles.button}
-        onClick={handleButtonClick}
-        // onMouseEnter={() => {
-        //   setIsControlOpen(true);
-        // }}
-        // onMouseLeave={() => {
-        //   setIsControlOpen(false);
-        // }}
-      >
+      <button onClick={onClick} className={`${styles.button}`}>
         {getIcon()}
       </button>
-      {actionType === "filter" && isFilterOpen && (
-        <FilterModal
-          isFilterOpen={isFilterOpen}
-          setIsFilterOpen={setIsFilterOpen}
-          style="right"
-          animationEnabled={true}
-          animationTime={400}
-        ></FilterModal>
-      )}
-      {actionType === "more" && isControlOpen && (
-        <ControlModal
-          onDelete={() => setIsControlOpen(false)}
-          onEdit={() => setIsControlOpen(false)}
-          onSave={() => setIsControlOpen(false)}
-          isControlOpen={isControlOpen}
-          setIsControlOpen={setIsControlOpen}
-        />
-      )}
     </div>
   );
 };

@@ -17,7 +17,6 @@ const FilterModal = ({
   save,
   disabledSearch,
 }) => {
-  // const [filterValue, setFilterValue] = useState("");
   const [modalAnimation, setModalAnimation] = useState("open");
 
   const handleInputChange = (e) => {

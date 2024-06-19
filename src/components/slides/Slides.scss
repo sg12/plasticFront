@@ -1,0 +1,222 @@
+/* Стили для карусели */
+.slide {
+	width: 100vw;
+	height: 80vh;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position-x: right; 
+    background-position-y: center;
+	-webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+
+	&__container {
+		padding-top: 10%;
+	}
+
+	&__info {
+		position: relative;
+		top: 20%;
+		width: calc(42% - 20px);
+		height: 141px;
+
+		&::after {
+			content: "";
+			display: block;
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			width: 20%;
+			height: 4px;
+			background-color: rgba(48, 102, 190, 1)
+		}
+
+		p {
+			max-height: 130px;
+			font-family: Raleway;
+			line-height: 42px;
+			letter-spacing: 0em;
+			color: rgba(35, 86, 169, 1);
+			overflow: hidden;
+			text-overflow: ellipsis;
+			margin: 0;
+		}
+	}
+}
+
+.AI-text {
+	position: relative;
+	top: 19%;
+	width: calc(35% - 20px);
+
+
+	p {
+		width: 100%;
+		font-family: Roboto;
+		font-size: 1.625rem;
+		font-weight: 400;
+		line-height: 31px;
+		letter-spacing: 0em;
+		text-align: left;
+		color: rgba(48, 98, 139, 1);
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+}
+
+.button-item {
+	position: relative;
+	top: 30%;
+	min-width: auto;
+	background: #FFFFFF;
+	box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+	border-radius: 30px;
+	transition: .3s;
+	display: inline-block;
+	text-decoration: none;
+
+	p {
+		margin: 15px;
+		font-family: 'Raleway';
+		font-style: normal;
+		font-weight: 700;
+		font-size: 1.3rem;
+		color: #000000;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+	}
+
+	&:hover {
+		background: #c9c8c8;
+	}
+}
+// @media screen and (max-width: 768px) {
+//     .slide {
+//         background-position-x: calc(100% + 350px);
+//     }
+// }
+//* ПК
+@media (max-width: 1600px) {
+	.slide {
+        background-position-x: calc(100% + 350px);
+    }
+}
+
+//* ПК
+@media (max-width: 1440px) {
+	.slide {
+        background-position-x: calc(100% + 350px);
+    }
+}
+
+//* ПК
+@media (max-width: 1280px) {
+	.slide {
+        background-position-x: calc(100% + 350px);
+    }
+}
+
+//* Планшет
+@media (max-width: 1024px) {
+	.slide {
+        background-position-x: calc(100% + 350px);
+		&__container {
+			padding-top: 20%;
+		}
+
+		&__info{
+			position: relative;
+			top: 40%;
+			width: calc(42% - 10px);
+			height: 141px;
+		}
+    }
+}
+
+//* Планшет
+@media (max-width: 768px) {
+	.slide {
+		display: flex;
+		align-items: flex-end;
+        background-position-x: calc(100% + 450px);
+		&__container {
+			margin-left: 2%;
+			margin-bottom: 4%;
+		}
+			&__info {
+				position: relative;
+				width: 100%;
+				height: auto;
+		
+				&::after {
+					content: "";
+					display: none;
+				}
+		
+				p {
+					font-size: 1.6rem;
+					margin: 0;
+					line-height: 42px;
+					color: rgb(255, 255, 255);
+				
+				}
+		}
+	}
+	.AI-text {
+		width: 100%;
+		p {
+			font-size: 1.5rem;
+			color: rgb(255, 255, 255);
+		}
+	}
+	.button-item {
+	
+		p {
+			margin: 13px;
+			font-size: 1.1rem;
+		}
+	}
+}
+
+//* Телефон
+@media (max-width: 360px) {
+	.slide {
+        background-position-x: calc(100% + 540px);
+		&__container {
+		}
+			&__info {		
+				p {
+					font-size: 1.2rem;
+					line-height: 20px;
+				
+				}
+		}
+	}
+	.AI-text {
+		width: 100%;
+		p {
+			font-size: 1.1rem;
+			line-height: 20px;
+			color: rgb(255, 255, 255);
+		}
+	}
+	.button-item {
+	
+		p {
+			margin: 11px;
+			font-size: 0.9rem;
+		}
+	}
+}
+
+//* Телефон
+@media (max-width: 320px) {
+	.slide {
+        background-position-x: calc(100% + 340px);
+    }
+}
