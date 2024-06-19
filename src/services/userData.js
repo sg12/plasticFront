@@ -59,8 +59,8 @@ export async function getUserData() {
         const city = response.data.city;
         dataArray.push({ key: 'City', value: city });
 
-        const ip = response.data.query;
-        dataArray.push({ key: 'IP Address', value: ip });
+        // const ip = response.data.query;
+        // dataArray.push({ key: 'IP Address', value: ip });
     } catch (error) {
         console.error('Error fetching data:', error);
     }
