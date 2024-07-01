@@ -6,6 +6,12 @@
     border: 1px solid #dbe1e9;
     padding: 4px;
     transition: background 0.2s ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 34px;
+    min-height: 34px;
+    color: #3066be;
 
     svg {
       display: flex;

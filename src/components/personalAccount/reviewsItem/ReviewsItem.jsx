@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./ReviewsItem.scss";
+import OutlineButton from "../../UI/buttons/outlineButton/OutlineButton";
 
 const ReviewsItem = ({
   text,
@@ -79,17 +80,26 @@ const ReviewsItem = ({
         <div className="reviews__footer-button">
           {isEditing ? (
             <>
-              <button className="save" onClick={handleSaveClick}>
+              <OutlineButton
+                onClick={handleSaveClick}
+                style={{ border: "none" }}
+              >
                 Сохранить
-              </button>
-              <button className="cancel" onClick={handleCancelClick}>
+              </OutlineButton>
+              <OutlineButton
+                onClick={handleCancelClick}
+                style={{ border: "none" }}
+              >
                 Отмена
-              </button>
+              </OutlineButton>
             </>
           ) : (
-            <button className="edit" onClick={() => setIsEditing(true)}>
+            <OutlineButton
+              onClick={() => setIsEditing(true)}
+              style={{ border: "none" }}
+            >
               Редактировать отзыв
-            </button>
+            </OutlineButton>
           )}
         </div>
       </div>

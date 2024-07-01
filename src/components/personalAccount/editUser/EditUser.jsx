@@ -7,34 +7,19 @@ import Checkbox from "../../UI/inputs/checkbox/Checkbox";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PlasticServices from "../../../services/PlasticServices";
+import OutlineButton from "../../UI/buttons/outlineButton/OutlineButton";
 
 const EditUser = ({ userData, toggleEditingMode }) => {
   const [editedData, setEditedData] = useState({
-    email: "",
-    address: "",
-    username: "",
-    date_born: "",
-    phone: "",
-    gender: "",
-    consentToPrivacyPolicy: false,
-    consentToDataProcessing: false,
+    email: userData?.user?.email || "",
+    address: userData?.user?.address || "",
+    username: userData?.user?.username || "",
+    date_born: userData?.date_born || "",
+    phone: userData?.user?.phone || "",
+    gender: userData?.user?.gender || "",
+    consentToPrivacyPolicy: userData?.consentToPrivacyPolicy || false,
+    consentToDataProcessing: userData?.consentToDataProcessing || false,
   });
-  console.log("editedData", editedData);
-
-  useEffect(() => {
-    if (userData) {
-      setEditedData({
-        email: userData?.user?.email || "",
-        address: userData?.user?.address || "",
-        username: userData?.user?.username || "",
-        date_born: userData?.date_born || "",
-        phone: userData?.user?.phone || "",
-        gender: userData?.user?.gender || "",
-        consentToPrivacyPolicy: userData?.consentToPrivacyPolicy || false,
-        consentToDataProcessing: userData?.consentToDataProcessing || false,
-      });
-    }
-  }, [userData]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -121,7 +106,7 @@ const EditUser = ({ userData, toggleEditingMode }) => {
     <>
       <form onSubmit={handleSave} className="edit">
         <span className="edit__title">Персональные данные</span>
-        <form className="edit__info">
+        <div className="edit__info">
           {fullName.map((field) => (
             <TextInput
               key={field.name}
@@ -162,7 +147,7 @@ const EditUser = ({ userData, toggleEditingMode }) => {
               />
             )
           )}
-        </form>
+        </div>
         <span className="edit__title">Согласие пользователя</span>
         <div className="edit__checkbox">
           {checkboxFields.map((field) => (
@@ -176,14 +161,17 @@ const EditUser = ({ userData, toggleEditingMode }) => {
             </Checkbox>
           ))}
         </div>
-        <hr className="profile__divider" />
-        <div className="edit__action-button">
-          <button type="sumbit" className="save">
+        <div className="edit__actions">
+          <OutlineButton type="submit" className="save">
             Сохранить
-          </button>
-          <button type="button" className="cancel" onClick={toggleEditingMode}>
+          </OutlineButton>
+          <OutlineButton
+            type="button"
+            className="cancel"
+            onClick={toggleEditingMode}
+          >
             Отмена
-          </button>
+          </OutlineButton>
         </div>
       </form>
     </>
