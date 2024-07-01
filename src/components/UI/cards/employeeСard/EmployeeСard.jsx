@@ -67,7 +67,7 @@ const EmployeeСard = ({ userData, onDelete }) => {
           {userData?.specialization || "Специализация"}
         </span>
         <div className={styles.employee__buttons}>
-          <Link
+          {/* <Link
             style={{ textDecoration: "none", width: "100%" }}
             target="_blank"
             to={"https://t.me/valtrsv"}
@@ -82,7 +82,7 @@ const EmployeeСard = ({ userData, onDelete }) => {
             >
               Мессенджер
             </OutlineButton>
-          </Link>
+          </Link> */}
           <OutlineButton onClick={onDelete}>
             <FaRegTrashCan />
           </OutlineButton>
