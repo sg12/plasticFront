@@ -39,6 +39,7 @@ const ReviewsInfo = () => {
       message: "Ирина Васильева своевременно прибыла на прием!",
     },
   ]);
+  
   // Фильтры для выбора типа пользователя
   const userTypeFilters = [
     { value: "all", name: "Все" },

@@ -6,10 +6,8 @@
   }
   &__list {
     display: flex;
+    flex-direction: column;
     gap: 16px;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    width: 100%;
   }
   &__title {
     font-size: var(--title-font-size);

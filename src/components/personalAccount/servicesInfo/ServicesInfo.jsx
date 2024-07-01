@@ -6,6 +6,7 @@ import DATA from "../../UI/table/data.js";
 import Radios from "../../UI/radios/Radios";
 import ServicesColumns from "./ServicesColumns.jsx";
 import { toast } from "react-toastify";
+import OutlineButton from "../../UI/buttons/outlineButton/OutlineButton.jsx";
 
 const ServicesInfo = () => {
   const options = [
@@ -111,11 +112,8 @@ const ServicesInfo = () => {
       ) : (
         <div style={{ opacity: 0.5 }}>Нет услуг</div>
       )}
-      <div
-        className="services__actions"
-        style={{ display: "flex", justifyContent: "right" }}
-      >
-        <button
+      <div style={{ display: "flex", justifyContent: "right" }}>
+        <OutlineButton
           onClick={() => (
             setIsFilterOpen(!isFilterOpen),
             setServiceData({
@@ -129,10 +127,10 @@ const ServicesInfo = () => {
             setEditIndex(null)
           )}
           type="button"
-          className="add"
+          style={{ border: "none" }}
         >
           Добавить услугу
-        </button>
+        </OutlineButton>
       </div>
       {isFilterOpen && (
         <FilterModal
