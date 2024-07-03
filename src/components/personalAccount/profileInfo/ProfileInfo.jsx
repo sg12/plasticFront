@@ -1,10 +1,14 @@
 import { useState } from "react";
 import EditUser from "../editUser/EditUser";
+
 import AlertModal from "../../UI/modals/alertModal/AlertModal";
+import Divider from "../../UI/dividers/Divider";
+
 import ProfileUserHeader from "../profileUser/ProfileUserHeader";
 import ProfileUserAction from "../profileUser/ProfileUserAction";
 import ProfileUserDetails from "../profileUser/ProfileUserDetails";
 import ProfileUserFooter from "../profileUser/ProfileUserFooter";
+
 
 const ProfileInfo = ({
   userData,
@@ -20,7 +24,7 @@ const ProfileInfo = ({
       {userData && (
         <>
           <ProfileUserHeader userData={userData} />
-          <hr className="profile__divider" />
+          <Divider />
           {!isEditing && (
             <>
               <ProfileUserDetails fields={fieldsDetails} userData={userData} />

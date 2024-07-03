@@ -49,7 +49,7 @@ const PersonalAccount = () => {
           <HeaderPanel userData={userData} onToggleAside={onToggleAside} />
         </header>
         <aside className={`aside-grid ${isAsideVisible ? "visible" : ""}`}>
-          <AsidePanel onClick={onToggleAside} userType={userData?.user?.type} />
+          <AsidePanel onClick={onToggleAside} userType={userData?.role} />
         </aside>
         <main className="main-grid">
           <MainPanel />

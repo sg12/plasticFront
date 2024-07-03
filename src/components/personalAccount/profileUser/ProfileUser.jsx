@@ -13,7 +13,7 @@ const ProfileUser = () => {
   let fieldsFooter = [];
 
   if (userData) {
-    switch (userData?.user?.type) {
+    switch (userData?.role) {
       case "client":
         fieldsDetails = [
           { label: "Пол", value: "gender" },
@@ -30,7 +30,7 @@ const ProfileUser = () => {
         ];
         fieldsFooter = [{ label: "Лицензии и сертификаты", value: "licenses" }];
         break;
-      case "surgeon":
+      case "doctor":
         fieldsDetails = [
           { label: "Пол", value: "gender" },
           { label: "Дата рождения", value: "date_born" },

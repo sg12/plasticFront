@@ -4,7 +4,7 @@ import desc from "../../../assets/imgs/desc.svg";
 
 const ProfileUserFooter = ({ userData, fields }) => (
   <div className="profile__footer">
-    {userData.user.type === "client" ? (
+    {userData?.role === "client" ? (
       <>
         <div className="profile__description">
           <img className="img" src={desc} alt="desc" />
