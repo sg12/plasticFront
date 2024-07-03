@@ -47,6 +47,7 @@ export const UserProvider = ({ children }) => {
     loading,
     fetchUserData, // Экспортируем функцию для обновления данных пользователя
   };
+  console.log("%c@ CONTEXT @", "background: #222; color: #bada55;", userData);
 
   return (
     <UserContext.Provider value={contextValue}>{children}</UserContext.Provider>
