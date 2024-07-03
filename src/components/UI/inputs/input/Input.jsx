@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
+
+import styles from "./Input.module.scss";
 
 const Input = ({
   label,
@@ -9,50 +10,28 @@ const Input = ({
   name,
   value,
   onChange,
+  andClass,
+  isLoading,
   ...props
 }) => {
   return (
-    <form style={styles.form}>
-      <label style={styles.label}>{label}</label>
+    <div className={andClass}>
+      {label && <label>{label}</label>}
       <input
-        style={{ ...styles.input, ...styles.size[size] }}
-        autoComplete="none"
+        style={{
+          opacity: isLoading ? 0.5 : 1,
+          pointerEvents: isLoading ? "none" : "auto",
+        }}
+        className={`${styles.input} ${styles[size]}`}
         placeholder={placeholder}
         type={type}
         name={name}
-        value={value}
+        value={value || ""}
         onChange={onChange}
         {...props}
       />
-    </form>
+    </div>
   );
-};
-
-const styles = {
-  form: {
-    display: "inline-flex",
-    width: "100%",
-  },
-  label: {},
-  input: {
-    width: "100%",
-    borderRadius: "8px",
-    border: "1px solid #3066be",
-  },
-  size: {
-    default: {
-      fontSize: "14px",
-      padding: "6px 12px",
-    },
-    medium: {
-      fontSize: "16px",
-      padding: "8px 16px",
-    },
-    large: {
-      fontSize: "18px",
-      padding: "8px 16px",
-    },
-  },
 };
 
 Input.propTypes = {
@@ -63,6 +42,8 @@ Input.propTypes = {
   value: PropTypes.string,
   onChange: PropTypes.func,
   size: PropTypes.oneOf(["default", "medium", "large"]),
+  andClass: PropTypes.string,
+  isLoading: PropTypes.bool,
 };
 
 export default Input;
