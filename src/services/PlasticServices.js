@@ -4,17 +4,23 @@ import Cookies from "js-cookie";
 const _apiBase = import.meta.env.VITE_API_URL;
 
 // Функция для создания экземпляра axios с токеном из куки
-const createAxiosInstance = () => {
-  return axios.create({
-    baseURL: _apiBase,
-    headers: {
-      Authorization: `Token ${Cookies.get("key")}`,
-      "Content-Type": "application/json",
-    },
-  });
-};
+let axiosInstance = axios.create({
+  baseURL: _apiBase,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
-let axiosInstance = createAxiosInstance();
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const key = Cookies.get("key");
+    if (key) {
+      config.headers.Authorization = `Token ${key}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
 class PlasticServices {
   static async getAllArticles(page) {
@@ -66,6 +72,10 @@ class PlasticServices {
     return response;
   }
 
+  //////////////////////////////
+  ////// PROFILE REQUESTS //////
+  //////////////////////////////
+
   static async getUser() {
     const profile = await axiosInstance.get("/profile");
     const profileMore = await axiosInstance.get(
@@ -85,25 +95,60 @@ class PlasticServices {
   }
 
   static async getFaq() {
-    return await axiosInstance.get(`${_apiBase}/faq`);
+    return await axiosInstance.get("/faq");
   }
 
-  static async registerUser(data, type) {
-    const response = await axiosInstance.post(
-      `${_apiBase}/auth/register/${type}`,
-      data
+  static async getTickets() {
+    return await axiosInstance.get("/tickets");
+  }
+
+  static async postTicket(formTicket) {
+    return await axiosInstance.post("/tickets", { ...formTicket });
+  }
+
+  static async getReviews() {
+    return await axiosInstance.post("/reviews");
+  }
+
+  static async getFavorities() {
+    const clinics = await axiosInstance.get(
+      "/profile/client/favorities/clinics"
     );
+    const doctors = await axiosInstance.get(
+      "/profile/client/favorities/doctors"
+    );
+
+    return {
+      data: [...clinics.data, ...doctors.data],
+    };
+  }
+
+  static async deleteFavorities(id) {
+    return await axiosInstance.post(`/profile/client/favorities/${id}`);
+  }
+
+  ///////////////////////////
+  ////// AUTH REQUESTS //////
+  ///////////////////////////
+
+  static async registerUser(data, type) {
+    const response = await axiosInstance.post(`/auth/register/${type}`, data);
     return Cookies.set("key", response.data.key);
   }
 
   static async loginUser(data) {
-    const response = await axiosInstance.post(`${_apiBase}/auth/login`, data);
+    const response = await axiosInstance.post("/auth/login", data);
     return Cookies.set("key", response.data.key);
   }
 
   static async logoutUser() {
     await axiosInstance.get("/auth/logout");
-    return Cookies.remove("token");
+    return Cookies.remove("key");
+  }
+
+  static async deleteUser() {
+    await axiosInstance.get("/auth/delete");
+    return Cookies.remove("key");
   }
 }
 
