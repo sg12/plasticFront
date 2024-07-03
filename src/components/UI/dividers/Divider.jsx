@@ -4,7 +4,7 @@ const Divider = ({ color, thickness, margin, opacity }) => {
     width: "100%",
     height: thickness || 1,
     margin: margin || 0,
-    opacity: opacity || 1,
+    opacity: opacity || .25,
   };
 
   return <div style={style} />;

@@ -2,12 +2,14 @@ import { useState, useEffect } from "react";
 import "./HelpInfo.scss";
 import { useFetching } from "../../../hooks/useFetching";
 import PlasticServices from "../../../services/PlasticServices";
+import OutlineButton from "../../UI/buttons/outlineButton/OutlineButton";
+import Spinner from "../../UI/preloader/Spinner";
 
 const HelpInfo = () => {
   const [openIndex, setOpenIndex] = useState(null);
+  const [visibleQuestions, setVisibleQuestions] = useState(5);
   const [faq, setFaq] = useState([]);
-  const [visibleQuestions, setVisibleQuestions] = useState(2);
-
+  
   const toggleAccordion = (index) => {
     setOpenIndex(openIndex === index ? null : index);
   };
@@ -17,13 +19,8 @@ const HelpInfo = () => {
   };
 
   const [fetchFaq, isFaqLoading, faqError] = useFetching(async () => {
-    try {
-      const response = await PlasticServices.getFaq();
-      setFaq(response.data);
-      console.log(response.data);
-    } catch (error) {
-      console.error("Ошибка при загрузке FAQ:", error);
-    }
+    const response = await PlasticServices.getFaq();
+    return setFaq(response.data);
   });
 
   useEffect(() => {
@@ -33,20 +30,29 @@ const HelpInfo = () => {
   return (
     <div className="help">
       <span className="help__title">Часто задаваемые вопросы</span>
-      {faq.slice(0, visibleQuestions).map((item, index) => (
-        <div
-          key={item.id}
-          className={`help__accordion ${openIndex === index ? "open" : ""}`}
-          onClick={() => toggleAccordion(index)}
-        >
-          <span className="help__question">{item.name}</span>
-          {openIndex === index && <p className="help__answer">{item.answer}</p>}
-        </div>
-      ))}
-      {visibleQuestions < faq.length && (
-        <button className="help__more" onClick={showMoreQuestions}>
-          Показать ещё
-        </button>
+      {faqError}
+      {isFaqLoading ? (
+        <Spinner />
+      ) : (
+        <>
+          {faq.slice(0, visibleQuestions).map((item, index) => (
+            <div
+              key={item.id}
+              className={`help__accordion ${openIndex === index ? "open" : ""}`}
+              onClick={() => toggleAccordion(index)}
+            >
+              <span className="help__question">{item.question}</span>
+              {openIndex === index && (
+                <p className="help__answer">{item.answer}</p>
+              )}
+            </div>
+          ))}
+          {visibleQuestions < faq.length && (
+            <OutlineButton onClick={showMoreQuestions}>
+              Показать ещё
+            </OutlineButton>
+          )}
+        </>
       )}
     </div>
   );

@@ -81,6 +81,8 @@
     height: 24px;
 
     img {
+      width: 24px;
+      height: 24px;
       filter: brightness(0) saturate(100%) invert(32%) sepia(96%) saturate(556%)
         hue-rotate(182deg) brightness(93%) contrast(94%);
     }

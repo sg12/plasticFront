@@ -32,7 +32,7 @@ const RegisterClient = () => {
         if (pathname === '/enterPage/registerClient') {
             type = 'client';
         } else if (pathname === '/enterPage/registerDoctor'){
-            type = 'surgeon';
+            type = 'doctor';
         } else if (pathname === '/enterPage/registerClinic'){
             type = 'clinic';
         }

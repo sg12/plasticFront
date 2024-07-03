@@ -1,18 +1,18 @@
-import { useState } from "react";
+// import { useState } from "react";
 
 const UserProfileHeader = ({ userData, extraDetails, extraIdentification }) => {
-  const [imageSrc, setImageSrc] = useState(null);
+  // const [imageSrc, setImageSrc] = useState(null);
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImageSrc(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  // const handleFileChange = (event) => {
+  //   const file = event.target.files[0];
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onloadend = () => {
+  //       setImageSrc(reader.result);
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
 
   return (
     <div className="profile__header">
@@ -20,31 +20,34 @@ const UserProfileHeader = ({ userData, extraDetails, extraIdentification }) => {
         <div className="profile__photo">
           <label htmlFor="uploadInput" className="profile__photo-label">
             <img
-              src={userData?.user?.avatar || imageSrc}
+              src={
+                userData?.avatar ||
+                "https://aib-schultes.de/wp-content/uploads/2019/11/jobs-icon-aibschultes-avatar.jpg"
+              }
               alt="user image"
               className="profile__photo-img"
             />
           </label>
-          <input
+          {/* <input
             type="file"
             id="uploadInput"
             accept="image/*"
             style={{ display: "none" }}
             onChange={handleFileChange}
-          />
+          /> */}
         </div>
         <div className="profile__details">
           <h3 className="profile__user-name">
-            {userData?.user?.username || "Неизвестно"}
+            {userData?.username || "Неизвестно"}
           </h3>
           <p className="profile__user-phone">
             <span className="profile__darkened">Телефон: </span>
-            {userData?.user?.phone || "Неизвестно"}
+            {userData?.phone || "Неизвестно"}
           </p>
-          {userData?.user?.email && (
+          {userData?.email && (
             <div className="profile__email">
               <span className="profile__darkened">Почта: </span>
-              {userData?.user?.email || "Неизвестно"}
+              {userData?.email || "Неизвестно"}
             </div>
           )}
           {extraDetails}
@@ -53,7 +56,7 @@ const UserProfileHeader = ({ userData, extraDetails, extraIdentification }) => {
       <div className="profile__identification">
         <div className="iden">
           <div className="iden__id">
-            <span>Ваш ID:</span> {userData?.user?.id || "Неизвестно"}
+            <span>Ваш ID:</span> {userData?.id || "Неизвестно"}
           </div>
           {extraIdentification}
         </div>

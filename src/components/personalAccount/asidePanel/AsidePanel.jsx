@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 
 import profile from "../../../assets/icons/profile.svg";
@@ -29,11 +29,11 @@ const AsidePanel = ({ userType, onClick }) => {
             disabled: true,
           },
           { to: "reviews", text: "Отзывы", icon: reviews },
-          { to: "settings", text: "Настройки", icon: setting },
+          // { to: "settings", text: "Настройки", icon: setting },
           { to: "help", text: "Помощь", icon: help },
           { to: "support", text: "Поддержка", icon: support },
         ];
-      case "surgeon":
+      case "doctor":
         return [
           { to: "profile", text: "Профиль (Доктор)", icon: profile },
           { to: "clinic", text: "Клиника", icon: specialist },
@@ -45,7 +45,7 @@ const AsidePanel = ({ userType, onClick }) => {
             disabled: true,
           },
           { to: "reviews", text: "Отзывы пациентов", icon: reviews },
-          { to: "settings", text: "Настройки", icon: setting },
+          // { to: "settings", text: "Настройки", icon: setting },
           { to: "help", text: "Помощь", icon: help },
           { to: "support", text: "Поддержка", icon: support },
         ];
@@ -61,7 +61,7 @@ const AsidePanel = ({ userType, onClick }) => {
             disabled: true,
           },
           { to: "reviews", text: "Отзывы пациентов", icon: reviews },
-          { to: "settings", text: "Настройки", icon: setting },
+          // { to: "settings", text: "Настройки", icon: setting },
           { to: "help", text: "Помощь", icon: help },
           { to: "support", text: "Поддержка", icon: support },
         ];
@@ -95,9 +95,7 @@ const AsidePanel = ({ userType, onClick }) => {
             (index === 1 || index === 3 || index + 1 === 0)) ||
             (userType !== "client" &&
               (index === 1 || (index + 2) % 3 === 0))) &&
-            index !== linksData.length - 1 && (
-              <Divider opacity={.25} />
-            )}
+            index !== linksData.length - 1 && <Divider />}
         </React.Fragment>
       ))}
     </aside>

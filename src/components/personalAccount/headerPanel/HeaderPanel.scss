@@ -44,10 +44,6 @@
   &__account {
     display: flex;
     gap: 32px;
-
-    @media (max-width: 375px) {
-      display: none;
-    }
   }
 
   &__notification {
@@ -81,6 +77,10 @@
       font-style: normal;
       font-weight: 400;
       line-height: normal;
+    }
+    
+    @media (max-width: 375px) {
+      display: none;
     }
   }
 }
