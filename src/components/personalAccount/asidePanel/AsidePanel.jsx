@@ -29,7 +29,7 @@ const AsidePanel = ({ userType, onClick }) => {
             disabled: true,
           },
           { to: "reviews", text: "Отзывы", icon: reviews },
-          { to: "settings", text: "Настройки", icon: setting },
+          // { to: "settings", text: "Настройки", icon: setting },
           { to: "help", text: "Помощь", icon: help },
           { to: "support", text: "Поддержка", icon: support },
         ];
@@ -45,7 +45,7 @@ const AsidePanel = ({ userType, onClick }) => {
             disabled: true,
           },
           { to: "reviews", text: "Отзывы пациентов", icon: reviews },
-          { to: "settings", text: "Настройки", icon: setting },
+          // { to: "settings", text: "Настройки", icon: setting },
           { to: "help", text: "Помощь", icon: help },
           { to: "support", text: "Поддержка", icon: support },
         ];
@@ -61,7 +61,7 @@ const AsidePanel = ({ userType, onClick }) => {
             disabled: true,
           },
           { to: "reviews", text: "Отзывы пациентов", icon: reviews },
-          { to: "settings", text: "Настройки", icon: setting },
+          // { to: "settings", text: "Настройки", icon: setting },
           { to: "help", text: "Помощь", icon: help },
           { to: "support", text: "Поддержка", icon: support },
         ];

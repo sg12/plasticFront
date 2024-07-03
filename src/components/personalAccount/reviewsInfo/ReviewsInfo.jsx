@@ -1,45 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReviewsItem from "../reviewsItem/ReviewsItem";
 import "./ReviewsInfo.scss";
 import Filter from "../../UI/filter/Filter";
+import { useFetching } from "../../../hooks/useFetching";
+import PlasticServices from "../../../services/PlasticServices";
+import Spinner from "../../UI/preloader/Spinner";
 
 const ReviewsInfo = () => {
   // Данные отзывов TODO: Подключить запрос на сервер
-  const [reviews, setReviews] = useState([
-    {
-      id: 1,
-      fullName: "Кристал",
-      rating: 5,
-      userType: "Клиника",
-      rusStatus: "Проверено",
-      engStatus: "verified",
-      date: "10.01.2024",
-      message:
-        "Пациент прошел все этапы обследования и лечения. Спасибо за посещение!",
-    },
-    {
-      id: 2,
-      fullName: "Семенова Ирини Васильева",
-      rating: 3,
-      userType: "Пациент",
-      rusStatus: "Не проверено",
-      engStatus: "not verified",
-      date: "16.02.2024",
-      message:
-        "Хочу выразить огромную благодарность Генадию В.В, он сделал сделал меня ещё краше!",
-    },
-    {
-      id: 3,
-      fullName: "Тарасов Валентин Фёдорович",
-      rating: 4,
-      userType: "Доктор",
-      rusStatus: "Отклонено",
-      engStatus: "rejected",
-      date: "05.04.2024",
-      message: "Ирина Васильева своевременно прибыла на прием!",
-    },
-  ]);
-  
+  const [reviews, setReviews] = useState([]);
+
+  const [fetchReviews, isReviewsLoading, reviewsError] = useFetching(
+    async () => {
+      const response = await PlasticServices.getReviews();
+      return setReviews(response.data);
+    }
+  );
+
+  useEffect(() => {
+    fetchReviews();
+  }, []);
+
   // Фильтры для выбора типа пользователя
   const userTypeFilters = [
     { value: "all", name: "Все" },
@@ -76,27 +57,38 @@ const ReviewsInfo = () => {
   return (
     <div className="reviews__info">
       <span className="reviews__title">Мои отзывы</span>
-      <Filter
-        filter={filter}
-        onFilterChange={handleFilterChange}
-        filters={userTypeFilters}
-      />
-      <div className="reviews__list">
-        {filteredReviews?.map((review) => (
-          <ReviewsItem
-            key={review.id}
-            date={review.date}
-            rating={review.rating}
-            userType={review.userType}
-            engStatus={review.engStatus}
-            rusStatus={review.rusStatus}
-            name={review.fullName}
-            text={review.message}
-            onSave={(updatedText) => handleSave(review.id, updatedText)}
-            onCancel={() => handleCancel(review.id)}
-          />
-        ))}
-      </div>
+      {reviewsError}
+      {isReviewsLoading ? (
+        <Spinner />
+      ) : (
+        <>
+          {reviews.length > 0 && (
+            <>
+              <Filter
+                filter={filter}
+                onFilterChange={handleFilterChange}
+                filters={userTypeFilters}
+              />
+              <div className="reviews__list">
+                {filteredReviews?.map((review) => (
+                  <ReviewsItem
+                    key={review.id}
+                    date={review.date}
+                    rating={review.rating}
+                    userType={review.userType}
+                    engStatus={review.engStatus}
+                    rusStatus={review.rusStatus}
+                    name={review.fullName}
+                    text={review.message}
+                    onSave={(updatedText) => handleSave(review.id, updatedText)}
+                    onCancel={() => handleCancel(review.id)}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+        </>
+      )}
     </div>
   );
 };

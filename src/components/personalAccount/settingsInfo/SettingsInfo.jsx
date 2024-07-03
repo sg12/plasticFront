@@ -1,63 +1,34 @@
 import "./SettingsInfo.scss";
 import PlasticServices from "../../../services/PlasticServices";
-import { useNavigate } from "react-router-dom";
+import OutlineButton from "../../UI/buttons/outlineButton/OutlineButton";
+import Input from "../../UI/inputs/input/Input";
 
 const SettingsInfo = () => {
-  const navigate = useNavigate();
+  const handleChangePassword = async (e) => {
+    e.preventDefault();
+    const oldPassword = e.target.elements.oldPassword.value;
+    const newPassword = e.target.elements.newPassword.value;
 
-  const handleLogout = async () => {
     try {
-      await PlasticServices.logoutUser();
-      navigate(
-        "/enterPage",
-        setTimeout(() => window.location.reload(), 0)
-      );
+      // Ваш код для изменения пароля
+      await PlasticServices.changePassword(oldPassword, newPassword);
+      alert("Пароль успешно изменён!");
     } catch (error) {
-      console.error("Ошибка при выходе из аккаунта:", error);
+      console.error("Ошибка при изменении пароля:", error);
+      alert(
+        "Произошла ошибка при изменении пароля. Пожалуйста, попробуйте ещё раз."
+      );
     }
   };
 
   return (
-    <div className="settings__wrapper settings">
-      <div className="settings__notice notice">
-        <h2 className="settings__title">Настройки уведомлений</h2>
-        <div className="notice__item">
-          <div className="notice__text">
-            <p className="notice__title">Отзывы</p>
-            <p className="notice__description">Новые отзывы о вас</p>
-          </div>
-          <label className="notice__checkbox">
-            <input type="checkbox" className="notice__input" />
-            <div className="notice__slider"></div>
-          </label>
-        </div>
-        <div className="notice__item">
-          <div className="notice__text">
-            <p className="notice__title">Новости</p>
-            <p className="notice__description">
-              Новости о новых функциях агрегатора
-            </p>
-          </div>
-          <label className="notice__checkbox">
-            <input type="checkbox" className="notice__input" />
-            <div className="notice__slider"></div>
-          </label>
-        </div>
-      </div>
-      <div className="settings__password password">
-        <span className="settings__title">Изменить пароль</span>
-        <input type="password" placeholder="Старый пароль" />
-        <input type="password" placeholder="Новый пароль" />
-      </div>
-      <div className="settings__control control">
-        <p className="control__date">Вы с нами с 01.12.1023</p>
-        <div className="control__buttons">
-          <button onClick={handleLogout} className="control__button">
-            Выйти из аккаунта
-          </button>
-          {/* <button className="control__button">Удалить учетную запись</button> */}
-        </div>
-      </div>
+    <div className="settings">
+      <span className="settings__title">Изменить пароль</span>
+      <form className="settings__password" onSubmit={handleChangePassword}>
+        <Input placeholder={"Старый пароль"} />
+        <Input placeholder={"Новый пароль"} />
+        <OutlineButton type="submit">Изменить пароль</OutlineButton>
+      </form>
     </div>
   );
 };
