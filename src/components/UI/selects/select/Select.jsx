@@ -42,7 +42,7 @@ Select.propTypes = {
   label: PropTypes.string,
   placeholder: PropTypes.string,
   name: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   onChange: PropTypes.func,
   size: PropTypes.oneOf(["default", "medium", "large"]),
   andClass: PropTypes.string,

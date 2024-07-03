@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./Preloader.module.scss";
+import Spinner from "./Spinner";
 
 const Preloader = ({ isDataLoaded, isLoading }) => {
   const [isVisible, setIsVisible] = useState(true);
@@ -41,7 +42,7 @@ const Preloader = ({ isDataLoaded, isLoading }) => {
       {errorMessage ? (
         <div className={styles.errorMessage}>{errorMessage}</div>
       ) : (
-        <div className={styles.spinner}></div>
+        <Spinner />
       )}
     </div>
   );
