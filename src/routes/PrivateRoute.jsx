@@ -8,7 +8,7 @@ const _apiBase = import.meta.env.VITE_API_URL;
 const PrivateRoute = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
-  const token = Cookies.get("token");
+  const token = Cookies.get("key");
 
   useEffect(() => {
     if (!token) {
@@ -18,7 +18,7 @@ const PrivateRoute = () => {
 
     const tokenHeader = "Token " + token;
 
-    fetch(`${_apiBase}/account/`, {
+    fetch(`${_apiBase}/profile`, {
       method: "GET",
       headers: {
         Authorization: tokenHeader,
