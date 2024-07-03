@@ -21,9 +21,8 @@ const EnterClient = () => {
     });
 
     const onSubmit = async ({ email, password }) => {
-        const data = { email, password };
-        await PlasticServices.loginUser(data);
-        navigate("/account",setTimeout ( () => window.location.reload(), 0));
+        await PlasticServices.loginUser({ email, password });
+        navigate("/account");
     };
 
     return (
