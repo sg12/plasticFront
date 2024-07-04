@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 import desc from "../../../assets/imgs/desc.svg";
@@ -19,6 +19,7 @@ const ProfileUserFooter = ({ userData, fields }) => {
   const [modalData, setModalData] = useState(
     Object.fromEntries(fields.map((section) => [section.value, {}]))
   );
+  const [additionally, setAdditionally] = useState({});
 
   const handleChange = (e, sectionValue) => {
     const { name, value } = e.target;
@@ -54,6 +55,27 @@ const ProfileUserFooter = ({ userData, fields }) => {
     }
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const responses = await Promise.all(
+          fields.map((section) =>
+            PlasticServices.getAdditionally(userData?.role, section.value)
+          )
+        );
+        const combinedData = fields.reduce((acc, section, index) => {
+          acc[section.value] = responses[index];
+          return acc;
+        }, {});
+        setAdditionally(combinedData);
+      } catch (error) {
+        console.error("Ошибка при получении данных:", error);
+      }
+    };
+
+    fetchData();
+  }, [fields, userData]);
+
   return (
     <div className="profile__footer">
       {userData?.role === "client" ? (
@@ -77,7 +99,9 @@ const ProfileUserFooter = ({ userData, fields }) => {
             <div key={index} className={`profile__${section.value}`}>
               <Field
                 label={section.label}
-                value={modalData[section.value][section.value]}
+                values={(additionally[section.value] || []).map((item) =>
+                  JSON.stringify(item)
+                )}
               />
               <div className="profile__actions">
                 <OutlineButton
@@ -110,7 +134,7 @@ const ProfileUserFooter = ({ userData, fields }) => {
                   ))}
                 </Modal>
               )}
-              {index < fields.length - 1 && <Divider />}
+              {index < fields.length - 1 && <Divider marginTop={16} />}
             </div>
           ))}
         </div>
