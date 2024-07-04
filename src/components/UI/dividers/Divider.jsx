@@ -1,4 +1,4 @@
-const Divider = ({ color, thickness, margin, opacity }) => {
+const Divider = ({ color, thickness, margin, opacity, andStyle }) => {
   const style = {
     backgroundColor: color || "#3066be",
     width: "100%",
@@ -7,7 +7,7 @@ const Divider = ({ color, thickness, margin, opacity }) => {
     opacity: opacity || .25,
   };
 
-  return <div style={style} />;
+  return <div style={style || andStyle} />;
 };
 
 export default Divider;
