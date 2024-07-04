@@ -50,14 +50,11 @@
     align-items: flex-end;
     .save,
     .cancel {
-      background: none;
       border: none;
-      cursor: pointer;
-      color: #3066be;
     }
     .cancel {
-      color: black;
-      opacity: 25%;
+      color: rgb(206, 44, 49);
+      opacity: .5;
     }
   }
 

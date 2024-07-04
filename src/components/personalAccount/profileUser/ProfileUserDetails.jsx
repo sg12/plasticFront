@@ -6,7 +6,7 @@ const ProfileUserDetails = ({ userData, fields }) => (
       <Field
         key={index}
         label={field.label}
-        value={userData?.user?.[field.value] || "Неизвестно"}
+        value={userData?.[field.value] || "Неизвестно"}
       />
     ))}
   </div>
