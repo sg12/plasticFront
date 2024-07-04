@@ -106,9 +106,9 @@ class PlasticServices {
     return await axiosInstance.post("/tickets", { ...formTicket });
   }
 
-  static async getReviews() {
-    return await axiosInstance.post("/reviews");
-  }
+  // static async getReviews(userType) {
+  //   return await axiosInstance.post(`/reviews`);
+  // }
 
   static async getFavorities() {
     const clinics = await axiosInstance.get(
@@ -127,12 +127,28 @@ class PlasticServices {
     return await axiosInstance.post(`/profile/client/favorities/${id}`);
   }
 
+  static async postAdditionally(type, data) {
+    const additionally = await axiosInstance.post(
+      `/profile/doctor/${type}`,
+      data
+    );
+    return additionally.data;
+  }
+
+  static async getAdditionally(userType, type) {
+    const additionally = await axiosInstance.get(`/profile/${userType}/${type}`);
+    return additionally.data;
+  }
+
   ///////////////////////////
   ////// AUTH REQUESTS //////
   ///////////////////////////
 
-  static async registerUser(data, type) {
-    const response = await axiosInstance.post(`/auth/register/${type}`, data);
+  static async registerUser(data, userType) {
+    const response = await axiosInstance.post(
+      `/auth/register/${userType}`,
+      data
+    );
     return Cookies.set("key", response.data.key);
   }
 
