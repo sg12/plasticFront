@@ -1,21 +1,31 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Input from "../../UI/inputs/input/Input";
 import Select from "../../UI/selects/select/Select";
 import Checkbox from "../../UI/inputs/checkbox/Checkbox";
 import OutlineButton from "../../UI/buttons/outlineButton/OutlineButton";
+import Spinner from "../../UI/preloader/Spinner";
 
 import "./EditUser.scss";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { fieldsConfig } from "./Field.config";
+import { fieldsConfig as fieldsConfigPromise } from "./Field.config";
 
 import PlasticServices from "../../../services/PlasticServices";
 
 const EditUser = ({ userData, toggleEditingMode }) => {
   const [editedData, setEditedData] = useState({ ...userData });
   const [isLoading, setIsLoading] = useState(false);
+  const [fieldsConfig, setFieldsConfig] = useState(null);
+
+  useEffect(() => {
+    const loadFieldsConfig = async () => {
+      const config = await fieldsConfigPromise;
+      setFieldsConfig(config);
+    };
+    loadFieldsConfig();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -52,6 +62,9 @@ const EditUser = ({ userData, toggleEditingMode }) => {
   };
 
   const renderFields = () => {
+    if (!fieldsConfig) {
+      return <Spinner />;
+    }
     const roleFields = fieldsConfig[userData?.role] || [];
 
     return roleFields.map((field) => {

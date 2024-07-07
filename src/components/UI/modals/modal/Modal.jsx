@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Modal.module.scss";
+import OutlineButton from "../../buttons/outlineButton/OutlineButton";
 
-const FilterModal = ({
-  isFilterOpen = false,
-  setIsFilterOpen,
+const Modal = ({
+  isModalOpen = false,
+  setIsModalOpen,
   children,
   title,
   style = "right",
@@ -14,17 +15,17 @@ const FilterModal = ({
   const [modalAnimation, setModalAnimation] = useState("open");
 
   useEffect(() => {
-    if (isFilterOpen) {
+    if (isModalOpen) {
       setModalAnimation("open");
     } else {
       setModalAnimation("close");
     }
-  }, [isFilterOpen]);
+  }, [isModalOpen]);
 
   function close() {
     setModalAnimation("close");
     setTimeout(() => {
-      setIsFilterOpen(false);
+      setIsModalOpen(false);
     }, animationTime || 400); // Мин. 0.1
   }
 
@@ -35,30 +36,28 @@ const FilterModal = ({
   return (
     <div className={`${styles.modalOverlay} ${styles[style]}`}>
       <div className={modalClass}>
-        {/* {title} */}
         <span className={styles.modal__title}>{title || "Title"}</span>
         {children}
         <div className={styles.modal__buttons}>
-          <button
-            className={styles.save}
+          <OutlineButton
+            style={{ color: "#ffffff", background: "#3066be" }}
             onClick={() => {
               save();
             }}
           >
             Сохранить
-          </button>
-          <button
-            className={styles.close}
+          </OutlineButton>
+          <OutlineButton
             onClick={() => {
               close();
             }}
           >
             Закрыть
-          </button>
+          </OutlineButton>
         </div>
       </div>
     </div>
   );
 };
 
-export default FilterModal;
+export default Modal;

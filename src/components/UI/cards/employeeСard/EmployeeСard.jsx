@@ -2,12 +2,13 @@ import OutlineButton from "../../buttons/outlineButton/OutlineButton";
 import Tag from "../../tags/Tag";
 import styles from "./EmployeeСard.module.scss";
 // import ContextMenu from "../../contextMenu/ContextMenu";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { FaRegTrashCan } from "react-icons/fa6";
 
 // Номер, ФИО, Специальность, Статус // Фильтрация, Доп - Удаление, Изменение, Сохранение, Переход в лк врача
 
 const EmployeeСard = ({ userData, onDelete }) => {
+  console.log(userData)
   // Контекстное меню в данный момент не требуется.
 
   // const [menu, setMenu] = useState(null);

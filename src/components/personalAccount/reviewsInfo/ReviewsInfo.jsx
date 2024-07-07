@@ -57,9 +57,10 @@ const ReviewsInfo = () => {
   return (
     <div className="reviews__info">
       <span className="reviews__title">Мои отзывы</span>
-      {reviewsError}
       {isReviewsLoading ? (
         <Spinner />
+      ) : reviewsError ? (
+        <div>Ошибка: {reviewsError}</div>
       ) : (
         <>
           {reviews.length > 0 && (
