@@ -1,5 +1,10 @@
-// Конфигурация полей в зависимости от роли пользователя
-export const fieldsConfig = {
+import PlasticServices from "../../../services/PlasticServices";
+
+const fetchLocation = async () => {
+  return await PlasticServices.getLocation();
+};
+
+export const fieldsConfig = fetchLocation().then((location) => ({
   client: [
     {
       name: "fio",
@@ -78,19 +83,31 @@ export const fieldsConfig = {
     {
       name: "metro",
       type: "select",
-      options: [{ value: "", label: "Не указан" }],
+      options: [
+        { value: "", label: "Не указан" },
+        ...location.metro.map((m) => ({ value: m.id, label: m.name })),
+      ],
       label: "Метро",
     },
     {
       name: "district",
       type: "select",
-      options: [{ value: "", label: "Не указан" }],
+      options: [
+        { value: "", label: "Не указан" },
+        ...location.districts.map((d) => ({
+          value: d.id,
+          label: d.name,
+        })),
+      ],
       label: "Район",
     },
     {
       name: "city",
       type: "select",
-      options: [{ value: "", label: "Не указан" }],
+      options: [
+        { value: "", label: "Не указан" },
+        ...location.cities.map((c) => ({ value: c.id, label: c.name })),
+      ],
       label: "Город",
     },
     {
@@ -158,4 +175,4 @@ export const fieldsConfig = {
       disabled: true,
     },
   ],
-};
+}));

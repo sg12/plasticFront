@@ -3,7 +3,6 @@ import Action from "../../UI/actions/Action";
 
 const ServicesColumns = ({ onEdit, onDelete }) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  console.log(isMobile);
 
   useEffect(() => {
     const handleResize = () => {

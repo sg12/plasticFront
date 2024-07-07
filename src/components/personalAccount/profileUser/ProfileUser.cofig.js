@@ -19,9 +19,13 @@ export default function ProfileUserConfig(userData) {
         { label: "Почта", value: "email" },
         { label: "Официальный сайт", value: "site" },
       ],
-      fieldsFooter: [
-        { label: "Лицензии и сертификаты", value: "licenses", type: "text" },
-      ],
+      // fieldsFooter: [
+      //   {
+      //     label: "Лицензии и сертификаты",
+      //     value: "licenses",
+      //     fields: [{ name: "image", type: "image", label: "Скан изображения" }],
+      //   },
+      // ],
     },
     doctor: {
       fieldsDetails: [
@@ -49,9 +53,7 @@ export default function ProfileUserConfig(userData) {
         // {
         //   label: "Лицензии и сертификаты",
         //   value: "licenses",
-        //   fields: [
-        //     { name: "image", type: "image", label: "Скан изображения" },
-        //   ],
+        //   fields: [{ name: "image", type: "image", label: "Скан изображения" }],
         // },
       ],
     },

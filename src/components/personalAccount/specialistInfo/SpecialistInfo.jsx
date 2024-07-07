@@ -1,55 +1,34 @@
-import AddCard from "../../UI/cards/addCard/AddCard.jsx";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+
 import EmployeeСard from "../../UI/cards/employeeСard/EmployeeСard.jsx";
-import Tooltip from "../../UI/tooltips/Tooltip.jsx";
 import Filter from "../../UI/filter/Filter.jsx";
-import { useState } from "react";
 import Modal from "../../UI/modals/modal/Modal.jsx";
 import Input from "../../UI/inputs/input/Input.jsx";
-import { toast } from "react-toastify";
+import Spinner from "../../UI/preloader/Spinner.jsx";
 
 import "./SpecialistInfo.scss";
 
+import PlasticServices from "../../../services/PlasticServices.js";
+import { useFetching } from "../../../hooks/useFetching.js";
+import OutlineButton from "../../UI/buttons/outlineButton/OutlineButton.jsx";
+
 export const SpecialistInfo = () => {
-  const [userData, setUserData] = useState([
-    {
-      id: 1,
-      avatar: "https://avatars.githubusercontent.com/u/10001001?v=4",
-      username: "Петров Геннадий Иванович",
-      specialization: "Хирург",
-      isActive: "Активный",
-      isOnline: "В сети",
-    },
-    {
-      id: 2,
-      avatar: "https://avatars.githubusercontent.com/u/10001001?v=4",
-      username: "Иванова Мария Леонидовна",
-      specialization: "Педиатр",
-      isActive: "Активный",
-      isOnline: "Не в сети",
-    },
-    {
-      id: 3,
-      avatar: "https://avatars.githubusercontent.com/u/10001001?v=4",
-      username: "Сидоров Алексей Викторович",
-      specialization: "Терапевт",
-      isActive: "Неактивный",
-      isOnline: "В сети",
-    },
-    {
-      id: 4,
-      avatar: "https://avatars.githubusercontent.com/u/10001001?v=4",
-      username: "Сидоров Алексей Викторович",
-      specialization: "Терапевт",
-      isActive: "Неактивный",
-      isOnline: "В сети",
-    },
-  ]);
-
+  const [employes, setEmployes] = useState([]);
   const [newUser, setNewUser] = useState({ id: "" });
-  console.log(newUser);
-
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [filter, setFilter] = useState("all");
+
+  const [fetchEmployes, isEmployesLoading, employesError] = useFetching(
+    async () => {
+      const response = await PlasticServices.getEmployes();
+      setEmployes(response);
+    }
+  );
+
+  useEffect(() => {
+    fetchEmployes();
+  }, []);
 
   const userTypeFilters = [
     { value: "Все", name: "Все" },
@@ -59,34 +38,32 @@ export const SpecialistInfo = () => {
     { value: "Не в сети", name: "Не в сети" },
   ];
 
-  // Фильтрация отзывов
   const filteredUsers =
     filter === "Все"
-      ? userData
-      : userData.filter((user) => {
+      ? employes
+      : employes.filter((employe) => {
           switch (filter) {
             case "Активный":
-              return user.isActive === "Активный";
+              return employe.isActive === "Активный";
             case "Неактивный":
-              return user.isActive === "Неактивный";
+              return employe.isActive === "Неактивный";
             case "В сети":
-              return user.isOnline === "В сети";
+              return employe.isOnline === "В сети";
             case "Не в сети":
-              return user.isOnline === "Не в сети";
+              return employe.isOnline === "Не в сети";
             default:
               return true;
           }
         });
 
   const handleDelete = (id) => {
-    setUserData(userData.filter((user) => user.id !== id));
+    setEmployes(employes.filter((employe) => employe.id !== id));
   };
 
   const handleSave = () => {
     if (newUser.id.trim()) {
-      setUserData([...userData, newUser]);
+      setEmployes([...employes, newUser]);
       setNewUser({ id: "" });
-      setIsFilterOpen(false);
       toast.success("Сотрудник успешно добавлен");
     } else {
       toast.warn("Введите ID сотрудника");
@@ -96,39 +73,52 @@ export const SpecialistInfo = () => {
   return (
     <div className="specialist">
       <span className="specialist__title">Ваши специалисты</span>
-      <div className="specialist__tools">
-        {/* <Alert
-          icon={IoIosAlert}
-          label={
-            "Для управления, нажмите правой кнопкой мыши на карточку или зажмите пальцем"
-          }
-        /> */}
-        <Filter
-          filter={filter}
-          onFilterChange={(e) => setFilter(e.target.value)}
-          filters={userTypeFilters}
-        />
-      </div>
-      {/* <Table userData={DATA} userType="clinic/specialists"/> */}
-      <div className="specialist__cards">
-        {filteredUsers &&
-          filteredUsers.map((user) => (
+
+      {employes.length > 0 && (
+        <div className="specialist__tools">
+          <Filter
+            filter={filter}
+            onFilterChange={(e) => setFilter(e.target.value)}
+            filters={userTypeFilters}
+          />
+        </div>
+      )}
+
+      {isEmployesLoading ? (
+        <Spinner />
+      ) : employesError ? (
+        <div>Ошибка: {employesError}</div>
+      ) : employes.length === 0 ? (
+        <span className="specialist__subtitle">Нет сотрудников</span>
+      ) : (
+        <div className="specialist__cards">
+          {filteredUsers.map((employe) => (
             <EmployeeСard
-              key={user.id}
-              userData={user}
-              onDelete={() => handleDelete(user.id)}
+              key={employe.id}
+              userData={employe}
+              onDelete={() => handleDelete(employe.id)}
             />
           ))}
+        </div>
+      )}
 
-        <Tooltip position={"bottom"} text={"Добавить врача"}>
-          <AddCard onClick={() => setIsFilterOpen(true)} />
-        </Tooltip>
-      </div>
-      {isFilterOpen && (
+      {!isEmployesLoading && !employesError && (
+        <div style={{ display: "flex", justifyContent: "right" }}>
+          <OutlineButton
+            onClick={() => setIsModalOpen(true)}
+            type="button"
+            style={{ border: "none" }}
+          >
+            Добавить сотрудника
+          </OutlineButton>
+        </div>
+      )}
+
+      {isModalOpen && (
         <Modal
           title={"Добавление сотрудника"}
-          isFilterOpen={isFilterOpen}
-          setIsFilterOpen={setIsFilterOpen}
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
           save={handleSave}
         >
           <Input
@@ -137,6 +127,7 @@ export const SpecialistInfo = () => {
             value={newUser.id}
             onChange={(e) => setNewUser({ ...newUser, id: e.target.value })}
             required
+            andClass="specialist__input"
           />
         </Modal>
       )}
