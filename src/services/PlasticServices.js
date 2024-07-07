@@ -106,9 +106,9 @@ class PlasticServices {
     return await axiosInstance.post("/tickets", { ...formTicket });
   }
 
-  // static async getReviews(userType) {
-  //   return await axiosInstance.post(`/reviews`);
-  // }
+  static async getReviews(userType) {
+    return await axiosInstance.post(`/reviews`);
+  }
 
   static async getFavorities() {
     const clinics = await axiosInstance.get(
@@ -136,8 +136,32 @@ class PlasticServices {
   }
 
   static async getAdditionally(userType, type) {
-    const additionally = await axiosInstance.get(`/profile/${userType}/${type}`);
+    const additionally = await axiosInstance.get(
+      `/profile/${userType}/${type}`
+    );
     return additionally.data;
+  }
+
+  static async getLocation() {
+    const cities = await axiosInstance.get("/cities");
+    const districts = await axiosInstance.get("/districts");
+    const metro = await axiosInstance.get("/metro");
+    const location = {
+      cities: cities.data,
+      districts: districts.data,
+      metro: metro.data,
+    };
+    return location;
+  }
+
+  static async getEmployes() {
+    const employes = await axiosInstance.get("/profile/employes");
+    return employes.data;
+  }
+
+  static async getServices(userType) {
+    const services = await axiosInstance.get(`/profile/${userType}/services`);
+    return services.data;
   }
 
   ///////////////////////////
