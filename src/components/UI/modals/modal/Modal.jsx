@@ -3,8 +3,8 @@ import styles from "./Modal.module.scss";
 import OutlineButton from "../../buttons/outlineButton/OutlineButton";
 
 const Modal = ({
-  isFilterOpen = false,
-  setIsFilterOpen,
+  isModalOpen = false,
+  setIsModalOpen,
   children,
   title,
   style = "right",
@@ -15,17 +15,17 @@ const Modal = ({
   const [modalAnimation, setModalAnimation] = useState("open");
 
   useEffect(() => {
-    if (isFilterOpen) {
+    if (isModalOpen) {
       setModalAnimation("open");
     } else {
       setModalAnimation("close");
     }
-  }, [isFilterOpen]);
+  }, [isModalOpen]);
 
   function close() {
     setModalAnimation("close");
     setTimeout(() => {
-      setIsFilterOpen(false);
+      setIsModalOpen(false);
     }, animationTime || 400); // Мин. 0.1
   }
 
