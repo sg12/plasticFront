@@ -1,45 +1,42 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useQuery } from "@siberiacancode/reactuse";
+
 import "./HelpInfo.scss";
-import { useFetching } from "../../../hooks/useFetching";
+
 import PlasticServices from "../../../services/PlasticServices";
+
 import OutlineButton from "../../UI/buttons/outlineButton/OutlineButton";
 import Spinner from "../../UI/preloader/Spinner";
 
 const HelpInfo = () => {
   const [openIndex, setOpenIndex] = useState(null);
   const [visibleQuestions, setVisibleQuestions] = useState(5);
-  const [faq, setFaq] = useState([]);
-  
-  const toggleAccordion = (index) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
 
-  const showMoreQuestions = () => {
-    setVisibleQuestions((prevCount) => prevCount + 3);
-  };
-
-  const [fetchFaq, isFaqLoading, faqError] = useFetching(async () => {
-    const response = await PlasticServices.getFaq();
-    return setFaq(response.data);
-  });
-
-  useEffect(() => {
-    fetchFaq();
-  }, []);
+  const {
+    data: faq,
+    isLoading,
+    isError,
+    isSuccess,
+    error,
+  } = useQuery(() => PlasticServices.getFaq());
 
   return (
     <div className="help">
       <span className="help__title">Часто задаваемые вопросы</span>
-      {faqError}
-      {isFaqLoading ? (
+
+      {isLoading ? (
         <Spinner />
-      ) : (
+      ) : isError ? (
+        <div>Ошибка: {error.message}</div>
+      ) : faq?.data?.length === 0 ? (
+        <span className="support__subtitle">Нет обращений</span>
+      ) : isSuccess ? (
         <>
-          {faq.slice(0, visibleQuestions).map((item, index) => (
+          {faq?.data?.slice(0, visibleQuestions).map((item, index) => (
             <div
               key={item.id}
               className={`help__accordion ${openIndex === index ? "open" : ""}`}
-              onClick={() => toggleAccordion(index)}
+              onClick={() => setOpenIndex(openIndex === index ? null : index)}
             >
               <span className="help__question">{item.question}</span>
               {openIndex === index && (
@@ -47,13 +44,16 @@ const HelpInfo = () => {
               )}
             </div>
           ))}
-          {visibleQuestions < faq.length && (
-            <OutlineButton onClick={showMoreQuestions}>
+
+          {visibleQuestions < faq?.data?.length && (
+            <OutlineButton
+              onClick={() => setVisibleQuestions((prevCount) => prevCount + 3)}
+            >
               Показать ещё
             </OutlineButton>
           )}
         </>
-      )}
+      ) : null}
     </div>
   );
 };

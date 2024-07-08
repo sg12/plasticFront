@@ -1,20 +1,12 @@
 .favourites {
   display: flex;
   flex-direction: column;
-  height: 100%;
   gap: 16px;
   &__title {
     font-size: 16px;
     font-weight: 700;
   }
-
-  &__noCards {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    font-size: 16px;
-    font-weight: 700;
+  &__subtitle {
     opacity: 0.5;
   }
 

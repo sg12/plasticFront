@@ -1,34 +1,32 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
+import { useQuery } from "@siberiacancode/reactuse";
 
 import EmployeeСard from "../../UI/cards/employeeСard/EmployeeСard.jsx";
 import Filter from "../../UI/filter/Filter.jsx";
 import Modal from "../../UI/modals/modal/Modal.jsx";
 import Input from "../../UI/inputs/input/Input.jsx";
 import Spinner from "../../UI/preloader/Spinner.jsx";
+import OutlineButton from "../../UI/buttons/outlineButton/OutlineButton.jsx";
 
 import "./SpecialistInfo.scss";
 
 import PlasticServices from "../../../services/PlasticServices.js";
-import { useFetching } from "../../../hooks/useFetching.js";
-import OutlineButton from "../../UI/buttons/outlineButton/OutlineButton.jsx";
 
 export const SpecialistInfo = () => {
   const [employes, setEmployes] = useState([]);
-  const [newUser, setNewUser] = useState({ id: "" });
+  const [newId, setNewId] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [filter, setFilter] = useState("all");
 
-  const [fetchEmployes, isEmployesLoading, employesError] = useFetching(
-    async () => {
-      const response = await PlasticServices.getEmployes();
-      setEmployes(response);
+  const { isLoading, isError, isSuccess, error, refetch } = useQuery(
+    () => PlasticServices.getEmployes(),
+    {
+      onSuccess: (data) => {
+        setEmployes(Array.isArray(data) ? data : []);
+      },
     }
   );
-
-  useEffect(() => {
-    fetchEmployes();
-  }, []);
 
   const userTypeFilters = [
     { value: "Все", name: "Все" },
@@ -61,10 +59,12 @@ export const SpecialistInfo = () => {
   };
 
   const handleSave = () => {
-    if (newUser.id.trim()) {
-      setEmployes([...employes, newUser]);
-      setNewUser({ id: "" });
+    if (newId.trim()) {
+      setEmployes([...employes, { id: newId }]);
+      // TODO: Добавить post запрос на добавление сотрудника
+      setNewId("");
       toast.success("Сотрудник успешно добавлен");
+      refetch();
     } else {
       toast.warn("Введите ID сотрудника");
     }
@@ -74,7 +74,7 @@ export const SpecialistInfo = () => {
     <div className="specialist">
       <span className="specialist__title">Ваши специалисты</span>
 
-      {employes.length > 0 && (
+      {!isLoading && employes.length > 0 && (
         <div className="specialist__tools">
           <Filter
             filter={filter}
@@ -84,25 +84,25 @@ export const SpecialistInfo = () => {
         </div>
       )}
 
-      {isEmployesLoading ? (
+      {isLoading ? (
         <Spinner />
-      ) : employesError ? (
-        <div>Ошибка: {employesError}</div>
+      ) : isError ? (
+        <div>Ошибка: {error.message}</div>
       ) : employes.length === 0 ? (
         <span className="specialist__subtitle">Нет сотрудников</span>
-      ) : (
+      ) : isSuccess ? (
         <div className="specialist__cards">
-          {filteredUsers.map((employe) => (
+          {filteredUsers.map((employee) => (
             <EmployeeСard
-              key={employe.id}
-              userData={employe}
-              onDelete={() => handleDelete(employe.id)}
+              key={employee.id}
+              userData={employee}
+              onDelete={() => handleDelete(employee.id)}
             />
           ))}
         </div>
-      )}
+      ) : null}
 
-      {!isEmployesLoading && !employesError && (
+      {!isLoading && !isError && (
         <div style={{ display: "flex", justifyContent: "right" }}>
           <OutlineButton
             onClick={() => setIsModalOpen(true)}
@@ -123,9 +123,10 @@ export const SpecialistInfo = () => {
         >
           <Input
             placeholder={"ID сотрудника"}
+            isLoading={isLoading}
             name={"id"}
-            value={newUser.id}
-            onChange={(e) => setNewUser({ ...newUser, id: e.target.value })}
+            value={newId}
+            onChange={(e) => setNewId(e.target.value)}
             required
             andClass="specialist__input"
           />

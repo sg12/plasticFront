@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useUser } from "../../../context/UserContext";
 import { toast } from "react-toastify";
-import { useFetching } from "../../../hooks/useFetching.js";
 import { fieldsConfig } from "./Field.config";
+import { useQuery } from "@siberiacancode/reactuse";
 
 import "./ServicesInfo.scss";
 
@@ -18,27 +18,25 @@ import PlasticServices from "../../../services/PlasticServices.js";
 
 const ServicesInfo = () => {
   const { userData } = useUser();
-  const [services, setServices] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
+  const [services, setServices] = useState([]);
   const [editIndex, setEditIndex] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [modalData, setModalData] = useState({
     name: "",
     price: "",
     status: "",
   });
 
-  const [fetchServices, isServicesLoading, servicesError] = useFetching(
-    async () => {
-      const response = await PlasticServices.getServices(userData.role);
-      setServices(response);
+  const { isLoading, isError, isSuccess, error, refetch } = useQuery(
+    () => PlasticServices.getServices(userData?.role),
+    {
+      keys: [userData?.role],
+      onSuccess: (data) => {
+        setEmployes(Array.isArray(data) ? data : []);
+      },
     }
   );
-
-  useEffect(() => {
-    fetchServices();
-  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -53,7 +51,6 @@ const ServicesInfo = () => {
       toast.warn("Пожалуйста, заполните все поля!");
       return;
     }
-    setIsLoading(true);
     if (isEditing) {
       const updatedServices = services.map((service, index) =>
         index === editIndex ? modalData : service
@@ -61,11 +58,12 @@ const ServicesInfo = () => {
       setServices(updatedServices);
       setIsEditing(false);
       setEditIndex(null);
+      toast.info("FIX THIS");
     } else {
       setServices([...services, modalData]);
       toast.success("Услуга успешно создана!");
+      refetch();
     }
-    setIsLoading(false);
     setModalData({
       name: "",
       price: "",
@@ -133,17 +131,17 @@ const ServicesInfo = () => {
     <div className="services">
       <span className="services__title">Ваши услуги</span>
 
-      {isServicesLoading ? (
+      {isLoading ? (
         <Spinner />
-      ) : servicesError ? (
-        <div>Ошибка: {servicesError}</div>
-      ) : services.length === 0 ? (
+      ) : isError ? (
+        <div>Ошибка: {error.message}</div>
+      ) : services?.length === 0 ? (
         <span className="specialist__subtitle">Нет услуг</span>
       ) : (
         <Table columns={columns} data={services} />
       )}
 
-      {!isServicesLoading && !servicesError && (
+      {!isLoading && !isError && (
         <div style={{ display: "flex", justifyContent: "right" }}>
           <OutlineButton
             onClick={() => (

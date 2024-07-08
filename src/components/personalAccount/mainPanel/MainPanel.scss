@@ -1,19 +1,12 @@
 .account {
-    &_main {
-        background: white;
-        width: 100%;
-        height: 100%;
-        border-radius: 16px;
-        padding: 16px;
-    }
-}
-
-.loader {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  &__main {
+    background: white;
+    width: 100%;
     height: 100%;
-    font-size: 24px;
-    color: #333;
+    border-radius: 16px;
+    padding: 16px;
   }
-
+  &__title {
+    font-weight: 700;
+  }
+}
