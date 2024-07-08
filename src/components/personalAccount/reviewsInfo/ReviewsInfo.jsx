@@ -1,25 +1,29 @@
-import { useEffect, useState } from "react";
-import ReviewsItem from "../reviewsItem/ReviewsItem";
-import "./ReviewsInfo.scss";
-import Filter from "../../UI/filter/Filter";
-import { useFetching } from "../../../hooks/useFetching";
+import { useState } from "react";
+import { useQuery } from "@siberiacancode/reactuse";
+import { useUser } from "../../../context/UserContext";
+
 import PlasticServices from "../../../services/PlasticServices";
+
+import "./ReviewsInfo.scss";
+
+import ReviewsItem from "../reviewsItem/ReviewsItem";
+import Filter from "../../UI/filter/Filter";
 import Spinner from "../../UI/preloader/Spinner";
 
 const ReviewsInfo = () => {
-  // Данные отзывов TODO: Подключить запрос на сервер
+  const { userData } = useUser();
   const [reviews, setReviews] = useState([]);
+  const [filter, setFilter] = useState("all");
 
-  const [fetchReviews, isReviewsLoading, reviewsError] = useFetching(
-    async () => {
-      const response = await PlasticServices.getReviews();
-      return setReviews(response.data);
+  const { isLoading, isError, isSuccess, error, refetch } = useQuery(
+    () => PlasticServices.getReviewsClinics(userData?.id),
+    {
+      keys: [userData?.id],
+      onSuccess: (data) => {
+        setReviews(Array.isArray(data) ? data : []);
+      },
     }
   );
-
-  useEffect(() => {
-    fetchReviews();
-  }, []);
 
   // Фильтры для выбора типа пользователя
   const userTypeFilters = [
@@ -28,7 +32,6 @@ const ReviewsInfo = () => {
     { value: "Пациент", name: "Пациент" },
     { value: "Доктор", name: "Доктор" },
   ];
-  const [filter, setFilter] = useState("all");
 
   const handleSave = (id, updatedText) => {
     setReviews((prevReviews) =>
@@ -52,44 +55,43 @@ const ReviewsInfo = () => {
   const filteredReviews =
     filter === "all"
       ? reviews
-      : reviews.filter((review) => review.userType === filter);
+      : reviews?.filter((review) => review.userType === filter);
 
   return (
     <div className="reviews__info">
       <span className="reviews__title">Мои отзывы</span>
-      {isReviewsLoading ? (
+
+      {isLoading ? (
         <Spinner />
-      ) : reviewsError ? (
-        <div>Ошибка: {reviewsError}</div>
-      ) : (
+      ) : isError ? (
+        <div>Ошибка: {error.message}</div>
+      ) : reviews?.length === 0 ? (
+        <span className="support__subtitle">Нет отзывов</span>
+      ) : isSuccess ? (
         <>
-          {reviews.length > 0 && (
-            <>
-              <Filter
-                filter={filter}
-                onFilterChange={handleFilterChange}
-                filters={userTypeFilters}
+          <Filter
+            filter={filter}
+            onFilterChange={handleFilterChange}
+            filters={userTypeFilters}
+          />
+          <div className="reviews__list">
+            {filteredReviews?.map((review) => (
+              <ReviewsItem
+                key={review.id}
+                date={review.date}
+                rating={review.rating}
+                userType={review.userType}
+                engStatus={review.engStatus}
+                rusStatus={review.rusStatus}
+                name={review.fullName}
+                text={review.message}
+                onSave={(updatedText) => handleSave(review.id, updatedText)}
+                onCancel={() => handleCancel(review.id)}
               />
-              <div className="reviews__list">
-                {filteredReviews?.map((review) => (
-                  <ReviewsItem
-                    key={review.id}
-                    date={review.date}
-                    rating={review.rating}
-                    userType={review.userType}
-                    engStatus={review.engStatus}
-                    rusStatus={review.rusStatus}
-                    name={review.fullName}
-                    text={review.message}
-                    onSave={(updatedText) => handleSave(review.id, updatedText)}
-                    onCancel={() => handleCancel(review.id)}
-                  />
-                ))}
-              </div>
-            </>
-          )}
+            ))}
+          </div>
         </>
-      )}
+      ) : null}
     </div>
   );
 };

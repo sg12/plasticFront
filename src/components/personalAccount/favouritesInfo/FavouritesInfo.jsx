@@ -1,32 +1,28 @@
-import { useEffect, useState } from "react";
-import { useUser } from "../../../context/UserContext";
-// import Search from "../../UI/inputs/searchInput/SearchInput";
-import CardsItem from "../cardsItem/CardsItem";
+import { useState } from "react";
+import PlasticServices from "../../../services/PlasticServices";
+import { useQuery } from "@siberiacancode/reactuse";
 
 import "./FavouritesInfo.scss";
+
+import CardsItem from "../cardsItem/CardsItem";
 import FilterModal from "../../UI/modals/filterModal/FilterModal";
 import OutlineButton from "../../UI/buttons/outlineButton/OutlineButton";
-import PlasticServices from "../../../services/PlasticServices";
-import { useFetching } from "../../../hooks/useFetching";
 import Spinner from "../../UI/preloader/Spinner";
 
 const FavouritesInfo = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [filterValue, setFilterValue] = useState("");
-  const [favorites, setFavorites] = useState([]);
 
-  const [fetchFavorites, isFavoritesLoading, favoritesError] = useFetching(
-    async () => {
-      const response = await PlasticServices.getFavorities();
-      return setFavorites(response.data);
-    }
-  );
+  const {
+    data: favorites,
+    isLoading,
+    isError,
+    isSuccess,
+    error,
+    refetch,
+  } = useQuery(() => PlasticServices.getFavorities());
 
-  useEffect(() => {
-    fetchFavorites();
-  }, []);
-
-  const filteredFavorites = favorites.filter((favorite) => {
+  const filteredFavorites = favorites?.data?.filter((favorite) => {
     const usernameMatch = favorite.username
       .toLowerCase()
       .includes(filterValue.toLowerCase());
@@ -44,46 +40,41 @@ const FavouritesInfo = () => {
   return (
     <div className="favourites">
       <span className="favourites__title">Избранное</span>
-      {favoritesError}
-      {isFavoritesLoading ? (
+
+      {isLoading ? (
         <Spinner />
-      ) : (
+      ) : isError ? (
+        <div>Ошибка: {error.message}</div>
+      ) : favorites?.data?.length === 0 ? (
+        <span className="favourites__subtitle">Нет избранных карточек</span>
+      ) : isSuccess ? (
         <>
-          {filteredFavorites.length > 0 ? (
-            <>
-              <div>
-                <OutlineButton onClick={() => setIsFilterOpen(!isFilterOpen)}>
-                  Фильтры
-                </OutlineButton>
-                {isFilterOpen && (
-                  <FilterModal
-                    isFilterOpen={isFilterOpen}
-                    setIsFilterOpen={setIsFilterOpen}
-                    style="right"
-                    animationEnabled={true}
-                    animationTime={400}
-                    filterValue={filterValue}
-                    setFilterValue={setFilterValue}
-                    searchData={favorites}
-                    disabledSearch={false}
-                    placeholder={"Поиск"}
-                  />
-                )}
-              </div>
-              <CardsItem
-                isFavorite={true}
-                favorites={filteredFavorites}
-                removeFromFavorites={removeFromFavorites}
-              />
-            </>
-          ) : filterValue.length > 0 ? (
-            <span className="favourites__noCards">
-              Карточка с такими параметрами не найдена
-            </span>
-          ) : (
-            <span className="favourites__noCards">Нет избранных карточек</span>
-          )}
+          <div>
+            <OutlineButton onClick={() => setIsFilterOpen(!isFilterOpen)}>
+              Фильтры
+            </OutlineButton>
+          </div>
+          <CardsItem
+            isFavorite={true}
+            favorites={filteredFavorites}
+            removeFromFavorites={removeFromFavorites}
+          />
         </>
+      ) : null}
+
+      {isFilterOpen && (
+        <FilterModal
+          isFilterOpen={isFilterOpen}
+          setIsFilterOpen={setIsFilterOpen}
+          style="right"
+          animationEnabled={true}
+          animationTime={400}
+          filterValue={filterValue}
+          setFilterValue={setFilterValue}
+          searchData={favorites}
+          disabledSearch={false}
+          placeholder={"Поиск"}
+        />
       )}
     </div>
   );

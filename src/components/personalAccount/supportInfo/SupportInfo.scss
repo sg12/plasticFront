@@ -46,6 +46,11 @@
     }
     &__text {
     }
+    &__button {
+      display: flex;
+      gap: 16px;
+      justify-content: right;
+    }
   }
 }
 

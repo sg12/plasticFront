@@ -8,7 +8,6 @@ import { FaRegTrashCan } from "react-icons/fa6";
 // Номер, ФИО, Специальность, Статус // Фильтрация, Доп - Удаление, Изменение, Сохранение, Переход в лк врача
 
 const EmployeeСard = ({ userData, onDelete }) => {
-  console.log(userData)
   // Контекстное меню в данный момент не требуется.
 
   // const [menu, setMenu] = useState(null);
@@ -57,8 +56,8 @@ const EmployeeСard = ({ userData, onDelete }) => {
       </div>
       <div className={styles.employee__info}>
         <div className={styles.employee__tags}>
-          {tags.map((tag) => (
-            <Tag key={tag} label={tag} />
+          {tags.map((tag, index) => (
+            <Tag key={index} label={tag} />
           ))}
         </div>
         <span className={styles.employee__name}>

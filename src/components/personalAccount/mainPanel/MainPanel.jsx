@@ -4,11 +4,14 @@ import GreetingInfo from "./greetingInfo/GreetingInfo";
 
 const MainPanel = () => {
   const location = useLocation();
-  const showProfileInfo = location.pathname.startsWith("/account/");
 
   return (
-    <main className="account_main">
-      {showProfileInfo ? <Outlet /> : <GreetingInfo />}
+    <main className="account__main">
+      {location.pathname.startsWith("/account/") ? (
+        <Outlet />
+      ) : (
+        <GreetingInfo />
+      )}
     </main>
   );
 };

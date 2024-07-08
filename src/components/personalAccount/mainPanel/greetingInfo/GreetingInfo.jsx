@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 
 const GreetingInfo = () => {
   const { userData } = useUser();
-  console.log(userData)
   const [time, setTime] = useState(new Date());
   // console.log(time);
 

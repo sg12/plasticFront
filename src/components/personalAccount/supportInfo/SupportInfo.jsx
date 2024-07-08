@@ -1,29 +1,32 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useQuery } from "@siberiacancode/reactuse";
+
+import { fieldsConfig } from "./Field.config";
 import "./SupportInfo.scss";
-import { useFetching } from "../../../hooks/useFetching";
+
+import PlasticServices from "../../../services/PlasticServices";
+
 import Spinner from "../../UI/preloader/Spinner";
 import Input from "../../UI/inputs/input/Input";
-import PlasticServices from "../../../services/PlasticServices";
 import OutlineButton from "../../UI/buttons/outlineButton/OutlineButton";
 import Divider from "../../UI/dividers/Divider";
 import formatDate from "../../../utils/formatDate";
 import Tag from "../../UI/tags/Tag";
 
 const SupportInfo = () => {
-  const [tickets, setTickets] = useState([]);
   const [formTicket, setFormTicket] = useState({
     title: "",
     text: "",
   });
 
-  const [fetchTickets, isTicketLoading, ticketError] = useFetching(async () => {
-    const response = await PlasticServices.getTickets();
-    return setTickets(response.data);
-  });
-
-  useEffect(() => {
-    fetchTickets();
-  }, []);
+  const {
+    data: tickets,
+    isLoading,
+    isError,
+    isSuccess,
+    error,
+    refetch,
+  } = useQuery(() => PlasticServices.getTickets());
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,32 +40,24 @@ const SupportInfo = () => {
     e.preventDefault();
     await PlasticServices.postTicket(formTicket);
     setFormTicket({ title: "", text: "" });
-    fetchTickets();
+    refetch();
   };
 
-  const fields = [
-    {
-      name: "title",
-      type: "text",
-      label: "Тема запроса",
-    },
-    {
-      name: "text",
-      type: "text",
-      label: "Текст",
-    },
-  ];
+  const handleDelete = async () => {
+    await PlasticServices.deleteTicket();
+    refetch();
+  };
 
   return (
     <div className="support">
       <span className="support__title">Обращение в службу поддержки</span>
       <form className="support__form" onSubmit={handleSubmit}>
-        {fields.map((field) => (
+        {fieldsConfig.map((field) => (
           <Input
             key={field.name}
             type={field.type}
             disabled={field.disabled}
-            isLoading={isTicketLoading}
+            isLoading={isLoading}
             name={field.name}
             value={formTicket[field.name]}
             onChange={handleChange}
@@ -78,20 +73,27 @@ const SupportInfo = () => {
       </form>
 
       <span className="support__title">Ваши обращения</span>
-      {isTicketLoading ? (
+
+      {isLoading ? (
         <Spinner />
-      ) : tickets.length > 0 ? (
-        tickets.map((ticket, index) => (
-          <SupportTicket key={index} data={ticket} />
+      ) : isError ? (
+        <div>Ошибка: {error.message}</div>
+      ) : tickets?.data?.length === 0 ? (
+        <span className="support__subtitle">Нет обращений</span>
+      ) : isSuccess ? (
+        tickets?.data?.map((ticket, index) => (
+          <SupportTicket
+            key={index}
+            data={ticket}
+            handleDelete={handleDelete}
+          />
         ))
-      ) : (
-        <div className="support__subtitle">Нет обращений</div>
-      )}
+      ) : null}
     </div>
   );
 };
 
-const SupportTicket = ({ data }) => {
+const SupportTicket = ({ data, handleDelete }) => {
   return (
     <div className="support__ticket">
       <div className="ticket__header">
@@ -103,7 +105,9 @@ const SupportTicket = ({ data }) => {
       </div>
       <Divider />
       <div className="ticket__text">{data.text}</div>
-      {/* <OutlineButton>Удалить</OutlineButton> */}
+      <div className="ticket__button">
+        <OutlineButton onClick={handleDelete}>Удалить</OutlineButton>
+      </div>
     </div>
   );
 };

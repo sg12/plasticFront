@@ -79,7 +79,7 @@ class PlasticServices {
   static async getUser() {
     const profile = await axiosInstance.get("/profile");
     const profileMore = await axiosInstance.get(
-      `/profile/${profile.data.role}`
+      `/profile/${profile?.data?.role}`
     );
 
     return {
@@ -106,8 +106,12 @@ class PlasticServices {
     return await axiosInstance.post("/tickets", { ...formTicket });
   }
 
-  static async getReviews(userType) {
-    return await axiosInstance.post(`/reviews`);
+  static async deleteTicket(id) {
+    return await axiosInstance.delete(`/tickets/${id}`);
+  }
+
+  static async getReviewsClinics(id) {
+    return await axiosInstance.get(`/clinics/${id}/reviews`);
   }
 
   static async getFavorities() {
@@ -157,6 +161,10 @@ class PlasticServices {
   static async getEmployes() {
     const employes = await axiosInstance.get("/profile/employes");
     return employes.data;
+  }
+
+  static async postEmployee() {
+    return await axiosInstance.post("/profile/employes");
   }
 
   static async getServices(userType) {
