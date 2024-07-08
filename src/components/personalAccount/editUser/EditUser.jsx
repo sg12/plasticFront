@@ -1,189 +1,143 @@
 import { useEffect, useState } from "react";
-import TextInput from "../../UI/inputs/textInput/TextInput";
-import Select from "../../UI/selects/select/Select";
-import "./EditUser.scss";
-import Checkbox from "../../UI/inputs/checkbox/Checkbox";
 
+import Input from "../../UI/inputs/input/Input";
+import Select from "../../UI/selects/select/Select";
+import Checkbox from "../../UI/inputs/checkbox/Checkbox";
+import OutlineButton from "../../UI/buttons/outlineButton/OutlineButton";
+import Spinner from "../../UI/preloader/Spinner";
+
+import "./EditUser.scss";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+import { fieldsConfig as fieldsConfigPromise } from "./Field.config";
+
 import PlasticServices from "../../../services/PlasticServices";
 
 const EditUser = ({ userData, toggleEditingMode }) => {
-  const [editedData, setEditedData] = useState({
-    email: "",
-    address: "",
-    username: "",
-    date_born: "",
-    phone: "",
-    gender: "",
-    consentToPrivacyPolicy: false,
-    consentToDataProcessing: false,
-  });
-  console.log("editedData", editedData);
+  const [editedData, setEditedData] = useState({ ...userData });
+  const [isLoading, setIsLoading] = useState(false);
+  const [fieldsConfig, setFieldsConfig] = useState(null);
 
   useEffect(() => {
-    if (userData) {
-      setEditedData({
-        email: userData?.user?.email || "",
-        address: userData?.user?.address || "",
-        username: userData?.user?.username || "",
-        date_born: userData?.date_born || "",
-        phone: userData?.user?.phone || "",
-        gender: userData?.user?.gender || "",
-        consentToPrivacyPolicy: userData?.consentToPrivacyPolicy || false,
-        consentToDataProcessing: userData?.consentToDataProcessing || false,
-      });
-    }
-  }, [userData]);
+    const loadFieldsConfig = async () => {
+      const config = await fieldsConfigPromise;
+      setFieldsConfig(config);
+    };
+    loadFieldsConfig();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    if (type === "checkbox") {
-      setEditedData((prevData) => ({
-        ...prevData,
-        [name]: checked,
-      }));
-    } else {
-      setEditedData((prevData) => ({
-        ...prevData,
-        [name]: value,
-      }));
-    }
-  };
-
-  const hasFormDataChanged = () => {
-    if (!userData) return false;
-    return Object.keys(editedData).some(
-      (key) => editedData[key] !== userData[key]
-    );
+    setEditedData((prevData) => ({
+      ...prevData,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   };
 
   const handleSave = async (e) => {
     e.preventDefault();
     if (
-      editedData.consentToPrivacyPolicy &&
-      editedData.consentToDataProcessing
+      !editedData.confidentiality_consent ||
+      !editedData.personal_data_consent
     ) {
-      if (hasFormDataChanged()) {
-        try {
-          const response = await toast.promise(
-            PlasticServices.patchUser(editedData),
-            {
-              pending: "Сохранение данных...",
-              success: "Данные успешно сохранились",
-              error: "Ошибка при сохранении данных",
-            }
-          );
-          toggleEditingMode(false);
-          window.location.reload();
-        } catch (err) {
-          toast.warn("Произошла ошибка при сохранении данных");
+      return toast.warn("Проставьте обе галочки перед сохранением.");
+    }
+
+    setIsLoading(true);
+    try {
+      await toast.promise(
+        PlasticServices.patchUser(editedData, userData?.role),
+        {
+          pending: "Сохранение данных...",
+          success: "Данные успешно сохранились",
+          error: "Ошибка при сохранении данных",
         }
-      } else {
-        toast.warn("Данные не изменились.");
-      }
-    } else {
-      toast.warn("Проставьте обе галочки перед сохранением.");
+      );
+      toggleEditingMode(false);
+      // window.location.reload();
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const fullName = [{ name: "username", placeholder: "ФИО", type: "text" }];
+  const renderFields = () => {
+    if (!fieldsConfig) {
+      return <Spinner />;
+    }
+    const roleFields = fieldsConfig[userData?.role] || [];
 
-  const extra = [
-    { name: "email", placeholder: "Email", type: "email", disabled: true },
-    { name: "phone", placeholder: "Телефон", type: "tel" },
-    { name: "address", placeholder: "Адрес", type: "text" },
-    {
-      name: "gender",
-      placeholder: "Пол",
-      type: "select",
-      options: [
-        { value: "male", label: "Мужчина" },
-        { value: "female", label: "Женщина" },
-        { value: "", label: "Не указан" },
-      ],
-    },
-    { name: "date_born", placeholder: "Дата рождения", type: "date" },
-  ];
-
-  const checkboxFields = [
-    {
-      name: "consentToPrivacyPolicy",
-      label: "Я ознакомлен с Политикой Конфиденциальности",
-    },
-    {
-      name: "consentToDataProcessing",
-      label: "Я даю Согласие на обработку персональных данных",
-    },
-  ];
+    return roleFields.map((field) => {
+      if (field.type === "select") {
+        return (
+          <Select
+            key={field.name}
+            disabled={field.disabled}
+            isLoading={isLoading}
+            name={field.name}
+            value={editedData[field.name]}
+            required
+            onChange={handleChange}
+            options={field.options}
+            label={field.label}
+            placeholder={field.placeholder}
+            andClass="edit__select"
+          />
+        );
+      } else {
+        return (
+          <Input
+            key={field.name}
+            type={field.type}
+            disabled={field.disabled}
+            isLoading={isLoading}
+            name={field.name}
+            value={editedData[field.name]}
+            onChange={handleChange}
+            required
+            autoComplete="none"
+            label={field.label}
+            placeholder={field.placeholder}
+            andClass="edit__input"
+          />
+        );
+      }
+    });
+  };
 
   return (
     <>
       <form onSubmit={handleSave} className="edit">
         <span className="edit__title">Персональные данные</span>
-        <form className="edit__info">
-          {fullName.map((field) => (
-            <TextInput
-              key={field.name}
-              type={field.type}
-              disabled={field.disabled}
-              andClass="edit__input"
-              name={field.name}
-              value={editedData[field.name]}
-              onChange={handleChange}
-              required
-              autoComplete="none"
-              placeholder={field.placeholder}
-            />
-          ))}
-          {extra.map((field) =>
-            field.type === "select" ? (
-              <Select
-                key={field.name}
-                name={field.name}
-                value={editedData[field.name]}
-                andClass="edit__select"
-                onChange={handleChange}
-                options={field.options}
-                placeholder={field.placeholder}
-              />
-            ) : (
-              <TextInput
-                key={field.name}
-                type={field.type}
-                disabled={field.disabled}
-                andClass="edit__input"
-                name={field.name}
-                value={editedData[field.name]}
-                onChange={handleChange}
-                required
-                autoComplete="none"
-                placeholder={field.placeholder}
-              />
-            )
-          )}
-        </form>
+        <div className="edit__info">{renderFields()}</div>
         <span className="edit__title">Согласие пользователя</span>
         <div className="edit__checkbox">
-          {checkboxFields.map((field) => (
-            <Checkbox
-              key={field.name}
-              name={field.name}
-              checked={editedData[field.name]}
-              onChange={handleChange}
-            >
-              {field.label}
-            </Checkbox>
-          ))}
+          <Checkbox
+            name="confidentiality_consent"
+            checked={editedData.confidentiality_consent}
+            onChange={handleChange}
+          >
+            Я ознакомлен с Политикой Конфиденциальности
+          </Checkbox>
+          <Checkbox
+            name="personal_data_consent"
+            checked={editedData.personal_data_consent}
+            onChange={handleChange}
+          >
+            Я даю Согласие на обработку персональных данных
+          </Checkbox>
         </div>
-        <hr className="profile__divider" />
-        <div className="edit__action-button">
-          <button type="sumbit" className="save">
+        <div className="edit__actions">
+          <OutlineButton type="submit" className="save">
             Сохранить
-          </button>
-          <button type="button" className="cancel" onClick={toggleEditingMode}>
+          </OutlineButton>
+          <OutlineButton
+            type="button"
+            className="cancel"
+            onClick={toggleEditingMode}
+          >
             Отмена
-          </button>
+          </OutlineButton>
         </div>
       </form>
     </>

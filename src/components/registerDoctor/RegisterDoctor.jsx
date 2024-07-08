@@ -26,7 +26,7 @@ const RegisterDoctor = () => {
         const pathname = window.location.pathname;
         let type = '';
         if (pathname === '/enterPage/registerDoctor') {
-            type = 'surgeon';
+            type = 'doctor';
         } else if (pathname === '/enterPage/registerClinic'){
             type = 'clinic';
         } else if (pathname === '/enterPage/registerClient'){

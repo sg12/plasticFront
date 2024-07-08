@@ -12,108 +12,62 @@
     opacity: 0.5;
   }
 }
-.clinic-card {
+
+.clinic__card {
   display: flex;
   padding: 16px;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
   gap: 16px;
-  max-width: 480px;
 
-  border-radius: 16px;
+  max-width: 400px;
+
+  border-radius: 8px;
   background: #fff;
-  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.25);
 
-  &__divider {
-    width: 100%;
-    margin: 0;
-    background: #5985cb;
-    opacity: 0.1;
-    height: 1px;
-    border: none;
+  &-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #3066be;
   }
-  &__block {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    &-name {
-      font-size: 16px;
-      font-weight: 700;
-      color: #3066be;
-    }
-    &-control {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 24px;
-      height: 24px;
-      cursor: pointer;
-    }
-  }
-  &__info {
+
+  &-info {
     display: flex;
     flex-direction: row;
     gap: 16px;
     width: 100%;
-    &-logo {
-      min-width: 100px;
-      min-height: 100px;
-      border: 1px solid black;
-      border-radius: 8px;
-    }
-    &-personal {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      width: 100%;
-      &-position {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-        &-text {
-          font-size: 16px;
-          color: #3066be;
-        }
-        &-director {
-        }
-      }
-      &-address {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        width: 100%;
-        &-text {
-        }
-        &-street {
-        }
-      }
-    }
   }
-  &__status {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    width: 100%;
-    &-text {
-      font-size: 16px;
-      color: #3066be;
-    }
-    &-status {
-    }
+
+  &-logo {
+    min-width: 100px;
+    min-height: 100px;
+    border: 1px solid black;
+    border-radius: 8px;
   }
-  &__position {
+
+  &-personal {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 16px;
     width: 100%;
-    &-text {
-      font-size: 16px;
-      color: #3066be;
-    }
-    &-position {
-    }
+  }
+
+  &-about {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  &-subtitle {
+    font-size: 16px;
+    color: #3066be;
+  }
+  &-cards {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    width: 100%;
   }
 }

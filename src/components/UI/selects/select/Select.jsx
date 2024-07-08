@@ -1,25 +1,52 @@
+import PropTypes from "prop-types";
+
 import styles from "./Select.module.scss";
 
-const Select = ({ children, id, name, options, value, onChange, andClass, ...props }) => {
+const Select = ({
+  label,
+  placeholder,
+  size = "medium",
+  name,
+  options,
+  value,
+  onChange,
+  andClass,
+  isLoading,
+  ...props
+}) => {
   return (
-    <form className={`${styles.select} ${andClass}`}>
-      <label className={styles.select__label}>{children}</label>
+    <div className={andClass}>
+      {label && <label>{label}</label>}
       <select
-        className={`${styles.select__select} ${andClass}`}
+        style={{
+          opacity: isLoading ? 0.5 : 1,
+          pointerEvents: isLoading ? "none" : "auto",
+        }}
+        className={`${styles.select} ${styles[size]}`}
         name={name}
-        id={id}
-        value={value}
+        value={value || ""}
         onChange={onChange}
-        {...props} // Проксирование дополнительных свойств
+        {...props}
       >
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
+        {options.map((option, index) => (
+          <option key={index} value={option.value}>
             {option.label}
           </option>
         ))}
       </select>
-    </form>
+    </div>
   );
+};
+
+Select.propTypes = {
+  label: PropTypes.string,
+  placeholder: PropTypes.string,
+  name: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  onChange: PropTypes.func,
+  size: PropTypes.oneOf(["default", "medium", "large"]),
+  andClass: PropTypes.string,
+  isLoading: PropTypes.bool,
 };
 
 export default Select;

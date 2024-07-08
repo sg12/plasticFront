@@ -28,7 +28,7 @@ const RegisterClinic = () => {
         if (pathname === '/enterPage/registerClinic') {
             type = 'clinic';
         } else if (pathname === '/enterPage/registerDoctor'){
-            type = 'surgeon';
+            type = 'doctor';
         } else if (pathname === '/enterPage/registerClient'){
             type = 'client';
         }

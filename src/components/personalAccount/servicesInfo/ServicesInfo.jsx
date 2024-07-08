@@ -1,78 +1,87 @@
-import React, { useState } from "react";
-import Table from "../../UI/table/Table";
+import React, { useEffect, useState } from "react";
+import { useUser } from "../../../context/UserContext";
+import { toast } from "react-toastify";
+import { fieldsConfig } from "./Field.config";
+import { useQuery } from "@siberiacancode/reactuse";
+
 import "./ServicesInfo.scss";
-import FilterModal from "../../UI/modals/filterModal/FilterModal";
-import DATA from "../../UI/table/data.js";
-import Radios from "../../UI/radios/Radios";
+
+import Table from "../../UI/table/Table";
+import OutlineButton from "../../UI/buttons/outlineButton/OutlineButton.jsx";
+import Modal from "../../UI/modals/modal/Modal.jsx";
+import Input from "../../UI/inputs/input/Input.jsx";
+import Select from "../../UI/selects/select/Select.jsx";
+import Spinner from "../../UI/preloader/Spinner.jsx";
+
 import ServicesColumns from "./ServicesColumns.jsx";
+import PlasticServices from "../../../services/PlasticServices.js";
 
 const ServicesInfo = () => {
-  const options = [
-    { value: "active", label: "Активная" },
-    { value: "inactive", label: "Неактивная" },
-  ];
-
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [services, setServices] = useState(DATA || []);
+  const { userData } = useUser();
   const [isEditing, setIsEditing] = useState(false);
+  const [services, setServices] = useState([]);
   const [editIndex, setEditIndex] = useState(null);
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [serviceData, setServiceData] = useState({
-    services: "",
-    costs: "",
-    type: "",
-    reception: null,
-    status: null,
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalData, setModalData] = useState({
+    name: "",
+    price: "",
+    status: "",
   });
 
-  const handleOptionChange = (value) => {
-    setSelectedOption(value);
-    handleInputChange("status", value);
-  };
+  const { isLoading, isError, isSuccess, error, refetch } = useQuery(
+    () => PlasticServices.getServices(userData?.role),
+    {
+      keys: [userData?.role],
+      onSuccess: (data) => {
+        setEmployes(Array.isArray(data) ? data : []);
+      },
+    }
+  );
 
-  const handleInputChange = (field, value) => {
-    setServiceData((prevData) => ({
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setModalData((prevData) => ({
       ...prevData,
-      [field]: value,
+      [name]: value,
     }));
   };
 
-  const handleReceptionTypeChange = (type) => {
-    handleInputChange("reception", type);
-  };
-
   const handleSave = () => {
+    if (!modalData.name || !modalData.price) {
+      toast.warn("Пожалуйста, заполните все поля!");
+      return;
+    }
     if (isEditing) {
       const updatedServices = services.map((service, index) =>
-        index === editIndex ? serviceData : service
+        index === editIndex ? modalData : service
       );
       setServices(updatedServices);
       setIsEditing(false);
       setEditIndex(null);
+      toast.info("FIX THIS");
     } else {
-      setServices([...services, serviceData]);
+      setServices([...services, modalData]);
+      toast.success("Услуга успешно создана!");
+      refetch();
     }
-
-    setServiceData({
-      services: "",
-      costs: "",
-      type: "",
-      reception: null,
-      status: null,
+    setModalData({
+      name: "",
+      price: "",
+      status: "",
     });
-    setIsFilterOpen(false);
   };
 
   const handleEdit = (index) => {
-    setServiceData(services[index]);
+    setModalData(services[index]);
     setIsEditing(true);
     setEditIndex(index);
-    setIsFilterOpen(true)
+    setIsModalOpen(true);
   };
 
   const handleDelete = (index) => {
     const updatedServices = services.filter((_, i) => i !== index);
     setServices(updatedServices);
+    toast.success("Услуга удалена!");
   };
 
   const columns = ServicesColumns({
@@ -80,91 +89,88 @@ const ServicesInfo = () => {
     onDelete: handleDelete,
   });
 
+  const renderFields = () => {
+    return fieldsConfig.map((field) => {
+      if (field.type === "select") {
+        return (
+          <Select
+            key={field.name}
+            disabled={field.disabled}
+            isLoading={isLoading}
+            name={field.name}
+            value={modalData[field.name]}
+            onChange={handleChange}
+            options={field.options}
+            label={field.label}
+            placeholder={field.placeholder}
+            andClass="services__select"
+          />
+        );
+      } else {
+        return (
+          <Input
+            key={field.name}
+            type={field.type}
+            disabled={field.disabled}
+            isLoading={isLoading}
+            name={field.name}
+            value={modalData[field.name]}
+            onChange={handleChange}
+            required
+            autoComplete="none"
+            label={field.label}
+            placeholder={field.placeholder}
+            andClass="services__input"
+          />
+        );
+      }
+    });
+  };
+
   return (
     <div className="services">
       <span className="services__title">Ваши услуги</span>
-      {services && services.length >= 1 ? (
-        <Table columns={columns} data={services} />
+
+      {isLoading ? (
+        <Spinner />
+      ) : isError ? (
+        <div>Ошибка: {error.message}</div>
+      ) : services?.length === 0 ? (
+        <span className="specialist__subtitle">Нет услуг</span>
       ) : (
-        <div style={{ opacity: 0.5 }}>Нет услуг</div>
+        <Table columns={columns} data={services} />
       )}
-      <div
-        className="services__actions"
-        style={{ display: "flex", justifyContent: "right" }}
-      >
-        <button
-          onClick={() => (
-            setIsFilterOpen(!isFilterOpen),
-            setServiceData({
-              services: "",
-              costs: "",
-              type: "",
-              reception: null,
-              status: null,
-            }),
-            setIsEditing(false),
-            setEditIndex(null)
-          )}
-          type="button"
-          className="add"
-        >
-          Добавить услугу
-        </button>
-      </div>
-      {isFilterOpen && (
-        <FilterModal
-          isFilterOpen={isFilterOpen}
-          setIsFilterOpen={setIsFilterOpen}
-          style="right"
-          animationEnabled={true}
-          animationTime={400}
-          filterValue={serviceData}
-          setFilterValue={setServiceData}
-          disabledSearch={true}
+
+      {!isLoading && !isError && (
+        <div style={{ display: "flex", justifyContent: "right" }}>
+          <OutlineButton
+            onClick={() => (
+              setIsModalOpen(!isModalOpen),
+              setIsEditing(false),
+              setEditIndex(null),
+              setModalData({
+                name: "",
+                price: "",
+                status: "",
+              })
+            )}
+            type="button"
+            style={{ border: "none" }}
+          >
+            Добавить услугу
+          </OutlineButton>
+        </div>
+      )}
+
+      {isModalOpen && (
+        <Modal
+          title={isEditing ? "Редактирование услуги" : "Добавление услуги"}
+          isModalOpen={isModalOpen}
+          setIsModalOpen={setIsModalOpen}
           save={handleSave}
         >
-          <input
-            type="text"
-            onChange={(e) => handleInputChange("services", e.target.value)}
-            placeholder="Наименование услуги"
-            value={serviceData?.services}
-          />
-          <input
-            type="text"
-            onChange={(e) => handleInputChange("costs", e.target.value)}
-            placeholder="Стоимость"
-            value={serviceData?.costs}
-          />
-          <select
-            className="services__select"
-            onChange={(e) => handleInputChange("type", e.target.value)}
-            value={serviceData?.type}
-          >
-            <option value="">Выберите тип</option>
-            <option value="1 тип">1 тип</option>
-            <option value="2 тип">2 тип</option>
-          </select>
-          <span className="services__title">Тип приема</span>
-          <div className="services__reception">
-            <input
-              type="button"
-              value="Частная практика"
-              onClick={() => handleReceptionTypeChange("Частная практика")}
-              className={
-                serviceData?.reception === "Частная практика" ? "active" : ""
-              }
-            />
-          </div>
-          <span className="services__title">Статус</span>
-          <div className="services__radio">
-            <Radios
-              name="status"
-              options={options}
-              onChange={handleOptionChange}
-              selected={selectedOption}
-            />
-          </div>
-        </FilterModal>
+          {renderFields()}
+        </Modal>
       )}
     </div>
   );

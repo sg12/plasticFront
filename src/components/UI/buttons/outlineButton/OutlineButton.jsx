@@ -11,7 +11,7 @@ const OutlineButton = ({ children, ...props }) => {
 };
 
 OutlineButton.propTypes = {
-	children: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+	children: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.element]).isRequired,
 	className: PropTypes.string,
 };
 

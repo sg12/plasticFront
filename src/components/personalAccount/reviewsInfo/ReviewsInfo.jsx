@@ -1,44 +1,30 @@
 import { useState } from "react";
-import ReviewsItem from "../reviewsItem/ReviewsItem";
+import { useQuery } from "@siberiacancode/reactuse";
+import { useUser } from "../../../context/UserContext";
+
+import PlasticServices from "../../../services/PlasticServices";
+
 import "./ReviewsInfo.scss";
+
+import ReviewsItem from "../reviewsItem/ReviewsItem";
 import Filter from "../../UI/filter/Filter";
+import Spinner from "../../UI/preloader/Spinner";
 
 const ReviewsInfo = () => {
-  // Данные отзывов TODO: Подключить запрос на сервер
-  const [reviews, setReviews] = useState([
+  const { userData } = useUser();
+  const [reviews, setReviews] = useState([]);
+  const [filter, setFilter] = useState("all");
+
+  const { isLoading, isError, isSuccess, error, refetch } = useQuery(
+    () => PlasticServices.getReviewsClinics(userData?.id),
     {
-      id: 1,
-      fullName: "Кристал",
-      rating: 5,
-      userType: "Клиника",
-      rusStatus: "Проверено",
-      engStatus: "verified",
-      date: "10.01.2024",
-      message:
-        "Пациент прошел все этапы обследования и лечения. Спасибо за посещение!",
-    },
-    {
-      id: 2,
-      fullName: "Семенова Ирини Васильева",
-      rating: 3,
-      userType: "Пациент",
-      rusStatus: "Не проверено",
-      engStatus: "not verified",
-      date: "16.02.2024",
-      message:
-        "Хочу выразить огромную благодарность Генадию В.В, он сделал сделал меня ещё краше!",
-    },
-    {
-      id: 3,
-      fullName: "Тарасов Валентин Фёдорович",
-      rating: 4,
-      userType: "Доктор",
-      rusStatus: "Отклонено",
-      engStatus: "rejected",
-      date: "05.04.2024",
-      message: "Ирина Васильева своевременно прибыла на прием!",
-    },
-  ]);
+      keys: [userData?.id],
+      onSuccess: (data) => {
+        setReviews(Array.isArray(data) ? data : []);
+      },
+    }
+  );
+
   // Фильтры для выбора типа пользователя
   const userTypeFilters = [
     { value: "all", name: "Все" },
@@ -46,7 +32,6 @@ const ReviewsInfo = () => {
     { value: "Пациент", name: "Пациент" },
     { value: "Доктор", name: "Доктор" },
   ];
-  const [filter, setFilter] = useState("all");
 
   const handleSave = (id, updatedText) => {
     setReviews((prevReviews) =>
@@ -70,32 +55,43 @@ const ReviewsInfo = () => {
   const filteredReviews =
     filter === "all"
       ? reviews
-      : reviews.filter((review) => review.userType === filter);
+      : reviews?.filter((review) => review.userType === filter);
 
   return (
     <div className="reviews__info">
       <span className="reviews__title">Мои отзывы</span>
-      <Filter
-        filter={filter}
-        onFilterChange={handleFilterChange}
-        filters={userTypeFilters}
-      />
-      <div className="reviews__list">
-        {filteredReviews?.map((review) => (
-          <ReviewsItem
-            key={review.id}
-            date={review.date}
-            rating={review.rating}
-            userType={review.userType}
-            engStatus={review.engStatus}
-            rusStatus={review.rusStatus}
-            name={review.fullName}
-            text={review.message}
-            onSave={(updatedText) => handleSave(review.id, updatedText)}
-            onCancel={() => handleCancel(review.id)}
+
+      {isLoading ? (
+        <Spinner />
+      ) : isError ? (
+        <div>Ошибка: {error.message}</div>
+      ) : reviews?.length === 0 ? (
+        <span className="support__subtitle">Нет отзывов</span>
+      ) : isSuccess ? (
+        <>
+          <Filter
+            filter={filter}
+            onFilterChange={handleFilterChange}
+            filters={userTypeFilters}
           />
-        ))}
-      </div>
+          <div className="reviews__list">
+            {filteredReviews?.map((review) => (
+              <ReviewsItem
+                key={review.id}
+                date={review.date}
+                rating={review.rating}
+                userType={review.userType}
+                engStatus={review.engStatus}
+                rusStatus={review.rusStatus}
+                name={review.fullName}
+                text={review.message}
+                onSave={(updatedText) => handleSave(review.id, updatedText)}
+                onCancel={() => handleCancel(review.id)}
+              />
+            ))}
+          </div>
+        </>
+      ) : null}
     </div>
   );
 };
