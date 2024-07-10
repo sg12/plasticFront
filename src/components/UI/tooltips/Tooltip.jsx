@@ -25,6 +25,7 @@ const Tooltip = ({ children, text, position }) => {
   // Определение стилей на основе выбранной позиции
   const getTooltipStyles = () => {
     let styles = {
+      fontSize: "12px",
       position: "absolute",
       padding: "4px 8px",
       color: "white",
@@ -43,7 +44,7 @@ const Tooltip = ({ children, text, position }) => {
           ...styles,
           bottom: `100%`,
           left: "50%",
-          transform: "translateX(-50%) translateY(-4px)", 
+          transform: "translateX(-50%) translateY(-4px)",
         };
         break;
       case "bottom":
@@ -51,7 +52,7 @@ const Tooltip = ({ children, text, position }) => {
           ...styles,
           top: `100%`,
           left: "50%",
-          transform: "translateX(-50%) translateY(4px)", 
+          transform: "translateX(-50%) translateY(4px)",
         };
         break;
       case "left":
