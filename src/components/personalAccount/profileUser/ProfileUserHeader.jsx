@@ -38,7 +38,7 @@ const UserProfileHeader = ({ userData, extraDetails, extraIdentification }) => {
         </div>
         <div className="profile__details">
           <h3 className="profile__user-name">
-            {userData?.username || "Неизвестно"}
+            {userData?.fio || "Неизвестно"}
           </h3>
           <p className="profile__user-phone">
             <span className="profile__darkened">Телефон: </span>

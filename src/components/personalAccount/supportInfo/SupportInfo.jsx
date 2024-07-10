@@ -43,8 +43,8 @@ const SupportInfo = () => {
     refetch();
   };
 
-  const handleDelete = async () => {
-    await PlasticServices.deleteTicket();
+  const handleDelete = async (id) => {
+    await PlasticServices.deleteTicket(id);
     refetch();
   };
 
@@ -85,7 +85,7 @@ const SupportInfo = () => {
           <SupportTicket
             key={index}
             data={ticket}
-            handleDelete={handleDelete}
+            handleDelete={() => handleDelete(ticket.id)}
           />
         ))
       ) : null}

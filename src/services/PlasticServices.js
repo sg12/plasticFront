@@ -91,7 +91,10 @@ class PlasticServices {
   }
 
   static async patchUser(editedData, role) {
-    return await axiosInstance.patch(`/profile/${role}`, { data: editedData });
+    const response = await axiosInstance.patch(`/profile/${role}`, {
+      data: editedData,
+    });
+    return console.log(response, editedData);
   }
 
   static async getFaq() {
@@ -131,19 +134,23 @@ class PlasticServices {
     return await axiosInstance.post(`/profile/client/favorities/${id}`);
   }
 
-  static async postAdditionally(type, data) {
-    const additionally = await axiosInstance.post(
-      `/profile/doctor/${type}`,
-      data
-    );
-    return additionally.data;
-  }
-
   static async getAdditionally(userType, type) {
     const additionally = await axiosInstance.get(
       `/profile/${userType}/${type}`
     );
     return additionally.data;
+  }
+
+  static async postAdditionally(userType, type, data) {
+    const additionally = await axiosInstance.post(
+      `/profile/${userType}/${type}`,
+      data
+    );
+    return additionally.data;
+  }
+
+  static async deleteAdditionally(userType, type, index) {
+    return await axiosInstance.delete(`/profile/${userType}/${type}/${index}`);
   }
 
   static async getLocation() {

@@ -31,7 +31,7 @@ export default function ProfileUserConfig(userData) {
       fieldsDetails: [
         { label: "Адрес", value: "address" },
         { label: "Официальный сайт", value: "site" },
-        { label: "Опыт работы", value: "experience" },
+        { label: "Опыт работы (лет)", value: "experience" },
       ],
       fieldsFooter: [
         {
