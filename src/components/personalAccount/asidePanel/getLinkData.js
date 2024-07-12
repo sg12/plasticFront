@@ -8,6 +8,7 @@ import reviews from "../../../assets/icons/reviews.svg";
 import setting from "../../../assets/icons/setting.svg";
 import help from "../../../assets/icons/help.svg";
 import support from "../../../assets/icons/support.svg";
+import appointmentHistory from "../../../assets/icons/appointmentHistory.svg"
 
 export default function getLinkData(userType) {
   switch (userType) {
@@ -15,12 +16,8 @@ export default function getLinkData(userType) {
       return [
         { to: "profile", text: "Профиль (Клиент)", icon: profile },
         { to: "favourites", text: "Избранное", icon: favourites },
-        {
-          to: "appointment",
-          text: "Записи на приём",
-          icon: appointment,
-          disabled: true,
-        },
+        { to: "appointment", text: "Запись на приём", icon: appointment },
+        { to: "appointment-history", text: "История записей", icon: appointmentHistory },
         { to: "reviews", text: "Отзывы", icon: reviews },
         // { to: "settings", text: "Настройки", icon: setting },
         { to: "help", text: "Помощь", icon: help },
@@ -31,12 +28,7 @@ export default function getLinkData(userType) {
         { to: "profile", text: "Профиль (Доктор)", icon: profile },
         { to: "clinic", text: "Клиника", icon: specialist },
         { to: "service", text: "Услуги", icon: services },
-        {
-          to: "appointment",
-          text: "Записи на приём",
-          icon: appointment,
-          disabled: true,
-        },
+        { to: "appointment", text: "Записи на приём", icon: appointment },
         { to: "reviews", text: "Отзывы пациентов", icon: reviews },
         // { to: "settings", text: "Настройки", icon: setting },
         { to: "help", text: "Помощь", icon: help },
@@ -47,12 +39,7 @@ export default function getLinkData(userType) {
         { to: "profile", text: "Профиль (Клиника)", icon: profile },
         { to: "specialist", text: "Специалисты", icon: specialist },
         { to: "service", text: "Услуги", icon: services },
-        {
-          to: "appointment",
-          text: "Записи на приём",
-          icon: appointment,
-          disabled: true,
-        },
+        { to: "appointment", text: "Записи на приём", icon: appointment },
         { to: "reviews", text: "Отзывы пациентов", icon: reviews },
         // { to: "settings", text: "Настройки", icon: setting },
         { to: "help", text: "Помощь", icon: help },

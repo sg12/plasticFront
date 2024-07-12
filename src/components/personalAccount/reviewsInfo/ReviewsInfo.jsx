@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@siberiacancode/reactuse";
 import { useUser } from "../../../context/UserContext";
 
@@ -6,32 +6,76 @@ import PlasticServices from "../../../services/PlasticServices";
 
 import "./ReviewsInfo.scss";
 
-import ReviewsItem from "../reviewsItem/ReviewsItem";
+import ReviewsItem from "./reviewsItem/ReviewsItem";
 import Filter from "../../UI/filter/Filter";
 import Spinner from "../../UI/preloader/Spinner";
+import useFilter from "../../../hooks/useFilter";
 
 const ReviewsInfo = () => {
+  // TODO: Рефакторить отзывы
   const { userData } = useUser();
-  const [reviews, setReviews] = useState([]);
-  const [filter, setFilter] = useState("all");
-
-  const { isLoading, isError, isSuccess, error, refetch } = useQuery(
-    () => PlasticServices.getReviewsClinics(userData?.id),
+  const [reviews, setReviews] = useState([
     {
-      keys: [userData?.id],
-      onSuccess: (data) => {
-        setReviews(Array.isArray(data) ? data : []);
+      id: 0,
+      author: {
+        id: 0,
+        email: "user@example.com",
+        username: "Васильев Петр Олегович",
+        avatar: "string",
       },
-    }
-  );
+      text: "string",
+      rating: 5,
+      created_at: "2024-07-11T19:39:22.754Z",
+      updated_at: "2024-07-11T19:39:22.754Z",
+      reply: {
+        id: 0,
+        author: {
+          id: 0,
+          email: "user@example.com",
+          username: "string",
+          avatar: "string",
+        },
+        created_at: "2024-07-11T19:39:22.754Z",
+        updated_at: "2024-07-11T19:39:22.754Z",
+        text: "string",
+      },
+    },
+    {
+      id: 1,
+      author: {
+        id: 0,
+        email: "user@example.com",
+        username: "Васильев Петр Олегович",
+        avatar: "string",
+      },
+      text: "string",
+      rating: 5,
+      created_at: "2024-07-11T19:39:22.754Z",
+      updated_at: "2024-07-11T19:39:22.754Z",
+      reply: {
+        id: 0,
+        author: {
+          id: 0,
+          email: "user@example.com",
+          username: "string",
+          avatar: "string",
+        },
+        created_at: "2024-07-11T19:39:22.754Z",
+        updated_at: "2024-07-11T19:39:22.754Z",
+        text: "string",
+      },
+    },
+  ]);
 
-  // Фильтры для выбора типа пользователя
-  const userTypeFilters = [
-    { value: "all", name: "Все" },
-    { value: "Клиника", name: "Клиника" },
-    { value: "Пациент", name: "Пациент" },
-    { value: "Доктор", name: "Доктор" },
-  ];
+  // const { isLoading, isError, isSuccess, error, refetch } = useQuery(
+  //   () => PlasticServices.getReviewsClinics(userData?.id),
+  //   {
+  //     keys: [userData?.id],
+  //     onSuccess: (data) => {
+  //       setReviews(Array.isArray(data) ? data : []);
+  //     },
+  //   }
+  // );
 
   const handleSave = (id, updatedText) => {
     setReviews((prevReviews) =>
@@ -46,22 +90,11 @@ const ReviewsInfo = () => {
     console.log(`Редактирование отзыва с id ${id} отменено`);
   };
 
-  // Функция для обновления фильтра
-  const handleFilterChange = (event) => {
-    setFilter(event.target.value);
-  };
-
-  // Фильтрация отзывов
-  const filteredReviews =
-    filter === "all"
-      ? reviews
-      : reviews?.filter((review) => review.userType === filter);
-
   return (
-    <div className="reviews__info">
+    <div className="reviews">
       <span className="reviews__title">Мои отзывы</span>
 
-      {isLoading ? (
+      {/* {isLoading ? (
         <Spinner />
       ) : isError ? (
         <div>Ошибка: {error.message}</div>
@@ -69,29 +102,19 @@ const ReviewsInfo = () => {
         <span className="support__subtitle">Нет отзывов</span>
       ) : isSuccess ? (
         <>
-          <Filter
-            filter={filter}
-            onFilterChange={handleFilterChange}
-            filters={userTypeFilters}
+        */}
+      <div className="reviews__list">
+        {reviews?.map((review, index) => (
+          <ReviewsItem
+            key={index}
+            data={review}
+            onSave={(updatedText) => handleSave(review.id, updatedText)}
+            onCancel={() => handleCancel(review.id)}
           />
-          <div className="reviews__list">
-            {filteredReviews?.map((review) => (
-              <ReviewsItem
-                key={review.id}
-                date={review.date}
-                rating={review.rating}
-                userType={review.userType}
-                engStatus={review.engStatus}
-                rusStatus={review.rusStatus}
-                name={review.fullName}
-                text={review.message}
-                onSave={(updatedText) => handleSave(review.id, updatedText)}
-                onCancel={() => handleCancel(review.id)}
-              />
-            ))}
-          </div>
-        </>
-      ) : null}
+        ))}
+      </div>
+      {/* </>
+      ) : null} */}
     </div>
   );
 };

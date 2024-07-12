@@ -2,28 +2,19 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
+
   &__title {
     font-size: 16px;
     font-weight: 700;
   }
+
   &__subtitle {
     opacity: 0.5;
   }
 
-  &__button {
-    &-filter {
-      padding: 8px 16px;
-      border-radius: 8px;
-      border: 2px solid #3066be;
-      background: none;
-      transition: background 0.1s ease-out;
-
-      &:hover {
-        background: rgba($color: #3066be, $alpha: 0.1);
-      }
-      &:focus {
-        background: rgba($color: #3066be, $alpha: 0.2);
-      }
-    }
+  &__result {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   }
 }
