@@ -50,26 +50,27 @@ class PlasticServices {
   }
 
   //! прокидывать значение через функцию или цикл
-  static async getAllDoctors(
-    limit,
-    page,
+  static async getDoctors(
     search,
     specialtie,
-    gender,
+    experience,
     category,
-    rating,
+    degree,
     reception,
-    sort
+    ordering,
+    gender,
+    page,
+    limit
   ) {
-    const response = await axios.get(
-      `${_apiBase}/surgeons?limit=${limit}&page=${page}&search=${search}&specialtie=${specialtie}&gender=${gender}&category=${category}&rating=${rating}&reception=${reception}&sort=${sort}`
+    const response = await axiosInstance.get(
+      `/doctors?search=${search}&specialtie=${specialtie}&experience=${experience}&category=${category}&degree=${degree}&reception=${reception}&ordering=${ordering}&gender=${gender}&page=${page}&limit=${limit}&`
     );
     return response;
   }
 
   static async getDoctor(id) {
-    const response = await axios.get(`${_apiBase}/surgeons/${id}`);
-    return response;
+    const response = await axiosInstance.get(`/doctors/${id}`);
+    return response.data;
   }
 
   //////////////////////////////
@@ -130,8 +131,17 @@ class PlasticServices {
     };
   }
 
+  static async postFavorities(data) {
+    console.log(data);
+    const response = await axiosInstance.post(
+      "/profile/client/favorities",
+      data
+    );
+    return response.data;
+  }
+
   static async deleteFavorities(id) {
-    return await axiosInstance.post(`/profile/client/favorities/${id}`);
+    return await axiosInstance.delete(`/profile/client/favorities/${id}`);
   }
 
   static async getAdditionally(userType, type) {
@@ -177,6 +187,21 @@ class PlasticServices {
   static async getServices(userType) {
     const services = await axiosInstance.get(`/profile/${userType}/services`);
     return services.data;
+  }
+
+  static async getDoctorsForAppointment(search) {
+    const response = await axiosInstance.get(`/doctors?search=${search}`);
+    return response.data.result;
+  }
+
+  static async getDoctorServices(id) {
+    const response = await axiosInstance.get(`/doctors/${id}/services`);
+    return response.data;
+  }
+
+  static async getReceptions() {
+    const response = await axiosInstance.get("/profile/client/receptions");
+    return response.data;
   }
 
   ///////////////////////////
