@@ -1,18 +1,27 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 
-export const useFilter = (initialItems) => {
+const useFilter = (initialItems, filterKey) => {
   const [items, setItems] = useState(initialItems);
-  const [filteredItems, setFilteredItems] = useState(initialItems); // Изменился этот момент
+  const [filteredItems, setFilteredItems] = useState(initialItems);
 
-  const filterItems = (value) => {
-    setFilteredItems(
-      items.filter((item) => item.toLowerCase().includes(value.toLowerCase()))
-    );
-  };
+  const filterItems = useCallback(
+    (value) => {
+      setFilteredItems(
+        value === "all"
+          ? items
+          : items.filter(
+              (item) =>
+                item[filterKey] &&
+                item[filterKey].toLowerCase().includes(value.toLowerCase())
+            )
+      );
+    },
+    [items, filterKey]
+  );
 
   useEffect(() => {
-    setFilteredItems(items);
-  }, [items]);
+    setFilteredItems(initialItems);
+  }, [initialItems]);
 
   return {
     items,
@@ -21,3 +30,5 @@ export const useFilter = (initialItems) => {
     filterItems,
   };
 };
+
+export default useFilter;
