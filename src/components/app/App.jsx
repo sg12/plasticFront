@@ -13,6 +13,8 @@ import HelpInfo from "../personalAccount/helpInfo/HelpInfo";
 import SupportInfo from "../personalAccount/supportInfo/SupportInfo";
 import ClinicsInfo from "../personalAccount/clinicsInfo/ClinicsInfo";
 import ServicesInfo from "../personalAccount/servicesInfo/ServicesInfo";
+import AppointmentInfo from "../personalAccount/appointmentInfo/AppointmentInfo";
+import AppointmentHistoryInfo from "../personalAccount/appointmentHistoryInfo/AppointmentHistoryInfo";
 
 import Layout from "../../pages/Layout";
 import MainPage from "../../pages/MainPage";
@@ -70,6 +72,11 @@ function App() {
           <Route path="account" element={<AccountPage />}>
             <Route path="profile" element={<ProfileUser />} />
             <Route path="reviews" element={<ReviewsInfo />} />
+            <Route path="appointment" element={<AppointmentInfo />} />
+            <Route
+              path="appointment-history"
+              element={<AppointmentHistoryInfo />}
+            />
             <Route path="help" element={<HelpInfo />} />
             <Route path="support" element={<SupportInfo />} />
             <Route path="clinic" element={<ClinicsInfo />} />
