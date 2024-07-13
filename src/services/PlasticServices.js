@@ -132,7 +132,6 @@ class PlasticServices {
   }
 
   static async postFavorities(data) {
-    console.log(data);
     const response = await axiosInstance.post(
       "/profile/client/favorities",
       data
@@ -201,6 +200,14 @@ class PlasticServices {
 
   static async getReceptions() {
     const response = await axiosInstance.get("/profile/client/receptions");
+    return response.data;
+  }
+
+  static async addReceptions(data) {
+    const response = await axiosInstance.post(
+      "/profile/client/receptions",
+      data
+    );
     return response.data;
   }
 
