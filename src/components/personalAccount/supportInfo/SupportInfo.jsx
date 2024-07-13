@@ -50,7 +50,6 @@ const SupportInfo = () => {
 
   return (
     <div className="support">
-      <span className="support__title">Обращение в службу поддержки</span>
       <form className="support__form" onSubmit={handleSubmit}>
         {fieldsConfig.map((field) => (
           <Input

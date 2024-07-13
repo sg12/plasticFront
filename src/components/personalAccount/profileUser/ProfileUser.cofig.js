@@ -8,7 +8,6 @@ export default function ProfileUserConfig(userData) {
       fieldsDetails: [
         { label: "Пол", value: "gender" },
         { label: "Дата рождения", value: "date_born" },
-        { label: "Почта", value: "email" },
         { label: "Адрес", value: "address" },
       ],
       fieldsFooter: [],

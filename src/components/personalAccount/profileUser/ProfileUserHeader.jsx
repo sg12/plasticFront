@@ -1,65 +1,38 @@
-// import { useState } from "react";
+import { FaUser, FaUserDoctor } from "react-icons/fa6";
+import Avatar from "../../UI/avatar/Avatar";
+import Field from "../../UI/fields/Field";
 
 const UserProfileHeader = ({ userData, extraDetails, extraIdentification }) => {
-  // const [imageSrc, setImageSrc] = useState(null);
-
-  // const handleFileChange = (event) => {
-  //   const file = event.target.files[0];
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onloadend = () => {
-  //       setImageSrc(reader.result);
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // };
-
   return (
     <div className="profile__header">
       <div className="profile__user">
-        <div className="profile__photo">
-          <label htmlFor="uploadInput" className="profile__photo-label">
-            <img
-              src={
-                userData?.avatar ||
-                "https://aib-schultes.de/wp-content/uploads/2019/11/jobs-icon-aibschultes-avatar.jpg"
-              }
-              alt="user image"
-              className="profile__photo-img"
-            />
-          </label>
-          {/* <input
-            type="file"
-            id="uploadInput"
-            accept="image/*"
-            style={{ display: "none" }}
-            onChange={handleFileChange}
-          /> */}
-        </div>
+        {userData?.role === "client" ? (
+          <Avatar
+            src={userData?.avatar}
+            icon={<FaUser />}
+            size={"large"}
+            alt={userData?.fio}
+          />
+        ) : (
+          <Avatar
+            src={userData?.avatar}
+            icon={<FaUserDoctor />}
+            size={"large"}
+            alt={userData?.fio}
+          />
+        )}
         <div className="profile__details">
-          <h3 className="profile__user-name">
-            {userData?.fio || "Неизвестно"}
-          </h3>
-          <p className="profile__user-phone">
-            <span className="profile__darkened">Телефон: </span>
-            {userData?.phone || "Неизвестно"}
-          </p>
-          {userData?.email && (
-            <div className="profile__email">
-              <span className="profile__darkened">Почта: </span>
-              {userData?.email || "Неизвестно"}
-            </div>
-          )}
+          <h3 className="profile__fio">{userData?.fio || "Неизвестно"}</h3>
+          <Field label={"Телефон"} values={userData?.phone} />
+          <Field label={"Email"} values={userData?.email} />
           {extraDetails}
         </div>
       </div>
       <div className="profile__identification">
-        <div className="iden">
-          <div className="iden__id">
-            <span>Ваш ID:</span> {userData?.id || "Неизвестно"}
-          </div>
-          {extraIdentification}
+        <div className="iden__id">
+          <span>Ваш ID:</span> {userData?.id || "Неизвестно"}
         </div>
+        {extraIdentification}
       </div>
     </div>
   );

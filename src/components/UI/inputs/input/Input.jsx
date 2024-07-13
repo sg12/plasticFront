@@ -43,7 +43,7 @@ Input.propTypes = {
   onChange: PropTypes.func,
   size: PropTypes.oneOf(["default", "medium", "large"]),
   andClass: PropTypes.string,
-  isLoading: PropTypes.bool,
+  isLoading: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
 };
 
 export default Input;

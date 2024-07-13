@@ -22,10 +22,12 @@ const AsidePanel = ({ userType, onClick }) => {
             </div>
             <span className="aside-panel__text">{link.text}</span>
           </NavLink>
-          {((userType === "client" &&
+          {/* {((userType === "client" &&
             (index === 1 || index === 3 || index + 1 === 0)) ||
             (userType !== "client" &&
               (index === 1 || (index + 2) % 3 === 0))) &&
+            index !== linksData.length - 1 && <Divider />} */}
+          {(index === 1 || (index + 2) % 3 === 0) &&
             index !== linksData.length - 1 && <Divider />}
         </React.Fragment>
       ))}

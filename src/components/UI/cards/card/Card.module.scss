@@ -1,0 +1,36 @@
+.card {
+  display: flex;
+  gap: 16px;
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+  padding: 16px;
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+
+  &:hover {
+    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.3);
+  }
+
+  &__active {
+    outline: 2px solid #3066be;
+    outline-offset: 4px;
+  }
+
+  &__info {
+    display: flex;
+    gap: 8px;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  &__title {
+  }
+
+  &__subtitle {
+    opacity: 0.5;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 150px;
+  }
+}
