@@ -67,15 +67,15 @@ const ReviewsInfo = () => {
     },
   ]);
 
-  // const { isLoading, isError, isSuccess, error, refetch } = useQuery(
-  //   () => PlasticServices.getReviewsClinics(userData?.id),
-  //   {
-  //     keys: [userData?.id],
-  //     onSuccess: (data) => {
-  //       setReviews(Array.isArray(data) ? data : []);
-  //     },
-  //   }
-  // );
+  const { isLoading, isError, isSuccess, error, refetch } = useQuery(
+    () => PlasticServices.getReviewsClinics(userData?.id),
+    {
+      keys: [userData?.id],
+      onSuccess: (data) => {
+        setReviews(Array.isArray(data) ? data : []);
+      },
+    }
+  );
 
   const handleSave = (id, updatedText) => {
     setReviews((prevReviews) =>
@@ -92,9 +92,7 @@ const ReviewsInfo = () => {
 
   return (
     <div className="reviews">
-      <span className="reviews__title">Мои отзывы</span>
-
-      {/* {isLoading ? (
+      {isLoading ? (
         <Spinner />
       ) : isError ? (
         <div>Ошибка: {error.message}</div>
@@ -102,19 +100,18 @@ const ReviewsInfo = () => {
         <span className="support__subtitle">Нет отзывов</span>
       ) : isSuccess ? (
         <>
-        */}
-      <div className="reviews__list">
-        {reviews?.map((review, index) => (
-          <ReviewsItem
-            key={index}
-            data={review}
-            onSave={(updatedText) => handleSave(review.id, updatedText)}
-            onCancel={() => handleCancel(review.id)}
-          />
-        ))}
-      </div>
-      {/* </>
-      ) : null} */}
+          <div className="reviews__list">
+            {reviews?.map((review, index) => (
+              <ReviewsItem
+                key={index}
+                data={review}
+                onSave={(updatedText) => handleSave(review.id, updatedText)}
+                onCancel={() => handleCancel(review.id)}
+              />
+            ))}
+          </div>
+        </>
+      ) : null}
     </div>
   );
 };

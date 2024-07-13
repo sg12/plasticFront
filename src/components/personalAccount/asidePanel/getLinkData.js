@@ -14,7 +14,7 @@ export default function getLinkData(userType) {
   switch (userType) {
     case "client":
       return [
-        { to: "profile", text: "Профиль (Клиент)", icon: profile },
+        { to: "profile", text: "Профиль", icon: profile },
         { to: "favourites", text: "Избранное", icon: favourites },
         { to: "appointment", text: "Запись на приём", icon: appointment },
         { to: "appointment-history", text: "История записей", icon: appointmentHistory },
@@ -25,7 +25,7 @@ export default function getLinkData(userType) {
       ];
     case "doctor":
       return [
-        { to: "profile", text: "Профиль (Доктор)", icon: profile },
+        { to: "profile", text: "Профиль", icon: profile },
         { to: "clinic", text: "Клиника", icon: specialist },
         { to: "service", text: "Услуги", icon: services },
         { to: "appointment", text: "Записи на приём", icon: appointment },
@@ -36,7 +36,7 @@ export default function getLinkData(userType) {
       ];
     case "clinic":
       return [
-        { to: "profile", text: "Профиль (Клиника)", icon: profile },
+        { to: "profile", text: "Профиль", icon: profile },
         { to: "specialist", text: "Специалисты", icon: specialist },
         { to: "service", text: "Услуги", icon: services },
         { to: "appointment", text: "Записи на приём", icon: appointment },

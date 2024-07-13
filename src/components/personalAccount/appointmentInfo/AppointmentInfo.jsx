@@ -7,13 +7,11 @@ import SendingEntry from "./sendingEntry/SendingEntry";
 import { useStep } from "@siberiacancode/reactuse";
 
 const AppointmentInfo = () => {
-  // TODO: Дописать запись на приём
   const stepper = useStep(2);
   const [selectedDoctor, setSelectedDoctor] = useState(null);
 
   return (
     <div className="appointment">
-      <span className="appointment__title">Записи на приём</span>
       {stepper.currentStep === 1 ? (
         <SelectDoctor
           stepper={stepper}

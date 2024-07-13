@@ -3,7 +3,6 @@ import Avatar from "../../UI/avatar/Avatar";
 import Field from "../../UI/fields/Field";
 
 const UserProfileHeader = ({ userData, extraDetails, extraIdentification }) => {
-  console.log(userData);
   return (
     <div className="profile__header">
       <div className="profile__user">

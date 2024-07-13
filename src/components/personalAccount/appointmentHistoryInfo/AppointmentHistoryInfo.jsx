@@ -16,7 +16,6 @@ const AppointmentHistoryInfo = () => {
 
   return (
     <div className="appointment-history">
-      <span className="appointment-history__title">История записей</span>
       <span className="appointment-history__subtitle">
         В данном разделе отображены все записи, которые были совершены с помощью
         PlasticBeauty

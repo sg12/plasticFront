@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PlasticServices from "../../../../services/PlasticServices";
 import { useQuery } from "@siberiacancode/reactuse";
 import ServicesColumns from "./ServicesColumn";
@@ -10,6 +10,9 @@ import Spinner from "../../../UI/preloader/Spinner";
 import Table from "../../../UI/table/Table";
 import Divider from "../../../UI/dividers/Divider";
 import Input from "../../../UI/inputs/input/Input";
+import Select from "../../../UI/selects/select/Select";
+import Avatar from "../../../UI/avatar/Avatar";
+import { toast } from "react-toastify";
 
 const DoctorInfo = ({ selectedDoctor }) => {
   return (
@@ -37,48 +40,60 @@ const DoctorInfo = ({ selectedDoctor }) => {
   );
 };
 
-const DoctorAvatar = ({ selectedDoctor }) => {
-  return (
-    <div className="appointment__photo">
-      {selectedDoctor?.avatar ? (
-        <img
-          className="appointment__img"
-          src={selectedDoctor?.avatar}
-          alt="doctor"
-        />
-      ) : (
-        <FaUserDoctor size={48} className="appointment__icon" />
-      )}
-    </div>
-  );
-};
-
 const SendingEntry = ({ stepper, selectedDoctor }) => {
+  const [datetime, setDatetime] = useState("");
+  const [receptionType, setReceptionType] = useState("private");
   console.log(selectedDoctor);
-  const {
-    data: services,
-    isLoading,
-    isError,
-    isSuccess,
-    error,
-    refetch,
-  } = useQuery(() => PlasticServices.getDoctorServices(selectedDoctor?.id), {
-    keys: [selectedDoctor?.id],
-  });
 
-  const columns = ServicesColumns();
+  // TODO: Добавить запрос, как только Дима исправит 500 статус
+  // const {
+  //   data: services,
+  //   isLoading,
+  //   isError,
+  //   isSuccess,
+  //   error,
+  //   refetch,
+  // } = useQuery(() => PlasticServices.getDoctorServices(selectedDoctor?.id), {
+  //   keys: [selectedDoctor?.id],
+  // });
+
+  // const columns = ServicesColumns();
+
+  const addReceptions = async () => {
+    if (datetime === "") {
+      toast.error("Укажите дату и время приёма");
+    } else {
+      try {
+        await PlasticServices.addReceptions({
+          type: receptionType,
+          datetime: datetime,
+          service: 1,
+          user: selectedDoctor?.id,
+        });
+        toast.success("Приём успешно создан");
+      } catch (error) {
+        toast.error("Ошибка при создании приёма");
+      }
+    }
+  };
 
   return (
     <>
       <div className="appointment__header">
         <div className="appointment__doctor">
-          <DoctorAvatar selectedDoctor={selectedDoctor} />
+          <Avatar
+            src={selectedDoctor?.avatar}
+            size={"large"}
+            icon={<FaUserDoctor />}
+          />
           <DoctorInfo selectedDoctor={selectedDoctor} />
         </div>
       </div>
+
       <Divider />
+
       <div className="appointment__main">
-        <span className="appointment__subtitle">Выберите услугу</span>
+        {/* <span className="appointment__subtitle">Выберите услугу</span>
         {isLoading ? (
           <Spinner />
         ) : isError ? (
@@ -88,41 +103,60 @@ const SendingEntry = ({ stepper, selectedDoctor }) => {
             У доктора не добавлены услуги
           </span>
         ) : isSuccess ? (
-          <div className="appointment__services"></div>
-        ) : null}
-
-        <Table
-          columns={columns}
-          data={[
-            {
-              id: 1,
-              specialty: {
-                id: 4,
-                name: "Удаление уха",
+          <Table
+            columns={columns}
+            data={[
+              {
+                id: 1,
+                specialty: {
+                  id: 4,
+                  name: "Удаление уха",
+                },
+                price: 1220,
+                status: true,
               },
-              price: 1220,
-              status: true,
-            },
-            {
-              id: 2,
-              specialty: {
-                id: 4,
-                name: "Удаление уха",
+              {
+                id: 2,
+                specialty: {
+                  id: 4,
+                  name: "Удаление уха",
+                },
+                price: 1220,
+                status: true,
               },
-              price: 1220,
-              status: true,
-            },
-          ]}
-        />
+            ]}
+          />
+        ) : null} */}
 
-        <Divider />
-        <span className="appointment__subtitle">Выберите дату приёма</span>
-        <Divider />
-        <span className="appointment__subtitle">Выберите время приёма</span>
+        <div className="appointment__inputs">
+          <Input
+            value={datetime}
+            name={"datetime"}
+            andClass={"appointment__input"}
+            type={"datetime-local"}
+            label={"Выберите дату и время приёма"}
+            onChange={(e) => setDatetime(e.target.value)}
+            required
+          />
+
+          <Select
+            value={receptionType}
+            name={"receptionType"}
+            andClass={"appointment__input"}
+            type={"datetime-local"}
+            label={"Выберите тип приёма"}
+            onChange={(e) => setReceptionType(e.target.value)}
+            required
+            options={[
+              { value: "private", label: "На дому" },
+              { value: "clinic", label: "В клинике" },
+            ]}
+          />
+        </div>
       </div>
 
       <div className="appointment__actions">
-        <OutlineButton>Отправить запись</OutlineButton>
+        <OutlineButton onClick={addReceptions}>Отправить запись</OutlineButton>
         <OutlineButton
           style={{ color: "rgb(206, 44, 49)" }}
           onClick={() => stepper.reset()}

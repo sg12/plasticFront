@@ -45,7 +45,6 @@ const FavouritesInfo = () => {
 
   return (
     <div className="favourites">
-      <span className="favourites__title">Избранное</span>
       <span className="favourites__subtitle">
         Доктора или клинику можно добавить, нажав на сердечко
       </span>
@@ -87,7 +86,6 @@ const FavouritesInfo = () => {
               />
             ))}
           </div>
-          {console.log(favorites)}
         </>
       ) : null}
 

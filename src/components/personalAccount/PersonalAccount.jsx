@@ -44,7 +44,7 @@ const PersonalAccount = () => {
           <AsidePanel onClick={onToggleAside} userType={userData?.role} />
         </aside>
         <main className="main-grid">
-          <MainPanel />
+          <MainPanel userType={userData?.role}/>
         </main>
       </div>
 
