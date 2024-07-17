@@ -8,7 +8,6 @@ export default function ProfileUserConfig(userData) {
       fieldsDetails: [
         { label: "Пол", value: "gender" },
         { label: "Дата рождения", value: "date_born" },
-        { label: "Почта", value: "email" },
         { label: "Адрес", value: "address" },
       ],
       fieldsFooter: [],
@@ -31,7 +30,7 @@ export default function ProfileUserConfig(userData) {
       fieldsDetails: [
         { label: "Адрес", value: "address" },
         { label: "Официальный сайт", value: "site" },
-        { label: "Опыт работы", value: "experience" },
+        { label: "Опыт работы (лет)", value: "experience" },
       ],
       fieldsFooter: [
         {

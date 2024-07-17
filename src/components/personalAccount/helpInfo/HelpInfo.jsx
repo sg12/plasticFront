@@ -22,8 +22,6 @@ const HelpInfo = () => {
 
   return (
     <div className="help">
-      <span className="help__title">Часто задаваемые вопросы</span>
-
       {isLoading ? (
         <Spinner />
       ) : isError ? (

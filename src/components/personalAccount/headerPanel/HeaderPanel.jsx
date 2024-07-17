@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
+import PlasticServices from "../../../services/PlasticServices";
 
 import logo from "../../../assets/icons/logoNew.svg";
 
@@ -6,7 +7,6 @@ import "./HeaderPanel.scss";
 import OutlineButton from "../../UI/buttons/outlineButton/OutlineButton";
 import { MdOutlineExitToApp } from "react-icons/md";
 import { RxHamburgerMenu } from "react-icons/rx";
-import PlasticServices from "../../../services/PlasticServices";
 
 const HeaderPanel = ({ onToggleAside }) => {
   const navigate = useNavigate();

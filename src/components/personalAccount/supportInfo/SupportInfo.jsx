@@ -43,14 +43,13 @@ const SupportInfo = () => {
     refetch();
   };
 
-  const handleDelete = async () => {
-    await PlasticServices.deleteTicket();
+  const handleDelete = async (id) => {
+    await PlasticServices.deleteTicket(id);
     refetch();
   };
 
   return (
     <div className="support">
-      <span className="support__title">Обращение в службу поддержки</span>
       <form className="support__form" onSubmit={handleSubmit}>
         {fieldsConfig.map((field) => (
           <Input
@@ -85,7 +84,7 @@ const SupportInfo = () => {
           <SupportTicket
             key={index}
             data={ticket}
-            handleDelete={handleDelete}
+            handleDelete={() => handleDelete(ticket.id)}
           />
         ))
       ) : null}
