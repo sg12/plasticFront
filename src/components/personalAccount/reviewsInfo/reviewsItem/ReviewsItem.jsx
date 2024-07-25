@@ -6,10 +6,9 @@ import Divider from "../../../UI/dividers/Divider";
 import formatDate from "../../../../utils/formatDate";
 
 const ReviewsItem = ({ data, onSave, onCancel }) => {
-  // TODO: Рефакторить отзывы
   const [isExpanded, setIsExpanded] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [editedText, setEditedText] = useState(data.text);
+  const [editedText, setEditedText] = useState(data?.text);
 
   const handleSaveClick = () => {
     onSave(editedText);
@@ -28,41 +27,45 @@ const ReviewsItem = ({ data, onSave, onCancel }) => {
         <div className="reviews__info">
           <div className="reviews__user">
             <span className="reviews__name">
-              {data.author.username || "FULLNAME"}
+              от: {data?.author?.username || "Author"}
             </span>
-            <Tag label={`Рейтинг: ${data.rating}`} />
+            <span className="reviews__name">
+              кому: {data?.user?.username || "Recipient"}
+            </span>
           </div>
-          <span className="reviews__date">{formatDate(data.created_at)}</span>
+
+          <Tag label={`Рейтинг: ${data?.rating}`} />
+          <span className="reviews__date">
+            {formatDate(data?.created_at) || "Data"}
+          </span>
         </div>
       </div>
       <Divider />
       <div className="reviews__main">
-        <div className="reviews__main-text">
-          {isEditing ? (
-            <textarea
-              value={editedText}
-              onChange={(e) => setEditedText(e.target.value)}
-            />
-          ) : (
-            <p>
-              {isExpanded
-                ? editedText
-                : editedText.length > 100
-                ? `${editedText.slice(0, 100)}...`
-                : editedText}
-              {!isExpanded && editedText.length > 100 && (
-                <span
-                  className="read-more"
-                  onClick={() => setIsExpanded(!isExpanded)}
-                >
-                  Читать дальше...
-                </span>
-              )}
-            </p>
-          )}
-        </div>
+        {isEditing ? (
+          <textarea
+            value={editedText}
+            onChange={(e) => setEditedText(e.target.value)}
+          />
+        ) : (
+          <p>
+            {isExpanded
+              ? editedText
+              : editedText?.length > 100
+              ? `${editedText.slice(0, 200)}...`
+              : editedText}
+            {!isExpanded && editedText?.length > 100 && (
+              <span
+                className="read-more"
+                onClick={() => setIsExpanded(!isExpanded)}
+              >
+                Читать дальше...
+              </span>
+            )}
+          </p>
+        )}
       </div>
-      <div className="reviews__actions">
+      {/* <div className="reviews__actions">
         {isEditing ? (
           <>
             <OutlineButton onClick={handleSaveClick} style={{ border: "none" }}>
@@ -83,7 +86,7 @@ const ReviewsItem = ({ data, onSave, onCancel }) => {
             Редактировать отзыв
           </OutlineButton>
         )}
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -4,13 +4,14 @@ import "./ClinicsInfo.scss";
 
 import Divider from "../../UI/dividers/Divider";
 import Tag from "../../UI/tags/Tag";
+import Avatar from "../../UI/avatar/Avatar";
+import { FaClinicMedical } from "react-icons/fa";
 
 const ClinicsInfo = () => {
   const { userData } = useUser();
 
   return (
     <div className="clinic">
-      <span className="clinic__title">Ваша клиника</span>
       {userData?.clinic ? (
         <ClinicCard userData={userData} />
       ) : (
@@ -28,9 +29,7 @@ const ClinicCard = ({ userData }) => {
       </span>
       <Divider />
       <div className="clinic__card-info">
-        <div className="clinic__card-logo">
-          <img src="" alt="clinic logo" />
-        </div>
+        <Avatar size="medium" icon={<FaClinicMedical />} />
         <div className="clinic__card-personal">
           <div className="clinic__card-about">
             <span className="clinic__card-subtitle">Руководитель:</span>
