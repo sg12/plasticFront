@@ -1,13 +1,13 @@
 .enter {
 
-    &__partner {
+    &__partner, &__client {
         display: flex;
         max-width: 500px;
         flex-direction: column;
         gap: var(--corner-radius-r-16, 16px);
     }
 }
-.partner {
+.partner, .client {
 
     &__link {
         max-width: max-content;

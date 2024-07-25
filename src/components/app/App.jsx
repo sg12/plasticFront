@@ -29,17 +29,16 @@ import NotFound from "../notFound/NotFound";
 import ConstructorPage from "../../pages/ConstructorPage";
 
 import EnterItem from "../enterItem/EnterItem";
-import EnterClient from "../enterClient/EnterClient";
-import RegisterClient from "../registerClient/RegisterClient";
-import EnterPartner from "../enterPartner/EnterPartner";
-import RegisterDoctor from "../registerDoctor/RegisterDoctor";
-import RegisterClinic from "../registerClinic/RegisterClinic";
+import RegisterClient from "../register/Register";
+import RegisterDoctor from "../register/Register";
+import RegisterClinic from "../register/Register";
 import ForgotPassword from "../forgotPassword/ForgotPassword";
 import NewPassword from "../newPassword/NewPassword";
 import EnterPage from "../../pages/EnterPage";
 import AccountPage from "../../pages/AccountPage";
 import ArticleDetailedPage from "../../pages/ArticleDetailedPage";
 import PrivateRoute from "../../routes/PrivateRoute";
+import Enter from "../enter/Enter";
 
 function App() {
   return (
@@ -60,9 +59,9 @@ function App() {
         </Route>
         <Route path="enterPage" element={<EnterPage />}>
           <Route index element={<EnterItem />}></Route>
-          <Route path="enterClient" element={<EnterClient />}></Route>
+          <Route path="client" element={<Enter />}></Route>
+          <Route path="partner" element={<Enter />}></Route>
           <Route path="registerClient" element={<RegisterClient />}></Route>
-          <Route path="enterPartner" element={<EnterPartner />}></Route>
           <Route path="registerDoctor" element={<RegisterDoctor />}></Route>
           <Route path="registerClinic" element={<RegisterClinic />}></Route>
           <Route path="forgotPassword" element={<ForgotPassword />}></Route>

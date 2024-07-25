@@ -1,13 +1,13 @@
 .enter {
 
-    &__client {
+    &__client, &__doctor, &__clinic {
         display: flex;
         max-width: 500px;
         flex-direction: column;
         gap: var(--corner-radius-r-16, 16px);
     }
 }
-.client {
+.client, .doctor, .clinic {
 
     &__link {
         max-width: max-content;
@@ -45,6 +45,41 @@
     }
 
     &__register {
+        color: #3066BE;
+        font-family: Raleway;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        text-decoration: none;
+    }
+
+    &__ref {
+        margin: 0;
+        max-width: 429px;
+        color: #3066BE;
+        text-align: center;
+        font-variant-numeric: lining-nums proportional-nums;
+        font-family: Raleway;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
+
+    &__confirmation {
+        margin: 0;
+        color: #3066BE;
+        text-align: center;
+        font-family: Raleway;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+    }
+
+    &__enter {
+        margin-left: 196px;
         color: #3066BE;
         font-family: Raleway;
         font-size: 16px;
