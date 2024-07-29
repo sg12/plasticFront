@@ -19,7 +19,7 @@ const ClinicsCardsItem = (props) => {
 	};
 
 	return (
-		<li className='clinics-cards-item'>
+		<li className='clinics-cards-item' onClick={toDetailedPage}>
 			<div className='clinics-cards-item__wrapper'>
 				<div className='clinics-cards-item__wrapper-left'>
 					<div className='clinics-cards-item__wrapper-left-box'>
@@ -29,7 +29,7 @@ const ClinicsCardsItem = (props) => {
 				</div>
 				<div className='clinics-cards-item__wrapper-center'>
 					<div className='clinics-cards-item__wrapper-center-box'>
-						<button className='title-doctor' onClick={toDetailedPage}>{props.post.official_name}</button>
+						<span className='title-doctor'>{props.post.official_name}</span>
 						<p className='text'>{props.post.id}</p>
 						<h3 className='title-h3'>УСЛУГИ</h3>
 						<p className='text'>{props.post.description}</p>

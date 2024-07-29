@@ -14,7 +14,6 @@ import { useFetching } from '../../hooks/useFetching';
 const ClinicDetailedList = () => {
 
 	const [clinic, setClinic] = useState([]);
-
 	const params = useParams();
 
 	const navigate = useNavigate();
@@ -29,7 +28,7 @@ const ClinicDetailedList = () => {
 	}, []);
 
 	const content = !(!isPostsLoading && !postError && clinic.length === 0)
-		? clinic.map((post) => (
+		? clinic?.map((post) => (
 			<ClinicDetailedItem post={post} key={post.id} />
 		))
 		: <h3 className='component-content-text'>Нет клиники</h3>;
