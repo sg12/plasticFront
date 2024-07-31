@@ -26,7 +26,7 @@ const ClinicDetailedItem = (props) => {
 
 	const [reviews, setReviews] = useState([]);
 
-	const token = Cookies.get("token");
+	const token = Cookies.get("key");
 
 	const privateReviews = () => {
 		if (!token) {
