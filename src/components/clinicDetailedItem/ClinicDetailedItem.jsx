@@ -102,9 +102,7 @@ const ClinicDetailedItem = (props) => {
 				{/* Модальное окно для ввода текстовых отзывов */}
 				<div className='doctor-detailed-item__modal-send-review'>
 					<h3 className='doctor-detailed-item__modal-send-review-title'>Добавить текстовый отзыв</h3>
-					<textarea className='review-textarea' placeholder="Ваша история" onChange={(event) => handleReviewChange(5, null, "Ваша история", event.target.value)} />
-					<textarea className='review-textarea' placeholder="Понравилось" onChange={(event) => handleReviewChange(6, null, "Понравилось", event.target.value)} />
-					<textarea className='review-textarea' placeholder="Не понравилось" onChange={(event) => handleReviewChange(7, null, "Не понравилось", event.target.value)} />
+					<textarea className='review-textarea' placeholder="Расскажите подробнее вашу историю, что вам понравилось или не понравилось" onChange={(event) => handleReviewChange(5, null, "Ваша история", event.target.value)} />
 					<FieldButton className='doctor-detailed-item__modal-send-review-button' onClick={handleReviewSubmit}>Оставить отзыв</FieldButton>
 				</div>
 			</CenterModal>
