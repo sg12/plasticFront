@@ -3,8 +3,11 @@ import "./AppointmentHistoryInfo.scss";
 import { useQuery } from "@siberiacancode/reactuse";
 import PlasticServices from "../../../services/PlasticServices";
 import Spinner from "../../UI/preloader/Spinner";
+import { useUser } from "../../../context/UserContext";
 
 const AppointmentHistoryInfo = () => {
+  const { userData } = useUser();
+
   const {
     data: receptions,
     isLoading,
@@ -12,7 +15,9 @@ const AppointmentHistoryInfo = () => {
     isSuccess,
     error,
     refetch,
-  } = useQuery(() => PlasticServices.getReceptions());
+  } = useQuery(() => PlasticServices.getReceptions(userData?.role), {
+    keys: [userData?.role],
+  });
 
   return (
     <div className="appointment-history">
@@ -32,7 +37,7 @@ const AppointmentHistoryInfo = () => {
           <ul>
             <li key={index}>{reception.date}</li>
           </ul>
-        )) // TODO: Добавить результат - карточку 
+        )) // TODO: Добавить результат - карточку
       ) : null}
     </div>
   );

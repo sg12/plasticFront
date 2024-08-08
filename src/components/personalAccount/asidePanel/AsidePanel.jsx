@@ -27,8 +27,9 @@ const AsidePanel = ({ userType, onClick }) => {
             (userType !== "client" &&
               (index === 1 || (index + 2) % 3 === 0))) &&
             index !== linksData.length - 1 && <Divider />} */}
-          {(index === 1 || (index + 2) % 3 === 0) &&
-            index !== linksData.length - 1 && <Divider />}
+          {(index + 2) % 3 === 0 && index !== linksData.length - 1 && (
+            <Divider />
+          )}
         </React.Fragment>
       ))}
     </aside>

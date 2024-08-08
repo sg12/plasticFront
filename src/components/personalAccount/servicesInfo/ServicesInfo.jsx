@@ -129,8 +129,6 @@ const ServicesInfo = () => {
 
   return (
     <div className="services">
-      <span className="services__title">Ваши услуги</span>
-
       {isLoading ? (
         <Spinner />
       ) : isError ? (

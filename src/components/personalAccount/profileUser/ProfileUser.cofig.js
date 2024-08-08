@@ -15,7 +15,6 @@ export default function ProfileUserConfig(userData) {
     clinic: {
       fieldsDetails: [
         { label: "Адрес", value: "address" },
-        { label: "Почта", value: "email" },
         { label: "Официальный сайт", value: "site" },
       ],
       // fieldsFooter: [

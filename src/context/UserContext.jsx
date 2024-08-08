@@ -19,7 +19,15 @@ export const UserProvider = ({ children }) => {
       },
     }
   );
-  const userData = data?.data;
+
+  let userData;
+
+  if (isLoading) {
+    return console.log("LoadingUserData...");
+  } else {
+    userData = data?.data;
+  }
+
   console.log(
     "%c@ CONTEXT @",
     "background: #222; color: #bada55;",

@@ -91,8 +91,8 @@ class PlasticServices {
     };
   }
 
-  static async patchUser(editedData, role) {
-    const response = await axiosInstance.patch(`/profile/${role}`, {
+  static async patchUser(editedData) {
+    const response = await axiosInstance.patch("/profile", {
       data: editedData,
     });
     return console.log(response, editedData);
@@ -114,8 +114,8 @@ class PlasticServices {
     return await axiosInstance.delete(`/tickets/${id}`);
   }
 
-  static async getReviewsClinics(id) {
-    return await axiosInstance.get(`/clinics/${id}/reviews`);
+  static async getReviews(userType, id) {
+    return await axiosInstance.get(`/${userType}s/${id}/reviews`);
   }
 
   static async getFavorities() {
@@ -198,8 +198,8 @@ class PlasticServices {
     return response.data;
   }
 
-  static async getReceptions() {
-    const response = await axiosInstance.get("/profile/client/receptions");
+  static async getReceptions(userType) {
+    const response = await axiosInstance.get(`/profile/${userType}/receptions`);
     return response.data;
   }
 

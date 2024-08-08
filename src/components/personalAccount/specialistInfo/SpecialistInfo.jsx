@@ -63,7 +63,8 @@ export const SpecialistInfo = () => {
       setEmployes([...employes, { id: newId }]);
       // TODO: Добавить post запрос на добавление сотрудника
       setNewId("");
-      toast.success("Сотрудник успешно добавлен");
+      // toast.success("Сотрудник успешно добавлен");
+      toast.info("Нет обработчика!");
       refetch();
     } else {
       toast.warn("Введите ID сотрудника");
@@ -72,8 +73,6 @@ export const SpecialistInfo = () => {
 
   return (
     <div className="specialist">
-      <span className="specialist__title">Ваши специалисты</span>
-
       {!isLoading && employes.length > 0 && (
         <div className="specialist__tools">
           <Filter

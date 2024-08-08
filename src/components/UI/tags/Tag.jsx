@@ -15,6 +15,7 @@ const Tag = ({ label, size = "default", ...props }) => {
 const styles = {
   tag: {
     display: "inline-block",
+    height: "fit-content",
     backgroundColor: "#5985cb",
     color: "#fff",
     borderRadius: "4px",
