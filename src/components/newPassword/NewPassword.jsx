@@ -54,8 +54,8 @@ const NewPassword = () => {
                 </FieldButton>
                 <p className='form__message'>Не забудьте новый пароль.</p>
                 <div className='form__registers'>
-                    <Link to={'/enterPage/enterClient'} className='form__register'>Вход клиента</Link>
-                    <Link to={'/enterPage/enterPartner'} className='form__register'>Вход партнёра</Link>
+                    <Link to={'/enterPage/client'} className='form__register'>Вход клиента</Link>
+                    <Link to={'/enterPage/partner'} className='form__register'>Вход партнёра</Link>
                 </div>
             </form>
         </div>

@@ -250,7 +250,7 @@ const Header = () => {
             </li>
           ))}
           <li>
-            {Cookies.get("token") ? (
+            {Cookies.get("key") ? (
               <Link
                 to={"account/profile"}
                 className="header__button-item"

@@ -23,7 +23,8 @@ const ClinicsCardsList = () => {
 
 	const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
 		const response = await PlasticServices.getAllClinics(filter.limit, page, filter.search, filter.service, filter.reception, filter.sort);
-		setPosts(response.data);
+		console.log(response);
+		setPosts(response.data.result);
 		const totalCount = response.headers['x-total-count'];
 		setTotalPages(getPageCount(totalCount, filter.limit));
 	});
@@ -37,7 +38,7 @@ const ClinicsCardsList = () => {
 	};
 
 	const content = !(!isPostsLoading && !postError && posts.length === 0)
-		? posts.map((post) => (
+		? posts?.map((post) => (
 			<ClinicsCardsItem post={post} key={post.id} />
 		))
 		: <h3 className='component-content-text'>Нет клиник</h3>;

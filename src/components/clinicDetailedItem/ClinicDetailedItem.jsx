@@ -26,7 +26,7 @@ const ClinicDetailedItem = (props) => {
 
 	const [reviews, setReviews] = useState([]);
 
-	const token = Cookies.get("token");
+	const token = Cookies.get("key");
 
 	const privateReviews = () => {
 		if (!token) {
@@ -48,7 +48,7 @@ const ClinicDetailedItem = (props) => {
 		updatedReviews[index] = { rating, text };
 		setReviews(updatedReviews);
 	};
-
+	console.log(props);
 	return (
 		<div className='clinic-detailed-item'>
 			<div className='clinic-detailed-item__box-title'>
@@ -59,7 +59,7 @@ const ClinicDetailedItem = (props) => {
 					<h3 style={{display:"flex", alignItems:"center", justifyContent:"center"}}>Вам нужно авторизоваться, чтобы оставлять отзывы</h3>
 					<Link to={"/enterPage"} style={{ textDecoration: 'none', color: "white"}}><FieldButton>Войти</FieldButton></Link>
 				</CenterModal>
-				<h2 className='title-doctor'>{props.post.user.username}</h2>
+				<h2 className='title-doctor'>{props.post.name}</h2>
 			</div>
 			<CenterModal visible={modal3} setVisible={setModal3}>
 				<div className='clinic-detailed-item__modal-send-review'>
@@ -97,7 +97,7 @@ const ClinicDetailedItem = (props) => {
 					<div className='clinic-detailed-item__wrapper-first-item'>
 						<div className='clinic-detailed-item__description-first'>
 							<h3 className='title-h3'>ОФИЦИАЛЬНОЕ НАЗВАНИЕ</h3>
-							<p className='text'>{props.post.id} {props.post.user.username}</p>
+							<p className='text'>{props.post.id} {props.post.official_name}</p>
 						</div>
 						<div className='clinic-detailed-item__description-first'>
 							<h3 className='title-h3'>РУКОВОДИТЕЛЬ</h3>
@@ -202,7 +202,7 @@ ClinicDetailedItem.propTypes = {
 	post: PropTypes.shape({
 		user: PropTypes.shape({
 			username: PropTypes.string.isRequired,
-		}).isRequired,
+		}),
 		id: PropTypes.number.isRequired,
 		director: PropTypes.string.isRequired,
 		official_name: PropTypes.string.isRequired,
