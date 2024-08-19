@@ -73,6 +73,10 @@ class PlasticServices {
     return response.data;
   }
 
+  static async postClinicReview(data, id) {
+    return await axiosInstance.post(`/clinics/${id}/reviews`, data);
+  }
+
   //////////////////////////////
   ////// PROFILE REQUESTS //////
   //////////////////////////////

@@ -17,14 +17,17 @@ import licenseBigImg from '../../assets/imgs/license-big.png';
 
 import Cookies from 'js-cookie';
 import { Link } from 'react-router-dom';
+import PlasticServices from '../../services/PlasticServices';
 
 const ClinicDetailedItem = (props) => {
 	const [modal, setModal] = useState(false);
 	const [modal2, setModal2] = useState(false);
 	const [modal3, setModal3] = useState(false);
+	const [modal4, setModal4] = useState(false);
 	const [alertModal, setAlertModal] = useState(false);
 
 	const [reviews, setReviews] = useState([]);
+	const [averageRating, setAverageRating] = useState(null);
 
 	const token = Cookies.get("key");
 
@@ -36,19 +39,29 @@ const ClinicDetailedItem = (props) => {
 		}
 	};
 
-	const handleReviewSubmit = () => {
-		console.log("Отзывы:");
-		reviews.forEach((review, index) => {
-			console.log(`${review.text}: ${review.rating}`);
-		});
-	};
+	const handleReviewSubmit = async () => {
+        const starRatings = reviews.slice(0, 5).map(review => review.rating);
+        const sumRatings = starRatings.reduce((acc, rating) => acc + rating, 0);
+        const avgRating = Math.round(sumRatings / starRatings.length);
+        const text = reviews[5]?.textReview;
+		const rating = avgRating;
 
-	const handleReviewChange = (index, rating, text) => {
+        const data = { rating, text };
+
+        setAverageRating(avgRating);
+
+        console.log("Средний рейтинг: ", avgRating);
+
+        await PlasticServices.postClinicReview(data, props.post.id);
+    };
+
+	const handleReviewChange = (index, rating, text, textReview) => {
 		const updatedReviews = [...reviews];
-		updatedReviews[index] = { rating, text };
+		updatedReviews[index] = { rating, text, textReview };
 		setReviews(updatedReviews);
 	};
-	console.log(props);
+	console.log(reviews);
+
 	return (
 		<div className='clinic-detailed-item'>
 			<div className='clinic-detailed-item__box-title'>
@@ -61,6 +74,11 @@ const ClinicDetailedItem = (props) => {
 				</CenterModal>
 				<h2 className='title-doctor'>{props.post.name}</h2>
 			</div>
+			{averageRating !== null && (
+				<div className='clinic-detailed-item__average-rating'>
+					<h3>Средний рейтинг: {averageRating}</h3>
+				</div>
+			)}
 			<CenterModal visible={modal3} setVisible={setModal3}>
 				<div className='clinic-detailed-item__modal-send-review'>
 					<h3 className='clinic-detailed-item__modal-send-review-title'>Оставить отзыв о клинике</h3>
@@ -89,7 +107,15 @@ const ClinicDetailedItem = (props) => {
 						<Stars totalStars={5} onChange={(rating) => handleReviewChange(4, rating, "Время ожидания")} />
 					</div>
 
-					<FieldButton className='clinic-detailed-item__modal-send-review-button' onClick={handleReviewSubmit}>Оставить отзыв</FieldButton>
+					<FieldButton className='clinic-detailed-item__modal-send-review-button' onClick={() => { setModal3(false); setModal4(true); }}>Продолжить</FieldButton>
+				</div>
+			</CenterModal>
+			<CenterModal visible={modal4} setVisible={setModal4}>
+				{/* Модальное окно для ввода текстовых отзывов */}
+				<div className='doctor-detailed-item__modal-send-review'>
+					<h3 className='doctor-detailed-item__modal-send-review-title'>Добавить текстовый отзыв</h3>
+					<textarea className='review-textarea' placeholder="Расскажите подробнее вашу историю, что вам понравилось или не понравилось" onChange={(event) => handleReviewChange(5, null, "text", event.target.value)} />
+					<FieldButton className='doctor-detailed-item__modal-send-review-button' onClick={handleReviewSubmit}>Оставить отзыв</FieldButton>
 				</div>
 			</CenterModal>
 			<div className='clinic-detailed-item__wrapper-first'>
