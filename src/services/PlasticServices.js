@@ -188,6 +188,10 @@ class PlasticServices {
     return services.data;
   }
 
+  static async postServices(data) {
+    return await axiosInstance.post("/profile/doctor/services", data);
+  }
+
   static async getDoctorsForAppointment(search) {
     const response = await axiosInstance.get(`/doctors?search=${search}`);
     return response.data.result;
@@ -209,6 +213,10 @@ class PlasticServices {
       data
     );
     return response.data;
+  }
+
+  static async getSpecializations() {
+    return await axiosInstance.get("/services/specializations");
   }
 
   ///////////////////////////
