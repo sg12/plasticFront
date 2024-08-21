@@ -1,11 +1,7 @@
 import ClinicsCardsList from "../components/clinicsCardsList/ClinicsCardsList";
 
 const ClinicsPage = () => {
-	return (
-		<>
-			<ClinicsCardsList />
-		</>
-	);
+  return <ClinicsCardsList />;
 };
 
 export default ClinicsPage;

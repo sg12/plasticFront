@@ -1,12 +1,7 @@
 import DoctorDetailedList from "../components/doctorDetailedList/DoctorDetailedList";
 
 const DoctorPage = () => {
-
-	return (
-		<>
-			<DoctorDetailedList />
-		</>
-	);
+  return <DoctorDetailedList />;
 };
 
 export default DoctorPage;

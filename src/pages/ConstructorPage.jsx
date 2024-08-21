@@ -1,11 +1,7 @@
 import ConstructorComp from "../components/constructor/ConstructorComp";
 
 const ConstructorPage = () => {
-	return (
-		<>
-			<ConstructorComp />
-		</>
-	);
+  return <ConstructorComp />;
 };
 
 export default ConstructorPage;
