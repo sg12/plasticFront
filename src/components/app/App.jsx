@@ -18,15 +18,15 @@ import AppointmentHistoryInfo from "../personalAccount/appointmentHistoryInfo/Ap
 
 import Layout from "../../pages/Layout";
 import MainPage from "../../pages/MainPage";
-import ServicesPage from "../../pages/ServicesPage";
 import DoctorsPage from "../../pages/DoctorsPage";
 import ClinicsPage from "../../pages/ClinicsPage";
 import DoctorPage from "../../pages/DoctorPage";
 import ClinicPage from "../../pages/ClinicPage";
-// import StocksPage from '../../pages/StocksPage';
-import ArticlesPage from "../../pages/ArticlesPage";
-import NotFound from "../notFound/NotFound";
+// import ArticlesPage from "../../pages/ArticlesPage";
+// import ArticleDetailedPage from "../../pages/ArticleDetailedPage";
 import ConstructorPage from "../../pages/ConstructorPage";
+
+import NotFound from "../notFound/NotFound";
 
 import EnterItem from "../enterItem/EnterItem";
 import RegisterClient from "../register/Register";
@@ -36,57 +36,55 @@ import ForgotPassword from "../forgotPassword/ForgotPassword";
 import NewPassword from "../newPassword/NewPassword";
 import EnterPage from "../../pages/EnterPage";
 import AccountPage from "../../pages/AccountPage";
-import ArticleDetailedPage from "../../pages/ArticleDetailedPage";
 import PrivateRoute from "../../routes/PrivateRoute";
 import Enter from "../enter/Enter";
 
 function App() {
   return (
-    <>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<MainPage />}></Route>
-          <Route path="services" element={<ServicesPage />}></Route>
-          <Route path="doctors" element={<DoctorsPage />}></Route>
-          <Route path="doctors/:id" element={<DoctorPage />}></Route>
-          <Route path="clinics" element={<ClinicsPage />}></Route>
-          <Route path="clinics/:id" element={<ClinicPage />}></Route>
-          {/* <Route path='stocks' element={<StocksPage />}></Route> */}
-          <Route path="articles" element={<ArticlesPage />}></Route>
-          <Route path="articles/:id" element={<ArticleDetailedPage />}></Route>
-          <Route path="*" element={<NotFound />}></Route>
-          <Route path="constructor" element={<ConstructorPage />}></Route>
+    <Routes>
+      <Route element={<Layout />}>
+        <Route index element={<MainPage />} />
+        <Route path="doctors" element={<DoctorsPage />} />
+        <Route path="doctors/:id" element={<DoctorPage />} />
+        <Route path="clinics" element={<ClinicsPage />} />
+        <Route path="clinics/:id" element={<ClinicPage />} />
+        {/* <Route path="articles" element={<ArticlesPage />} /> */}
+        {/* <Route path="articles/:id" element={<ArticleDetailedPage />} /> */}
+        <Route path="constructor" element={<ConstructorPage />} />
+      </Route>
+
+      <Route path="*" element={<NotFound />} />
+
+      <Route path="enterPage" element={<EnterPage />}>
+        <Route index element={<EnterItem />} />
+        <Route path="client" element={<Enter />} />
+        <Route path="partner" element={<Enter />} />
+        <Route path="registerClient" element={<RegisterClient />} />
+        <Route path="registerDoctor" element={<RegisterDoctor />} />
+        <Route path="registerClinic" element={<RegisterClinic />} />
+        <Route path="forgotPassword" element={<ForgotPassword />} />
+        <Route path="newPassword" element={<NewPassword />} />
+      </Route>
+
+      <Route element={<PrivateRoute />}>
+        <Route path="account" element={<AccountPage />}>
+          <Route path="profile" element={<ProfileUser />} />
+          <Route path="reviews" element={<ReviewsInfo />} />
+          <Route path="appointment" element={<AppointmentInfo />} />
+          <Route
+            path="appointment-history"
+            element={<AppointmentHistoryInfo />}
+          />
+          <Route path="help" element={<HelpInfo />} />
+          <Route path="support" element={<SupportInfo />} />
+          <Route path="clinic" element={<ClinicsInfo />} />
+          <Route path="service" element={<ServicesInfo />} />
+          <Route path="specialist" element={<SpecialistInfo />} />
+          <Route path="settings" element={<SettingsInfo />} />
+          <Route path="favourites" element={<FavouritesInfo />} />
         </Route>
-        <Route path="enterPage" element={<EnterPage />}>
-          <Route index element={<EnterItem />}></Route>
-          <Route path="client" element={<Enter />}></Route>
-          <Route path="partner" element={<Enter />}></Route>
-          <Route path="registerClient" element={<RegisterClient />}></Route>
-          <Route path="registerDoctor" element={<RegisterDoctor />}></Route>
-          <Route path="registerClinic" element={<RegisterClinic />}></Route>
-          <Route path="forgotPassword" element={<ForgotPassword />}></Route>
-          <Route path="newPassword" element={<NewPassword />}></Route>
-        </Route>
-        <Route element={<PrivateRoute />}>
-          <Route path="account" element={<AccountPage />}>
-            <Route path="profile" element={<ProfileUser />} />
-            <Route path="reviews" element={<ReviewsInfo />} />
-            <Route path="appointment" element={<AppointmentInfo />} />
-            <Route
-              path="appointment-history"
-              element={<AppointmentHistoryInfo />}
-            />
-            <Route path="help" element={<HelpInfo />} />
-            <Route path="support" element={<SupportInfo />} />
-            <Route path="clinic" element={<ClinicsInfo />} />
-            <Route path="service" element={<ServicesInfo />} />
-            <Route path="specialist" element={<SpecialistInfo />} />
-            <Route path="settings" element={<SettingsInfo />} />
-            <Route path="favourites" element={<FavouritesInfo />} />
-          </Route>
-        </Route>
-      </Routes>
-    </>
+      </Route>
+    </Routes>
   );
 }
 

@@ -1,6 +1,8 @@
 .doctors-cards-list {
-
-	&__box {
-		padding-left: 0;
-	}
+  &__box {
+    padding-left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
 }

@@ -12,6 +12,7 @@ import Modal from "../../UI/modals/modal/Modal.jsx";
 import Input from "../../UI/inputs/input/Input.jsx";
 import Select from "../../UI/selects/select/Select.jsx";
 import Spinner from "../../UI/preloader/Spinner.jsx";
+import Checkbox from "../../UI/checkbox/Checkbox.jsx";
 
 import ServicesColumns from "./ServicesColumns.jsx";
 import PlasticServices from "../../../services/PlasticServices.js";
@@ -33,7 +34,7 @@ const ServicesInfo = () => {
     {
       keys: [userData?.role],
       onSuccess: (data) => {
-        setEmployes(Array.isArray(data) ? data : []);
+        setServices(Array.isArray(data) ? data : []);
       },
     }
   );
@@ -46,7 +47,7 @@ const ServicesInfo = () => {
     }));
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!modalData.name || !modalData.price) {
       toast.warn("Пожалуйста, заполните все поля!");
       return;
@@ -60,7 +61,10 @@ const ServicesInfo = () => {
       setEditIndex(null);
       toast.info("FIX THIS");
     } else {
+      console.log(modalData);
+      const response = PlasticServices.postServices(modalData);
       setServices([...services, modalData]);
+      console.log(response);
       toast.success("Услуга успешно создана!");
       refetch();
     }

@@ -10,13 +10,12 @@ import doctorsicon from "../../assets/icons/doctors-icon.png";
 import clinicsicon from "../../assets/icons/clinics-icon.png";
 import articlesicon from "../../assets/icons/articles-icon.png";
 
-
 export const links = [
-  { text: "Главная", to: "" , icon:`${mainicon}`},
-  { text: "Услуги", to: "", icon:`${servicesicon}` },
-  { text: "Врачи", to: "doctors", icon:`${doctorsicon}`},
-  { text: "Клиники", to: "clinics", icon:`${clinicsicon}` },
-  { text: "Статьи", to: "articles", icon:`${articlesicon}` },
+  { text: "Главная", to: "", icon: `${mainicon}` },
+  { text: "Услуги", to: "", icon: `${servicesicon}` },
+  { text: "Врачи", to: "doctors", icon: `${doctorsicon}` },
+  { text: "Клиники", to: "clinics", icon: `${clinicsicon}` },
+  // { text: "Статьи", to: "articles", icon:`${articlesicon}` },
 ];
 export const categoriesData = [
   {
@@ -98,7 +97,6 @@ const Header = () => {
 
   const location = useLocation();
   const menuRef = useRef(null);
-
 
   const handleServicesClick = () => {
     setServicesMenuOpen(!isServicesMenuOpen);

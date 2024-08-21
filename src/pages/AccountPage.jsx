@@ -9,11 +9,9 @@ const AccountPage = () => {
   }, []);
 
   return (
-    <>
-      <UserProvider>
-        <PersonalAccount />
-      </UserProvider>
-    </>
+    <UserProvider>
+      <PersonalAccount />
+    </UserProvider>
   );
 };
 

@@ -1,78 +1,71 @@
-import './DoctorsCardsList.scss';
+import "./DoctorsCardsList.scss";
 
-import { useState, useEffect } from 'react';
+import { useState } from "react";
 
-import PlasticServices from '../../services/PlasticServices';
+import PlasticServices from "../../services/PlasticServices";
 
-import PaginationPosts from '../UI/pagination/paginationPosts/PaginationPosts';
+// import FilterCards from "../filterCards/FilterCards";
+import DoctorsCardsItem from "../doctorsCardsItem/DoctorsCardsItem";
+import Spinner from "../spinner/Spinner";
+import OutlineButton from "../UI/buttons/outlineButton/OutlineButton";
 
-import FilterCards from '../filterCards/FilterCards';
-import DoctorsCardsItem from '../doctorsCardsItem/DoctorsCardsItem';
-import Spinner from '../spinner/Spinner';
-import OutlineButton from '../UI/buttons/outlineButton/OutlineButton';
-
-import { useFetching } from '../../hooks/useFetching';
-import { getPageCount } from '../../utils/pagesPosts/PagesPosts';
+import { useQuery } from "@siberiacancode/reactuse";
 
 const DoctorsCardsList = () => {
+  const [filter, setFilter] = useState({ limit: "6" });
 
-	const [posts, setPosts] = useState([]);
-	const [page, setPage] = useState(1);
-	const [totalPages, setTotalPages] = useState(0);
-	const [filter, setFilter] = useState({ limit: '6', search: ''});
+  const {
+    data: doctors,
+    isLoading,
+    isError,
+    error,
+    isSuccess,
+    refetch,
+  } = useQuery(
+    () =>
+      PlasticServices.getDoctors({
+        limit: filter.limit,
+      }),
+    {
+      keys: [filter.limit],
+    }
+  );
 
-	const [fetchPosts, isPostsLoading, postError] = useFetching(async () => {
-		const response = await PlasticServices.getDoctors(filter.limit, page, filter.search);
-		setPosts(response.data);
-		const totalCount = response.headers['x-total-count'];
-		setTotalPages(getPageCount(totalCount, filter.limit));
-	});
+  return (
+    <section className="doctors-cards-list section">
+      <div className="doctors-cards-list__container container">
+        <h2 className="title-h2">ВРАЧИ</h2>
+        {/* <FilterCards
+          filter={filter}
+          setFilter={setFilter}
+          doctors={"doctors"}
+        /> */}
 
-	useEffect(() => {
-		fetchPosts();
-	}, [page, filter]);
+        <ul className="doctors-cards-list__box">
+          {!isLoading && isSuccess ? (
+            doctors.result.map((doctor) => (
+              <DoctorsCardsItem doctor={doctor} key={doctor.id} />
+            ))
+          ) : (
+            <h3 className="component-content-text">Нет врачей</h3>
+          )}
+        </ul>
 
-	const changePage = (page) => {
-		setPage(page);
-	};
-
-	const content = !(!isPostsLoading && !postError && posts.length === 0)
-		? posts.map((post) => (
-			<DoctorsCardsItem post={post} key={post.id} />
-		))
-		: <h3 className='component-content-text'>Нет врачей</h3>;
-
-	const error = postError
-		? <h3 className='component-error-text'>Ошибка: {postError}</h3>
-		: null;
-
-	const spinner = isPostsLoading
-		? <Spinner />
-		: null;
-
-	const reload = (postError && posts.length === 0)
-		? <OutlineButton className='component-button-text' onClick={() => fetchPosts()}>Обновить</OutlineButton>
-		: null;
-
-	return (
-		<section className='doctors-cards-list section'>
-			<div className='doctors-cards-list__container container'>
-				<h2 className='title-h2'>ВРАЧИ</h2>
-				<FilterCards filter={filter} setFilter={setFilter} setPage={setPage} doctors={'doctors'} />
-				<ul className='doctors-cards-list__box'>
-					{content}
-				</ul>
-				{error}
-				{spinner}
-				{reload}
-				<PaginationPosts
-					totalPages={totalPages}
-					page={page}
-					changePage={changePage}
-				/>
-			</div>
-		</section>
-	);
+        {isError && (
+          <h3 className="component-error-text">Ошибка: {error.message}</h3>
+        )}
+        {isLoading && <Spinner />}
+        {isError && (
+          <OutlineButton
+            className="component-button-text"
+            onClick={() => refetch()}
+          >
+            Обновить
+          </OutlineButton>
+        )}
+      </div>
+    </section>
+  );
 };
 
 export default DoctorsCardsList;
