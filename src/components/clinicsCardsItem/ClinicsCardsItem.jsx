@@ -1,57 +1,47 @@
-import './ClinicsCardsItem.scss';
+import "./ClinicsCardsItem.scss";
 
-import PropTypes from 'prop-types';
+import { useNavigate } from "react-router-dom";
 
-import { useNavigate } from 'react-router-dom';
+import Review from "../review/Review";
 
-import LikeButton from '../UI/buttons/likeButton/LikeButton';
-import Review from '../review/Review';
-import Contacts from '../contacts/Contacts';
+import OutlineButton from "../UI/buttons/outlineButton/OutlineButton";
+import Avatar from "../UI/avatar/Avatar";
+import { FaClinicMedical } from "react-icons/fa";
+import Divider from "../UI/dividers/Divider";
+import { useWindowSize } from "@siberiacancode/reactuse";
 
-import clinicImg from '../../assets/imgs/clinic-1.png';
+const ClinicsCardsItem = ({ clinics }) => {
+  const navigate = useNavigate();
+  const { width } = useWindowSize();
 
-const ClinicsCardsItem = (props) => {
+  const toDetailedPage = () => {
+    navigate(`/clinics/${clinics.id}`);
+  };
 
-	const navigate = useNavigate();
+  return (
+    <li className="clinics-cards-item">
+      <div className="clinics-cards-item__left">
+        <div className="clinics-cards-item__avatar">
+          <Avatar icon={<FaClinicMedical />} size={"large"} />
+          <OutlineButton
+            onClick={toDetailedPage}
+            className="clinicss-cards-item__button"
+          >
+            Перейти
+          </OutlineButton>
+          <Review
+            reviewCount={clinics?.reviews_count || 0}
+            rating={clinics?.rating || 0}
+          />
+        </div>
+        <div className="doctors-cards-item__info">
+          <span className="doctors-cards-item__name">{clinics?.name}</span>
+        </div>
+      </div>
 
-	const toDetailedPage = () => {
-		navigate(`/clinics/${props.post.id}`);
-	};
-
-	return (
-		<li className='clinics-cards-item' onClick={toDetailedPage}>
-			<div className='clinics-cards-item__wrapper'>
-				<div className='clinics-cards-item__wrapper-left'>
-					<div className='clinics-cards-item__wrapper-left-box'>
-						<img className='clinics-cards-item__wrapper-left-img' src={clinicImg} alt="логотип клиники" />
-					</div>
-					<Review />
-				</div>
-				<div className='clinics-cards-item__wrapper-center'>
-					<div className='clinics-cards-item__wrapper-center-box'>
-						<span className='title-doctor'>{props.post.official_name}</span>
-						<p className='text'>{props.post.id}</p>
-						<h3 className='title-h3'>УСЛУГИ</h3>
-						<p className='text'>{props.post.description}</p>
-					</div>
-				</div>
-				<div className='clinics-cards-item__wrapper-right'>
-					<Contacts />
-				</div>
-				<div className='clinics-cards-item__wrapper-like'>
-					<LikeButton />
-				</div>
-			</div>
-		</li>
-	);
-};
-
-ClinicsCardsItem.propTypes = {
-	post: PropTypes.shape({
-		id: PropTypes.number.isRequired,
-		official_name: PropTypes.string.isRequired,
-		description: PropTypes.string.isRequired,
-	}).isRequired,
+      {/* {width <= 768 && <Divider />} */}
+    </li>
+  );
 };
 
 export default ClinicsCardsItem;

@@ -23,49 +23,40 @@ axiosInstance.interceptors.request.use(
 );
 
 class PlasticServices {
-  static async getAllArticles(page) {
-    const response = await axios.get(
-      `${_apiBase}/articles?limit=6&page=${page}`
-    );
-    return response;
-  }
+  // static async getAllArticles(page) {
+  //   const response = await axios.get(
+  //     `${_apiBase}/articles?limit=6&page=${page}`
+  //   );
+  //   return response;
+  // }
 
-  //! изменить формат времени
-  static async getArticle(id) {
-    const response = await axios.get(`${_apiBase}/articles/${id}`);
-    return response;
-  }
+  // //! изменить формат времени
+  // static async getArticle(id) {
+  //   const response = await axios.get(`${_apiBase}/articles/${id}`);
+  //   return response;
+  // }
 
-  //! прокидывать значение через функцию или цикл
-  static async getAllClinics(limit, page, search, service, reception, sort) {
-    const response = await axios.get(
-      `${_apiBase}/clinics?limit=${limit}&page=${page}&search=${search}&service=${service}&reception=${reception}&sort=${sort}`
-    );
-    return response;
+  static async getClinics(params) {
+    const queryString = Object.entries(params)
+      .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+      .join("&");
+
+    const response = await axiosInstance.get(`/clinics?${queryString}`);
+    return response.data;
   }
 
   static async getClinic(id) {
-    const response = await axios.get(`${_apiBase}/clinics/${id}`);
-    return response;
+    const response = await axiosInstance.get(`/clinics/${id}`);
+    return response.data;
   }
 
-  //! прокидывать значение через функцию или цикл
-  static async getDoctors(
-    search,
-    specialtie,
-    experience,
-    category,
-    degree,
-    reception,
-    ordering,
-    gender,
-    page,
-    limit
-  ) {
-    const response = await axiosInstance.get(
-      `/doctors?search=${search}&specialtie=${specialtie}&experience=${experience}&category=${category}&degree=${degree}&reception=${reception}&ordering=${ordering}&gender=${gender}&page=${page}&limit=${limit}&`
-    );
-    return response;
+  static async getDoctors(params) {
+    const queryString = Object.entries(params)
+      .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
+      .join("&");
+
+    const response = await axiosInstance.get(`/doctors?${queryString}`);
+    return response.data;
   }
 
   static async getDoctor(id) {
