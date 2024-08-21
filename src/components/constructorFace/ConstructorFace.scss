@@ -1,8 +1,4 @@
 .constructor-face {
-  &__container {
-    position: relative;
-    padding-bottom:50px;
-  }
   &__wrapper {
     position: relative;
   }
@@ -11,7 +7,7 @@
     height: 100%;
   }
   &__img {
-    padding-left:150px;
+    padding-left: 150px;
     //width: 50%;
     height: 600px;
   }

@@ -1,145 +1,76 @@
 .doctors-cards-item {
-	padding: 30px;
-	list-style-type: none;
-	border-radius: 15px;
-	background: var(--pallet-color-11005, #FFF);
-	box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.20);
-	margin-bottom: 30px;
+  list-style-type: none;
+  border-radius: 16px;
+  padding: 32px;
+  background: #ffffff;
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.25);
+  transition: box-shadow 0.2s;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  flex-wrap: wrap;
 
-	&__wrapper {
-		display: flex;
-		justify-content: space-between;
-	}
+  &:hover {
+    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.3);
+  }
 
-	&__wrapper-left {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-	}
+  &__main {
+    display: flex;
+    gap: 16px;
+    justify-content: space-between;
+  }
 
-	&__wrapper-left-img {
-		width: 200px;
-		padding: 0 10px;
-	}
+  &__avatar {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
 
-	&__wrapper-left-box {
-		border: 1px solid black;
-		border-radius: 30px;
-		height: 240px;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
+  &__left {
+    display: flex;
+    gap: 16px;
+  }
 
-	&__wrapper-center {
-		width: 700px;
-	}
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
 
-	&__wrapper-center-box {
-		>button {
-			background: none;
-			border: none;
-			padding: 0;
-			cursor: pointer;
-		}
-	}
+  &__name {
+    font-size: 24px;
+    color: #3066be;
+  }
 
-	&__wrapper-right {
-		width: 400px;
-	}
+  &__right {
+    display: flex;
+    gap: 8px;
+    flex-direction: column;
+  }
+
+  &__clinic {
+    font-size: 24px;
+  }
+
+  &__button {
+    display: flex;
+  }
 }
 
-//* ПК
-@media (max-width: 1600px) {
-	.doctors-cards-item {
-		&__wrapper-center {
-			width: 600px;
-		}
-	}
+@media screen and (max-width: 768px) {
+  .doctors-cards-item {
+    justify-content: center;
+    text-align: center;
+    &__avatar {
+      align-items: center;
+      justify-content: center;
+    }
+    &__left {
+      flex-direction: column;
+    }
+
+    &__button {
+      width: 100%;
+    }
+  }
 }
-
-//* ПК
-@media (max-width: 1440px) {
-	.doctors-cards-item {
-
-		&__wrapper-left {
-			width: 200px;
-		}
-
-		&__wrapper-center {
-			width: 500px;
-		}
-
-		&__wrapper-right {
-			width: 300px;
-		}
-	}
-}
-
-//* ПК
-@media (max-width: 1280px) {
-	.doctors-cards-item {
-		padding: 20px;
-
-		&__wrapper-left {
-			width: 150px;
-		}
-
-		&__wrapper-left-box {
-			height: 150px;
-		}
-
-		&__wrapper-left-img {
-			width: 150px;
-		}
-
-		&__wrapper-center {
-			width: 350px;
-		}
-
-		&__wrapper-right {
-			width: 260px;
-		}
-	}
-}
-
-//* Планшет
-@media (max-width: 1024px) {
-	.doctors-cards-item {
-		position: relative;
-
-		&__wrapper {
-			flex-wrap: wrap;
-			justify-content: flex-start;
-		}
-
-		&__wrapper-left {
-			margin-right: 30px;
-		}
-
-		&__wrapper-center {
-			width: 400px;
-		}
-
-		&__wrapper-like {
-			position: absolute;
-			right: 20px;
-		}
-	}
-}
-
-//* Планшет
-@media (max-width: 768px) {
-	.doctors-cards-item {
-
-		&__wrapper-left {
-			margin-bottom: 20px;
-		}
-	}
-}
-
-//* Телефон
-@media (max-width: 360px) {}
-
-//* Телефон
-@media (max-width: 320px) {}
