@@ -1,6 +1,6 @@
-import z from "zod";
+import z from "zod"
 
-export const genderSchema = z.enum(["male", "female"]);
+export const genderSchema = z.enum(["male", "female"])
 
 export const basicInfoSchema = z
   .object({
@@ -13,12 +13,12 @@ export const basicInfoSchema = z
   .refine((data) => data.password === data.confirmPassword, {
     message: "Пароли не совпадают",
     path: ["confirmPassword"],
-  });
+  })
 
 export const patientInfoSchema = z.object({
   birthDate: z.string().optional(),
   gender: genderSchema.optional(),
-});
+})
 
 export const doctorInfoSchema = z.object({
   licenseNumber: z.string().min(3, "Номер лицензии обязателен"),
@@ -27,7 +27,9 @@ export const doctorInfoSchema = z.object({
   education: z.string().min(2, "Укажите образование"),
   workplace: z.string().min(2, "Укажите место работы"),
   inn: z.string().length(10, "ИНН должен быть 10 цифр"),
-});
+  birthDate: z.string().optional(),
+  gender: genderSchema.optional(),
+})
 
 export const clinicInfoSchema = z.object({
   legalName: z.string().min(2),
@@ -38,5 +40,4 @@ export const clinicInfoSchema = z.object({
   clinicLicense: z.string().min(5),
   directorName: z.string().min(2),
   directorPosition: z.string().min(2),
-});
-
+})
