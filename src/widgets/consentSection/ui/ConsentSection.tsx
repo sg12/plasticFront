@@ -1,14 +1,11 @@
-import { FileText, Check } from "lucide-react";
-import type { ConsentSectionProps } from "../types/types";
-import { BannerButton } from "@/shared/ui/bannerButton";
+import { FileText, Check } from "lucide-react"
+import type { ConsentSectionProps } from "../types/types"
+import { BannerButton } from "@/shared/ui/bannerButton"
 
-export function ConsentSection({
-  hasConsent,
-  onShowConsentModal,
-}: ConsentSectionProps) {
+export function ConsentSection({ hasConsent, onShowConsentModal }: ConsentSectionProps) {
   return (
     <div>
-      <label className="flex items-start">
+      <div className="flex items-start">
         <div className="w-full">
           {!hasConsent ? (
             <BannerButton
@@ -42,7 +39,7 @@ export function ConsentSection({
             />
           )}
         </div>
-      </label>
+      </div>
     </div>
-  );
+  )
 }
