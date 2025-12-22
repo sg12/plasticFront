@@ -8,7 +8,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/shared/ui/collapsible";
-import { FILE_ACCEPT_TYPES } from "@/entities/document/model/contants";
+import { FILE_ACCEPT_TYPES } from "@/entities/document/model/constants";
 
 export const FileUpload = <T extends FileRecord>({
   fileSlots,
