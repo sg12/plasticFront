@@ -1,25 +1,21 @@
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "@/shared/ui/inputGroup";
-import { Label } from "@/shared/ui/label";
-import { FileText } from "lucide-react";
-import { useFormContext } from "react-hook-form";
-import type { SignUpFormData } from "@/features/signUp/model/types";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/shared/ui/inputGroup"
+import { Label } from "@/shared/ui/label"
+import { FileText } from "lucide-react"
+import { useFormContext } from "react-hook-form"
+import type { SignUpFormData } from "@/features/signUp/model/types"
 
 export function ClinicInfoStep() {
   const {
     register,
     formState: { errors },
-  } = useFormContext<SignUpFormData>();
+  } = useFormContext<SignUpFormData>()
 
-  const clinicErrors = "clinic" in errors ? errors.clinic : undefined;
+  const clinicErrors = "clinic" in errors ? errors.clinic : undefined
 
   return (
     <>
       <div>
-        <Label htmlFor="legalName" className="text-gray-700 mb-2">
+        <Label htmlFor="legalName" className="mb-2 text-gray-700">
           Юридическое название
         </Label>
         <InputGroup>
@@ -27,6 +23,7 @@ export function ClinicInfoStep() {
             <FileText />
           </InputGroupAddon>
           <InputGroupInput
+            id="legalName"
             {...register("clinic.legalName")}
             placeholder="ООО 'Медицинская клиника'"
           />
@@ -36,9 +33,9 @@ export function ClinicInfoStep() {
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
         <div>
-          <Label htmlFor="clinicInn" className="text-gray-700 mb-2">
+          <Label htmlFor="clinicInn" className="mb-2 text-gray-700">
             ИНН клиники
           </Label>
           <InputGroup>
@@ -46,6 +43,7 @@ export function ClinicInfoStep() {
               <FileText />
             </InputGroupAddon>
             <InputGroupInput
+              id="clinicInn"
               {...register("clinic.clinicInn")}
               placeholder="7701234567"
             />
@@ -56,17 +54,14 @@ export function ClinicInfoStep() {
         </div>
 
         <div>
-          <Label htmlFor="ogrn" className="text-gray-700 mb-2">
+          <Label htmlFor="ogrn" className="mb-2 text-gray-700">
             ОГРН
           </Label>
           <InputGroup>
             <InputGroupAddon>
               <FileText />
             </InputGroupAddon>
-            <InputGroupInput
-              {...register("clinic.ogrn")}
-              placeholder="1234567890123"
-            />
+            <InputGroupInput id="ogrn" {...register("clinic.ogrn")} placeholder="1234567890123" />
           </InputGroup>
           {clinicErrors?.ogrn && (
             <p className="text-sm text-red-500">{clinicErrors.ogrn.message}</p>
@@ -75,7 +70,7 @@ export function ClinicInfoStep() {
       </div>
 
       <div>
-        <Label htmlFor="legalAddress" className="text-gray-700 mb-2">
+        <Label htmlFor="legalAddress" className="mb-2 text-gray-700">
           Юридический адрес
         </Label>
         <InputGroup>
@@ -83,6 +78,7 @@ export function ClinicInfoStep() {
             <FileText />
           </InputGroupAddon>
           <InputGroupInput
+            id="legalAddress"
             {...register("clinic.legalAddress")}
             placeholder="г. Москва, ул. Ленина, д. 1"
           />
@@ -93,7 +89,7 @@ export function ClinicInfoStep() {
       </div>
 
       <div>
-        <Label htmlFor="actualAddress" className="text-gray-700 mb-2">
+        <Label htmlFor="actualAddress" className="mb-2 text-gray-700">
           Фактический адрес
         </Label>
         <InputGroup>
@@ -101,6 +97,7 @@ export function ClinicInfoStep() {
             <FileText />
           </InputGroupAddon>
           <InputGroupInput
+            id="actualAddress"
             {...register("clinic.actualAddress")}
             placeholder="г. Москва, ул. Ленина, д. 1"
           />
@@ -111,7 +108,7 @@ export function ClinicInfoStep() {
       </div>
 
       <div>
-        <Label htmlFor="clinicLicense" className="text-gray-700 mb-2">
+        <Label htmlFor="clinicLicense" className="mb-2 text-gray-700">
           Номер медицинской лицензии
         </Label>
         <InputGroup>
@@ -119,6 +116,7 @@ export function ClinicInfoStep() {
             <FileText />
           </InputGroupAddon>
           <InputGroupInput
+            id="clinicLicense"
             {...register("clinic.clinicLicense")}
             placeholder="ЛО-77-01-123456"
           />
@@ -128,9 +126,9 @@ export function ClinicInfoStep() {
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
         <div>
-          <Label htmlFor="directorName" className="text-gray-700 mb-2">
+          <Label htmlFor="directorName" className="mb-2 text-gray-700">
             ФИО руководителя
           </Label>
           <InputGroup>
@@ -138,6 +136,7 @@ export function ClinicInfoStep() {
               <FileText />
             </InputGroupAddon>
             <InputGroupInput
+              id="directorName"
               {...register("clinic.directorName")}
               placeholder="Иванов Иван Иванович"
             />
@@ -148,7 +147,7 @@ export function ClinicInfoStep() {
         </div>
 
         <div>
-          <Label htmlFor="directorPosition" className="text-gray-700 mb-2">
+          <Label htmlFor="directorPosition" className="mb-2 text-gray-700">
             Должность руководителя
           </Label>
           <InputGroup>
@@ -156,6 +155,7 @@ export function ClinicInfoStep() {
               <FileText />
             </InputGroupAddon>
             <InputGroupInput
+              id="directorPosition"
               {...register("clinic.directorPosition")}
               placeholder="Генеральный директор"
             />
@@ -166,5 +166,5 @@ export function ClinicInfoStep() {
         </div>
       </div>
     </>
-  );
+  )
 }

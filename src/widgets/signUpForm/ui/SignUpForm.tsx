@@ -1,6 +1,6 @@
 import { AlertCircle, ChevronRight, ChevronLeft } from "lucide-react";
 import { useSignUpForm } from "@/features/signUp/hooks/useSignUpForm";
-import { StepIndicator } from "@/widgets/stepIndicator/ui/StepIndicator";
+import { StepIndicator } from "@/shared/ui/StepIndicator";
 import { ConsentModal } from "@/widgets/consentModal/ui/ConsentModal";
 import { PrivacyModal } from "@/widgets/privacyModal/ui/PrivacyModal";
 import { RoleSelector } from "@/widgets/roleSelector/ui/RoleSelector";
@@ -20,7 +20,8 @@ import type {
   ClinicUploadedFiles,
   DoctorUploadedFiles,
 } from "@/entities/document/types/types";
-import { FILE_ACCEPT_TYPES } from "@/entities/document/model/contants";
+import { FILE_ACCEPT_TYPES } from "@/entities/document/model/constants";
+import { SIGNUP_STEPS_BY_ROLE } from "@/features/signUp/model/constants";
 
 export function SignUpForm() {
   const navigate = useNavigate();
@@ -102,7 +103,9 @@ export function SignUpForm() {
 
               {currentStep > 0 && (
                 <>
-                  <StepIndicator userRole={role} currentStep={currentStep} />
+                  {SIGNUP_STEPS_BY_ROLE[role].length > 1 && (
+                    <StepIndicator steps={SIGNUP_STEPS_BY_ROLE[role]} currentStep={currentStep} />
+                  )}
 
                   {(role === USER_ROLES.DOCTOR ||
                     role === USER_ROLES.CLINIC) && (

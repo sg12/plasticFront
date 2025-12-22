@@ -1,24 +1,20 @@
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "@/shared/ui/inputGroup";
-import { Label } from "@/shared/ui/label";
-import { FileText } from "lucide-react";
-import { useFormContext } from "react-hook-form";
-import type { SignUpFormData } from "@/features/signUp/model/types";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/shared/ui/inputGroup"
+import { Label } from "@/shared/ui/label"
+import { FileText } from "lucide-react"
+import { useFormContext } from "react-hook-form"
+import type { SignUpFormData } from "@/features/signUp/model/types"
 
 export function DoctorInfoStep() {
   const {
     register,
     formState: { errors },
-  } = useFormContext<SignUpFormData>();
+  } = useFormContext<SignUpFormData>()
 
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
         <div>
-          <Label htmlFor="licenseNumber" className="text-gray-700 mb-2">
+          <Label htmlFor="licenseNumber" className="mb-2 text-gray-700">
             Номер лицензии
           </Label>
           <InputGroup>
@@ -26,19 +22,18 @@ export function DoctorInfoStep() {
               <FileText />
             </InputGroupAddon>
             <InputGroupInput
+              id="licenseNumber"
               {...register("doctor.licenseNumber")}
               placeholder="ЛО-77-01-123456"
             />
           </InputGroup>
           {errors.doctor?.licenseNumber && (
-            <p className="text-sm text-red-500">
-              {errors.doctor.licenseNumber.message}
-            </p>
+            <p className="text-sm text-red-500">{errors.doctor.licenseNumber.message}</p>
           )}
         </div>
 
         <div>
-          <Label htmlFor="specialization" className="text-gray-700 mb-2">
+          <Label htmlFor="specialization" className="mb-2 text-gray-700">
             Специализация
           </Label>
           <InputGroup>
@@ -46,21 +41,20 @@ export function DoctorInfoStep() {
               <FileText />
             </InputGroupAddon>
             <InputGroupInput
+              id="specialization"
               {...register("doctor.specialization")}
               placeholder="Пластическая хирургия"
             />
           </InputGroup>
           {errors.doctor?.specialization && (
-            <p className="text-sm text-red-500">
-              {errors.doctor.specialization.message}
-            </p>
+            <p className="text-sm text-red-500">{errors.doctor.specialization.message}</p>
           )}
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
         <div>
-          <Label htmlFor="experience" className="text-gray-700 mb-2">
+          <Label htmlFor="experience" className="mb-2 text-gray-700">
             Опыт работы
           </Label>
           <InputGroup>
@@ -68,6 +62,7 @@ export function DoctorInfoStep() {
               <FileText />
             </InputGroupAddon>
             <InputGroupInput
+              id="experience"
               type="number"
               {...register("doctor.experience", {
                 valueAsNumber: true,
@@ -81,14 +76,14 @@ export function DoctorInfoStep() {
         </div>
 
         <div>
-          <Label htmlFor="inn" className="text-gray-700 mb-2">
+          <Label htmlFor="inn" className="mb-2 text-gray-700">
             ИНН
           </Label>
           <InputGroup>
             <InputGroupAddon>
               <FileText />
             </InputGroupAddon>
-            <InputGroupInput {...register("doctor.inn")} placeholder="1234567890" />
+            <InputGroupInput id="inn" {...register("doctor.inn")} placeholder="1234567890" />
           </InputGroup>
           {errors.doctor?.inn && (
             <p className="text-sm text-red-500">{errors.doctor.inn.message}</p>
@@ -97,7 +92,7 @@ export function DoctorInfoStep() {
       </div>
 
       <div>
-        <Label htmlFor="education" className="text-gray-700 mb-2">
+        <Label htmlFor="education" className="mb-2 text-gray-700">
           Образование
         </Label>
         <InputGroup>
@@ -105,6 +100,7 @@ export function DoctorInfoStep() {
             <FileText />
           </InputGroupAddon>
           <InputGroupInput
+            id="education"
             {...register("doctor.education")}
             placeholder="РНИМУ им. Н.И. Пирогова"
           />
@@ -115,7 +111,7 @@ export function DoctorInfoStep() {
       </div>
 
       <div>
-        <Label htmlFor="workplace" className="text-gray-700 mb-2">
+        <Label htmlFor="workplace" className="mb-2 text-gray-700">
           Место работы
         </Label>
         <InputGroup>
@@ -123,6 +119,7 @@ export function DoctorInfoStep() {
             <FileText />
           </InputGroupAddon>
           <InputGroupInput
+            id="workplace"
             {...register("doctor.workplace")}
             placeholder="Клиника пластической хирургии"
           />
@@ -132,5 +129,5 @@ export function DoctorInfoStep() {
         )}
       </div>
     </>
-  );
+  )
 }

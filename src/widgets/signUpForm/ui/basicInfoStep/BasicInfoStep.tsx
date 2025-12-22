@@ -1,28 +1,23 @@
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "@/shared/ui/inputGroup";
-import { Label } from "@/shared/ui/label";
-import { Mail, Lock, Eye, EyeOff, User, Phone } from "lucide-react";
-import { useState } from "react";
-import { useFormContext } from "react-hook-form";
-import type { SignUpFormData } from "@/features/signUp/model/types";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/shared/ui/inputGroup"
+import { Label } from "@/shared/ui/label"
+import { Mail, Lock, Eye, EyeOff, User, Phone } from "lucide-react"
+import { useState } from "react"
+import { useFormContext } from "react-hook-form"
+import type { SignUpFormData } from "@/features/signUp/model/types"
 
 export function BasicInfoStep() {
   const {
     register,
     formState: { errors },
-  } = useFormContext<SignUpFormData>();
+  } = useFormContext<SignUpFormData>()
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   return (
     <>
       <div>
-
-        <Label htmlFor="fullName" className="text-gray-700 mb-2">
+        <Label htmlFor="fullName" className="mb-2 text-gray-700">
           Фамилия Имя Отчество
         </Label>
         <InputGroup>
@@ -30,6 +25,7 @@ export function BasicInfoStep() {
             <User />
           </InputGroupAddon>
           <InputGroupInput
+            id="fullName"
             {...register("basic.fullName")}
             placeholder="Иванов Иван Иванович"
           />
@@ -39,9 +35,9 @@ export function BasicInfoStep() {
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
         <div>
-          <Label htmlFor="email" className="text-gray-700 mb-2">
+          <Label htmlFor="email" className="mb-2 text-gray-700">
             Email
           </Label>
           <InputGroup>
@@ -49,6 +45,7 @@ export function BasicInfoStep() {
               <Mail />
             </InputGroupAddon>
             <InputGroupInput
+              id="email"
               {...register("basic.email")}
               placeholder="example@mail.ru"
             />
@@ -59,7 +56,7 @@ export function BasicInfoStep() {
         </div>
 
         <div>
-          <Label htmlFor="phone" className="text-gray-700 mb-2">
+          <Label htmlFor="phone" className="mb-2 text-gray-700">
             Телефон
           </Label>
           <InputGroup>
@@ -67,6 +64,7 @@ export function BasicInfoStep() {
               <Phone />
             </InputGroupAddon>
             <InputGroupInput
+              id="phone"
               {...register("basic.phone")}
               placeholder="+7 (999) 999-99-99"
             />
@@ -77,9 +75,9 @@ export function BasicInfoStep() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
         <div>
-          <Label htmlFor="password" className="text-gray-700 mb-2">
+          <Label htmlFor="password" className="mb-2 text-gray-700">
             Пароль
           </Label>
           <InputGroup>
@@ -87,6 +85,7 @@ export function BasicInfoStep() {
               <Lock />
             </InputGroupAddon>
             <InputGroupInput
+              id="password"
               type={showPassword ? "text" : "password"}
               {...register("basic.password")}
               placeholder="Введите пароль"
@@ -96,11 +95,7 @@ export function BasicInfoStep() {
               className="cursor-pointer"
               onClick={() => setShowPassword((s) => !s)}
             >
-              {showPassword ? (
-                <Eye className="w-5 h-5" />
-              ) : (
-                <EyeOff className="w-5 h-5" />
-              )}
+              {showPassword ? <Eye className="h-5 w-5" /> : <EyeOff className="h-5 w-5" />}
             </InputGroupAddon>
           </InputGroup>
           {errors.basic?.password && (
@@ -109,7 +104,7 @@ export function BasicInfoStep() {
         </div>
 
         <div>
-          <Label htmlFor="confirmPassword" className="text-gray-700 mb-2">
+          <Label htmlFor="confirmPassword" className="mb-2 text-gray-700">
             Подтвердите пароль
           </Label>
           <InputGroup>
@@ -117,6 +112,7 @@ export function BasicInfoStep() {
               <Lock />
             </InputGroupAddon>
             <InputGroupInput
+              id="confirmPassword"
               type={showConfirmPassword ? "text" : "password"}
               {...register("basic.confirmPassword")}
               placeholder="Введите пароль"
@@ -126,20 +122,14 @@ export function BasicInfoStep() {
               className="cursor-pointer"
               onClick={() => setShowConfirmPassword((s) => !s)}
             >
-              {showConfirmPassword ? (
-                <Eye className="w-5 h-5" />
-              ) : (
-                <EyeOff className="w-5 h-5" />
-              )}
+              {showConfirmPassword ? <Eye className="h-5 w-5" /> : <EyeOff className="h-5 w-5" />}
             </InputGroupAddon>
           </InputGroup>
           {errors.basic?.confirmPassword && (
-            <p className="text-sm text-red-500">
-              {errors.basic.confirmPassword.message as string}
-            </p>
+            <p className="text-sm text-red-500">{errors.basic.confirmPassword.message as string}</p>
           )}
         </div>
       </div>
     </>
-  );
+  )
 }
