@@ -7,13 +7,7 @@ type UploadedFilePaths = {
   [key: string]: string | string[];
 };
 
-/**
- * Загружает файлы в Supabase Storage
- * @param userId - ID пользователя
- * @param role - Роль (doctor/clinic)
- * @param files - Объект с файлами
- * @returns Объект с путями к загруженным файлам
- */
+
 export async function uploadFiles(
   userId: string,
   role: "doctor" | "clinic",
@@ -32,7 +26,7 @@ export async function uploadFiles(
       if (!(file instanceof File)) continue;
 
       const fileExt = file.name.split(".").pop();
-      const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+      const fileName = `${crypto.randomUUID()}.${fileExt}`;
       const filePath = `${userId}/${role}/${key}/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
@@ -58,11 +52,6 @@ export async function uploadFiles(
   return paths;
 }
 
-/**
- * Получает signed URLs для файлов из Storage
- * @param filePaths - Объект с путями к файлам
- * @returns Объект с signed URLs
- */
 export async function getFileUrls(
   filePaths: UploadedFilePaths
 ): Promise<Array<{ name: string; url: string }>> {
