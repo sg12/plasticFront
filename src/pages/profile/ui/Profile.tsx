@@ -3,7 +3,7 @@ import { Button } from "../../../shared/ui/button"
 import { UserProfileCard } from "../../../widgets/profile/userProfileCard/ui/UserProfileCard"
 import { UserProfileInformation } from "../../../widgets/profile/userProfileInformation/ui/UserProfileInformation"
 import { UserProfileHistory } from "../../../widgets/profile/UserProfileHistory/ui/UserProfileHistory"
-import { useProfile } from "../hooks/useProfile"
+import { useProfile } from "../../../widgets/profile/hooks/useProfile"
 
 export const Profile = () => {
   const {
