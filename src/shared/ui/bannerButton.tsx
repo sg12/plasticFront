@@ -8,8 +8,8 @@ import type { VariantProps } from "class-variance-authority";
 
 interface BannerButtonProps {
   title: string;
-  description: string;
-  icon: LucideIcon;
+  description?: string;
+  icon?: LucideIcon;
   onClick?: () => void;
   className?: string;
   size?: VariantProps<typeof buttonVariants>["size"];
@@ -77,7 +77,7 @@ const BannerButton = React.forwardRef<HTMLButtonElement, BannerButtonProps>(
               iconBg
             )}
           >
-            <Icon className={cn(iconColor)} />
+            {Icon && <Icon className={cn(iconColor)} />}
           </div>
 
           <div className="flex-1 text-left">
