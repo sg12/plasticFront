@@ -1,10 +1,13 @@
-import { createBrowserRouter, Navigate } from "react-router-dom";
-import { App } from "../App";
-import { PublicRoute } from "./PublicRoute";
-import { ProtectedRoute } from "./ProtectedRoute";
-import { Main } from "@/pages/main/ui/Main";
-import { SignIn } from "@/pages/signIn/ui/SignIn";
-import { SignUp } from "@/pages/signUp/ui/SignUp";
+import { createBrowserRouter, Navigate } from "react-router-dom"
+import { App } from "../App"
+import { PublicRoute } from "./PublicRoute"
+import { ProtectedRoute } from "./ProtectedRoute"
+import { Main } from "@/pages/main/ui/Main"
+import { SignIn } from "@/pages/signIn/ui/SignIn"
+import { SignUp } from "@/pages/signUp/ui/SignUp"
+import { Dashboard } from "@/pages/dashboard/ui/Dashboard"
+import { Profile } from "@/pages/profile/ui/Profile"
+import { AIVisualizer } from "@/pages/aiVisualizer/ui/AIVisualizer"
 
 export const router = createBrowserRouter([
   {
@@ -18,8 +21,8 @@ export const router = createBrowserRouter([
       {
         element: <PublicRoute />,
         children: [
-          { path: "signin", element: <SignIn /> },
-          { path: "signup", element: <SignUp /> },
+          { path: "signin", element: <SignIn />, handle: { title: "Вход" } },
+          { path: "signup", element: <SignUp />, handle: { title: "Регистрация" } },
         ],
       },
       {
@@ -28,10 +31,15 @@ export const router = createBrowserRouter([
           {
             path: "main",
             element: <Main />,
-            children: [],
+            handle: { title: "Главная" },
+            children: [
+              { index: true, element: <Dashboard />, handle: { title: "Главная" } },
+              { path: "profile", element: <Profile />, handle: { title: "Профиль" } },
+              { path: "ai", element: <AIVisualizer />, handle: { title: "AI Визуализатор" } },
+            ],
           },
         ],
       },
     ],
   },
-]);
+])
