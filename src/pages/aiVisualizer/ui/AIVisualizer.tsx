@@ -43,7 +43,16 @@ export const AIVisualizer = () => {
         goBack()
       }
     }
-  }, [state, setStep, startProcessing, completeProcessing, goBack])
+  }, [
+    state.step,
+    state.selectedZone,
+    state.uploadedPhoto,
+    state.intensity,
+    setStep,
+    startProcessing,
+    completeProcessing,
+    goBack,
+  ])
 
   const handleBookConsultation = () => {
     window.open("/main/appointments", "_blank")

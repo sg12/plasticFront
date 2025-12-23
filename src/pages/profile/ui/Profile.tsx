@@ -2,7 +2,7 @@ import { Edit2, Loader, QrCode, Save, X } from "lucide-react"
 import { Button } from "../../../shared/ui/button"
 import { UserProfileCard } from "../../../widgets/profile/userProfileCard/ui/UserProfileCard"
 import { UserProfileInformation } from "../../../widgets/profile/userProfileInformation/ui/UserProfileInformation"
-import { UserProfileHistory } from "../../../widgets/profile/UserProfileHistory/ui/UserProfileHistory"
+import { UserProfileHistory } from "../../../widgets/profile/userProfileHistory/ui/UserProfileHistory"
 import { useProfile } from "../../../widgets/profile/hooks/useProfile"
 
 export const Profile = () => {
