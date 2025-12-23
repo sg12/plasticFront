@@ -1,5 +1,14 @@
-import { X, FileText, Check } from "lucide-react";
-import type { ConsentModalProps } from "../types/types";
+import { FileText, Check, ShieldCheck, User, Building2, X } from "lucide-react"
+import { Button } from "@/shared/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/shared/ui/dialog"
+import type { ConsentModalProps } from "../types/types"
 
 export function ConsentModal({
   userRole,
@@ -8,111 +17,138 @@ export function ConsentModal({
   onShowPrivacyModal,
 }: ConsentModalProps) {
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-xl font-semibold text-gray-900">
-              Согласие на обработку персональных данных
-            </h3>
-            <button
-              onClick={onDecline}
-              className="text-gray-400 hover:text-gray-600"
-            >
-              <X className="w-6 h-6" />
-            </button>
+    <Dialog open onOpenChange={(open) => !open && onDecline()}>
+      <DialogContent className="max-w-2xl gap-0 p-0">
+        <DialogHeader className="border-b p-6 pb-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-100">
+              <ShieldCheck className="h-5 w-5 text-purple-600" />
+            </div>
+            <div>
+              <DialogTitle className="text-xl">Согласие на обработку данных</DialogTitle>
+              <DialogDescription>В соответствии с 152-ФЗ</DialogDescription>
+            </div>
           </div>
+        </DialogHeader>
 
-          <div className="space-y-4 text-gray-700">
-            <div className="bg-purple-50 border border-purple-200 rounded-xl p-4">
-              <div className="flex items-start gap-3">
-                <FileText className="w-5 h-5 text-purple-600 mt-0.5 flex-shrink-0" />
+        <div className="max-h-[60vh] overflow-y-auto">
+          <div className="space-y-5 p-6">
+            <div className="rounded-xl border border-purple-200 bg-gradient-to-br from-purple-50 to-purple-100/50 p-4">
+              <div className="flex gap-3">
+                <FileText className="mt-0.5 h-5 w-5 shrink-0 text-purple-600" />
                 <div>
-                  <p className="text-sm text-purple-900 mb-1">
-                    <strong>Обработка персональных данных</strong>
-                  </p>
+                  <p className="mb-1 font-medium text-purple-900">Обработка персональных данных</p>
                   <p className="text-sm text-purple-800">
-                    В соответствии с Федеральным законом № 152-ФЗ "О
-                    персональных данных", я даю согласие на обработку моих
-                    персональных данных для целей регистрации в системе и
-                    предоставления услуг.
+                    Я даю согласие на обработку моих персональных данных для целей регистрации в
+                    системе и предоставления услуг платформы.
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="text-sm space-y-2">
-              <p>
-                <strong>Какие данные обрабатываются:</strong>
-              </p>
-              <ul className="list-disc list-inside space-y-1 ml-4">
-                <li>ФИО, контактные данные (email, телефон)</li>
-                <li>Пароль в зашифрованном виде</li>
+            <div className="space-y-3">
+              <h4 className="flex items-center gap-2 font-semibold text-gray-900">
+                <User className="h-4 w-4 text-gray-500" />
+                Какие данные обрабатываются
+              </h4>
+              <div className="space-y-2 rounded-lg bg-gray-50 p-4">
+                <div className="flex items-start gap-2">
+                  <div className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-gray-400" />
+                  <span className="text-sm text-gray-700">
+                    ФИО, контактные данные (email, телефон)
+                  </span>
+                </div>
+                <div className="flex items-start gap-2">
+                  <div className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-gray-400" />
+                  <span className="text-sm text-gray-700">Пароль в зашифрованном виде</span>
+                </div>
                 {userRole === "doctor" && (
                   <>
-                    <li>
-                      Профессиональные данные (специализация, опыт работы,
-                      образование)
-                    </li>
-                    <li>Документы (диплом, лицензия, сертификаты)</li>
+                    <div className="flex items-start gap-2">
+                      <div className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-purple-400" />
+                      <span className="text-sm text-gray-700">
+                        Профессиональные данные (специализация, опыт, образование)
+                      </span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <div className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-purple-400" />
+                      <span className="text-sm text-gray-700">
+                        Документы (диплом, лицензия, сертификаты)
+                      </span>
+                    </div>
                   </>
                 )}
                 {userRole === "clinic" && (
                   <>
-                    <li>Данные организации (ИНН, ОГРН, юридический адрес)</li>
-                    <li>Документы клиники (лицензии, уставные документы)</li>
+                    <div className="flex items-start gap-2">
+                      <div className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-purple-400" />
+                      <span className="text-sm text-gray-700">
+                        Данные организации (ИНН, ОГРН, адрес)
+                      </span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <div className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-purple-400" />
+                      <span className="text-sm text-gray-700">
+                        Документы клиники (лицензии, уставные документы)
+                      </span>
+                    </div>
                   </>
                 )}
-              </ul>
+              </div>
             </div>
 
-            <div className="text-sm space-y-2">
-              <p>
-                <strong>Цели обработки:</strong>
-              </p>
-              <ul className="list-disc list-inside space-y-1 ml-4">
-                <li>Регистрация и аутентификация пользователей</li>
-                <li>Предоставление доступа к сервису</li>
-                <li>Обеспечение безопасности данных</li>
-                <li>Модерация аккаунтов специалистов</li>
-              </ul>
+            <div className="space-y-3">
+              <h4 className="flex items-center gap-2 font-semibold text-gray-900">
+                <Building2 className="h-4 w-4 text-gray-500" />
+                Цели обработки
+              </h4>
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  "Регистрация и аутентификация",
+                  "Доступ к сервису",
+                  "Безопасность данных",
+                  "Модерация аккаунтов",
+                ].map((item) => (
+                  <div
+                    key={item}
+                    className="flex items-center gap-2 rounded-lg bg-gray-50 px-3 py-2"
+                  >
+                    <Check className="h-4 w-4 shrink-0 text-green-500" />
+                    <span className="text-sm text-gray-700">{item}</span>
+                  </div>
+                ))}
+              </div>
             </div>
 
-            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+            {/* Информация о защите */}
+            <div className="rounded-xl border border-blue-200 bg-blue-50 p-4">
               <p className="text-sm text-blue-900">
-                <strong>Политика конфиденциальности:</strong> Ваши данные
-                защищены в соответствии с требованиями законодательства РФ. Мы
-                не передаем данные третьим лицам без вашего согласия.
+                <strong>Защита данных:</strong> Ваши данные защищены в соответствии с
+                законодательством РФ. Мы не передаём данные третьим лицам без вашего согласия.
               </p>
             </div>
-          </div>
-
-          <div className="flex gap-3 mt-6">
-            <button
-              onClick={onDecline}
-              className="flex-1 bg-gray-200 text-gray-700 py-3 rounded-xl hover:bg-gray-300 transition-all"
-            >
-              Отказаться
-            </button>
-            <button
-              onClick={onAccept}
-              className="flex-1 bg-gradient-to-r from-purple-600 to-purple-700 text-white py-3 rounded-xl hover:from-purple-700 hover:to-purple-800 transition-all flex items-center justify-center gap-2"
-            >
-              <Check className="w-5 h-5" />
-              Принять
-            </button>
-          </div>
-
-          <div className="text-center mt-4">
-            <button
-              onClick={onShowPrivacyModal}
-              className="text-sm text-purple-600 hover:text-purple-700 underline"
-            >
-              Подробная политика конфиденциальности
-            </button>
           </div>
         </div>
-      </div>
-    </div>
-  );
+
+        <DialogFooter className="flex-col gap-3 border-t bg-gray-50/50 p-6 pt-4 sm:flex-col">
+          <div className="flex w-full gap-3">
+            <Button variant="outline" className="flex-1" onClick={onDecline}>
+              <X className="h-4 w-4" />
+              Отказаться
+            </Button>
+            <Button className="flex-1" onClick={onAccept}>
+              <Check className="h-4 w-4" />
+              Принять согласие
+            </Button>
+          </div>
+          <button
+            onClick={onShowPrivacyModal}
+            className="text-sm text-purple-600 transition-colors hover:text-purple-700 hover:underline"
+          >
+            Подробная политика конфиденциальности →
+          </button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
 }
