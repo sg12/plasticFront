@@ -1,13 +1,17 @@
-import { Outlet } from "react-router-dom";
-import { useEffect } from "react";
-import { useAuthStore } from "@/entities/auth/model/store";
+import { Outlet } from "react-router-dom"
+import { useEffect, useCallback } from "react"
+import { useAuthStore } from "@/entities/auth/model/store"
 
 export const App = () => {
-    const { initialize } = useAuthStore();
+  const { initialize } = useAuthStore()
 
-    useEffect(() => {
-        initialize();
-    }, [initialize]);
+  const initAuth = useCallback(() => {
+    initialize()
+  }, [initialize])
 
-    return <Outlet />;
-};
+  useEffect(() => {
+    initAuth()
+  }, [initAuth])
+
+  return <Outlet />
+}
