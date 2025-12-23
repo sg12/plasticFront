@@ -22,9 +22,9 @@ const buttonVariants = cva(
         cancel: "bg-gray-200 text-muted-foreground hover:muted",
       },
       size: {
-        default: "h-9 px-4 py-2 has-[>svg]:px-3",
-        sm: "h-8 gap-1.5 px-3 has-[>svg]:px-2.5",
-        lg: "h-12 px-6 has-[>svg]:px-4",
+        default: "p-3 px-4 py-2 has-[>svg]:px-3",
+        sm: "p-2 gap-1.5 px-3 has-[>svg]:px-2.5",
+        lg: "p-4 has-[>svg]:px-4",
         icon: "size-9 rounded-md",
         bannerSm:
           "p-4 [&>div]:gap-2 [&>div>div:first-child]:size-10 [&>div>div:first-child_svg]:size-5 [&_h3]:text-sm [&_p]:text-sm [&>div>svg]:size-5",
