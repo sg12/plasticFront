@@ -1,83 +1,116 @@
-import { supabase } from "@/shared/api/supabase/client";
-import type { DoctorUploadedFiles, ClinicUploadedFiles } from "../types/types";
+import { supabase } from "@/shared/api/supabase/client"
+import type { DoctorUploadedFiles, ClinicUploadedFiles } from "../types/types"
+import {
+  validateFiles,
+  FILE_VALIDATION_CONFIGS,
+  isFileValidationError,
+  type FileValidationConfig,
+} from "@/shared/lib/fileValidation"
 
-const STORAGE_BUCKET = "documents";
+const STORAGE_BUCKET = "documents"
 
 type UploadedFilePaths = {
-  [key: string]: string | string[];
-};
+  [key: string]: string | string[]
+}
 
+// Конфигурации валидации для разных типов документов
+const DOCUMENT_VALIDATION_CONFIGS: Record<string, FileValidationConfig> = {
+  diploma: FILE_VALIDATION_CONFIGS.documents,
+  license: FILE_VALIDATION_CONFIGS.documents,
+  certificate: FILE_VALIDATION_CONFIGS.documents,
+  clinicDocuments: FILE_VALIDATION_CONFIGS.clinicDocuments,
+}
 
 export async function uploadFiles(
   userId: string,
   role: "doctor" | "clinic",
-  files: DoctorUploadedFiles | ClinicUploadedFiles
+  files: DoctorUploadedFiles | ClinicUploadedFiles,
 ): Promise<UploadedFilePaths> {
-  const paths: UploadedFilePaths = {};
+  const paths: UploadedFilePaths = {}
 
   for (const [key, fileOrFiles] of Object.entries(files)) {
-    if (!fileOrFiles) continue;
+    if (!fileOrFiles) continue
 
-    const filesArray = Array.isArray(fileOrFiles) ? fileOrFiles : [fileOrFiles];
+    const filesArray = Array.isArray(fileOrFiles) ? fileOrFiles : [fileOrFiles]
+    const validFiles = filesArray.filter((file) => file instanceof File) as File[]
 
-    const uploadedPaths: string[] = [];
+    if (validFiles.length === 0) continue
 
-    for (const file of filesArray) {
-      if (!(file instanceof File)) continue;
-
-      const fileExt = file.name.split(".").pop();
-      const fileName = `${crypto.randomUUID()}.${fileExt}`;
-      const filePath = `${userId}/${role}/${key}/${fileName}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from(STORAGE_BUCKET)
-        .upload(filePath, file, {
-          cacheControl: "3600",
-          upsert: false,
-        });
-
-      if (uploadError) {
-        console.error(`Ошибка загрузки файла ${key}:`, uploadError);
-        throw new Error(`Не удалось загрузить файл ${key}: ${uploadError.message}`);
+    // Валидируем файлы перед загрузкой
+    const config = DOCUMENT_VALIDATION_CONFIGS[key] || FILE_VALIDATION_CONFIGS.documents
+    try {
+      await validateFiles(validFiles, config)
+    } catch (error) {
+      if (isFileValidationError(error)) {
+        console.error(`Валидация файла не пройдена для ${key}:`, error.message)
+        throw new Error(`Ошибка валидации файла "${error.fileName}": ${error.message}`)
       }
+      throw error
+    }
 
-      uploadedPaths.push(filePath);
+    const uploadedPaths: string[] = []
+
+    for (const file of validFiles) {
+      const fileExt = file.name.split(".").pop()
+      const fileName = `${crypto.randomUUID()}.${fileExt}`
+      const filePath = `${userId}/${role}/${key}/${fileName}`
+
+      try {
+        const { error: uploadError } = await supabase.storage
+          .from(STORAGE_BUCKET)
+          .upload(filePath, file, {
+            cacheControl: "3600",
+            upsert: false,
+          })
+
+        if (uploadError) {
+          console.error(`Ошибка загрузки файла ${key}:`, uploadError)
+          throw new Error(`Не удалось загрузить файл ${key}: ${uploadError.message}`)
+        }
+
+        uploadedPaths.push(filePath)
+      } catch (uploadError) {
+        console.error(`Ошибка загрузки файла ${file.name}:`, uploadError)
+        throw new Error(
+          `Не удалось загрузить файл "${file.name}": ${uploadError instanceof Error ? uploadError.message : "Неизвестная ошибка"}`,
+        )
+      }
     }
 
     if (uploadedPaths.length > 0) {
-      paths[key] = Array.isArray(fileOrFiles) ? uploadedPaths : uploadedPaths[0];
+      paths[key] = Array.isArray(fileOrFiles) ? uploadedPaths : uploadedPaths[0]
     }
   }
 
-  return paths;
+  return paths
 }
 
 export async function getFileUrls(
-  filePaths: UploadedFilePaths
+  filePaths: UploadedFilePaths,
 ): Promise<Array<{ name: string; url: string }>> {
-  const urls: Array<{ name: string; url: string }> = [];
+  const urls: Array<{ name: string; url: string }> = []
 
   for (const [key, pathOrPaths] of Object.entries(filePaths)) {
-    const paths = Array.isArray(pathOrPaths) ? pathOrPaths : [pathOrPaths];
+    const paths = Array.isArray(pathOrPaths) ? pathOrPaths : [pathOrPaths]
 
     for (const path of paths) {
       const { data, error } = await supabase.storage
         .from(STORAGE_BUCKET)
-        .createSignedUrl(path, 3600); // URL действителен 1 час
+        .createSignedUrl(path, 3600) // URL действителен 1 час
 
       if (error) {
-        console.error(`Ошибка получения URL для ${path}:`, error);
-        continue;
+        console.error(`Ошибка получения URL для ${path}:`, error)
+        continue
       }
 
       if (data?.signedUrl) {
         urls.push({
           name: key,
           url: data.signedUrl,
-        });
+        })
       }
     }
   }
 
-  return urls;
+  return urls
 }
