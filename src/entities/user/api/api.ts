@@ -155,7 +155,7 @@ export const updateUser = async (
     full_name: data.full_name,
     phone: data.phone,
     email: data.email,
-    updated_at: new Date().toISOString()
+    updated_at: new Date().toISOString(),
   }
 
   const { error: profileError } = await supabase.from(PROFILES).update(baseUpdate).eq("id", id)
@@ -170,7 +170,7 @@ export const updateUser = async (
         .update({
           birth_date: patient.birth_date ?? null,
           gender: patient.gender ?? null,
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
         .eq("id", id)
       if (error) throw error
@@ -191,7 +191,7 @@ export const updateUser = async (
           workplace: doctor.workplace,
           inn: doctor.inn,
           documents: doctor.documents ?? null,
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
         .eq("id", id)
       if (error) throw error
@@ -211,7 +211,7 @@ export const updateUser = async (
           director_name: clinic.director_name,
           director_position: clinic.director_position,
           documents: clinic.documents ?? null,
-          updated_at: new Date().toISOString()
+          updated_at: new Date().toISOString(),
         })
         .eq("id", id)
       if (error) throw error
