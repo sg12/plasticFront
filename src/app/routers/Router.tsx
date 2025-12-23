@@ -8,6 +8,8 @@ import { SignUp } from "@/pages/signUp/ui/SignUp"
 import { Dashboard } from "@/pages/dashboard/ui/Dashboard"
 import { Profile } from "@/pages/profile/ui/Profile"
 import { AIVisualizer } from "@/pages/aiVisualizer/ui/AIVisualizer"
+import { General } from "@/widgets/settings/general/ui/General"
+import { PersonalData } from "@/widgets/settings/personalData/ui/PersonalData"
 
 export const router = createBrowserRouter([
   {
@@ -36,6 +38,23 @@ export const router = createBrowserRouter([
               { index: true, element: <Dashboard />, handle: { title: "Главная" } },
               { path: "profile", element: <Profile />, handle: { title: "Профиль" } },
               { path: "ai", element: <AIVisualizer />, handle: { title: "AI Визуализатор" } },
+              {
+                path: "settings",
+                // element: <Settings />,
+                handle: { title: "Настройки" },
+                children: [
+                  {
+                    path: "general",
+                    element: <General />,
+                    handle: { title: "Основные настройки" },
+                  },
+                  {
+                    path: "personalData",
+                    element: <PersonalData />,
+                    handle: { title: "Персональные данные" },
+                  },
+                ],
+              },
             ],
           },
         ],
