@@ -1,10 +1,10 @@
 import { Mail, Phone } from "lucide-react"
-import { Avatar, AvatarFallback, AvatarImage } from "../../../../shared/ui/avatar"
-import type { Props } from "../../types/types"
-import { formatName, formatRole } from "../../../../shared/lib/utils"
-import { Separator } from "../../../../shared/ui/separator"
-import { Badge } from "../../../../shared/ui/badge"
-import type { UserRole } from "../../../../entities/user/types/types"
+import { Avatar, AvatarFallback, AvatarImage } from "../../../shared/ui/avatar"
+import type { Props } from "../types/types"
+import { formatName, formatRole } from "../../../shared/lib/utils"
+import { Separator } from "../../../shared/ui/separator"
+import { Badge } from "../../../shared/ui/badge"
+import type { UserRole } from "../../../entities/user/types/types"
 
 export const UserProfileCard = ({ profile }: Props) => {
   return (

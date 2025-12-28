@@ -1,88 +1,115 @@
-import React from "react";
-import type { FileRecord, FileUploadProps } from "../types/types";
-import { Check, ChevronsUpDown, Upload } from "lucide-react";
-import { Label } from "@/shared/ui/label";
-import { Input } from "@/shared/ui/input";
+import React, { useState } from "react"
+import type { FileRecord, FileUploadProps } from "../types/types"
+import { Check, ChevronsUpDown, Upload, AlertCircle } from "lucide-react"
+import { Label } from "@/shared/ui/label"
+import { Input } from "@/shared/ui/input"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/shared/ui/collapsible"
+import { FILE_ACCEPT_TYPES } from "@/entities/document/model/constants"
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/shared/ui/collapsible";
-import { FILE_ACCEPT_TYPES } from "@/entities/document/model/constants";
+  validateFiles,
+  FILE_VALIDATION_CONFIGS,
+  isFileValidationError,
+} from "@/shared/lib/fileValidation"
+import { Alert, AlertDescription } from "@/shared/ui/alert"
 
 export const FileUpload = <T extends FileRecord>({
   fileSlots,
   onFileChange,
   uploadedFiles,
 }: FileUploadProps<T>) => {
-  const [openSlots, setOpenSlots] = React.useState<Set<string>>(new Set());
+  const [openSlots, setOpenSlots] = React.useState<Set<string>>(new Set())
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({})
 
-  const toggleSlot = (slotId: T) => {
+  const toggleSlot = (slotId: keyof T) => {
     setOpenSlots((prev) => {
-      const next = new Set(prev);
-      next.has(String(slotId))
-        ? next.delete(String(slotId))
-        : next.add(String(slotId));
-      return next;
-    });
-  };
+      const next = new Set(prev)
+      next.has(String(slotId)) ? next.delete(String(slotId)) : next.add(String(slotId))
+      return next
+    })
+  }
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>, fileType: keyof T) => {
+    const files = Array.from(e.target.files || [])
+    const slotId = String(fileType)
+
+    // Очищаем предыдущие ошибки для этого слота
+    setValidationErrors((prev) => ({ ...prev, [slotId]: "" }))
+
+    if (files.length === 0) {
+      onFileChange(e, fileType as keyof T)
+      return
+    }
+
+    try {
+      // Валидируем файлы - используем стандартные конфигурации
+      const config = FILE_VALIDATION_CONFIGS.documents // Используем документы по умолчанию
+      await validateFiles(files, config)
+
+      // Если валидация прошла успешно, передаем файлы дальше
+      onFileChange(e, fileType as keyof T)
+    } catch (error) {
+      if (isFileValidationError(error)) {
+        setValidationErrors((prev) => ({ ...prev, [slotId]: error.message }))
+      } else {
+        setValidationErrors((prev) => ({
+          ...prev,
+          [slotId]: "Произошла ошибка при валидации файла",
+        }))
+      }
+      // Очищаем выбранные файлы при ошибке
+      e.target.value = ""
+    }
+  }
 
   return (
     <div className="space-y-5">
       {fileSlots.map((slot) => {
-        const isSlotOpen = openSlots.has(slot.id as string);
-        const slotFiles = uploadedFiles[slot.id];
-        const fileCount = Array.isArray(slotFiles)
-          ? slotFiles
-          : slotFiles
-          ? [slotFiles]
-          : [];
+        const isSlotOpen = openSlots.has(slot.id as string)
+        const slotFiles = uploadedFiles[slot.id]
+        const fileCount = Array.isArray(slotFiles) ? slotFiles : slotFiles ? [slotFiles] : []
         return (
           <div key={String(slot.id)}>
-            <Label
-              htmlFor={String(slot.id)}
-              className="block text-sm text-gray-700 mb-2"
-            >
+            <Label htmlFor={String(slot.id)} className="mb-2 block text-sm text-gray-700">
               {slot.label}
             </Label>
             <div className="relative">
-              <Upload className="absolute left-4 top-1/2 -translate-y-1/2 w-5 text-gray-400" />
+              <Upload className="absolute top-1/2 left-4 w-5 -translate-y-1/2 text-gray-400" />
               <Input
                 type="file"
                 id={String(slot.id)}
                 name={slot.label}
                 multiple={slot.multiple}
-                onChange={(e) => onFileChange(e, slot.id)}
+                onChange={(e) => handleFileChange(e, slot.id)}
                 accept={FILE_ACCEPT_TYPES}
-                required
-                className="pl-12 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent file:mr-4 file:px-4 file:rounded-lg file:border-0 file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"
+                className="py-3 pl-12 file:mr-4 file:rounded-lg file:border-0 file:bg-purple-50 file:px-4 file:text-purple-700 hover:file:bg-purple-100 focus:border-transparent focus:ring-2 focus:ring-purple-500 focus:outline-none"
               />
             </div>
+
+            {/* Отображение ошибок валидации */}
+            {validationErrors[String(slot.id)] && (
+              <Alert variant="destructive" className="mt-2">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>{validationErrors[String(slot.id)]}</AlertDescription>
+              </Alert>
+            )}
+
             {slotFiles &&
               (fileCount.length > 1 ? null : (
-                <Collapsible
-                  open={isSlotOpen}
-                  onOpenChange={() => toggleSlot(slot.id)}
-                >
+                <Collapsible open={isSlotOpen} onOpenChange={() => toggleSlot(slot.id as keyof T)}>
                   <CollapsibleTrigger asChild>
                     <button
                       type="button"
-                      className="flex items-center gap-2 mt-2 text-sm text-gray-600 hover:text-gray-800 transition-colors"
+                      className="mt-2 flex items-center gap-2 text-sm text-gray-600 transition-colors hover:text-gray-800"
                       aria-expanded={isSlotOpen}
                     >
-                      <ChevronsUpDown className="w-4 h-4" />
-                      <span>
-                        {isSlotOpen ? "Скрыть" : "Показать"} загруженные файлы
-                      </span>
+                      <ChevronsUpDown className="h-4 w-4" />
+                      <span>{isSlotOpen ? "Скрыть" : "Показать"} загруженные файлы</span>
                     </button>
                   </CollapsibleTrigger>
                   <CollapsibleContent>
                     <div className="mt-2 space-y-1">
                       {fileCount.map((file, idx) => (
-                        <p
-                          key={idx}
-                          className="flex items-center gap-2 text-sm text-green-600"
-                        >
+                        <p key={idx} className="flex items-center gap-2 text-sm text-green-600">
                           <Check size={16} />
                           {file.name}
                         </p>
@@ -92,8 +119,8 @@ export const FileUpload = <T extends FileRecord>({
                 </Collapsible>
               ))}
           </div>
-        );
+        )
       })}
     </div>
-  );
-};
+  )
+}

@@ -14,7 +14,7 @@ export const ProtectedRoute = () => {
     navigate("/signin", { replace: true })
   }
 
-  if (loading && !profile) {
+  if (loading || !profile) {
     return (
       <div className="flex h-screen w-screen items-center justify-center">
         <Loader role="status" aria-label="Loading" className="size-4 animate-spin" />

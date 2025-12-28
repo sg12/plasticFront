@@ -1,5 +1,5 @@
-import { pluralRu } from '../../../../shared/lib/utils'
-import type { Props } from "../../types/types"
+import { pluralRu } from "@/shared/lib/utils"
+import { type Props } from "../types/types"
 import dayjs from "dayjs"
 
 export const UserProfileHistory = ({ profile }: Props) => {

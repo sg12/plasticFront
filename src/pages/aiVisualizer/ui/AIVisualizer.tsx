@@ -1,6 +1,6 @@
 import { useCallback } from "react"
 import { useVisualization } from "@/features/aiVisualization/hooks/useVisualization"
-import { processImageWithAI } from "@/features/aiVisualization/api/api"
+import { processFaceImage } from "@/features/aiVisualization/api/api"
 import { BodySelector } from "@/widgets/bodySelector/ui/BodySelector"
 import { PhotoUploader } from "@/features/aiVisualization/ui/PhotoUploader"
 import { ProcessingLoader } from "@/features/processingLoader/ui/ProcessingLoader"
@@ -18,6 +18,8 @@ export const AIVisualizer = () => {
     selectZone,
     setPhoto,
     setIntensity,
+    setDescription,
+    setOperationType,
     startProcessing,
     completeProcessing,
     reset,
@@ -32,22 +34,42 @@ export const AIVisualizer = () => {
       startProcessing()
 
       try {
-        const result = await processImageWithAI({
+        // Проверяем, что выбранная зона поддерживается для обработки лица
+        const faceZones: Array<"nose" | "eyes" | "lips" | "cheeks" | "chin" | "forehead" | "ears"> =
+          ["nose", "eyes", "lips", "cheeks", "chin", "forehead", "ears"]
+
+        if (!state.selectedZone || !faceZones.includes(state.selectedZone as any)) {
+          throw new Error(
+            "Выбранная зона не поддерживается для обработки лица. Пожалуйста, выберите зону лица.",
+          )
+        }
+
+        const result = await processFaceImage({
           image: state.uploadedPhoto,
-          zone: state.selectedZone!,
+          zone: state.selectedZone,
+          operationType: state.operationType,
           intensity: state.intensity,
         })
         completeProcessing(result.resultUrl)
       } catch (error) {
         console.error("AI processing error:", error)
+        const errorMessage =
+          error instanceof Error ? error.message : "Произошла ошибка при обработке изображения"
+        alert(errorMessage)
         goBack()
       }
     }
-  }, [state, setStep, startProcessing, completeProcessing, goBack])
-
-  const handleBookConsultation = () => {
-    window.open("/main/appointments", "_blank")
-  }
+  }, [
+    state.step,
+    state.selectedZone,
+    state.uploadedPhoto,
+    state.intensity,
+    state.operationType,
+    setStep,
+    startProcessing,
+    completeProcessing,
+    goBack,
+  ])
 
   return (
     <div className="min-h-full px-4 py-8">
@@ -55,14 +77,14 @@ export const AIVisualizer = () => {
         <div className="mb-8 text-center">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 px-4 py-2 text-sm font-medium text-white">
             <Sparkles className="size-4" />
-            AI Визуализатор
+            Визуализатор
           </div>
           <h1 className="mb-2 text-3xl font-bold text-gray-900">
             Посмотрите на себя после операции
           </h1>
           <p className="mx-auto max-w-xl text-gray-500">
-            Наш AI покажет, как вы можете выглядеть после пластической операции. Выберите зону,
-            загрузите фото и получите визуализацию за секунды.
+            Визуализатор покажет, как вы можете выглядеть после пластической операции. Выберите
+            зону, загрузите фото и получите визуализацию за секунды.
           </p>
         </div>
 
@@ -82,8 +104,11 @@ export const AIVisualizer = () => {
                 photo={state.uploadedPhoto}
                 photoPreview={state.photoPreview}
                 intensity={state.intensity}
+                operationType={state.operationType}
                 onPhotoChange={setPhoto}
                 onIntensityChange={setIntensity}
+                onOperationTypeChange={setOperationType}
+                onDescriptionChange={setDescription}
               />
             )}
 
@@ -98,7 +123,6 @@ export const AIVisualizer = () => {
                   originalImage={state.photoPreview}
                   resultImage={state.resultImage}
                   onReset={reset}
-                  onBookConsultation={handleBookConsultation}
                 />
               )}
           </CardContent>

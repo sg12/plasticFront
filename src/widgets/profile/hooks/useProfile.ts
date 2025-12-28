@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { useAuthStore } from "@/entities/auth/model/store"
+import { useUserProfile } from "@/entities/user/hooks/useUserProfile"
 import { updateUser } from "@/entities/user/api/api"
 import { USER_ROLES } from "@/entities/user/model/constants"
 import type {
@@ -24,7 +25,8 @@ export type UseProfileResult = {
 }
 
 export function useProfile(): UseProfileResult {
-  const { profile, user, loadProfile } = useAuthStore()
+  const { user } = useAuthStore()
+  const { profile, refresh: refreshProfile } = useUserProfile(user?.id)
 
   const [isEditing, setIsEditing] = useState(false)
   const [editableProfile, setEditableProfile] = useState<RoleProfile | null>(profile)
@@ -95,9 +97,8 @@ export function useProfile(): UseProfileResult {
         const next = { ...profile, ...values } as RoleProfile
         await updateUser(next.id, next as any)
 
-        if (user?.id) {
-          await loadProfile(user.id)
-        }
+        // Обновляем профиль через SWR
+        await refreshProfile()
         toast.success("Данные обновлены.")
         setIsEditing(false)
       } catch (e) {

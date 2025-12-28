@@ -1,10 +1,8 @@
 import { useMatches } from "react-router-dom"
-import { useIsMobile } from "../../../shared/hooks/useMobile"
-import { Separator } from "../../../shared/ui/separator"
-import { SidebarTrigger } from "../../../shared/ui/sidebar"
+import { Separator } from "@/shared/ui/separator"
+import { SidebarTrigger } from "@/shared/ui/sidebar"
 
 export const Header = () => {
-  const isMobile = useIsMobile()
   const matches = useMatches()
   const current = matches[matches.length - 1]
   const title =
@@ -12,12 +10,8 @@ export const Header = () => {
 
   return (
     <header className="bg-sidebar text-sidebar-foreground sticky top-0 right-0 left-0 z-1 flex h-14 items-center gap-2 border-b px-4">
-      {isMobile && (
-        <>
-          <SidebarTrigger />
-          <Separator orientation="vertical" className="mx-2" />
-        </>
-      )}
+      <SidebarTrigger />
+      <Separator orientation="vertical" className="mx-2" />
       <div className="text-foreground min-w-0 truncate text-sm font-medium">{title}</div>
     </header>
   )

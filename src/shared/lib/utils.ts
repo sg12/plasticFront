@@ -7,7 +7,11 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export const formatName = (fullName: string, isFirstSymbol?: boolean): string => {
+export const formatName = (
+  fullName: string,
+  isFirstSymbol?: boolean,
+  parts?: "firstName" | "lastName" | "patronymic",
+): string => {
   if (isFirstSymbol) {
     return fullName
       .trim()
@@ -16,12 +20,23 @@ export const formatName = (fullName: string, isFirstSymbol?: boolean): string =>
       .join("")
   }
 
-  const parts = fullName.trim().split(/\s+/)
+  const partsOfFullName = fullName.trim().split(/\s+/)
 
-  if (parts.length === 0) return ""
-  if (parts.length === 1) return parts[0]
+  if (partsOfFullName.length === 0) return ""
+  if (partsOfFullName.length === 1) return partsOfFullName[0]
 
-  const [lastName, firstName, patronymic] = parts
+  const [lastName, firstName, patronymic] = partsOfFullName
+
+  if (parts) {
+    switch (parts) {
+      case "lastName":
+        return lastName ?? ""
+      case "firstName":
+        return firstName ?? ""
+      case "patronymic":
+        return patronymic ?? ""
+    }
+  }
 
   const initials = [firstName, patronymic]
     .filter(Boolean)

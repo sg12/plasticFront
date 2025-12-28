@@ -1,192 +1,201 @@
-import { X, Shield, Lock, Eye, Database } from "lucide-react";
-import type { PrivacyModalProps } from "../types/types";
+import { Shield, Lock, Eye, Database, CheckCircle, AlertTriangle } from "lucide-react"
+import { Button } from "@/shared/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/shared/ui/dialog"
+import type { PrivacyModalProps } from "../types/types"
 
 export function PrivacyModal({ onClose }: PrivacyModalProps) {
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-2xl font-semibold text-gray-900">
-              Политика конфиденциальности
-            </h3>
-            <button
-              onClick={onClose}
-              className="text-gray-400 hover:text-gray-600"
-            >
-              <X className="w-6 h-6" />
-            </button>
+    <Dialog open onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="max-w-3xl gap-0 p-0">
+        <DialogHeader className="border-b p-6 pb-4">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-purple-100 to-blue-100">
+              <Shield className="h-5 w-5 text-purple-600" />
+            </div>
+            <div>
+              <DialogTitle className="text-xl">Политика конфиденциальности</DialogTitle>
+              <DialogDescription>
+                Федеральный закон № 152-ФЗ "О персональных данных"
+              </DialogDescription>
+            </div>
           </div>
+        </DialogHeader>
 
-          <div className="space-y-6 text-gray-700">
-            <div className="bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-xl p-6">
-              <div className="flex items-start gap-4">
-                <Shield className="w-8 h-8 text-purple-600 flex-shrink-0" />
+        <div className="max-h-[65vh] overflow-y-auto">
+          <div className="space-y-6 p-6">
+            <div className="rounded-xl border border-purple-200 bg-gradient-to-br from-purple-50 via-purple-50/50 to-blue-50 p-5">
+              <div className="flex gap-4">
+                <Shield className="h-8 w-8 shrink-0 text-purple-600" />
                 <div>
-                  <h4 className="text-lg font-semibold text-gray-900 mb-2">
-                    Защита ваших данных
-                  </h4>
-                  <p className="text-gray-700">
-                    Мы серьезно относимся к защите ваших персональных данных и
-                    соблюдаем все требования Федерального закона № 152-ФЗ "О
-                    персональных данных".
+                  <h4 className="mb-1 font-semibold text-gray-900">Защита ваших данных</h4>
+                  <p className="text-sm text-gray-700">
+                    Мы серьёзно относимся к защите персональных данных и соблюдаем все требования
+                    законодательства РФ.
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="space-y-4">
-              <h4 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
-                <Database className="w-6 h-6 text-purple-600" />
+            <section className="space-y-4">
+              <h4 className="flex items-center gap-2 font-semibold text-gray-900">
+                <Database className="h-5 w-5 text-purple-600" />
                 Какие данные мы собираем
               </h4>
 
-              <div className="bg-gray-50 rounded-lg p-4">
-                <h5 className="font-medium text-gray-900 mb-2">
-                  Обязательные данные:
-                </h5>
-                <ul className="list-disc list-inside space-y-1 text-sm text-gray-700">
-                  <li>ФИО, email, номер телефона</li>
-                  <li>Пароль (хранится в зашифрованном виде)</li>
-                  <li>Тип аккаунта (пациент/врач/клиника)</li>
-                </ul>
-              </div>
+              <div className="grid gap-3">
+                <DataBlock title="Обязательные данные" variant="default">
+                  <DataItem>ФИО, email, номер телефона</DataItem>
+                  <DataItem>Пароль (хранится в зашифрованном виде)</DataItem>
+                  <DataItem>Тип аккаунта (пациент / врач / клиника)</DataItem>
+                </DataBlock>
 
-              <div className="bg-gray-50 rounded-lg p-4">
-                <h5 className="font-medium text-gray-900 mb-2">Для врачей:</h5>
-                <ul className="list-disc list-inside space-y-1 text-sm text-gray-700">
-                  <li>Специализация, опыт работы, образование</li>
-                  <li>Номер медицинской лицензии</li>
-                  <li>Скан-копии дипломов и сертификатов</li>
-                </ul>
-              </div>
+                <DataBlock title="Для врачей" variant="purple">
+                  <DataItem>Специализация, опыт работы, образование</DataItem>
+                  <DataItem>Номер медицинской лицензии</DataItem>
+                  <DataItem>Скан-копии дипломов и сертификатов</DataItem>
+                </DataBlock>
 
-              <div className="bg-gray-50 rounded-lg p-4">
-                <h5 className="font-medium text-gray-900 mb-2">Для клиник:</h5>
-                <ul className="list-disc list-inside space-y-1 text-sm text-gray-700">
-                  <li>Юридические данные организации</li>
-                  <li>Медицинская лицензия клиники</li>
-                  <li>Уставные документы</li>
-                </ul>
+                <DataBlock title="Для клиник" variant="purple">
+                  <DataItem>Юридические данные организации</DataItem>
+                  <DataItem>Медицинская лицензия клиники</DataItem>
+                  <DataItem>Уставные документы</DataItem>
+                </DataBlock>
               </div>
-            </div>
+            </section>
 
-            <div className="space-y-4">
-              <h4 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
-                <Lock className="w-6 h-6 text-green-600" />
+            <section className="space-y-4">
+              <h4 className="flex items-center gap-2 font-semibold text-gray-900">
+                <Lock className="h-5 w-5 text-green-600" />
                 Как мы защищаем ваши данные
               </h4>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                  <h5 className="font-medium text-green-900 mb-2">
-                    Шифрование
-                  </h5>
-                  <p className="text-sm text-green-800">
-                    Все данные передаются по защищенным каналам HTTPS и хранятся
-                    в зашифрованном виде.
-                  </p>
-                </div>
-
-                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                  <h5 className="font-medium text-green-900 mb-2">Доступ</h5>
-                  <p className="text-sm text-green-800">
-                    Доступ к данным имеют только авторизованные сотрудники и
-                    только при необходимости.
-                  </p>
-                </div>
-
-                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                  <h5 className="font-medium text-green-900 mb-2">
-                    Резервное копирование
-                  </h5>
-                  <p className="text-sm text-green-800">
-                    Регулярное резервное копирование данных с соблюдением мер
-                    безопасности.
-                  </p>
-                </div>
-
-                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                  <h5 className="font-medium text-green-900 mb-2">
-                    Мониторинг
-                  </h5>
-                  <p className="text-sm text-green-800">
-                    Постоянный мониторинг системы на предмет попыток
-                    несанкционированного доступа.
-                  </p>
-                </div>
+              <div className="grid grid-cols-2 gap-3">
+                <SecurityCard icon={Lock} title="Шифрование">
+                  Все данные передаются по HTTPS и хранятся в зашифрованном виде
+                </SecurityCard>
+                <SecurityCard icon={Eye} title="Контроль доступа">
+                  Доступ только у авторизованных сотрудников при необходимости
+                </SecurityCard>
+                <SecurityCard icon={Database} title="Резервное копирование">
+                  Регулярные бэкапы с соблюдением мер безопасности
+                </SecurityCard>
+                <SecurityCard icon={Shield} title="Мониторинг">
+                  Постоянный мониторинг на предмет несанкционированного доступа
+                </SecurityCard>
               </div>
-            </div>
+            </section>
 
-            <div className="space-y-4">
-              <h4 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
-                <Eye className="w-6 h-6 text-blue-600" />
+            <section className="space-y-4">
+              <h4 className="flex items-center gap-2 font-semibold text-gray-900">
+                <Eye className="h-5 w-5 text-blue-600" />
                 Как мы используем ваши данные
               </h4>
 
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <ul className="list-disc list-inside space-y-1 text-sm text-blue-800">
-                  <li>
-                    <strong>Регистрация и аутентификация:</strong> Для создания
-                    и поддержания вашего аккаунта
-                  </li>
-                  <li>
-                    <strong>Предоставление услуг:</strong> Для обеспечения
-                    доступа к функционалу платформы
-                  </li>
-                  <li>
-                    <strong>Модерация:</strong> Для проверки аккаунтов врачей и
-                    клиник
-                  </li>
-                  <li>
-                    <strong>Безопасность:</strong> Для предотвращения
-                    мошенничества и нарушений
-                  </li>
-                  <li>
-                    <strong>Улучшение сервиса:</strong> Для анализа
-                    использования и улучшения платформы
-                  </li>
-                </ul>
+              <div className="space-y-2 rounded-xl border border-blue-200 bg-blue-50 p-4">
+                <UsageItem title="Регистрация">Создание и поддержание вашего аккаунта</UsageItem>
+                <UsageItem title="Услуги">Обеспечение доступа к функционалу платформы</UsageItem>
+                <UsageItem title="Модерация">Проверка аккаунтов врачей и клиник</UsageItem>
+                <UsageItem title="Безопасность">Предотвращение мошенничества</UsageItem>
+                <UsageItem title="Улучшение">Анализ и улучшение сервиса</UsageItem>
+              </div>
+            </section>
+
+            <div className="rounded-xl border border-amber-200 bg-amber-50 p-5">
+              <div className="flex gap-3">
+                <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
+                <div className="space-y-2">
+                  <h4 className="font-semibold text-amber-900">Важная информация</h4>
+                  <ul className="space-y-1.5 text-sm text-amber-800">
+                    <li>• Мы не передаём данные третьим лицам без вашего согласия</li>
+                    <li>• Вы можете запросить удаление данных в любой момент</li>
+                    <li>• Данные хранятся только необходимое время</li>
+                    <li>• При изменении политики мы уведомим вас заранее</li>
+                  </ul>
+                </div>
               </div>
             </div>
 
-            <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-6">
-              <h4 className="text-lg font-semibold text-yellow-900 mb-3">
-                Важная информация
-              </h4>
-              <ul className="space-y-2 text-sm text-yellow-800">
-                <li>
-                  • Мы не передаем ваши данные третьим лицам без вашего явного
-                  согласия
-                </li>
-                <li>
-                  • Вы можете в любой момент запросить удаление своих данных
-                </li>
-                <li>
-                  • Мы храним данные только в течение времени, необходимого для
-                  предоставления услуг
-                </li>
-                <li>• При изменении политики мы уведомим вас заранее</li>
-              </ul>
+            <div className="text-center text-sm text-gray-500">
+              Последнее обновление: {new Date().toLocaleDateString("ru-RU")}
             </div>
-
-            <div className="bg-gray-100 rounded-lg p-4">
-              <p className="text-sm text-gray-600 text-center">
-                Последнее обновление: {new Date().toLocaleDateString("ru-RU")}
-              </p>
-            </div>
-          </div>
-
-          <div className="flex justify-center mt-6">
-            <button
-              onClick={onClose}
-              className="bg-gradient-to-r from-purple-600 to-purple-700 text-white px-8 py-3 rounded-xl hover:from-purple-700 hover:to-purple-800 transition-all"
-            >
-              Понятно, закрыть
-            </button>
           </div>
         </div>
-      </div>
+
+        <DialogFooter className="border-t bg-gray-50/50 p-6 pt-4">
+          <Button onClick={onClose} className="w-full sm:w-auto">
+            <CheckCircle className="h-4 w-4" />
+            Понятно, закрыть
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+function DataBlock({
+  title,
+  variant,
+  children,
+}: {
+  title: string
+  variant: "default" | "purple"
+  children: React.ReactNode
+}) {
+  const styles = {
+    default: "bg-gray-50 border-gray-200",
+    purple: "bg-purple-50/50 border-purple-200",
+  }
+
+  return (
+    <div className={`rounded-lg border p-4 ${styles[variant]}`}>
+      <h5 className="mb-2 font-medium text-gray-900">{title}</h5>
+      <div className="space-y-1">{children}</div>
     </div>
-  );
+  )
+}
+
+function DataItem({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex items-start gap-2">
+      <div className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-gray-400" />
+      <span className="text-sm text-gray-700">{children}</span>
+    </div>
+  )
+}
+
+function SecurityCard({
+  icon: Icon,
+  title,
+  children,
+}: {
+  icon: React.ElementType
+  title: string
+  children: React.ReactNode
+}) {
+  return (
+    <div className="rounded-lg border border-green-200 bg-green-50 p-4">
+      <div className="mb-2 flex items-center gap-2">
+        <Icon className="h-4 w-4 text-green-600" />
+        <h5 className="font-medium text-green-900">{title}</h5>
+      </div>
+      <p className="text-sm text-green-800">{children}</p>
+    </div>
+  )
+}
+
+function UsageItem({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div className="flex items-start gap-2">
+      <span className="text-sm text-blue-800">
+        <strong>{title}:</strong> {children}
+      </span>
+    </div>
+  )
 }

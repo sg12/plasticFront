@@ -9,7 +9,6 @@ interface ResultComparisonProps {
   originalImage: string;
   resultImage: string;
   onReset: () => void;
-  onBookConsultation?: () => void;
 }
 
 export const ResultComparison = ({
