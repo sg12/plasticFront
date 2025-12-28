@@ -14,6 +14,10 @@ export const ProtectedRoute = () => {
     navigate("/signin", { replace: true })
   }
 
+  if (!session) {
+    return <Navigate to="/signin" replace />
+  }
+
   if (loading || !profile) {
     return (
       <div className="flex h-screen w-screen items-center justify-center">
@@ -21,10 +25,6 @@ export const ProtectedRoute = () => {
         <Label>Загрузка...</Label>
       </div>
     )
-  }
-
-  if (!session) {
-    return <Navigate to="/signin" replace />
   }
 
   const isDoctorOrClinic =
