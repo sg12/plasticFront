@@ -1,9 +1,9 @@
-import { Edit2, Loader, QrCode, Save, X } from "lucide-react"
+import { Edit2, Loader, Save, X } from "lucide-react"
 import { Button } from "../../../shared/ui/button"
-import { UserProfileCard } from "../../../widgets/profile/userProfileCard/ui/UserProfileCard"
-import { UserProfileInformation } from "../../../widgets/profile/userProfileInformation/ui/UserProfileInformation"
-import { UserProfileHistory } from "../../../widgets/profile/userProfileHistory/ui/UserProfileHistory"
 import { useProfile } from "../../../widgets/profile/hooks/useProfile"
+import { UserProfileCard } from "@/widgets/profile/ui/UserProfileCard"
+import { UserProfileInformation } from "@/widgets/profile/ui/UserProfileInformation"
+import { UserProfileHistory } from "@/widgets/profile/ui/UserProfileHistory"
 
 export const Profile = () => {
   const {
@@ -21,7 +21,7 @@ export const Profile = () => {
   return (
     <FormProvider {...form}>
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col justify-between gap-4 lg:flex-row">
           <div>
             <h2>Мой профиль</h2>
             <p className="mt-2 text-gray-600">Управляйте вашей личной информацией</p>
@@ -32,12 +32,12 @@ export const Profile = () => {
                 <Edit2 className="h-4 w-4" />
                 Редактировать
               </Button>
-              {profile?.role === "patient" && (
+              {/* {profile?.role === "patient" && (
                 <Button onClick={() => {}}>
                   <QrCode className="h-4 w-4" />
                   QR-код
                 </Button>
-              )}
+              )} */}
             </div>
           ) : (
             <div className="flex gap-2">
