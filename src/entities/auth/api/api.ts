@@ -3,6 +3,7 @@ import type {
   AuthChangeEvent,
   Session,
   SignInWithPasswordCredentials,
+  SignOut,
   SignUpWithPasswordCredentials,
 } from "@supabase/supabase-js"
 
@@ -14,12 +15,12 @@ export const signUp = (credentials: SignUpWithPasswordCredentials) => {
   return supabase.auth.signUp(credentials)
 }
 
-export const signOut = () => {
-  return supabase.auth.signOut()
+export const signOut = (scope?: SignOut["scope"]) => {
+  return supabase.auth.signOut({ scope: scope })
 }
 
-export const getSession = () => {
-  return supabase.auth.getSession()
+export const getSession = async () => {
+  return await supabase.auth.getSession()
 }
 
 export const onAuthStateChange = (

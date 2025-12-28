@@ -3,6 +3,9 @@ import type { Session, User as SupabaseUser } from "@supabase/supabase-js"
 import { getSession, onAuthStateChange, signOut } from "../api/api"
 import type { AuthState } from "../types/types"
 import { getUser } from "@/entities/user/api/api"
+import { mutate } from "swr"
+
+type AuthSubscription = ReturnType<typeof onAuthStateChange>
 
 interface AuthStore extends AuthState {
   setSession: (session: Session | null) => void
@@ -13,6 +16,7 @@ interface AuthStore extends AuthState {
   initialize: () => Promise<void>
   signOut: () => Promise<void>
   reset: () => void
+  _authSubscription: AuthSubscription | null
 }
 
 const initialState: AuthState = {
@@ -25,6 +29,7 @@ const initialState: AuthState = {
 
 export const useAuthStore = create<AuthStore>((set, get) => ({
   ...initialState,
+  _authSubscription: null,
 
   setSession: (session) => {
     set({ session, user: session?.user ?? null })
@@ -46,17 +51,24 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     try {
       const profile = await getUser(userId)
       set({ profile })
+      await mutate(["userProfile", userId], profile, false)
     } catch (error) {
       console.error("Ошибка загрузки профиля:", error)
       set({ profile: null })
+      await mutate(["userProfile", userId], null, false)
     }
   },
 
   initialize: async () => {
-    const { initialized } = get()
+    const { initialized, _authSubscription } = get()
+
+    if (_authSubscription) {
+      _authSubscription.data?.subscription?.unsubscribe()
+      set({ _authSubscription: null })
+    }
+
     if (initialized) return
 
-    
     try {
       set({ loading: true })
       // Получаем текущую сессию
@@ -78,8 +90,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
 
       set({ loading: false })
 
-      // Подписываемся на изменения состояния авторизации
-      onAuthStateChange(async (_event, session) => {
+      const subscription = onAuthStateChange(async (_event, session) => {
         set({
           session,
           user: session?.user ?? null,
@@ -91,6 +102,8 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
           set({ profile: null })
         }
       })
+
+      set({ _authSubscription: subscription })
     } catch (error) {
       console.error("Ошибка инициализации авторизации:", error)
       set({
@@ -104,9 +117,9 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   },
 
   signOut: async () => {
-    
     try {
       set({ loading: true })
+      const { user } = get()
       const { error } = await signOut()
       if (error) throw error
 
@@ -115,6 +128,11 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
         user: null,
         profile: null,
       })
+
+      // Очищаем SWR кеш для профиля
+      if (user?.id) {
+        await mutate(["userProfile", user.id], null, false)
+      }
     } catch (error) {
       console.error("Ошибка выхода:", error)
     } finally {
@@ -123,6 +141,10 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   },
 
   reset: () => {
-    set(initialState)
+    const { _authSubscription } = get()
+    if (_authSubscription) {
+      _authSubscription.data?.subscription?.unsubscribe()
+    }
+    set({ ...initialState, _authSubscription: null })
   },
 }))
