@@ -84,13 +84,13 @@ export const navigationConfig = {
         },
       ],
     },
-    {
-      id: "help",
-      name: "Помощь",
-      icon: HelpCircle,
-      url: "/main/help",
-      section: "other",
-    },
+    // {
+    //   id: "help",
+    //   name: "Помощь",
+    //   icon: HelpCircle,
+    //   url: "/main/help",
+    //   section: "other",
+    // },
     {
       id: "support",
       name: "Поддержка",
@@ -163,13 +163,13 @@ export const navigationConfig = {
         },
       ],
     },
-    {
-      id: "help",
-      name: "Помощь",
-      icon: HelpCircle,
-      url: "/main/help",
-      section: "other",
-    },
+    // {
+    //   id: "help",
+    //   name: "Помощь",
+    //   icon: HelpCircle,
+    //   url: "/main/help",
+    //   section: "other",
+    // },
     {
       id: "support",
       name: "Поддержка",
@@ -235,13 +235,13 @@ export const navigationConfig = {
         },
       ],
     },
-    {
-      id: "help",
-      name: "Помощь",
-      icon: HelpCircle,
-      url: "/main/help",
-      section: "other",
-    },
+    // {
+    //   id: "help",
+    //   name: "Помощь",
+    //   icon: HelpCircle,
+    //   url: "/main/help",
+    //   section: "other",
+    // },
     {
       id: "support",
       name: "Поддержка",

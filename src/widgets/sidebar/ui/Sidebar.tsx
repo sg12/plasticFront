@@ -13,6 +13,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSub,
   SidebarMenuSubItem,
+  useSidebar,
 } from "@/shared/ui/sidebar"
 import { Item, ItemActions, ItemDescription, ItemTitle, ItemContent } from "@/shared/ui/item"
 import { Button } from "@/shared/ui/button"
@@ -29,6 +30,7 @@ export const Sidebar = ({ ...props }: React.ComponentProps<typeof SidebarUI>) =>
   const { user, profile, signOut } = useAuthStore()
   const { pathname } = useLocation()
   const navigate = useNavigate()
+  const { openMobile, setOpenMobile } = useSidebar()
 
   const handleSignOut = async () => {
     await signOut()
@@ -86,6 +88,7 @@ export const Sidebar = ({ ...props }: React.ComponentProps<typeof SidebarUI>) =>
                               ? "bg-purple-50 text-purple-600"
                               : "text-gray-600 hover:bg-gray-50"
                           }
+                          onClick={() => setOpenMobile(hasChildren ?? openMobile)}
                         >
                           <NavLink to={item.url}>
                             <item.icon />
@@ -131,6 +134,7 @@ export const Sidebar = ({ ...props }: React.ComponentProps<typeof SidebarUI>) =>
                                         ? "bg-purple-50 text-purple-600"
                                         : "text-gray-600 hover:bg-gray-50"
                                     }
+                                    onClick={() => setOpenMobile(!openMobile)}
                                   >
                                     <NavLink to={sub.url}>
                                       <sub.icon />
@@ -156,19 +160,19 @@ export const Sidebar = ({ ...props }: React.ComponentProps<typeof SidebarUI>) =>
           asChild
           className="relative overflow-hidden border-0 bg-linear-to-r from-violet-500 to-fuchsia-700 text-white hover:scale-[1.02]"
         >
-          <NavLink to="ai">
-            <Sparkles className="pointer-events-none absolute -right-3 size-24 text-white/90 opacity-40" />
+          <NavLink to="ai" onClick={() => setOpenMobile(!openMobile)}>
+            <Sparkles className="pointer-events-none absolute right-3 size-24 text-white/90 opacity-40" />
             <ItemContent>
-              <ItemTitle className="font-semibold text-white">AI Визуализатор</ItemTitle>
+              <ItemTitle className="font-semibold text-white">Визуализатор</ItemTitle>
               <ItemDescription className="text-white/80">
-                Он покажет, как ты будешь выглядеть после операции
+                Посмотрите на себя после операции
               </ItemDescription>
             </ItemContent>
           </NavLink>
         </Item>
         <Item variant="muted" className="relative overflow-hidden">
           {profile?.role === "doctor" && (
-            <Stethoscope className="pointer-events-none absolute -right-3 size-24 opacity-10" />
+            <Stethoscope className="pointer-events-none absolute right-3 size-24 opacity-10" />
           )}
           {profile?.role === "clinic" && (
             <Hospital className="pointer-events-none absolute right-3 size-24 opacity-10" />
