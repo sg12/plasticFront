@@ -31,9 +31,9 @@ export const BodySelector = ({ selectedZone, onSelectZone }: BodySelectorProps) 
             <Smile className="size-4" />
             Лицо
           </TabsTrigger>
-          <TabsTrigger value="body" className="flex items-center gap-2">
+          <TabsTrigger value="body" className="flex items-center gap-2" disabled>
             <User className="size-4" />
-            Тело
+            Тело (Недоступно)
           </TabsTrigger>
         </TabsList>
 
