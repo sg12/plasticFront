@@ -1,334 +1,606 @@
-import { supabase } from "@/shared/api/supabase/client"
-import {
-  validateFile,
-  FILE_VALIDATION_CONFIGS,
-  isFileValidationError,
-} from "@/shared/lib/fileValidation"
+import { FaceMesh } from "@mediapipe/face_mesh"
+import type { OperationType } from "../types/types"
 
-export interface AIProcessingParams {
+export type FaceZone = "nose" | "eyes" | "lips" | "cheeks" | "chin" | "forehead" | "ears"
+
+const ZONE_LANDMARKS = {
+  nose: {
+    bridge: [6, 51, 4, 5],
+    tip: [1, 2, 5, 4],
+    nostrils: [31, 35, 168, 197, 195, 98, 327],
+    sides: [131, 134, 102, 49, 220, 305, 290, 305],
+  },
+  lips: {
+    upper: [61, 84, 17, 314, 405, 320, 307, 375, 321, 308, 324, 318],
+    lower: [78, 95, 88, 178, 87, 14, 317, 402, 318, 324],
+    corners: [61, 291],
+    center: [13, 14],
+  },
+  eyes: {
+    leftUpper: [159, 160, 161, 246, 7, 163, 144, 145, 153, 154, 155, 133],
+    leftLower: [33, 7, 163, 144, 145, 153, 154, 155, 133, 173, 157, 158],
+    rightUpper: [386, 387, 388, 466, 263, 362, 382, 381, 380, 374, 373, 390],
+    rightLower: [263, 362, 382, 381, 380, 374, 373, 390, 466, 388, 387, 386],
+  },
+  chin: {
+    tip: [152, 175, 199, 175, 18],
+    jaw: [172, 136, 150, 149, 176, 148, 152, 377, 400, 378, 379, 365, 397, 288, 361, 323],
+  },
+  cheeks: {
+    left: [116, 117, 118, 119, 120, 121, 126, 142, 36, 205, 206, 207, 213, 192, 147],
+    right: [345, 346, 347, 348, 349, 350, 451, 452, 265, 336, 296, 334, 293, 300, 276],
+  },
+  forehead: {
+    center: [10, 151, 337, 299, 333, 298, 301, 368, 264, 447, 366, 401, 435, 410, 454],
+    brows: [107, 55, 65, 52, 53, 46, 336, 296, 334, 293, 300, 276],
+  },
+  ears: {
+    left: [234, 127, 162, 21, 54, 103, 67, 109],
+    right: [454, 356, 389, 251, 284, 332, 297, 338],
+  },
+}
+
+interface Params {
   image: File
-  zone: string
+  zone: FaceZone
+  operationType: OperationType | null
   intensity: number
+  description?: string
 }
 
-export interface AIProcessingResult {
-  resultUrl: string
-  processingTime: number
-}
-
-// Режим mock - если явно включен (или если не можем определить провайдера)
-const USE_MOCK = import.meta.env.VITE_USE_MOCK === "true"
-
-// Конвертирует File в base64 data URI с валидацией
-const fileToBase64 = async (file: File): Promise<string> => {
-  // Валидируем файл перед конвертацией
-  try {
-    await validateFile(file, FILE_VALIDATION_CONFIGS.images)
-  } catch (error) {
-    if (isFileValidationError(error)) {
-      throw new Error(`Ошибка валидации изображения: ${error.message}`)
-    }
-    throw error
+const averagePoint = (points: any[]) => {
+  const sum = points.reduce((a, p) => ({ x: a.x + p.x, y: a.y + p.y }), { x: 0, y: 0 })
+  return {
+    x: sum.x / points.length,
+    y: sum.y / points.length,
   }
+}
 
+const fileToImage = (file: File): Promise<HTMLImageElement> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
-    reader.onload = () => resolve(reader.result as string)
-    reader.onerror = () => reject(new Error("Ошибка чтения файла"))
+    reader.onload = () => {
+      const img = new Image()
+      img.onload = () => resolve(img)
+      img.onerror = reject
+      img.src = reader.result as string
+    }
+    reader.onerror = reject
     reader.readAsDataURL(file)
   })
 }
 
-// Координаты зон лица (в процентах от размера изображения)
-// Предполагаем стандартное фото лица в анфас
-interface ZoneMask {
-  x: number // центр X (0-1)
-  y: number // центр Y (0-1)
-  width: number // ширина (0-1)
-  height: number // высота (0-1)
-  prompt: string
-}
+const detectLandmarks = (faceMesh: FaceMesh, image: HTMLImageElement): Promise<any[] | null> => {
+  return new Promise((resolve) => {
+    faceMesh.onResults((res) => {
+      resolve(res.multiFaceLandmarks?.[0] ?? null)
+    })
 
-const ZONE_MASKS: Record<string, ZoneMask> = {
-  forehead: {
-    x: 0.5,
-    y: 0.18,
-    width: 0.5,
-    height: 0.15,
-    prompt: "smooth forehead, no wrinkles, natural skin texture",
-  },
-  eyes: {
-    x: 0.5,
-    y: 0.35,
-    width: 0.6,
-    height: 0.12,
-    prompt: "beautiful eyes, refreshed look, no dark circles, natural appearance",
-  },
-  nose: {
-    x: 0.5,
-    y: 0.5,
-    width: 0.25,
-    height: 0.25,
-    prompt: "refined nose, balanced proportions, natural bridge, harmonious shape",
-  },
-  cheeks: {
-    x: 0.5,
-    y: 0.55,
-    width: 0.7,
-    height: 0.2,
-    prompt: "defined cheekbones, sculpted face, natural contour, youthful appearance",
-  },
-  lips: {
-    x: 0.5,
-    y: 0.72,
-    width: 0.35,
-    height: 0.1,
-    prompt: "fuller lips, defined lip shape, natural plump, balanced proportions",
-  },
-  chin: {
-    x: 0.5,
-    y: 0.85,
-    width: 0.4,
-    height: 0.15,
-    prompt: "refined chin, balanced jawline, defined contour, harmonious face shape",
-  },
-  ears: {
-    x: 0.5,
-    y: 0.45,
-    width: 0.95,
-    height: 0.25,
-    prompt: "refined ear shape, balanced proportions, natural appearance",
-  },
-}
-
-// Создаёт маску для выбранной зоны (белый = изменять)
-const createZoneMask = async (imageBase64: string, zone: string): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    const img = new Image()
-
-    img.onload = () => {
-      const canvas = document.createElement("canvas")
-      const ctx = canvas.getContext("2d")
-
-      canvas.width = img.width
-      canvas.height = img.height
-
-      if (!ctx) {
-        reject(new Error("Canvas context недоступен"))
-        return
-      }
-
-      // Заполняем чёрным (не изменять)
-      ctx.fillStyle = "black"
-      ctx.fillRect(0, 0, canvas.width, canvas.height)
-
-      // Получаем координаты зоны
-      const zoneMask = ZONE_MASKS[zone]
-      if (!zoneMask) {
-        // Если зона не найдена, делаем маску на всё лицо
-        ctx.fillStyle = "white"
-        ctx.beginPath()
-        ctx.ellipse(
-          canvas.width * 0.5,
-          canvas.height * 0.45,
-          canvas.width * 0.35,
-          canvas.height * 0.45,
-          0,
-          0,
-          Math.PI * 2,
-        )
-        ctx.fill()
-      } else {
-        // Рисуем белый эллипс в зоне (изменять)
-        ctx.fillStyle = "white"
-        ctx.beginPath()
-        ctx.ellipse(
-          canvas.width * zoneMask.x,
-          canvas.height * zoneMask.y,
-          (canvas.width * zoneMask.width) / 2,
-          (canvas.height * zoneMask.height) / 2,
-          0,
-          0,
-          Math.PI * 2,
-        )
-        ctx.fill()
-
-        // Размытие краёв для плавного перехода
-        ctx.filter = "blur(20px)"
-        ctx.drawImage(canvas, 0, 0)
-        ctx.filter = "none"
-      }
-
-      resolve(canvas.toDataURL("image/png"))
-    }
-
-    img.onerror = () => reject(new Error("Ошибка загрузки изображения"))
-    img.src = imageBase64
+    faceMesh.send({ image })
   })
 }
 
-// Получаем промпт для зоны
-const getPromptForZone = (zone: string, intensity: number): string => {
-  const zoneMask = ZONE_MASKS[zone]
-  const basePrompt = zoneMask?.prompt || "enhanced natural appearance"
+const bilinearInterpolate = (
+  data: Uint8ClampedArray,
+  width: number,
+  height: number,
+  x: number,
+  y: number,
+): [number, number, number, number] => {
+  const x1 = Math.floor(x)
+  const y1 = Math.floor(y)
+  const x2 = Math.min(x1 + 1, width - 1)
+  const y2 = Math.min(y1 + 1, height - 1)
 
-  const strength =
-    intensity > 70
-      ? "significantly enhanced"
-      : intensity > 40
-        ? "moderately enhanced"
-        : "subtly enhanced"
+  const fx = x - x1
+  const fy = y - y1
 
-  return `professional portrait photo, ${strength} ${basePrompt}, photorealistic, high quality, detailed skin texture, maintaining natural look`
+  const getPixel = (px: number, py: number) => {
+    const idx = (py * width + px) * 4
+    return [data[idx] || 0, data[idx + 1] || 0, data[idx + 2] || 0, data[idx + 3] || 0]
+  }
+
+  const p11 = getPixel(x1, y1)
+  const p21 = getPixel(x2, y1)
+  const p12 = getPixel(x1, y2)
+  const p22 = getPixel(x2, y2)
+
+  // Билинейная интерполяция
+  const interpolate = (a: number, b: number, c: number, d: number) => {
+    return a * (1 - fx) * (1 - fy) + b * fx * (1 - fy) + c * (1 - fx) * fy + d * fx * fy
+  }
+
+  return [
+    Math.round(interpolate(p11[0], p21[0], p12[0], p22[0])),
+    Math.round(interpolate(p11[1], p21[1], p12[1], p22[1])),
+    Math.round(interpolate(p11[2], p21[2], p12[2], p22[2])),
+    Math.round(interpolate(p11[3], p21[3], p12[3], p22[3])),
+  ]
 }
 
-// Вызов Replicate через Supabase Edge Function
-const callReplicateInpainting = async (
-  imageBase64: string,
-  zone: string,
+// Функция для применения деформации с несколькими контрольными точками одновременно
+// Использует forward mapping с билинейной интерполяцией для более качественного результата
+const applyMultiPointLiquify = (
+  ctx: CanvasRenderingContext2D,
+  points: Array<{
+    x: number
+    y: number
+    radius: number
+    strength: number
+    direction: "in" | "out"
+  }>,
+) => {
+  const w = ctx.canvas.width
+  const h = ctx.canvas.height
+  const imageData = ctx.getImageData(0, 0, w, h)
+  const data = imageData.data
+  const newData = new Uint8ClampedArray(w * h * 4)
+
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      const nx = x / w
+      const ny = y / h
+
+      let totalDx = 0
+      let totalDy = 0
+      let totalWeight = 0
+
+      for (const point of points) {
+        const dx = nx - point.x
+        const dy = ny - point.y
+        const dist = Math.sqrt(dx * dx + dy * dy)
+
+        if (dist <= point.radius) {
+          const normalizedDist = dist / point.radius
+          const weight = Math.pow(1 - normalizedDist, 3)
+          const pull = weight * point.strength * (point.direction === "in" ? -1 : 1)
+
+          const angle = Math.atan2(dy, dx)
+          const newDist = dist * (1 + pull)
+          const srcX = point.x + Math.cos(angle) * newDist
+          const srcY = point.y + Math.sin(angle) * newDist
+
+          totalDx += (srcX - nx) * weight
+          totalDy += (srcY - ny) * weight
+          totalWeight += weight
+        }
+      }
+
+      let srcX = nx
+      let srcY = ny
+
+      if (totalWeight > 0) {
+        srcX = nx + totalDx / totalWeight
+        srcY = ny + totalDy / totalWeight
+      }
+
+      const srcPixelX = srcX * w
+      const srcPixelY = srcY * h
+
+      const [r, g, b, a] = bilinearInterpolate(data, w, h, srcPixelX, srcPixelY)
+
+      const dstIdx = (y * w + x) * 4
+      newData[dstIdx] = r
+      newData[dstIdx + 1] = g
+      newData[dstIdx + 2] = b
+      newData[dstIdx + 3] = a
+    }
+  }
+
+  ctx.putImageData(new ImageData(newData, w, h), 0, 0)
+}
+
+const applyZoneDeformation = (
+  ctx: CanvasRenderingContext2D,
+  landmarks: any[],
+  zone: FaceZone,
+  operationType: OperationType | null,
   intensity: number,
-): Promise<string> => {
-  const maskBase64 = await createZoneMask(imageBase64, zone)
-  const prompt = getPromptForZone(zone, intensity)
+) => {
+  const factor = intensity / 100
 
-  const { data, error } = await supabase.functions.invoke("replicate", {
-    body: {
-      image: imageBase64,
-      mask: maskBase64,
-      prompt,
-    },
-  })
-
-  if (error) {
-    throw new Error(error.message || "Ошибка вызова Supabase функции replicate")
+  switch (zone) {
+    case "nose":
+      applyNoseOperation(ctx, landmarks, operationType, factor)
+      break
+    case "lips":
+      applyLipsOperation(ctx, landmarks, operationType, factor)
+      break
+    case "eyes":
+      applyEyesOperation(ctx, landmarks, operationType, factor)
+      break
+    case "chin":
+      applyChinOperation(ctx, landmarks, operationType, factor)
+      break
+    case "cheeks":
+      applyCheeksOperation(ctx, landmarks, operationType, factor)
+      break
+    case "forehead":
+      applyForeheadOperation(ctx, landmarks, operationType, factor)
+      break
+    case "ears":
+      applyEarsOperation(ctx, landmarks, operationType, factor)
+      break
   }
-
-  const resultUrl = (data as { resultUrl?: unknown } | null)?.resultUrl
-  if (typeof resultUrl !== "string" || resultUrl.length === 0) {
-    throw new Error("Replicate: не удалось получить URL результата")
-  }
-
-  return resultUrl
 }
 
-// Mock обработка с визуализацией зоны (валидация уже выполнена в fileToBase64)
-const processImageMock = async (image: File, zone: string, intensity: number): Promise<string> => {
-  const processingTime = 2000 + Math.random() * 2000
-  await new Promise((resolve) => setTimeout(resolve, processingTime))
+const applyNoseOperation = (
+  ctx: CanvasRenderingContext2D,
+  landmarks: any[],
+  operationType: OperationType | null,
+  factor: number,
+) => {
+  const zone = ZONE_LANDMARKS.nose
+  const tip = averagePoint(zone.tip.map((i) => landmarks[i]))
+  const bridge = averagePoint(zone.bridge.map((i) => landmarks[i]))
 
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-
-    reader.onerror = () => reject(new Error("Ошибка чтения файла"))
-
-    reader.onload = () => {
-      const img = new Image()
-
-      img.onerror = () => reject(new Error("Ошибка загрузки изображения"))
-
-      img.onload = () => {
-        const canvas = document.createElement("canvas")
-        const ctx = canvas.getContext("2d")
-
-        canvas.width = img.width
-        canvas.height = img.height
-
-        if (!ctx) {
-          reject(new Error("Canvas context недоступен"))
-          return
-        }
-
-        ctx.drawImage(img, 0, 0)
-
-        // Получаем координаты зоны
-        const zoneMask = ZONE_MASKS[zone]
-        const factor = intensity / 100
-
-        if (zoneMask) {
-          // Применяем эффект только к выбранной зоне
-          const zoneX = canvas.width * (zoneMask.x - zoneMask.width / 2)
-          const zoneY = canvas.height * (zoneMask.y - zoneMask.height / 2)
-          const zoneW = canvas.width * zoneMask.width
-          const zoneH = canvas.height * zoneMask.height
-
-          // Получаем данные только зоны
-          const imageData = ctx.getImageData(zoneX, zoneY, zoneW, zoneH)
-          const data = imageData.data
-
-          // Применяем улучшение
-          for (let i = 0; i < data.length; i += 4) {
-            const r = data[i]
-            const g = data[i + 1]
-            const b = data[i + 2]
-
-            data[i] = Math.min(255, r + (255 - r) * 0.15 * factor)
-            data[i + 1] = Math.min(255, g + (255 - g) * 0.12 * factor)
-            data[i + 2] = Math.min(255, b + (255 - b) * 0.08 * factor)
-          }
-
-          ctx.putImageData(imageData, zoneX, zoneY)
-
-          // Добавляем glow эффект на зону
-          ctx.globalCompositeOperation = "soft-light"
-          const gradient = ctx.createRadialGradient(
-            canvas.width * zoneMask.x,
-            canvas.height * zoneMask.y,
-            0,
-            canvas.width * zoneMask.x,
-            canvas.height * zoneMask.y,
-            (canvas.width * zoneMask.width) / 2,
-          )
-          gradient.addColorStop(0, `rgba(255, 220, 200, ${0.3 * factor})`)
-          gradient.addColorStop(1, `rgba(255, 220, 200, 0)`)
-          ctx.fillStyle = gradient
-          ctx.fillRect(0, 0, canvas.width, canvas.height)
-        }
-
-        resolve(canvas.toDataURL("image/jpeg", 0.92))
+  switch (operationType) {
+    case "reduce":
+      // Уменьшение носа - используем множественные точки для более естественного эффекта
+      applyMultiPointLiquify(ctx, [
+        { x: tip.x, y: tip.y, radius: 0.18, strength: factor * 1.2, direction: "in" },
+        { x: bridge.x, y: bridge.y, radius: 0.15, strength: factor * 0.9, direction: "in" },
+      ])
+      break
+    case "refine":
+      // Утончение - сжатие по бокам с множественными точками
+      const nostrils = zone.nostrils.map((i) => landmarks[i])
+      const refinePoints = nostrils.map((point) => ({
+        x: point.x,
+        y: point.y,
+        radius: 0.12,
+        strength: factor * 1.0,
+        direction: "in" as const,
+      }))
+      applyMultiPointLiquify(ctx, refinePoints)
+      break
+    case "straighten":
+      // Выпрямление - поднятие горбинки
+      if (bridge.y < tip.y) {
+        applyMultiPointLiquify(ctx, [
+          { x: bridge.x, y: bridge.y, radius: 0.15, strength: factor * 0.9, direction: "out" },
+        ])
       }
-
-      img.src = reader.result as string
-    }
-
-    reader.readAsDataURL(image)
-  })
+      break
+    case "lift-tip":
+      // Поднятие кончика
+      applyMultiPointLiquify(ctx, [
+        { x: tip.x, y: tip.y, radius: 0.15, strength: factor * 1.0, direction: "out" },
+      ])
+      break
+    default:
+      // По умолчанию - уменьшение
+      applyMultiPointLiquify(ctx, [
+        { x: tip.x, y: tip.y, radius: 0.18, strength: factor * 1.2, direction: "in" },
+        { x: bridge.x, y: bridge.y, radius: 0.15, strength: factor * 0.9, direction: "in" },
+      ])
+  }
 }
 
-// Основная функция обработки изображения через AI
-export const processImageWithAI = async (
-  params: AIProcessingParams,
-): Promise<AIProcessingResult> => {
-  const startTime = Date.now()
+const applyLipsOperation = (
+  ctx: CanvasRenderingContext2D,
+  landmarks: any[],
+  operationType: OperationType | null,
+  factor: number,
+) => {
+  const zone = ZONE_LANDMARKS.lips
+  const upperCenter = averagePoint(zone.upper.map((i) => landmarks[i]))
+  const lowerCenter = averagePoint(zone.lower.map((i) => landmarks[i]))
+  const center = averagePoint([upperCenter, lowerCenter])
 
-  try {
-    // Дополнительная валидация параметров
-    if (!params.zone || !ZONE_MASKS[params.zone]) {
-      throw new Error(`Недопустимая зона: ${params.zone}`)
-    }
+  switch (operationType) {
+    case "increase":
+      // Увеличение губ - расширение наружу с множественными точками
+      applyMultiPointLiquify(ctx, [
+        {
+          x: upperCenter.x,
+          y: upperCenter.y,
+          radius: 0.16,
+          strength: factor * 1.3,
+          direction: "out",
+        },
+        {
+          x: lowerCenter.x,
+          y: lowerCenter.y,
+          radius: 0.16,
+          strength: factor * 1.3,
+          direction: "out",
+        },
+      ])
+      break
+    case "reduce":
+      // Уменьшение губ - сжатие внутрь
+      applyMultiPointLiquify(ctx, [
+        { x: center.x, y: center.y, radius: 0.18, strength: factor * 1.1, direction: "in" },
+      ])
+      break
+    case "reshape":
+      // Изменение формы - корректировка контура
+      applyMultiPointLiquify(ctx, [
+        {
+          x: upperCenter.x,
+          y: upperCenter.y,
+          radius: 0.14,
+          strength: factor * 0.9,
+          direction: "out",
+        },
+      ])
+      break
+    default:
+      // По умолчанию - увеличение
+      applyMultiPointLiquify(ctx, [
+        {
+          x: upperCenter.x,
+          y: upperCenter.y,
+          radius: 0.16,
+          strength: factor * 1.3,
+          direction: "out",
+        },
+        {
+          x: lowerCenter.x,
+          y: lowerCenter.y,
+          radius: 0.16,
+          strength: factor * 1.3,
+          direction: "out",
+        },
+      ])
+  }
+}
 
-    if (params.intensity < 0 || params.intensity > 100) {
-      throw new Error(`Интенсивность должна быть в диапазоне 0-100, получено: ${params.intensity}`)
-    }
+const applyEyesOperation = (
+  ctx: CanvasRenderingContext2D,
+  landmarks: any[],
+  operationType: OperationType | null,
+  factor: number,
+) => {
+  const zone = ZONE_LANDMARKS.eyes
+  const leftUpper = averagePoint(zone.leftUpper.map((i) => landmarks[i]))
+  const rightUpper = averagePoint(zone.rightUpper.map((i) => landmarks[i]))
+  const leftLower = averagePoint(zone.leftLower.map((i) => landmarks[i]))
+  const rightLower = averagePoint(zone.rightLower.map((i) => landmarks[i]))
 
-    let resultUrl: string
+  switch (operationType) {
+    case "upper-lift":
+      // Поднятие верхних век с множественными точками
+      applyMultiPointLiquify(ctx, [
+        { x: leftUpper.x, y: leftUpper.y, radius: 0.14, strength: factor * 1.0, direction: "out" },
+        {
+          x: rightUpper.x,
+          y: rightUpper.y,
+          radius: 0.14,
+          strength: factor * 1.0,
+          direction: "out",
+        },
+      ])
+      break
+    case "lower-lift":
+      // Подтяжка нижних век
+      applyMultiPointLiquify(ctx, [
+        { x: leftLower.x, y: leftLower.y, radius: 0.14, strength: factor * 0.9, direction: "out" },
+        {
+          x: rightLower.x,
+          y: rightLower.y,
+          radius: 0.14,
+          strength: factor * 0.9,
+          direction: "out",
+        },
+      ])
+      break
+    case "widen":
+      // Расширение разреза глаз
+      applyMultiPointLiquify(ctx, [
+        { x: leftUpper.x, y: leftUpper.y, radius: 0.12, strength: factor * 0.8, direction: "out" },
+        {
+          x: rightUpper.x,
+          y: rightUpper.y,
+          radius: 0.12,
+          strength: factor * 0.8,
+          direction: "out",
+        },
+      ])
+      break
+    default:
+      // По умолчанию - поднятие верхних век
+      applyMultiPointLiquify(ctx, [
+        { x: leftUpper.x, y: leftUpper.y, radius: 0.14, strength: factor * 1.0, direction: "out" },
+        {
+          x: rightUpper.x,
+          y: rightUpper.y,
+          radius: 0.14,
+          strength: factor * 1.0,
+          direction: "out",
+        },
+      ])
+  }
+}
 
-    if (USE_MOCK) {
-      console.log("[AI Visualizer] Using mock mode (set VITE_AI_PROVIDER to enable AI)")
-      // Валидация выполняется в fileToBase64 для mock режима тоже
-      resultUrl = await processImageMock(params.image, params.zone, params.intensity)
-    } else {
-      const imageBase64 = await fileToBase64(params.image)
+const applyChinOperation = (
+  ctx: CanvasRenderingContext2D,
+  landmarks: any[],
+  operationType: OperationType | null,
+  factor: number,
+) => {
+  const zone = ZONE_LANDMARKS.chin
+  const tip = averagePoint(zone.tip.map((i) => landmarks[i]))
 
-      console.log("[AI Visualizer] Using Replicate via Supabase Edge Function")
-      resultUrl = await callReplicateInpainting(imageBase64, params.zone, params.intensity)
-    }
+  switch (operationType) {
+    case "reduce":
+      // Уменьшение подбородка
+      applyMultiPointLiquify(ctx, [
+        { x: tip.x, y: tip.y, radius: 0.18, strength: factor * 1.1, direction: "in" },
+      ])
+      break
+    case "augment":
+      // Увеличение подбородка
+      applyMultiPointLiquify(ctx, [
+        { x: tip.x, y: tip.y, radius: 0.18, strength: factor * 1.2, direction: "out" },
+      ])
+      break
+    case "reshape":
+      // Изменение формы
+      applyMultiPointLiquify(ctx, [
+        { x: tip.x, y: tip.y, radius: 0.14, strength: factor * 0.9, direction: "out" },
+      ])
+      break
+    default:
+      // По умолчанию - уменьшение
+      applyMultiPointLiquify(ctx, [
+        { x: tip.x, y: tip.y, radius: 0.18, strength: factor * 1.1, direction: "in" },
+      ])
+  }
+}
 
-    return {
-      resultUrl,
-      processingTime: Date.now() - startTime,
-    }
-  } catch (error) {
-    console.error("[AI Visualizer] Error:", error)
-    throw error
+const applyCheeksOperation = (
+  ctx: CanvasRenderingContext2D,
+  landmarks: any[],
+  operationType: OperationType | null,
+  factor: number,
+) => {
+  const zone = ZONE_LANDMARKS.cheeks
+  const left = averagePoint(zone.left.map((i) => landmarks[i]))
+  const right = averagePoint(zone.right.map((i) => landmarks[i]))
+
+  switch (operationType) {
+    case "augment":
+      // Увеличение скул
+      applyMultiPointLiquify(ctx, [
+        { x: left.x, y: left.y, radius: 0.16, strength: factor * 1.1, direction: "out" },
+        { x: right.x, y: right.y, radius: 0.16, strength: factor * 1.1, direction: "out" },
+      ])
+      break
+    case "reduce":
+      // Уменьшение щек
+      applyMultiPointLiquify(ctx, [
+        { x: left.x, y: left.y, radius: 0.18, strength: factor * 1.0, direction: "in" },
+        { x: right.x, y: right.y, radius: 0.18, strength: factor * 1.0, direction: "in" },
+      ])
+      break
+    case "lift":
+      // Подтяжка скул
+      applyMultiPointLiquify(ctx, [
+        { x: left.x, y: left.y, radius: 0.14, strength: factor * 0.9, direction: "out" },
+        { x: right.x, y: right.y, radius: 0.14, strength: factor * 0.9, direction: "out" },
+      ])
+      break
+    default:
+      // По умолчанию - увеличение
+      applyMultiPointLiquify(ctx, [
+        { x: left.x, y: left.y, radius: 0.16, strength: factor * 1.1, direction: "out" },
+        { x: right.x, y: right.y, radius: 0.16, strength: factor * 1.1, direction: "out" },
+      ])
+  }
+}
+
+const applyForeheadOperation = (
+  ctx: CanvasRenderingContext2D,
+  landmarks: any[],
+  operationType: OperationType | null,
+  factor: number,
+) => {
+  const zone = ZONE_LANDMARKS.forehead
+  const center = averagePoint(zone.center.map((i) => landmarks[i]))
+
+  switch (operationType) {
+    case "smooth":
+      // Разглаживание морщин
+      applyMultiPointLiquify(ctx, [
+        { x: center.x, y: center.y, radius: 0.2, strength: factor * 0.8, direction: "in" },
+      ])
+      break
+    case "lift":
+      // Подтяжка лба
+      applyMultiPointLiquify(ctx, [
+        { x: center.x, y: center.y, radius: 0.18, strength: factor * 0.9, direction: "out" },
+      ])
+      break
+    case "reduce":
+      // Уменьшение выступающего лба
+      applyMultiPointLiquify(ctx, [
+        { x: center.x, y: center.y, radius: 0.18, strength: factor * 1.0, direction: "in" },
+      ])
+      break
+    default:
+      // По умолчанию - разглаживание
+      applyMultiPointLiquify(ctx, [
+        { x: center.x, y: center.y, radius: 0.2, strength: factor * 0.8, direction: "in" },
+      ])
+  }
+}
+
+const applyEarsOperation = (
+  ctx: CanvasRenderingContext2D,
+  landmarks: any[],
+  operationType: OperationType | null,
+  factor: number,
+) => {
+  const zone = ZONE_LANDMARKS.ears
+  const left = averagePoint(zone.left.map((i) => landmarks[i]))
+  const right = averagePoint(zone.right.map((i) => landmarks[i]))
+
+  switch (operationType) {
+    case "pin-back":
+      // Прижатие ушей
+      applyMultiPointLiquify(ctx, [
+        { x: left.x, y: left.y, radius: 0.14, strength: factor * 1.0, direction: "in" },
+        { x: right.x, y: right.y, radius: 0.14, strength: factor * 1.0, direction: "in" },
+      ])
+      break
+    case "reduce":
+      // Уменьшение ушей
+      applyMultiPointLiquify(ctx, [
+        { x: left.x, y: left.y, radius: 0.16, strength: factor * 1.1, direction: "in" },
+        { x: right.x, y: right.y, radius: 0.16, strength: factor * 1.1, direction: "in" },
+      ])
+      break
+    case "reshape":
+      // Изменение формы
+      applyMultiPointLiquify(ctx, [
+        { x: left.x, y: left.y, radius: 0.12, strength: factor * 0.8, direction: "out" },
+        { x: right.x, y: right.y, radius: 0.12, strength: factor * 0.8, direction: "out" },
+      ])
+      break
+    default:
+      // По умолчанию - прижатие
+      applyMultiPointLiquify(ctx, [
+        { x: left.x, y: left.y, radius: 0.14, strength: factor * 1.0, direction: "in" },
+        { x: right.x, y: right.y, radius: 0.14, strength: factor * 1.0, direction: "in" },
+      ])
+  }
+}
+
+export const processFaceImage = async ({
+  image,
+  zone,
+  operationType,
+  intensity,
+}: Params): Promise<{ resultUrl: string }> => {
+  const img = await fileToImage(image)
+  const canvas = document.createElement("canvas")
+  const ctx = canvas.getContext("2d")!
+
+  canvas.width = img.width
+  canvas.height = img.height
+  ctx.drawImage(img, 0, 0)
+
+  // ===== MediaPipe FaceMesh =====
+  const faceMesh = new FaceMesh({
+    locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`,
+  })
+
+  faceMesh.setOptions({
+    maxNumFaces: 1,
+    refineLandmarks: true,
+  })
+
+  const landmarks = await detectLandmarks(faceMesh, img)
+  if (!landmarks) {
+    throw new Error("Лицо не обнаружено")
+  }
+
+  // ===== Деформация с учетом типа операции =====
+  applyZoneDeformation(ctx, landmarks, zone, operationType, intensity)
+
+  return {
+    resultUrl: canvas.toDataURL("image/jpeg", 0.92),
   }
 }

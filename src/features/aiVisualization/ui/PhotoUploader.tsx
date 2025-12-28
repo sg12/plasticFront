@@ -1,6 +1,6 @@
-import { useCallback, useState } from "react"
+import { useCallback, useState, useEffect } from "react"
 import { useDropzone } from "react-dropzone"
-import type { BodyZone } from "@/features/aiVisualization/types/types"
+import type { BodyZone, OperationType } from "@/features/aiVisualization/types/types"
 import { BODY_ZONES, MAX_FILE_SIZE } from "@/features/aiVisualization/model/constants"
 import { cn } from "@/shared/lib/utils"
 import { Upload, X, AlertCircle, Info } from "lucide-react"
@@ -10,24 +10,43 @@ import {
   FILE_VALIDATION_CONFIGS,
   isFileValidationError,
 } from "@/shared/lib/fileValidation"
+import { Label } from "@/shared/ui/label"
+import { Slider } from "@/shared/ui/slider"
+import { RadioGroup, RadioGroupItem } from "@/shared/ui/radioGroup"
 
 interface PhotoUploaderProps {
   selectedZone: BodyZone
   photo: File | null
   photoPreview: string | null
   intensity: number
+  operationType: OperationType | null
   onPhotoChange: (file: File | null, preview: string | null) => void
   onIntensityChange: (value: number) => void
+  onOperationTypeChange: (operationType: OperationType | null) => void
+  onDescriptionChange: (description: string) => void
 }
 
 export const PhotoUploader = ({
   selectedZone,
   photo,
   photoPreview,
+  intensity,
+  operationType,
   onPhotoChange,
+  onIntensityChange,
+  onOperationTypeChange,
 }: PhotoUploaderProps) => {
   const [error, setError] = useState<string | null>(null)
   const zone = BODY_ZONES[selectedZone]
+  const availableOperations = zone.operations || []
+  const selectedOperation = operationType
+
+  // Автоматически выбираем первую операцию, если не выбрана
+  useEffect(() => {
+    if (!operationType && availableOperations.length > 0) {
+      onOperationTypeChange(availableOperations[0].id)
+    }
+  }, [operationType, availableOperations, onOperationTypeChange])
 
   const onDrop = useCallback(
     async (acceptedFiles: File[], rejectedFiles: any[]) => {
@@ -99,6 +118,54 @@ export const PhotoUploader = ({
         <Info className="size-4 text-violet-600" />
         <AlertDescription className="text-violet-700">{zone.photoTip}</AlertDescription>
       </Alert>
+
+      {availableOperations.length > 0 && (
+        <div className="space-y-3">
+          <Label className="text-base font-semibold">Тип операции</Label>
+          <RadioGroup
+            value={selectedOperation || undefined}
+            onValueChange={(value) => onOperationTypeChange(value as OperationType)}
+            className="grid grid-cols-1 gap-3 sm:grid-cols-2"
+          >
+            {availableOperations.map((operation) => (
+              <div
+                key={operation.id}
+                className={cn(
+                  "flex items-start space-x-3 rounded-lg border p-3 transition-all",
+                  selectedOperation === operation.id
+                    ? "border-violet-500 bg-violet-50"
+                    : "border-gray-200 hover:border-violet-300",
+                )}
+              >
+                <RadioGroupItem value={operation.id} id={operation.id} className="mt-1" />
+                <label htmlFor={operation.id} className="flex-1 cursor-pointer space-y-1">
+                  <div className="font-medium text-gray-900">{operation.label}</div>
+                  <div className="text-sm text-gray-500">{operation.description}</div>
+                </label>
+              </div>
+            ))}
+          </RadioGroup>
+        </div>
+      )}
+
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <Label htmlFor="intensity" className="text-base font-semibold">
+            Интенсивность
+          </Label>
+          <span className="text-sm font-medium text-violet-600">{intensity}%</span>
+        </div>
+        <Slider
+          id="intensity"
+          min={10}
+          max={100}
+          step={5}
+          value={[intensity]}
+          onValueChange={([value]) => onIntensityChange(value)}
+          className="w-full"
+        />
+        <p className="text-xs text-gray-500">Регулируйте интенсивность эффекта операции</p>
+      </div>
 
       {!photoPreview ? (
         <div

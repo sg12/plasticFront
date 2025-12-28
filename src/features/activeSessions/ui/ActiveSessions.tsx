@@ -1,7 +1,7 @@
 import { Button } from "@/shared/ui/button"
 import { Skeleton } from "@/shared/ui/skeleton"
 import { Monitor, LogOut, RefreshCw } from "lucide-react"
-import { useActiveSessions } from "../hooks/useActiveSessions"
+import { useActiveSessions } from "@/features/activeSessions/hooks/useActiveSessions"
 
 export const ActiveSessions = () => {
   const { session, isLoading, isSigningOut, signOutAll, refresh } = useActiveSessions()
@@ -37,11 +37,16 @@ export const ActiveSessions = () => {
       )}
 
       <div className="flex flex-wrap gap-2">
-        <Button variant="outline" size="sm" onClick={refresh} disabled={isLoading}>
+        <Button variant="outline" size="sm" onClick={() => refresh()} disabled={isLoading}>
           <RefreshCw className="h-4 w-4" />
           Обновить
         </Button>
-        <Button variant="destructive" size="sm" onClick={signOutAll} disabled={isSigningOut}>
+        <Button
+          variant="destructive"
+          size="sm"
+          onClick={() => signOutAll()}
+          disabled={isSigningOut}
+        >
           <LogOut className="h-4 w-4" />
           {isSigningOut ? "Выход..." : "Выйти со всех устройств"}
         </Button>

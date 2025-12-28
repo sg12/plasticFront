@@ -9,8 +9,8 @@ import { USER_ROLES } from "@/entities/user/model/constants"
 import { getUser } from "@/entities/user/api/api"
 import { requestModeration } from "@/shared/api/supabase/moderation"
 import { getFileUrls } from "@/entities/document/api/api"
-import { recordLogin } from "@/features/loginHistory/hooks/useLoginHistory"
 import type { DoctorProfile, ClinicProfile } from "@/entities/user/types/types"
+import { recordLogin } from '@/features/loginHistory/api/api'
 
 export const useSignInForm = () => {
   const [showPassword, setShowPassword] = useState(false)

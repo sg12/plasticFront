@@ -32,7 +32,7 @@ export const LoginHistory = () => {
         ))}
       </div>
 
-      <Button variant="outline" size="sm" onClick={refresh} disabled={isLoading}>
+      <Button variant="outline" size="sm" onClick={() => refresh()} disabled={isLoading}>
         <RefreshCw className="h-4 w-4" />
         Обновить
       </Button>
