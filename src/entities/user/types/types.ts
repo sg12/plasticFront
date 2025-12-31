@@ -4,53 +4,6 @@ export type UserRole = (typeof USER_ROLES)[keyof typeof USER_ROLES]
 
 export type Gender = "male" | "female" | undefined
 
-// export interface BasicInfo {
-//   id: string;
-//   fullName: string;
-//   email: string;
-//   phone: string;
-//   password: string;
-// }
-
-// export interface PatientInfo {
-//   birthDate: string;
-//   gender: Gender;
-// }
-
-// export interface DoctorInfo {
-//   licenseNumber: string;
-//   specialization: string;
-//   experience: number;
-//   education: string;
-//   workplace: string;
-//   inn: string;
-// }
-
-// export interface ClinicInfo {
-//   legalName: string;
-//   clinicInn: string;
-//   ogrn: string;
-//   legalAddress: string;
-//   actualAddress: string;
-//   clinicLicense: string;
-//   directorName: string;
-//   directorPosition: string;
-// }
-
-// export type User =
-//   | (Profile & {
-//     role: typeof USER_ROLES.PATIENT;
-//     info: PatientProfile;
-//   })
-//   | (Profile & {
-//     role: typeof USER_ROLES.DOCTOR;
-//     info: DoctorProfile;
-//   })
-//   | (Profile & {
-//     role: typeof USER_ROLES.CLINIC;
-//     info: ClinicProfile;
-//   });
-
 export type RoleProfile = PatientProfile | DoctorProfile | ClinicProfile
 
 export type ModerationStatus = (typeof MODERATION_STATUS)[keyof typeof MODERATION_STATUS]

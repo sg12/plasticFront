@@ -22,7 +22,7 @@ interface AuthStore extends AuthState {
 const initialState: AuthState = {
   session: null,
   user: null,
-  loading: true,
+  loading: false,
   initialized: false,
   profile: null,
 }
@@ -120,7 +120,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     try {
       set({ loading: true })
       const { user } = get()
-      const { error } = await signOut()
+      const { error } = await signOut("global")
       if (error) throw error
 
       set({

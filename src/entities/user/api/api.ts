@@ -25,7 +25,6 @@ export const createUser = async (
   })
 
   if (error) {
-    console.error("Ошибка создания базового профиля:", error)
     throw new Error(`Не удалось создать профиль: ${error.message}`)
   }
 
@@ -52,7 +51,6 @@ export const createUser = async (
       gender: data.patient?.gender || null,
     })
     if (patientError) {
-      console.error("Ошибка создания профиля пациента:", patientError)
       throw new Error(`Не удалось создать профиль пациента: ${patientError.message}`)
     }
   } else if (data.role === USER_ROLES.DOCTOR) {
@@ -70,7 +68,6 @@ export const createUser = async (
       documents: filePaths || null, // Сохраняем пути к файлам
     })
     if (error) {
-      console.error("Ошибка создания профиля доктора:", error)
       throw new Error(`Не удалось создать профиль доктора: ${error.message}`)
     }
   } else if (data.role === USER_ROLES.CLINIC) {
@@ -90,7 +87,6 @@ export const createUser = async (
       documents: filePaths || null, // Сохраняем пути к файлам
     })
     if (error) {
-      console.error("Ошибка создания профиля клиники:", error)
       throw new Error(`Не удалось создать профиль клиники: ${error.message}`)
     }
   }
@@ -218,8 +214,4 @@ export const updateUser = async (
       break
     }
   }
-}
-
-export const deleteUser = async () => {
-  throw new Error("deleteUser must be called from server")
 }
