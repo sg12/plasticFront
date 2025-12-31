@@ -43,7 +43,7 @@ export const ProtectedRoute = () => {
             Статус: <span className="font-medium">{profile?.moderation_status}</span>
           </div>
           <div className="pt-2">
-            <Button type="button" variant="outline" onClick={() => void handleSignOut()}>
+            <Button type="button" variant="outline" onClick={() => handleSignOut()}>
               Выйти
             </Button>
           </div>
