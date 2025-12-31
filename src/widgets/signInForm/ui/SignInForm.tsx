@@ -1,5 +1,5 @@
 import { Mail, Lock, Eye, EyeOff } from "lucide-react"
-import { NavLink, useNavigate } from "react-router-dom"
+import { NavLink } from "react-router-dom"
 import { FormControl, FormField, FormItem, FormMessage } from "@/shared/ui/form"
 import { FormProvider } from "react-hook-form"
 import { useSignInForm } from "@/features/signIn/hooks/useSignInForm"
@@ -10,8 +10,6 @@ import { Label } from "@/shared/ui/label"
 
 export function SignInForm() {
   const { form, showPassword, isLoading, setShowPassword, onSubmit } = useSignInForm()
-
-  const navigate = useNavigate()
 
   return (
     <FormProvider {...form}>

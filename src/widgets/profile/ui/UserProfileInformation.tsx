@@ -3,7 +3,6 @@ import type { RoleProfile } from "../../../entities/user/types/types"
 import { USER_ROLES } from "../../../entities/user/model/constants"
 import { Input } from "../../../shared/ui/input"
 import { Label } from "../../../shared/ui/label"
-import { Button } from "../../../shared/ui/button"
 import { Controller, useFormContext } from "react-hook-form"
 import {
   Select,
@@ -12,19 +11,15 @@ import {
   SelectItem,
   SelectContent,
 } from "../../../shared/ui/select"
-import { useEmailVerification } from "@/features/emailVerification/hooks/useEmailVerification"
-import { Lock, Send, CheckCircle, Loader2 } from "lucide-react"
+import { Lock, CheckCircle } from "lucide-react"
+import { useAuthStore } from "@/entities/auth/model/store"
 
 export const UserProfileInformation = ({ profile, isEditing }: Props) => {
+  const { user } = useAuthStore()
   if (!profile) return null
 
   const { register, watch, control } = useFormContext<RoleProfile>()
   const role = watch("role") ?? profile.role
-  const {
-    isVerified: emailVerified,
-    isSending: emailSending,
-    sendVerificationEmail,
-  } = useEmailVerification()
 
   return (
     <div className="rounded-xl border border-gray-200 bg-white p-6">
@@ -46,7 +41,7 @@ export const UserProfileInformation = ({ profile, isEditing }: Props) => {
           <div>
             <Label htmlFor="profile_email" className="mb-2 flex items-center gap-2 text-gray-700">
               Email
-              {emailVerified && (
+              {user?.user_metadata.email_verified && (
                 <span className="flex items-center gap-1 rounded-full bg-green-100 px-2 py-0.5 text-xs text-green-700">
                   <CheckCircle className="h-3 w-3" />
                   Подтверждён
@@ -57,37 +52,14 @@ export const UserProfileInformation = ({ profile, isEditing }: Props) => {
               <Input
                 id="profile_email"
                 type="email"
-                disabled={emailVerified || !isEditing}
-                className={emailVerified ? "bg-gray-50 pr-10" : ""}
+                disabled={user?.user_metadata.email_verified || !isEditing}
+                className={user?.user_metadata.email_verified ? "bg-gray-50 pr-10" : ""}
                 {...register("email")}
               />
-              {emailVerified ? (
+              {user?.user_metadata.email_verified && (
                 <Lock className="absolute top-1/2 right-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
-              ) : (
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  onClick={sendVerificationEmail}
-                  disabled={emailSending}
-                  className="absolute top-1/2 right-1 h-7 -translate-y-1/2 text-xs text-purple-600 hover:text-purple-700"
-                >
-                  {emailSending ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    <>
-                      <Send className="h-3 w-3" />
-                      Подтвердить
-                    </>
-                  )}
-                </Button>
               )}
             </div>
-            {!emailVerified && (
-              <p className="mt-1 text-xs text-amber-600">
-                Email не подтверждён. Нажмите "Подтвердить" для отправки письма.
-              </p>
-            )}
           </div>
 
           <div>
