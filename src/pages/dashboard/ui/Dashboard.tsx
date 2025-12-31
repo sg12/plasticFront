@@ -1,7 +1,7 @@
 import { useAuthStore } from "@/entities/auth/model/store"
 import { formatName } from "@/shared/lib/utils"
 import { Item, ItemTitle, ItemDescription, ItemContent } from "@/shared/ui/item"
-import { Calendar, Database, MessageCircle, Settings, User } from "lucide-react"
+import { Database, MessageCircle, Settings, User } from "lucide-react"
 import { NavLink } from "react-router-dom"
 
 export const Dashboard = () => {
