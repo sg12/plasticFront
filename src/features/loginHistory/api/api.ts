@@ -1,4 +1,4 @@
-import type { LoginRecord } from '@/features/loginHistory/types/types'
+import type { LoginRecord } from "@/features/loginHistory/types/types"
 import { supabase } from "@/shared/api/supabase/client"
 import { parseBrowser, parseDevice, parseOS } from "@/shared/lib/userAgent"
 
@@ -14,8 +14,6 @@ export const recordLogin = async (userId: string, success: boolean = true) => {
       device: parseDevice(userAgent),
       success,
     })
-
-
   } catch (e) {
     console.warn("Не удалось записать историю входа:", e)
   }

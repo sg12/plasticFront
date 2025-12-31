@@ -98,35 +98,30 @@ export const createSupportTicket = async (
 }
 
 async function sendToTelegram(ticket: SupportTicket, userId: string): Promise<void> {
-  try {
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("email, full_name, role")
-      .eq("id", userId)
-      .single()
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("email, full_name, role")
+    .eq("id", userId)
+    .single()
 
-    const user = profile
-      ? {
-          id: userId,
-          email: profile.email,
-          full_name: profile.full_name,
-          role: profile.role,
-        }
-      : { id: userId }
+  const user = profile
+    ? {
+        id: userId,
+        email: profile.email,
+        full_name: profile.full_name,
+        role: profile.role,
+      }
+    : { id: userId }
 
-    const { error } = await supabase.functions.invoke(SEND_SUPPORT_TO_TELEGRAM, {
-      body: {
-        ticket,
-        user,
-      },
-    })
+  const { error } = await supabase.functions.invoke(SEND_SUPPORT_TO_TELEGRAM, {
+    body: {
+      ticket,
+      user,
+    },
+  })
 
-    if (error) {
-      console.error("Telegram notification error:", error)
-      throw error
-    }
-  } catch (error) {
-    console.error("Failed to send ticket to Telegram:", error)
+  if (error) {
+    throw error
   }
 }
 

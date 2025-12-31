@@ -7,13 +7,9 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { signUpSchema } from "../model/schema"
 import type { UploadedFilesByRole } from "@/entities/document/types/types"
 import { signUp } from "@/entities/auth/api/api"
-import { createUser, getUser } from "@/entities/user/api/api"
+import { createUser } from "@/entities/user/api/api"
 import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
-import { requestModeration } from "@/shared/api/supabase/moderation"
-import { getFileUrls } from "@/entities/document/api/api"
-import { saveInitialConsents } from "@/features/consentManagement/api/saveConsents"
-import type { DoctorProfile, ClinicProfile } from "@/entities/user/types/types"
 
 export const useSignUpForm = () => {
   const [currentStep, setCurrentStep] = useState(0)
@@ -120,6 +116,7 @@ export const useSignUpForm = () => {
         email: data.basic.email,
         password: data.basic.password,
         options: {
+          emailRedirectTo: `${window.location.origin}/signin`,
           data: {
             phone: data.basic.phone,
             full_name: data.basic.fullName,
@@ -147,67 +144,22 @@ export const useSignUpForm = () => {
         return
       }
 
+      // Создаём профиль пользователя (файлы загружаются внутри createUser)
       try {
-        // Передаём uploadedFiles для загрузки в Storage
         await createUser(authData.user.id, data, uploadedFiles)
-
-        // Сохраняем согласия на обработку данных в БД
-        await saveInitialConsents(authData.user.id)
       } catch (profileError: any) {
         console.error("Ошибка создания профиля:", profileError)
-
-        // Показываем понятную ошибку
         const errorMessage =
           profileError?.message ||
           profileError?.error?.message ||
           "Ошибка создания профиля. Регистрация не завершена."
-
         toast.error(errorMessage)
         setIsLoading(false)
         return
       }
 
-      // Для doctor/clinic — отправляем заявку модераторам в Telegram
-      if (data.role === USER_ROLES.DOCTOR || data.role === USER_ROLES.CLINIC) {
-        try {
-          // Получаем профиль с путями к файлам
-          const profile = await getUser(authData.user.id)
-          const documents = (profile as DoctorProfile | ClinicProfile).documents || null
-
-          let files: Array<{ name: string; url?: string }> = []
-
-          // Если есть пути к файлам, получаем signed URLs
-          if (documents) {
-            files = await getFileUrls(documents)
-          } else {
-            // Fallback: используем имена файлов из uploadedFiles
-            const roleFiles = (uploadedFiles as any)?.[data.role] ?? {}
-            files = Object.values(roleFiles).flatMap((value: any) => {
-              if (!value) return []
-              if (Array.isArray(value)) return value.map((f) => ({ name: f?.name }))
-              return [{ name: value?.name }]
-            })
-          }
-
-          const { error: moderationError } = await requestModeration({
-            profileId: authData.user.id,
-            role: data.role,
-            fullName: data.basic.fullName,
-            email: data.basic.email,
-            phone: data.basic.phone,
-            files,
-          })
-
-          if (moderationError) {
-            console.error("Ошибка отправки заявки на модерацию:", moderationError)
-          }
-        } catch (moderationErr) {
-          console.error("Ошибка подготовки данных для модерации:", moderationErr)
-        }
-      }
-
       toast.success("Регистрация выполнена успешно")
-      navigate(0)
+      navigate("/signin")
     } catch (error) {
       toast.error("Произошла ошибка при регистрации")
       console.error("Ошибка регистрации:", error)
