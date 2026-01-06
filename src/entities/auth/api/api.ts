@@ -19,8 +19,8 @@ export const signOut = (scope?: SignOut["scope"]) => {
   return supabase.auth.signOut({ scope: scope })
 }
 
-export const getSession = async () => {
-  return await supabase.auth.getSession()
+export const getSession = () => {
+  return supabase.auth.getSession()
 }
 
 export const onAuthStateChange = (
