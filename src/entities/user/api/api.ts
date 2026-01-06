@@ -1,6 +1,12 @@
-import type { SignUpFormData } from "@/features/signUp/model/types"
+import type { SignUpFormData } from "@/features/auth/ui/signUp/model/types"
 import { supabase } from "@/shared/api/supabase/client"
-import type { Profile, DoctorProfile, ClinicProfile, PatientProfile } from "../types/types"
+import type {
+  Profile,
+  DoctorProfile,
+  ClinicProfile,
+  PatientProfile,
+  RoleProfile,
+} from "../types/types"
 import { USER_ROLES } from "../model/constants"
 import type { UploadedFilesByRole } from "@/entities/document/types/types"
 import { uploadFiles } from "@/entities/document/api/api"
@@ -13,7 +19,7 @@ const CLINIC_PROFILES = "clinic_profiles"
 export const createUser = async (
   userId: string,
   data: SignUpFormData,
-  uploadedFiles?: UploadedFilesByRole,
+  uploadedFiles: UploadedFilesByRole = {},
 ) => {
   // 1) Создаём базовый профиль
   const { error } = await supabase.from(PROFILES).insert({
@@ -25,38 +31,37 @@ export const createUser = async (
   })
 
   if (error) {
+    if (
+      error.code === "23505" ||
+      error.message?.includes("duplicate key value violates unique constraint")
+    ) {
+      const duplicateError = new Error("USER_ALREADY_EXISTS")
+      duplicateError.name = "DuplicateKeyError"
+      throw duplicateError
+    }
     throw new Error(`Не удалось создать профиль: ${error.message}`)
   }
 
   // 2) Загружаем файлы в Storage (если есть) и получаем пути
   let filePaths: Record<string, string | string[]> | null = null
-  if (uploadedFiles && (data.role === USER_ROLES.DOCTOR || data.role === USER_ROLES.CLINIC)) {
-    const roleFiles = uploadedFiles[data.role]
-    if (roleFiles && Object.keys(roleFiles).length > 0) {
-      try {
-        filePaths = await uploadFiles(userId, data.role, roleFiles as any)
-      } catch (uploadError: any) {
-        console.error("Ошибка загрузки файлов:", uploadError)
-        throw new Error(`Не удалось загрузить файлы: ${uploadError.message}`)
-      }
-    }
+
+  if (data.role === USER_ROLES.DOCTOR && uploadedFiles[USER_ROLES.DOCTOR]) {
+    filePaths = await uploadFiles(userId, "doctor", uploadedFiles[USER_ROLES.DOCTOR]!)
+  } else if (data.role === USER_ROLES.CLINIC && uploadedFiles[USER_ROLES.CLINIC]) {
+    filePaths = await uploadFiles(userId, "clinic", uploadedFiles[USER_ROLES.CLINIC]!)
   }
 
   // 3) Создаём role-specific данные
+  let roleError = null
+
   if (data.role === USER_ROLES.PATIENT) {
-    // Для пациента всегда создаём запись (данные могут быть опциональными)
-    const { error: patientError } = await supabase.from(PATIENT_PROFILES).insert({
+    const { error } = await supabase.from(PATIENT_PROFILES).insert({
       id: userId,
       birth_date: data.patient?.birthDate || null,
       gender: data.patient?.gender || null,
     })
-    if (patientError) {
-      throw new Error(`Не удалось создать профиль пациента: ${patientError.message}`)
-    }
-  } else if (data.role === USER_ROLES.DOCTOR) {
-    if (!data.doctor) {
-      throw new Error("Данные доктора обязательны для регистрации")
-    }
+    roleError = error
+  } else if (data.role === USER_ROLES.DOCTOR && data.doctor) {
     const { error } = await supabase.from(DOCTOR_PROFILES).insert({
       id: userId,
       license_number: data.doctor.licenseNumber,
@@ -65,15 +70,10 @@ export const createUser = async (
       education: data.doctor.education,
       workplace: data.doctor.workplace,
       inn: data.doctor.inn,
-      documents: filePaths || null, // Сохраняем пути к файлам
+      documents: filePaths,
     })
-    if (error) {
-      throw new Error(`Не удалось создать профиль доктора: ${error.message}`)
-    }
-  } else if (data.role === USER_ROLES.CLINIC) {
-    if (!data.clinic) {
-      throw new Error("Данные клиники обязательны для регистрации")
-    }
+    roleError = error
+  } else if (data.role === USER_ROLES.CLINIC && data.clinic) {
     const { error } = await supabase.from(CLINIC_PROFILES).insert({
       id: userId,
       legal_name: data.clinic.legalName,
@@ -84,62 +84,49 @@ export const createUser = async (
       clinic_license: data.clinic.clinicLicense,
       director_name: data.clinic.directorName,
       director_position: data.clinic.directorPosition,
-      documents: filePaths || null, // Сохраняем пути к файлам
+      documents: filePaths,
     })
-    if (error) {
-      throw new Error(`Не удалось создать профиль клиники: ${error.message}`)
-    }
+    roleError = error
+  }
+
+  if (roleError) {
+    await supabase.from(PROFILES).delete().eq("id", userId)
+    throw new Error(`Role profile error: ${roleError.message}`)
   }
 }
 
-export const getUser = async (
-  userId: string,
-): Promise<PatientProfile | DoctorProfile | ClinicProfile> => {
+export const getUser = async (userId: string): Promise<Profile | RoleProfile | null> => {
   // 1) Получаем базовый профиль
   const { data: profile, error: profileError } = await supabase
     .from(PROFILES)
     .select("*")
     .eq("id", userId)
-    .single<Profile>()
+    .maybeSingle<Profile>()
 
   if (profileError) throw profileError
-  if (!profile) throw new Error("Profile not found")
+  if (!profile) return null
+
+  if (!profile.role) return profile
+
+  let specificTable = ""
+  if (profile.role === USER_ROLES.PATIENT) specificTable = PATIENT_PROFILES
+  else if (profile.role === USER_ROLES.DOCTOR) specificTable = DOCTOR_PROFILES
+  else if (profile.role === USER_ROLES.CLINIC) specificTable = CLINIC_PROFILES
 
   // 2) Получаем role-specific данные
-  if (profile.role === USER_ROLES.PATIENT) {
-    const { data: patientData, error: patientError } = await supabase
-      .from(PATIENT_PROFILES)
+  if (specificTable) {
+    const { data: specificData, error: specificError } = await supabase
+      .from(specificTable)
       .select("*")
       .eq("id", userId)
-      .single()
+      .maybeSingle()
 
-    if (patientError) throw patientError
-    return { ...profile, ...patientData } as PatientProfile
+    if (specificError) throw specificError
+
+    return specificData ? { ...profile, ...specificData } : profile
   }
 
-  if (profile.role === USER_ROLES.DOCTOR) {
-    const { data: doctorData, error: doctorError } = await supabase
-      .from(DOCTOR_PROFILES)
-      .select("*")
-      .eq("id", userId)
-      .single()
-
-    if (doctorError) throw doctorError
-    return { ...profile, ...doctorData } as DoctorProfile
-  }
-
-  if (profile.role === USER_ROLES.CLINIC) {
-    const { data: clinicData, error: clinicError } = await supabase
-      .from(CLINIC_PROFILES)
-      .select("*")
-      .eq("id", userId)
-      .single()
-
-    if (clinicError) throw clinicError
-    return { ...profile, ...clinicData } as ClinicProfile
-  }
-
-  throw new Error(`Unknown profile role: ${String(profile.role)}`)
+  return profile
 }
 
 export const updateUser = async (
@@ -195,6 +182,17 @@ export const updateUser = async (
     }
     case USER_ROLES.CLINIC: {
       const clinic = data as ClinicProfile
+      const clinicDocs = clinic.documents
+      const documentsNormalized = clinic.documents
+        ? {
+            ...clinic.documents,
+            clinicDocuments: Array.isArray(clinicDocs)
+              ? clinicDocs
+              : clinicDocs
+                ? [clinicDocs]
+                : [],
+          }
+        : null
       const { error } = await supabase
         .from(CLINIC_PROFILES)
         .update({
@@ -206,7 +204,7 @@ export const updateUser = async (
           clinic_license: clinic.clinic_license,
           director_name: clinic.director_name,
           director_position: clinic.director_position,
-          documents: clinic.documents ?? null,
+          documents: documentsNormalized ?? null,
           updated_at: new Date().toISOString(),
         })
         .eq("id", id)

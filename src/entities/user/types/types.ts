@@ -14,11 +14,11 @@ export interface Profile {
   full_name: string | null
   email: string
   phone: string | null
-  moderation_status?: ModerationStatus | null
-  moderation_comment?: string | null
+  moderation_status: ModerationStatus | null
+  moderation_comment: string | null
   created_at?: string
-  updated_at?: string | null
-  moderated_at?: string | null
+  updated_at?: string
+  moderated_at: string | null
 }
 
 export interface PatientProfile extends Profile {
@@ -35,7 +35,7 @@ export interface DoctorProfile extends Profile {
   education: string
   workplace: string
   inn: string
-  documents?: Record<string, string | string[]> | null // Пути к файлам в Storage
+  documents: Record<string, string | string[]> | null
 }
 
 export interface ClinicProfile extends Profile {
@@ -47,5 +47,5 @@ export interface ClinicProfile extends Profile {
   clinic_license: string
   director_name: string
   director_position: string
-  documents?: Record<string, string | string[]> | null // Пути к файлам в Storage
+  documents: Record<string, string | string[]> | null
 }
