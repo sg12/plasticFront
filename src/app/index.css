@@ -121,7 +121,7 @@
 
   body {
     @apply bg-background text-foreground;
-    @apply bg-gradient-to-br from-purple-100 via-white to-orange-100;
+    /* @apply bg-gradient-to-br from-purple-100 via-white to-orange-100; */
   }
 
   h1 {
