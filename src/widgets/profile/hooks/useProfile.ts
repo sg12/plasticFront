@@ -1,94 +1,111 @@
 import { useEffect, useMemo, useState } from "react"
 import { FormProvider, useForm } from "react-hook-form"
 import { useAuthStore } from "@/entities/auth/model/store"
+import { useUserProfile } from "@/entities/user/hooks/useUserProfile"
 import { updateUser } from "@/entities/user/api/api"
-import type { RoleProfile, UserUpdateFormData } from "@/entities/user/types/types"
+import { USER_ROLES } from "@/entities/user/model/constants"
+import type {
+  ClinicProfile,
+  DoctorProfile,
+  PatientProfile,
+  RoleProfile,
+} from "@/entities/user/types/types"
 import { toast } from "sonner"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { userUpdateSchema } from "@/entities/user/model/schema"
 
-export const useProfile = () => {
-  const { profile } = useAuthStore()
+export type UseProfileResult = {
+  profile: RoleProfile | null
+  isEditing: boolean
+  editableProfile: RoleProfile | null
+  form: ReturnType<typeof useForm<RoleProfile>>
+  isSaving: boolean
+  startEdit: () => void
+  cancelEdit: () => void
+  save: () => Promise<void>
+  FormProvider: typeof FormProvider
+}
+
+export function useProfile(): UseProfileResult {
+  const { user } = useAuthStore()
+  const { profile, refresh: refreshProfile } = useUserProfile(user?.id)
+
   const [isEditing, setIsEditing] = useState(false)
-  const [editableProfile, setEditableProfile] = useState<RoleProfile | null>(profile as RoleProfile)
+  const [editableProfile, setEditableProfile] = useState<RoleProfile | null>(profile)
 
-  const defaultValues = useMemo<UserUpdateFormData | undefined>(() => {
+  const defaultValues = useMemo<RoleProfile | undefined>(() => {
     if (!profile) return undefined
-    return profile as UserUpdateFormData
+
+    if (profile.role === USER_ROLES.PATIENT) {
+      const p = profile as PatientProfile
+
+      return {
+        ...p,
+      }
+    }
+
+    if (profile.role === USER_ROLES.DOCTOR) {
+      const d = profile as DoctorProfile
+
+      return {
+        ...d,
+      }
+    }
+
+    const c = profile as ClinicProfile
+    return {
+      ...c,
+    }
   }, [profile])
 
-  const form = useForm<UserUpdateFormData>({
-    resolver: zodResolver(userUpdateSchema),
-    defaultValues: defaultValues,
+  const form = useForm<RoleProfile>({
+    defaultValues,
     mode: "onBlur",
   })
 
-  const [isSaving, setIsSaving] = useState(false)
+  useEffect(() => {
+    setEditableProfile(profile)
+  }, [profile])
 
   useEffect(() => {
-    if (profile && defaultValues) {
-      form.reset(defaultValues)
-    }
-  }, [defaultValues, form])
-
-  useEffect(() => {
-    if (!isEditing) {
-      setEditableProfile(profile)
-    }
-  }, [profile, isEditing])
-
-  useEffect(() => {
-    if (!isEditing || !profile) return
-
-    const subscription = form.watch((values) => {
-      setEditableProfile({
-        ...profile,
-        ...(values as Partial<RoleProfile>),
-      })
+    if (!isEditing) return
+    const sub = form.watch((values) => {
+      if (!profile) return
+      setEditableProfile({ ...profile, ...(values as Partial<RoleProfile>) } as RoleProfile)
     })
-    return () => subscription.unsubscribe()
+    return () => sub.unsubscribe()
   }, [form, isEditing, profile])
 
   const startEdit = () => {
-    if (!profile) return
+    setEditableProfile(profile)
+    if (defaultValues) form.reset(defaultValues)
     setIsEditing(true)
   }
 
   const cancelEdit = () => {
     setIsEditing(false)
     setEditableProfile(profile)
+    if (defaultValues) form.reset(defaultValues)
   }
 
-  const onSubmit = async (data: UserUpdateFormData) => {
-    if (!profile) {
-      toast.error("Профиль не загружен")
-      return
-    }
-    setIsSaving(true)
+  const save = async () => {
+    return form.handleSubmit(async (values) => {
+      if (!profile) {
+        setIsEditing(false)
+        return
+      }
 
-    try {
-      const updatedProfile = { ...profile, ...data }
-      console.log("Data from form:", data)
-      console.log("Merged profile data to be sent:", updatedProfile)
+      try {
+        const next = { ...profile, ...values } as RoleProfile
+        await updateUser(next.id, next as any)
 
-      await updateUser(updatedProfile.id, updatedProfile)
-      toast.success("Профиль успешно обновлён")
-      setIsEditing(false)
-      setIsSaving(false)
-    } catch (error) {
-      toast.error("Не удалось сохранить изменения")
-      console.error("Ошибка сохранения профиля:", error)
-    }
-  }
-
-  const handleSaveClick = async () => {
-    onSubmit(form.getValues())
-  }
-
-  const isFormChanged = () => {
-    const currentValues = form.getValues()
-
-    return JSON.stringify(currentValues) !== JSON.stringify(defaultValues)
+        // Обновляем профиль через SWR
+        await refreshProfile()
+        toast.success("Данные обновлены.")
+        setIsEditing(false)
+      } catch (e) {
+        toast.error("Ошибка при обновление.")
+        console.error("Не удалось сохранить профиль:", e)
+      }
+    })()
   }
 
   return {
@@ -96,12 +113,10 @@ export const useProfile = () => {
     isEditing,
     editableProfile,
     form,
-    isSaving,
+    isSaving: form.formState.isSubmitting,
     startEdit,
     cancelEdit,
-    onSubmit,
-    handleSaveClick,
-    isFormChanged,
+    save,
     FormProvider,
   }
 }

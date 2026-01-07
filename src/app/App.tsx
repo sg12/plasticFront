@@ -1,13 +1,13 @@
-import { Outlet } from "react-router"
+import { Outlet } from "react-router-dom"
 import { useEffect } from "react"
 import { useAuthStore } from "@/entities/auth/model/store"
 
 export const App = () => {
-  const initialize = useAuthStore((state) => state.initialize)
+  const { initialize } = useAuthStore()
 
   useEffect(() => {
     initialize()
-  }, [initialize])
+  }, [])
 
   return <Outlet />
 }

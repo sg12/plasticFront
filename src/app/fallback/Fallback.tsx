@@ -2,7 +2,7 @@ import type { FallbackProps } from "react-error-boundary"
 import { Button } from "@/shared/ui/button"
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert"
 import { AlertCircle, RefreshCw, Home } from "lucide-react"
-import { useNavigate } from "react-router"
+import { useNavigate } from "react-router-dom"
 
 export const Fallback = ({ error, resetErrorBoundary }: FallbackProps) => {
   const navigate = useNavigate()
