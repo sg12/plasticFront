@@ -1,10 +1,9 @@
 import { useState } from "react"
 import useSWR from "swr"
 import { toast } from "sonner"
-import { supabase } from "@/shared/api/supabase/client"
 import type { Session } from "@supabase/supabase-js"
 import { parseBrowser } from "@/shared/lib/userAgent"
-import { signOut } from "@/entities/auth/api/api"
+import { getSession, signOut } from "@/entities/auth/api/api"
 
 export interface SessionInfo {
   accessToken: string
@@ -28,7 +27,7 @@ const parseSession = (session: Session): SessionInfo => {
 
 const fetchSession = async (): Promise<SessionInfo | null> => {
   try {
-    const { data, error } = await supabase.auth.getSession()
+    const { data, error } = await getSession()
 
     if (error) {
       console.error("Ошибка получения сессии:", error)
@@ -55,17 +54,12 @@ export const useActiveSessions = () => {
     revalidateOnFocus: false,
     refreshInterval: 30 * 1000,
     dedupingInterval: 1 * 60 * 1000,
-    // Предотвращаем бесконечные повторные попытки
     errorRetryCount: 2,
     errorRetryInterval: 1000,
-    // Не повторяем запрос при ошибке, если это не критично
     shouldRetryOnError: (error) => {
-      // Повторяем только при сетевых ошибках, не при ошибках авторизации
       return error?.message?.includes("network") || error?.message?.includes("timeout")
     },
-    // Сохраняем предыдущие данные при обновлении
     keepPreviousData: true,
-    // Таймаут для запроса (10 секунд)
     onError: (error) => {
       console.error("SWR error in useActiveSessions:", error)
     },

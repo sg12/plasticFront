@@ -27,7 +27,7 @@ export const fetchLoginHistory = async (userId: string): Promise<LoginRecord[]> 
     .select("*")
     .eq("userId", userId)
     .order("createdAt", { ascending: false })
-    .limit(20)
+    .limit(5)
 
   if (error) {
     if (error.code === "42P01") {

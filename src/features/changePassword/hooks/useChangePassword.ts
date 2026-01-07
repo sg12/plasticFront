@@ -38,6 +38,7 @@ export function useChangePassword() {
         return
       }
 
+      // TODO: ПЕРЕДЕЛАТЬ, НЕ ИСПОЛЬЗОВАТЬ ТАКОЙ МЕТОД
       const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
       const response = await fetch(`${supabaseUrl}/auth/v1/user`, {
         method: "PUT",

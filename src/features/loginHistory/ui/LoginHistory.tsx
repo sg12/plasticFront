@@ -1,10 +1,9 @@
-import { Button } from "@/shared/ui/button"
 import { Skeleton } from "@/shared/ui/skeleton"
-import { Monitor, Smartphone, Tablet, RefreshCw, XCircle, Check } from "lucide-react"
+import { Monitor, Smartphone, Tablet, XCircle, Check } from "lucide-react"
 import { useLoginHistory, type LoginRecord } from "../hooks/useLoginHistory"
 
 export const LoginHistory = () => {
-  const { history, isLoading, refresh } = useLoginHistory()
+  const { history, isLoading } = useLoginHistory()
 
   if (isLoading) {
     return (
@@ -31,11 +30,6 @@ export const LoginHistory = () => {
           <LoginRecordItem key={record.id} record={record} />
         ))}
       </div>
-
-      <Button variant="outline" size="sm" onClick={() => refresh()} disabled={isLoading}>
-        <RefreshCw className="h-4 w-4" />
-        Обновить
-      </Button>
     </div>
   )
 }
