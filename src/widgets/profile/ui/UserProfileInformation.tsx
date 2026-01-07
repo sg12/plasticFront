@@ -27,7 +27,7 @@ export const UserProfileInformation = ({ form, profile, isEditing, isSaving }: P
       <h3 className="mb-6">Личная информация</h3>
       <div className="space-y-6">
         {/* Основная информация */}
-        <div className="grid grid-cols-2 gap-5 lg:grid-cols-2">
+        <div className="grid lg:grid-cols-2 gap-5 lg:grid-cols-2">
           <FormField
             control={form.control}
             disabled={!isEditing || isSaving}

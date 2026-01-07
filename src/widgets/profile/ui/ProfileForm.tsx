@@ -31,7 +31,10 @@ export const ProfileForm = () => {
           {profile?.role != USER_ROLES.CLINIC &&
             (!isEditing ? (
               <div className="flex flex-wrap gap-2">
-                <Button onClick={() => startEdit()}>
+                <Button
+                  onClick={() => startEdit()}
+                  className="fixed bottom-4 left-1/2 z-10 -translate-x-1/2 sm:relative sm:bottom-auto sm:left-auto sm:translate-x-0"
+                >
                   <Edit2 className="h-4 w-4" />
                   Редактировать
                 </Button>
@@ -43,7 +46,7 @@ export const ProfileForm = () => {
                 )} */}
               </div>
             ) : (
-              <div className="flex gap-2">
+              <div className="fixed bottom-4 left-1/2 z-10 flex -translate-x-1/2 gap-2 sm:relative sm:bottom-auto sm:left-auto sm:translate-x-0">
                 <Button onClick={() => handleSaveClick()} variant="save" disabled={isSaving}>
                   {isSaving ? (
                     <Loader className="h-4 w-4 animate-spin" />

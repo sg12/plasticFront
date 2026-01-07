@@ -1,9 +1,25 @@
-import { USER_ROLES } from "@/entities/user/model/constants";
-import { User, Stethoscope, Hospital } from "lucide-react";
-import type { RoleSelectorProps } from "../types/types";
-import { BannerButton } from "@/shared/ui/bannerButton";
+import { USER_ROLES } from "@/entities/user/model/constants"
+import { User, Stethoscope, Hospital } from "lucide-react"
+import type { RoleSelectorProps } from "../types/types"
+import { BannerButton } from "@/shared/ui/bannerButton"
+import { useIsMobile } from "@/shared/hooks/useMobile"
+import * as React from "react"
 
 export function RoleSelector({ onRoleSelect }: RoleSelectorProps) {
+  const isMobile = useIsMobile()
+  const [isTablet, setIsTablet] = React.useState(false)
+
+  React.useEffect(() => {
+    const checkTablet = () => {
+      setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024)
+    }
+
+    checkTablet()
+    window.addEventListener("resize", checkTablet)
+    return () => window.removeEventListener("resize", checkTablet)
+  }, [])
+
+  const buttonSize = isMobile ? "bannerSm" : isTablet ? "bannerLg" : "bannerXl"
   const roles = [
     {
       type: USER_ROLES.PATIENT,
@@ -44,29 +60,27 @@ export function RoleSelector({ onRoleSelect }: RoleSelectorProps) {
         chevron: "group-hover:text-green-600",
       },
     },
-  ];
+  ]
 
   return (
     <>
-      <div className="space-y-4">
-        {roles.map((role, index) => (
-          <BannerButton
-            key={index}
-            title={role.title}
-            size="bannerXl"
-            description={role.description}
-            icon={role.icon}
-            onClick={() => onRoleSelect(role.type)}
-            colors={{
-              border: role.styles.border,
-              bg: role.styles.bg,
-              iconBg: role.styles.iconBg,
-              icon: role.styles.icon,
-              chevron: role.styles.chevron,
-            }}
-          />
-        ))}
-      </div>
+      {roles.map((role, index) => (
+        <BannerButton
+          key={index}
+          title={role.title}
+          size={buttonSize}
+          description={role.description}
+          icon={role.icon}
+          onClick={() => onRoleSelect(role.type)}
+          colors={{
+            border: role.styles.border,
+            bg: role.styles.bg,
+            iconBg: role.styles.iconBg,
+            icon: role.styles.icon,
+            chevron: role.styles.chevron,
+          }}
+        />
+      ))}
     </>
-  );
+  )
 }

@@ -27,7 +27,7 @@ export function SignUpForm() {
     closePrivacyModal,
     acceptConsent,
     onSubmit,
-    FormProvider
+    FormProvider,
   } = useSignUpForm()
 
   const [showPassword, setShowPassword] = useState(false)
@@ -56,61 +56,99 @@ export function SignUpForm() {
   return (
     <FormProvider {...form}>
       <div className="flex min-h-screen items-center justify-center">
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
-          <div className="w-full max-w-2xl">
-            <div className="w-full space-y-5 rounded-2xl border border-gray-200 bg-white p-8 shadow-xl">
-              <div className="mb-6">
-                <h2 className="mb-2 text-gray-900">Регистрация</h2>
-                <p className="text-gray-600">
-                  {currentStep === 0 ? "Выберите тип аккаунта" : "Создайте новый аккаунт"}
-                </p>
-              </div>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-2xl space-y-6">
+          <div className="w-full space-y-6 rounded-2xl border border-gray-200 bg-white p-8 shadow-xl">
+            <div className="mb-6">
+              <h2 className="mb-2 text-gray-900">Регистрация</h2>
+              <p className="text-gray-600">
+                {currentStep === 0 ? "Выберите тип аккаунта" : "Создайте новый аккаунт"}
+              </p>
+            </div>
 
-              {showConsentModal && (
-                <ConsentModal
-                  userRole={role}
-                  onAccept={acceptConsent}
-                  onDecline={closeConsentModal}
-                  onShowPrivacyModal={openPrivacyModal}
-                />
-              )}
+            {showConsentModal && (
+              <ConsentModal
+                userRole={role}
+                onAccept={acceptConsent}
+                onDecline={closeConsentModal}
+                onShowPrivacyModal={openPrivacyModal}
+              />
+            )}
 
-              {showPrivacyModal && <PrivacyModal onClose={closePrivacyModal} />}
+            {showPrivacyModal && <PrivacyModal onClose={closePrivacyModal} />}
 
-              {currentStep == 0 && (
+            {currentStep == 0 && (
+              <FormField
+                control={form.control}
+                name="role"
+                render={({ field }) => (
+                  <FormItem>
+                    <RoleSelector
+                      onRoleSelect={(role) => (field.onChange(role), setCurrentStep((s) => s + 1))}
+                    />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+
+            {currentStep == 1 && (
+              <>
                 <FormField
                   control={form.control}
-                  name="role"
+                  name="basic.fullName"
                   render={({ field }) => (
                     <FormItem>
-                      <RoleSelector
-                        onRoleSelect={(role) => (
-                          field.onChange(role),
-                          setCurrentStep((s) => s + 1)
-                        )}
-                      />
+                      <FormLabel>Фамилия Имя Отчество</FormLabel>
+                      <FormControl>
+                        <InputGroup>
+                          <InputGroupAddon>
+                            <User />
+                          </InputGroupAddon>
+                          <InputGroupInput
+                            id="fullName"
+                            placeholder="Иванов Иван Иванович"
+                            {...field}
+                          />
+                        </InputGroup>
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-              )}
 
-              {currentStep == 1 && (
-                <>
+                <div className="grid grid-cols-1 items-start gap-5 md:grid-cols-2">
                   <FormField
                     control={form.control}
-                    name="basic.fullName"
+                    name="basic.email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Фамилия Имя Отчество</FormLabel>
+                        <FormLabel>Email</FormLabel>
                         <FormControl>
                           <InputGroup>
                             <InputGroupAddon>
-                              <User />
+                              <Mail />
+                            </InputGroupAddon>
+                            <InputGroupInput id="email" placeholder="example@mail.ru" {...field} />
+                          </InputGroup>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="basic.phone"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Телефон</FormLabel>
+                        <FormControl>
+                          <InputGroup>
+                            <InputGroupAddon>
+                              <Phone />
                             </InputGroupAddon>
                             <InputGroupInput
-                              id="fullName"
-                              placeholder="Иванов Иван Иванович"
+                              id="phone"
+                              placeholder="+7 (999) 999-99-99"
                               {...field}
                             />
                           </InputGroup>
@@ -119,164 +157,117 @@ export function SignUpForm() {
                       </FormItem>
                     )}
                   />
+                </div>
 
-                  <div className="grid grid-cols-1 items-start gap-5 md:grid-cols-2">
-                    <FormField
-                      control={form.control}
-                      name="basic.email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Email</FormLabel>
-                          <FormControl>
-                            <InputGroup>
-                              <InputGroupAddon>
-                                <Mail />
-                              </InputGroupAddon>
-                              <InputGroupInput
-                                id="email"
-                                placeholder="example@mail.ru"
-                                {...field}
-                              />
-                            </InputGroup>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="basic.phone"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Телефон</FormLabel>
-                          <FormControl>
-                            <InputGroup>
-                              <InputGroupAddon>
-                                <Phone />
-                              </InputGroupAddon>
-                              <InputGroupInput
-                                id="phone"
-                                placeholder="+7 (999) 999-99-99"
-                                {...field}
-                              />
-                            </InputGroup>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-1 items-start gap-5 md:grid-cols-2">
-                    <FormField
-                      control={form.control}
-                      name="basic.password"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Пароль</FormLabel>
-                          <FormControl>
-                            <InputGroup>
-                              <InputGroupAddon>
-                                <Lock />
-                              </InputGroupAddon>
-                              <InputGroupInput
-                                id="password"
-                                type={showPassword ? "text" : "password"}
-                                placeholder="Введите пароль"
-                                {...field}
-                              />
-                              <InputGroupAddon
-                                align="inline-end"
-                                className="cursor-pointer"
-                                onClick={() => setShowPassword((s) => !s)}
-                              >
-                                {showPassword ? (
-                                  <Eye className="h-5 w-5" />
-                                ) : (
-                                  <EyeOff className="h-5 w-5" />
-                                )}
-                              </InputGroupAddon>
-                            </InputGroup>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="basic.confirmPassword"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Подтвердите пароль</FormLabel>
-                          <FormControl>
-                            <InputGroup>
-                              <InputGroupAddon>
-                                <Lock />
-                              </InputGroupAddon>
-                              <InputGroupInput
-                                id="confirmPassword"
-                                type={showConfirmPassword ? "text" : "password"}
-                                placeholder="Введите пароль"
-                                {...field}
-                              />
-                              <InputGroupAddon
-                                align="inline-end"
-                                className="cursor-pointer"
-                                onClick={() => setShowConfirmPassword((s) => !s)}
-                              >
-                                {showConfirmPassword ? (
-                                  <Eye className="h-5 w-5" />
-                                ) : (
-                                  <EyeOff className="h-5 w-5" />
-                                )}
-                              </InputGroupAddon>
-                            </InputGroup>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  <ConsentSection
-                    hasConsent={hasConsent}
-                    onShowConsentModal={openConsentModal}
-                    userRole={role}
+                <div className="grid grid-cols-1 items-start gap-5 md:grid-cols-2">
+                  <FormField
+                    control={form.control}
+                    name="basic.password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Пароль</FormLabel>
+                        <FormControl>
+                          <InputGroup>
+                            <InputGroupAddon>
+                              <Lock />
+                            </InputGroupAddon>
+                            <InputGroupInput
+                              id="password"
+                              type={showPassword ? "text" : "password"}
+                              placeholder="Введите пароль"
+                              {...field}
+                            />
+                            <InputGroupAddon
+                              align="inline-end"
+                              className="cursor-pointer"
+                              onClick={() => setShowPassword((s) => !s)}
+                            >
+                              {showPassword ? (
+                                <Eye className="h-5 w-5" />
+                              ) : (
+                                <EyeOff className="h-5 w-5" />
+                              )}
+                            </InputGroupAddon>
+                          </InputGroup>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
+                  <FormField
+                    control={form.control}
+                    name="basic.confirmPassword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Подтвердите пароль</FormLabel>
+                        <FormControl>
+                          <InputGroup>
+                            <InputGroupAddon>
+                              <Lock />
+                            </InputGroupAddon>
+                            <InputGroupInput
+                              id="confirmPassword"
+                              type={showConfirmPassword ? "text" : "password"}
+                              placeholder="Введите пароль"
+                              {...field}
+                            />
+                            <InputGroupAddon
+                              align="inline-end"
+                              className="cursor-pointer"
+                              onClick={() => setShowConfirmPassword((s) => !s)}
+                            >
+                              {showConfirmPassword ? (
+                                <Eye className="h-5 w-5" />
+                              ) : (
+                                <EyeOff className="h-5 w-5" />
+                              )}
+                            </InputGroupAddon>
+                          </InputGroup>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
 
-                  <div className="grid grid-cols-2 gap-5">
-                    <Button
-                      disabled={loading}
-                      variant="secondary"
-                      onClick={() => setCurrentStep((s) => s - 1)}
-                    >
-                      <ArrowLeft />
-                      Выбрать роль
-                    </Button>
-                    <Button type="submit" className="w-full" disabled={loading}>
-                      {loading ? "Регистрация..." : "Зарегистрироваться"}
-                    </Button>
-                  </div>
-                </>
-              )}
+                <ConsentSection
+                  hasConsent={hasConsent}
+                  onShowConsentModal={openConsentModal}
+                  userRole={role}
+                />
 
-              <Separator className="relative inset-0 flex items-center justify-center">
-                <span className="bg-white px-4 text-gray-500">или</span>
-              </Separator>
+                <div className="grid lg:grid-cols-2 gap-5">
+                  <Button
+                    disabled={loading}
+                    variant="secondary"
+                    onClick={() => setCurrentStep((s) => s - 1)}
+                  >
+                    <ArrowLeft />
+                    Выбрать роль
+                  </Button>
+                  <Button type="submit" className="w-full" disabled={loading}>
+                    {loading ? "Регистрация..." : "Зарегистрироваться"}
+                  </Button>
+                </div>
+              </>
+            )}
 
-              <div className="text-center">
-                <p className="text-sm text-gray-600">
-                  Уже есть аккаунт?{" "}
-                  <NavLink to="/signin" className="text-purple-600 hover:text-purple-700">
-                    Войти
-                  </NavLink>
-                </p>
-              </div>
+            <Separator className="relative inset-0 flex items-center justify-center">
+              <span className="bg-white px-4 text-gray-500">или</span>
+            </Separator>
+
+            <div className="text-center">
+              <p className="text-sm text-gray-600">
+                Уже есть аккаунт?{" "}
+                <NavLink to="/signin" className="text-purple-600 hover:text-purple-700">
+                  Войти
+                </NavLink>
+              </p>
             </div>
+          </div>
 
-            <div className="mt-8 text-center text-sm text-gray-500">
-              <p>© 2025 Агрегатор пластических услуг</p>
-            </div>
+          <div className="mt-8 text-center text-sm text-gray-500">
+            <p>© 2025 Агрегатор пластических услуг</p>
           </div>
         </form>
       </div>
