@@ -1,30 +1,26 @@
-import type { Props } from "../types/types"
 import type { RoleProfile } from "../../../entities/user/types/types"
 import { USER_ROLES } from "../../../entities/user/model/constants"
-import { Input } from "../../../shared/ui/input"
-import { Label } from "../../../shared/ui/label"
-import { Button } from "../../../shared/ui/button"
-import { Controller, useFormContext } from "react-hook-form"
-import {
-  Select,
-  SelectValue,
-  SelectTrigger,
-  SelectItem,
-  SelectContent,
-} from "../../../shared/ui/select"
-import { useEmailVerification } from "@/features/emailVerification/hooks/useEmailVerification"
-import { Lock, Send, CheckCircle, Loader2 } from "lucide-react"
+import { type UseFormReturn } from "react-hook-form"
+import { Lock, CheckCircle, Mail, User, Phone } from "lucide-react"
+import { useAuthStore } from "@/entities/auth/model/store"
+import { PatientForm } from "@/widgets/roleForms/PatientForm"
+import { DoctorForm } from "@/widgets/roleForms/DoctorForm"
+import { ClinicForm } from "@/widgets/roleForms/ClinicForm"
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/form"
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/shared/ui/inputGroup"
+import { Badge } from "@/shared/ui/badge"
+import { Separator } from "@/shared/ui/separator"
 
-export const UserProfileInformation = ({ profile, isEditing }: Props) => {
+export interface Props {
+  form: UseFormReturn<any>
+  profile: RoleProfile | null
+  isEditing?: boolean
+  isSaving?: boolean
+}
+
+export const UserProfileInformation = ({ form, profile, isEditing, isSaving }: Props) => {
+  const { user } = useAuthStore()
   if (!profile) return null
-
-  const { register, watch, control } = useFormContext<RoleProfile>()
-  const role = watch("role") ?? profile.role
-  const {
-    isVerified: emailVerified,
-    isSending: emailSending,
-    sendVerificationEmail,
-  } = useEmailVerification()
 
   return (
     <div className="rounded-xl border border-gray-200 bg-white p-6">
