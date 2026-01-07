@@ -1,4 +1,4 @@
-import { NavLink, useLocation, useNavigate } from "react-router-dom"
+import { NavLink, useLocation, useNavigate } from "react-router"
 import {
   Sidebar as SidebarUI,
   SidebarContent,
@@ -24,17 +24,26 @@ import type { UserRole } from "@/entities/user/types/types"
 import { navigationConfig, sectionLabels } from "../model/navigation"
 import { Logo } from "../../../shared/ui/logo"
 import type React from "react"
+import { useState } from "react"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/shared/ui/collapsible"
+import { ProcessingLoader } from "@/features/processingLoader/ui/ProcessingLoader"
+import { USER_ROLES } from "@/entities/user/model/constants"
 
 export const Sidebar = ({ ...props }: React.ComponentProps<typeof SidebarUI>) => {
   const { user, profile, signOut } = useAuthStore()
   const { pathname } = useLocation()
-  const navigate = useNavigate()
   const { openMobile, setOpenMobile } = useSidebar()
+  const navigate = useNavigate()
+  const [isSigningOut, setIsSigningOut] = useState(false)
 
   const handleSignOut = async () => {
-    await signOut()
-    navigate("/signin", { replace: true })
+    setIsSigningOut(true)
+    try {
+      await signOut()
+      navigate("/signin")
+    } finally {
+      setIsSigningOut(false)
+    }
   }
 
   const navigation = navigationConfig[profile?.role as UserRole] ?? []
@@ -171,22 +180,32 @@ export const Sidebar = ({ ...props }: React.ComponentProps<typeof SidebarUI>) =>
           </NavLink>
         </Item>
         <Item variant="muted" className="relative overflow-hidden">
-          {profile?.role === "doctor" && (
+          {profile?.role === USER_ROLES.DOCTOR && (
             <Stethoscope className="pointer-events-none absolute right-3 size-24 opacity-10" />
           )}
-          {profile?.role === "clinic" && (
+          {profile?.role === USER_ROLES.CLINIC && (
             <Hospital className="pointer-events-none absolute right-3 size-24 opacity-10" />
           )}
-          {profile?.role === "patient" && (
+          {profile?.role === USER_ROLES.PATIENT && (
             <User className="pointer-events-none absolute right-3 size-24 opacity-10" />
           )}
           <ItemContent>
-            <ItemTitle>{formatName(user?.user_metadata.full_name)}</ItemTitle>
+            <ItemTitle>
+              {profile?.role === USER_ROLES.CLINIC
+                ? profile.legalName
+                : formatName(profile?.fullName || "-")}
+            </ItemTitle>
             <ItemDescription>{formatRole(profile?.role as UserRole)}</ItemDescription>
           </ItemContent>
           <ItemActions>
-            <Button type="button" variant="ghost" size="icon" onClick={() => void handleSignOut()}>
-              <LogOut />
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              onClick={handleSignOut}
+              disabled={isSigningOut}
+            >
+              {isSigningOut ? <ProcessingLoader /> : <LogOut />}
             </Button>
           </ItemActions>
         </Item>
