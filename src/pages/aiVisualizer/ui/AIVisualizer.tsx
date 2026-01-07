@@ -8,8 +8,8 @@ import { ResultComparison } from "@/widgets/resultComparison/ui/ResultComparison
 import { Button } from "@/shared/ui/button"
 import { Card, CardContent } from "@/shared/ui/card"
 import { ArrowLeft, ArrowRight, Sparkles } from "lucide-react"
-import { AI_VISUALIZER_STEPS } from "../../../features/aiVisualization/model/constants"
-import { StepIndicator } from "@/shared/ui/stepIndicator"
+// import { AI_VISUALIZER_STEPS } from "../../../features/aiVisualization/model/constants"
+// import { StepIndicator } from "@/shared/ui/stepIndicator"
 
 export const AIVisualizer = () => {
   const {
@@ -88,9 +88,9 @@ export const AIVisualizer = () => {
           </p>
         </div>
 
-        {AI_VISUALIZER_STEPS.length > 1 && (
+        {/* {AI_VISUALIZER_STEPS.length > 1 && (
           <StepIndicator steps={AI_VISUALIZER_STEPS} currentStep={state.step} />
-        )}
+        )} */}
 
         <Card>
           <CardContent className="p-6 md:p-8">
