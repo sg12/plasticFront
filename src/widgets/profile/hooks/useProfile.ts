@@ -7,6 +7,7 @@ import { toast } from "sonner"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { userUpdateSchema } from "@/entities/user/model/schema"
 
+
 export const useProfile = () => {
   const { profile } = useAuthStore()
   const [isEditing, setIsEditing] = useState(false)
