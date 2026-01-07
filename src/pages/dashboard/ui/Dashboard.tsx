@@ -1,8 +1,8 @@
 import { useAuthStore } from "@/entities/auth/model/store"
 import { formatName } from "@/shared/lib/utils"
 import { Item, ItemTitle, ItemDescription, ItemContent } from "@/shared/ui/item"
-import { Calendar, Database, MessageCircle, Settings, User } from "lucide-react"
-import { NavLink } from "react-router-dom"
+import { Database, MessageCircle, Settings, User } from "lucide-react"
+import { NavLink } from "react-router"
 
 export const Dashboard = () => {
   const { profile } = useAuthStore()
@@ -39,7 +39,7 @@ export const Dashboard = () => {
       <div className="relative h-48 overflow-hidden rounded-2xl bg-gradient-to-br from-purple-600 to-purple-800">
         <div className="relative z-10 flex h-full flex-col justify-center p-8">
           <h1 className="text-white">
-            Добро пожаловать, {formatName(profile?.full_name ?? "", false, "firstName")}!
+            Добро пожаловать, {formatName(profile?.fullName ?? "", false, "firstName")}!
           </h1>
           <p className="mt-2 text-purple-100">Управляйте своими записями и процедурами</p>
         </div>

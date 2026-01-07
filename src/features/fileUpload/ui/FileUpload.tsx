@@ -81,7 +81,6 @@ export const FileUpload = <T extends FileRecord>({
                 multiple={slot.multiple}
                 onChange={(e) => handleFileChange(e, slot.id)}
                 accept={FILE_ACCEPT_TYPES}
-                className="py-3 pl-12 file:mr-4 file:rounded-lg file:border-0 file:bg-purple-50 file:px-4 file:text-purple-700 hover:file:bg-purple-100 focus:border-transparent focus:ring-2 focus:ring-purple-500 focus:outline-none"
               />
             </div>
 
