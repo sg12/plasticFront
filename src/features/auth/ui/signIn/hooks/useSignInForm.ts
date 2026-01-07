@@ -8,7 +8,7 @@ import { useAuthStore } from "@/entities/auth/model/store"
 
 export const useSignInForm = () => {
   const [showPassword, setShowPassword] = useState(false)
-  const { signIn, loading } = useAuthStore()
+  const { signIn } = useAuthStore()
   const navigate = useNavigate()
 
   const form = useForm<SignInFormData>({
@@ -64,7 +64,7 @@ export const useSignInForm = () => {
 
   return {
     showPassword,
-    isLoading: loading,
+    isLoading: form.formState.isSubmitting,
     form,
 
     setShowPassword,

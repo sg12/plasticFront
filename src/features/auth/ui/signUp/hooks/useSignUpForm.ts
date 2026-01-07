@@ -1,5 +1,5 @@
 import { useState } from "react"
-import type { SignUpFormData } from "../model/types"
+import type { SignUpFormData } from "../types/types"
 import type { UserRole } from "@/entities/user/types/types"
 import { USER_ROLES } from "@/entities/user/model/constants"
 import { useForm } from "react-hook-form"
@@ -7,13 +7,14 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { signUpSchema } from "../model/schema"
 import { toast } from "sonner"
 import { useAuthStore } from "@/entities/auth/model/store"
+import { FormProvider } from "react-hook-form"
 
 export const useSignUpForm = () => {
   const [currentStep, setCurrentStep] = useState(0)
   const [showConsentModal, setShowConsentModal] = useState(false)
   const [showPrivacyModal, setShowPrivacyModal] = useState(false)
   const [hasConsent, setHasConsent] = useState(false)
-  const { signUp, loading } = useAuthStore()
+  const { signUp } = useAuthStore()
 
   const form = useForm<SignUpFormData>({
     resolver: zodResolver(signUpSchema),
@@ -54,14 +55,15 @@ export const useSignUpForm = () => {
     }
 
     try {
-      const { error } = await signUp(data)
+      const { data: authData, error } = await signUp(data)
 
-      if (error) {
-        if (error.message.includes("User already registered")) {
-          toast.info("Пользователь с таким email уже существует. Войдите в систему.")
-        } else {
-          toast.error(error.message || "Ошибка регистрации")
-        }
+      if (error && error.message.includes("User already registered")) {
+        toast.warning("Пользователь с таким email уже существует. Войдите в систему.")
+        return
+      }
+
+      if (authData && !!authData.user?.identities) {
+        toast.warning("Пользователь с таким email уже существует. Войдите в систему.")
         return
       }
 
@@ -75,7 +77,7 @@ export const useSignUpForm = () => {
   return {
     form,
     role,
-    loading,
+    loading: form.formState.isSubmitting,
     currentStep,
     setCurrentStep,
     showConsentModal,
@@ -87,5 +89,6 @@ export const useSignUpForm = () => {
     closePrivacyModal,
     acceptConsent,
     onSubmit,
+    FormProvider,
   }
 }

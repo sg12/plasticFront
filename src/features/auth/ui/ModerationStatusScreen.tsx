@@ -4,8 +4,8 @@ import { AlertCircle, Clock } from "lucide-react"
 
 export const ModerationStatusScreen = () => {
   const { profile, signOut } = useAuthStore()
-  const isRejected = profile?.moderation_status === "rejected"
-  const rejectionReason = profile?.moderation_comment
+  const isRejected = profile?.moderationStatus === "rejected"
+  const rejectionReason = profile?.moderationComment
 
   return (
     <div className="flex h-screen w-screen items-center justify-center bg-gray-50 p-4">
