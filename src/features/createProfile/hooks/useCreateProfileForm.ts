@@ -5,11 +5,16 @@ import { useNavigate } from "react-router"
 import { toast } from "sonner"
 import { useAuthStore } from "@/entities/auth/model/store"
 import { createUser } from "@/entities/user/api/api"
-import type { ClinicUploadedFiles, DoctorUploadedFiles, UploadedFilesByRole } from "@/entities/document/types/types"
-import { createProfileSchema } from "../model/schema"
-import type { CreateProfileFormData } from "../model/types"
+import type {
+  ClinicUploadedFiles,
+  DoctorUploadedFiles,
+  UploadedFilesByRole,
+} from "@/entities/document/types/types"
 import { getSession } from "@/entities/auth/api/api"
-import type { FileSlot } from '@/features/fileUpload/types/types'
+import type { FileSlot } from "@/features/fileUpload/types/types"
+import type { UserCreateFormData, UserRole } from "@/entities/user/types/types"
+import { userCreateSchema } from "@/entities/user/model/schema"
+import { FormProvider } from "react-hook-form"
 
 export const useCreateProfileForm = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -25,44 +30,34 @@ export const useCreateProfileForm = () => {
     }
   }, [profile])
 
-  const role = user?.user_metadata.role?.toLowerCase() as
-    | "patient"
-    | "doctor"
-    | "clinic"
-    | undefined
+  const role = user?.user_metadata.role?.toLowerCase() as UserRole
 
-  const form = useForm<CreateProfileFormData>({
-    resolver: zodResolver(createProfileSchema),
+  const form = useForm<UserCreateFormData>({
+    resolver: zodResolver(userCreateSchema),
     defaultValues: {
       role: role,
-      patient: {
-        birthDate: undefined,
-        gender: undefined,
-      },
-      doctor: {
-        licenseNumber: "",
-        specialization: "",
-        experience: undefined,
-        education: "",
-        workplace: "",
-        inn: "",
-        gender: undefined,
-        birthDate: undefined,
-        documents: {},
-      },
-      clinic: {
-        legalName: "",
-        clinicInn: "",
-        ogrn: "",
-        legalAddress: "",
-        actualAddress: "",
-        clinicLicense: "",
-        directorName: "",
-        directorPosition: "",
-        documents: {},
-      },
+      // Patient fields
+      birthDate: undefined,
+      gender: undefined,
+      // Doctor fields
+      licenseNumber: "",
+      specialization: "",
+      experience: undefined,
+      education: "",
+      workplace: "",
+      inn: "",
+      // Clinic fields
+      legalName: "",
+      clinicInn: "",
+      ogrn: "",
+      legalAddress: "",
+      actualAddress: "",
+      clinicLicense: "",
+      directorName: "",
+      directorPosition: "",
+      documents: {},
     },
-    mode: "onBlur",
+    mode: "all",
   })
 
   useEffect(() => {
@@ -109,7 +104,7 @@ export const useCreateProfileForm = () => {
     }))
   }
 
-  const onSubmit = async (data: CreateProfileFormData) => {
+  const onSubmit = async (data: UserCreateFormData) => {
     if (!user) {
       toast.error("Пользователь не аутентифицирован.")
       return
@@ -127,12 +122,10 @@ export const useCreateProfileForm = () => {
     }
 
     const fullData = {
-      basic: {
-        email: sessionData.session.user.email!,
-        fullName: sessionData.session.user.user_metadata.full_name,
-        phone: sessionData.session.user.user_metadata.phone,
-      },
       ...data,
+      email: sessionData.session.user.email!,
+      fullName: sessionData.session.user.user_metadata.full_name,
+      phone: sessionData.session.user.user_metadata.phone,
     }
 
     try {
@@ -152,6 +145,17 @@ export const useCreateProfileForm = () => {
     }
   }
 
+  const handleSaveClick = async () => {
+    const isValid = await form.trigger()
+
+    if (!isValid) {
+      toast.error("Пожалуйста, заполните все обязательные поля корректно.")
+      return setCurrentStep(0)
+    }
+
+    onSubmit(form.getValues())
+  }
+
   return {
     form,
     role,
@@ -163,5 +167,7 @@ export const useCreateProfileForm = () => {
     doctorFileSlots,
     clinicFileSlots,
     onSubmit,
+    handleSaveClick,
+    FormProvider,
   }
 }
