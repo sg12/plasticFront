@@ -1,33 +1,27 @@
-import type { SignUpFormData } from "@/features/auth/ui/signUp/model/types"
 import { supabase } from "@/shared/api/supabase/client"
-import type {
-  Profile,
-  DoctorProfile,
-  ClinicProfile,
-  PatientProfile,
-  RoleProfile,
-} from "../types/types"
-import { USER_ROLES } from "../model/constants"
+import type { Profile, RoleProfile, UserUpdateFormData, UserCreateFormData } from "../types/types"
+import { USER_ROLES, MODERATION_STATUS } from "../model/constants"
 import type { UploadedFilesByRole } from "@/entities/document/types/types"
 import { uploadFiles } from "@/entities/document/api/api"
 
 const PROFILES = "profiles"
-const PATIENT_PROFILES = "patient_profiles"
-const DOCTOR_PROFILES = "doctor_profiles"
-const CLINIC_PROFILES = "clinic_profiles"
+const PATIENT_PROFILES = "patientProfiles"
+const DOCTOR_PROFILES = "doctorProfiles"
+const CLINIC_PROFILES = "clinicProfiles"
 
 export const createUser = async (
   userId: string,
-  data: SignUpFormData,
+  data: UserCreateFormData,
   uploadedFiles: UploadedFilesByRole = {},
 ) => {
   // 1) Создаём базовый профиль
   const { error } = await supabase.from(PROFILES).insert({
     id: userId,
     role: data.role,
-    full_name: data.basic.fullName,
-    phone: data.basic.phone,
-    email: data.basic.email,
+    fullName: data.fullName,
+    phone: data.phone,
+    email: data.email,
+    moderationStatus: data.role === USER_ROLES.PATIENT ? MODERATION_STATUS.APPROVED : MODERATION_STATUS.PENDING,
   })
 
   if (error) {
@@ -57,33 +51,35 @@ export const createUser = async (
   if (data.role === USER_ROLES.PATIENT) {
     const { error } = await supabase.from(PATIENT_PROFILES).insert({
       id: userId,
-      birth_date: data.patient?.birthDate || null,
-      gender: data.patient?.gender || null,
+      birthDate: data.birthDate || null,
+      gender: data.gender || null,
     })
     roleError = error
-  } else if (data.role === USER_ROLES.DOCTOR && data.doctor) {
+  } else if (data.role === USER_ROLES.DOCTOR) {
     const { error } = await supabase.from(DOCTOR_PROFILES).insert({
       id: userId,
-      license_number: data.doctor.licenseNumber,
-      specialization: data.doctor.specialization,
-      experience: data.doctor.experience,
-      education: data.doctor.education,
-      workplace: data.doctor.workplace,
-      inn: data.doctor.inn,
+      licenseNumber: data.licenseNumber,
+      specialization: data.specialization,
+      experience: data.experience,
+      education: data.education,
+      workplace: data.workplace || null,
+      inn: data.inn,
+      birthDate: data.birthDate || null,
+      gender: data.gender || null,
       documents: filePaths,
     })
     roleError = error
-  } else if (data.role === USER_ROLES.CLINIC && data.clinic) {
+  } else if (data.role === USER_ROLES.CLINIC) {
     const { error } = await supabase.from(CLINIC_PROFILES).insert({
       id: userId,
-      legal_name: data.clinic.legalName,
-      clinic_inn: data.clinic.clinicInn,
-      ogrn: data.clinic.ogrn,
-      legal_address: data.clinic.legalAddress,
-      actual_address: data.clinic.actualAddress,
-      clinic_license: data.clinic.clinicLicense,
-      director_name: data.clinic.directorName,
-      director_position: data.clinic.directorPosition,
+      legalName: data.legalName,
+      clinicInn: data.clinicInn,
+      ogrn: data.ogrn,
+      legalAddress: data.legalAddress,
+      actualAddress: data.actualAddress,
+      clinicLicense: data.clinicLicense,
+      directorName: data.directorName,
+      directorPosition: data.directorPosition,
       documents: filePaths,
     })
     roleError = error
@@ -95,13 +91,13 @@ export const createUser = async (
   }
 }
 
-export const getUser = async (userId: string): Promise<Profile | RoleProfile | null> => {
+export const getUser = async (userId: string): Promise<RoleProfile | null> => {
   // 1) Получаем базовый профиль
   const { data: profile, error: profileError } = await supabase
     .from(PROFILES)
     .select("*")
     .eq("id", userId)
-    .maybeSingle<Profile>()
+    .maybeSingle<RoleProfile>()
 
   if (profileError) throw profileError
   if (!profile) return null
@@ -129,16 +125,14 @@ export const getUser = async (userId: string): Promise<Profile | RoleProfile | n
   return profile
 }
 
-export const updateUser = async (
-  id: Profile["id"],
-  data: PatientProfile | DoctorProfile | ClinicProfile,
-) => {
+export const updateUser = async (id: Profile["id"], data: UserUpdateFormData) => {
+  if (!data) return
   // 1) Обновляем базовый профиль
   const baseUpdate: Partial<Profile> = {
-    full_name: data.full_name,
+    fullName: data.fullName,
     phone: data.phone,
     email: data.email,
-    updated_at: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   }
 
   const { error: profileError } = await supabase.from(PROFILES).update(baseUpdate).eq("id", id)
@@ -147,41 +141,41 @@ export const updateUser = async (
   // 2) Обновляем role-specific данные
   switch (data.role) {
     case USER_ROLES.PATIENT: {
-      const patient = data as PatientProfile
+      const patient = data
       const { error } = await supabase
         .from(PATIENT_PROFILES)
         .update({
-          birth_date: patient.birth_date ?? null,
+          birthDate: patient.birthDate ?? null,
           gender: patient.gender ?? null,
-          updated_at: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
         })
         .eq("id", id)
       if (error) throw error
       break
     }
     case USER_ROLES.DOCTOR: {
-      const doctor = data as DoctorProfile
+      const doctor = data
 
       const { error } = await supabase
         .from(DOCTOR_PROFILES)
         .update({
-          birth_date: doctor.birth_date ?? null,
+          birthDate: doctor.birthDate ?? null,
           gender: doctor.gender ?? null,
-          license_number: doctor.license_number,
+          licenseNumber: doctor.licenseNumber,
           specialization: doctor.specialization,
           experience: doctor.experience,
           education: doctor.education,
           workplace: doctor.workplace,
           inn: doctor.inn,
           documents: doctor.documents ?? null,
-          updated_at: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
         })
         .eq("id", id)
       if (error) throw error
       break
     }
     case USER_ROLES.CLINIC: {
-      const clinic = data as ClinicProfile
+      const clinic = data
       const clinicDocs = clinic.documents
       const documentsNormalized = clinic.documents
         ? {
@@ -196,16 +190,16 @@ export const updateUser = async (
       const { error } = await supabase
         .from(CLINIC_PROFILES)
         .update({
-          legal_name: clinic.legal_name,
-          clinic_inn: clinic.clinic_inn,
+          legalName: clinic.legalName,
+          clinicInn: clinic.clinicInn,
           ogrn: clinic.ogrn,
-          legal_address: clinic.legal_address,
-          actual_address: clinic.actual_address,
-          clinic_license: clinic.clinic_license,
-          director_name: clinic.director_name,
-          director_position: clinic.director_position,
+          legalAddress: clinic.legalAddress,
+          actualAddress: clinic.actualAddress,
+          clinicLicense: clinic.clinicLicense,
+          directorName: clinic.directorName,
+          directorPosition: clinic.directorPosition,
           documents: documentsNormalized ?? null,
-          updated_at: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
         })
         .eq("id", id)
       if (error) throw error
