@@ -42,7 +42,7 @@ export const LoginHistory = () => {
 
 function LoginRecordItem({ record }: { record: LoginRecord }) {
   const Icon = getDeviceIcon(record.device)
-  const date = new Date(record.created_at)
+  const date = new Date(record.createdAt)
 
   return (
     <div className="flex items-center justify-between rounded-lg bg-gray-50 p-3">
@@ -57,7 +57,7 @@ function LoginRecordItem({ record }: { record: LoginRecord }) {
           <p className="text-xs text-gray-500">
             {date.toLocaleDateString("ru-RU")} в{" "}
             {date.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" })}
-            {record.ip_address && <> · {record.ip_address}</>}
+            {record.ipAddress && <> · {record.ipAddress}</>}
           </p>
         </div>
       </div>

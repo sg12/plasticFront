@@ -28,11 +28,7 @@ type SupportFileRecord = FileRecord & {
 
 export const Support = () => {
   const [attachedFiles, setAttachedFiles] = useState<SupportFileRecord>({})
-  const {
-    tickets,
-    isLoading: isLoadingTickets,
-    error,
-  } = useSupportTickets()
+  const { tickets, isLoading: isLoadingTickets, error } = useSupportTickets()
   const { createTicket, isCreating } = useCreateSupportTicket()
 
   const form = useForm<CreateSupportTicketFormData>({

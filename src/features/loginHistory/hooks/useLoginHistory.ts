@@ -20,7 +20,7 @@ export const useLoginHistory = () => {
       dedupingInterval: 2 * 60 * 1000,
       onError: (err) => {
         if (err instanceof Error && err.message.includes("миграцию")) {
-          console.warn("Ошибка: таблица login_history не создана. Запустите миграцию.")
+          console.warn("Ошибка: таблица loginHistory не создана. Запустите миграцию.")
         } else {
           console.error("Ошибка загрузки истории входов:", err)
         }
