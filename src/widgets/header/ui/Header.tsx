@@ -1,4 +1,4 @@
-import { useMatches } from "react-router-dom"
+import { useMatches } from "react-router"
 import { Separator } from "@/shared/ui/separator"
 import { SidebarTrigger } from "@/shared/ui/sidebar"
 

@@ -1,8 +1,10 @@
+import type { userCreateSchema, userUpdateSchema } from "@/entities/user/model/schema"
 import type { MODERATION_STATUS, USER_ROLES } from "../model/constants"
+import type z from "zod"
 
 export type UserRole = (typeof USER_ROLES)[keyof typeof USER_ROLES]
 
-export type Gender = "male" | "female" | undefined
+export type Gender = "male" | "female"
 
 export type RoleProfile = PatientProfile | DoctorProfile | ClinicProfile
 
@@ -11,41 +13,44 @@ export type ModerationStatus = (typeof MODERATION_STATUS)[keyof typeof MODERATIO
 export interface Profile {
   readonly id: string
   readonly role: UserRole
-  full_name: string | null
+  fullName: string | null
   email: string
   phone: string | null
-  moderation_status?: ModerationStatus | null
-  moderation_comment?: string | null
-  created_at?: string
-  updated_at?: string | null
-  moderated_at?: string | null
+  moderationStatus: ModerationStatus | null
+  moderationComment: string | null
+  createdAt?: string
+  updatedAt?: string
+  moderatedAt: string | null
 }
 
 export interface PatientProfile extends Profile {
-  birth_date: string | null
+  birthDate: string | null
   gender: Gender
 }
 
 export interface DoctorProfile extends Profile {
   gender: Gender
-  birth_date: string | null
-  license_number: string
+  birthDate: string | null
+  licenseNumber: string
   specialization: string
   experience: number
   education: string
   workplace: string
   inn: string
-  documents?: Record<string, string | string[]> | null // Пути к файлам в Storage
+  documents: Record<string, string | string[]> | null
 }
 
 export interface ClinicProfile extends Profile {
-  legal_name: string
-  clinic_inn: string
+  legalName: string
+  clinicInn: string
   ogrn: string
-  legal_address: string
-  actual_address: string
-  clinic_license: string
-  director_name: string
-  director_position: string
-  documents?: Record<string, string | string[]> | null // Пути к файлам в Storage
+  legalAddress: string
+  actualAddress: string
+  clinicLicense: string
+  directorName: string
+  directorPosition: string
+  documents: Record<string, string | string[]> | null
 }
+
+export type UserCreateFormData = z.infer<typeof userCreateSchema>
+export type UserUpdateFormData = z.infer<typeof userUpdateSchema>

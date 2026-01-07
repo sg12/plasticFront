@@ -1,8 +1,8 @@
 import { Mail, Lock, Eye, EyeOff } from "lucide-react"
-import { NavLink } from "react-router-dom"
+import { NavLink } from "react-router"
 import { FormControl, FormField, FormItem, FormMessage } from "@/shared/ui/form"
 import { FormProvider } from "react-hook-form"
-import { useSignInForm } from "@/features/signIn/hooks/useSignInForm"
+import { useSignInForm } from "@/features/auth/ui/signIn/hooks/useSignInForm"
 import { Button } from "@/shared/ui/button"
 import { Separator } from "@/shared/ui/separator"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/shared/ui/inputGroup"
@@ -91,7 +91,7 @@ export function SignInForm() {
           />
 
           <Button type="submit" className="w-full" disabled={isLoading}>
-            Войти
+            {isLoading ? "Вход..." : "Войти"}
           </Button>
 
           <Separator className="relative inset-0 flex items-center justify-center">
@@ -101,10 +101,7 @@ export function SignInForm() {
           <div className="text-center">
             <p className="text-gray-600">
               Нет аккаунта?{" "}
-              <NavLink
-                to="/signup"
-                className="text-purple-600 hover:text-purple-700"
-              >
+              <NavLink to="/signup" className="text-purple-600 hover:text-purple-700">
                 Зарегистрироваться
               </NavLink>
             </p>

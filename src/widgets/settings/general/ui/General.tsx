@@ -12,7 +12,7 @@ export const General = () => {
         <p className="mt-2 text-gray-600">Управление параметрами аккаунта и приложения</p>
       </div>
 
-      <div className="rounded-xl border border-gray-200 bg-white p-6">
+      {/* <div className="rounded-xl border border-gray-200 bg-white p-6">
         <div className="mb-4 flex items-center gap-3">
           <Lock className="h-5 w-5 text-purple-600" />
           <h3>Безопасность</h3>
@@ -20,7 +20,7 @@ export const General = () => {
         <div className="space-y-3">
           <ChangePassword />
         </div>
-      </div>
+      </div> */}
 
       <div className="rounded-xl border border-gray-200 bg-white p-6">
         <div className="mb-4 flex items-center gap-3">

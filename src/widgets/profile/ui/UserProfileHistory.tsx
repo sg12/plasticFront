@@ -1,6 +1,10 @@
+import type { RoleProfile } from "@/entities/user/types/types"
 import { pluralRu } from "@/shared/lib/utils"
-import { type Props } from "../types/types"
 import dayjs from "dayjs"
+
+interface Props {
+  profile: RoleProfile | null
+}
 
 export const UserProfileHistory = ({ profile }: Props) => {
   const formatWithUs = () => {

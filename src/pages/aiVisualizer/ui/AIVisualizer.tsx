@@ -8,7 +8,7 @@ import { ResultComparison } from "@/widgets/resultComparison/ui/ResultComparison
 import { Button } from "@/shared/ui/button"
 import { Card, CardContent } from "@/shared/ui/card"
 import { ArrowLeft, ArrowRight, Sparkles } from "lucide-react"
-import { StepIndicator } from "../../../shared/ui/StepIndicator"
+import { StepIndicator } from "../../../shared/ui/stepIndicator"
 import { AI_VISUALIZER_STEPS } from "../../../features/aiVisualization/model/constants"
 
 export const AIVisualizer = () => {

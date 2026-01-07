@@ -1,10 +1,9 @@
-import { Button } from "@/shared/ui/button"
 import { Skeleton } from "@/shared/ui/skeleton"
-import { Monitor, Smartphone, Tablet, RefreshCw, XCircle, Check } from "lucide-react"
+import { Monitor, Smartphone, Tablet, XCircle, Check } from "lucide-react"
 import { useLoginHistory, type LoginRecord } from "../hooks/useLoginHistory"
 
 export const LoginHistory = () => {
-  const { history, isLoading, refresh } = useLoginHistory()
+  const { history, isLoading } = useLoginHistory()
 
   if (isLoading) {
     return (
@@ -31,18 +30,13 @@ export const LoginHistory = () => {
           <LoginRecordItem key={record.id} record={record} />
         ))}
       </div>
-
-      <Button variant="outline" size="sm" onClick={() => refresh()} disabled={isLoading}>
-        <RefreshCw className="h-4 w-4" />
-        Обновить
-      </Button>
     </div>
   )
 }
 
 function LoginRecordItem({ record }: { record: LoginRecord }) {
   const Icon = getDeviceIcon(record.device)
-  const date = new Date(record.created_at)
+  const date = new Date(record.createdAt)
 
   return (
     <div className="flex items-center justify-between rounded-lg bg-gray-50 p-3">
@@ -57,7 +51,7 @@ function LoginRecordItem({ record }: { record: LoginRecord }) {
           <p className="text-xs text-gray-500">
             {date.toLocaleDateString("ru-RU")} в{" "}
             {date.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" })}
-            {record.ip_address && <> · {record.ip_address}</>}
+            {record.ipAddress && <> · {record.ipAddress}</>}
           </p>
         </div>
       </div>

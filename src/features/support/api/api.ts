@@ -1,17 +1,17 @@
 import { supabase } from "@/shared/api/supabase/client"
 import type { SupportTicket, CreateSupportTicketData, SupportTicketReply } from "../model/types"
 
-const TABLE_NAME = "support_tickets"
-const REPLIES_TABLE_NAME = "support_ticket_replies"
-const STORAGE_BUCKET = "support_attachments"
-const SEND_SUPPORT_TO_TELEGRAM = "send_support_to_telegram"
+const TABLE_NAME = "supportTickets" // TABLE
+const REPLIES_TABLE_NAME = "supportTicketReplies" // TABLE
+const STORAGE_BUCKET = "support_attachments" // BUCKET
+const SEND_SUPPORT_TO_TELEGRAM = "send_support_to_telegram" // EDGE
 
 export const fetchUserTickets = async (userId: string): Promise<SupportTicket[]> => {
   const { data, error } = await supabase
     .from(TABLE_NAME)
     .select("*")
-    .eq("user_id", userId)
-    .order("created_at", { ascending: false })
+    .eq("userId", userId)
+    .order("createdAt", { ascending: false })
 
   if (error) throw error
   return data || []
@@ -100,7 +100,7 @@ export const createSupportTicket = async (
 async function sendToTelegram(ticket: SupportTicket, userId: string): Promise<void> {
   const { data: profile } = await supabase
     .from("profiles")
-    .select("email, full_name, role")
+    .select("email, fullName, role")
     .eq("id", userId)
     .single()
 
@@ -108,7 +108,7 @@ async function sendToTelegram(ticket: SupportTicket, userId: string): Promise<vo
     ? {
         id: userId,
         email: profile.email,
-        full_name: profile.full_name,
+        fullName: profile.fullName,
         role: profile.role,
       }
     : { id: userId }
@@ -129,8 +129,8 @@ export const fetchTicketReplies = async (ticketId: string): Promise<SupportTicke
   const { data, error } = await supabase
     .from(REPLIES_TABLE_NAME)
     .select("*")
-    .eq("ticket_id", ticketId)
-    .order("created_at", { ascending: true })
+    .eq("ticketId", ticketId)
+    .order("createdAt", { ascending: true })
 
   if (error) throw error
   return data || []
