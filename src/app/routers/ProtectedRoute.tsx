@@ -17,6 +17,8 @@ export const ProtectedRoute = () => {
 
   const isCreateProfilePage = location.pathname === "/createProfile"
 
+  if (!initialized) return
+
   if (session && !profile && !isCreateProfilePage) {
     return <Navigate to="/createProfile" replace />
   }
@@ -28,7 +30,7 @@ export const ProtectedRoute = () => {
   const isDoctorOrClinic =
     profile?.role === USER_ROLES.DOCTOR || profile?.role === USER_ROLES.CLINIC
 
-  if (isDoctorOrClinic && profile?.moderation_status !== "approved") {
+  if (isDoctorOrClinic && profile?.moderationStatus !== "approved") {
     return <ModerationStatusScreen />
   }
 
