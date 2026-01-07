@@ -1,6 +1,6 @@
 import ReactDOM from "react-dom/client"
 import { Toaster } from "sonner"
-import { RouterProvider } from "react-router"
+import { RouterProvider } from "react-router-dom"
 import { router } from "./routers/Router"
 import { ErrorBoundary } from "react-error-boundary"
 import { SWRConfig } from "swr"

@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
-import type { Gender, UserRole } from "../../entities/user/types/types"
+import type { UserRole } from "../../entities/user/types/types"
 import { USER_ROLES } from "../../entities/user/model/constants"
 
 export function cn(...inputs: ClassValue[]) {
@@ -12,9 +12,6 @@ export const formatName = (
   isFirstSymbol?: boolean,
   parts?: "firstName" | "lastName" | "patronymic",
 ): string => {
-  if (!fullName) {
-    return ""
-  }
   if (isFirstSymbol) {
     return fullName
       .trim()
@@ -58,10 +55,6 @@ export const formatRole = (role: UserRole): string => {
     case USER_ROLES.CLINIC:
       return "Клиника"
   }
-}
-
-export const formatGender = (value: Gender) => {
-  return value === "male" ? "Мужской" : value === "female" ? "Женский" : ""
 }
 
 export const pluralRu = (n: number, one: string, few: string, many: string) => {

@@ -1,17 +1,17 @@
 import { supabase } from "@/shared/api/supabase/client"
 import type { SupportTicket, CreateSupportTicketData, SupportTicketReply } from "../model/types"
 
-const TABLE_NAME = "supportTickets" // TABLE
-const REPLIES_TABLE_NAME = "supportTicketReplies" // TABLE
-const STORAGE_BUCKET = "support_attachments" // BUCKET
-const SEND_SUPPORT_TO_TELEGRAM = "send_support_to_telegram" // EDGE
+const TABLE_NAME = "support_tickets"
+const REPLIES_TABLE_NAME = "support_ticket_replies"
+const STORAGE_BUCKET = "support_attachments"
+const SEND_SUPPORT_TO_TELEGRAM = "send_support_to_telegram"
 
 export const fetchUserTickets = async (userId: string): Promise<SupportTicket[]> => {
   const { data, error } = await supabase
     .from(TABLE_NAME)
     .select("*")
-    .eq("userId", userId)
-    .order("createdAt", { ascending: false })
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false })
 
   if (error) throw error
   return data || []
@@ -98,30 +98,35 @@ export const createSupportTicket = async (
 }
 
 async function sendToTelegram(ticket: SupportTicket, userId: string): Promise<void> {
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("email, fullName, role")
-    .eq("id", userId)
-    .single()
+  try {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("email, full_name, role")
+      .eq("id", userId)
+      .single()
 
-  const user = profile
-    ? {
-        id: userId,
-        email: profile.email,
-        fullName: profile.fullName,
-        role: profile.role,
-      }
-    : { id: userId }
+    const user = profile
+      ? {
+          id: userId,
+          email: profile.email,
+          full_name: profile.full_name,
+          role: profile.role,
+        }
+      : { id: userId }
 
-  const { error } = await supabase.functions.invoke(SEND_SUPPORT_TO_TELEGRAM, {
-    body: {
-      ticket,
-      user,
-    },
-  })
+    const { error } = await supabase.functions.invoke(SEND_SUPPORT_TO_TELEGRAM, {
+      body: {
+        ticket,
+        user,
+      },
+    })
 
-  if (error) {
-    throw error
+    if (error) {
+      console.error("Telegram notification error:", error)
+      throw error
+    }
+  } catch (error) {
+    console.error("Failed to send ticket to Telegram:", error)
   }
 }
 
@@ -129,8 +134,8 @@ export const fetchTicketReplies = async (ticketId: string): Promise<SupportTicke
   const { data, error } = await supabase
     .from(REPLIES_TABLE_NAME)
     .select("*")
-    .eq("ticketId", ticketId)
-    .order("createdAt", { ascending: true })
+    .eq("ticket_id", ticketId)
+    .order("created_at", { ascending: true })
 
   if (error) throw error
   return data || []

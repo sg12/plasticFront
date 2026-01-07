@@ -28,12 +28,13 @@ export async function uploadFiles(
 ): Promise<UploadedFilePaths> {
   const paths: UploadedFilePaths = {}
 
-  const uploadPromises = Object.entries(files).map(async ([key, fileOrFiles]) => {
-    if (!fileOrFiles) return
+  for (const [key, fileOrFiles] of Object.entries(files)) {
+    if (!fileOrFiles) continue
 
     const filesArray = Array.isArray(fileOrFiles) ? fileOrFiles : [fileOrFiles]
     const validFiles = filesArray.filter((file) => file instanceof File) as File[]
-    if (validFiles.length === 0) return
+
+    if (validFiles.length === 0) continue
 
     // Валидируем файлы перед загрузкой
     const config = DOCUMENT_VALIDATION_CONFIGS[key] || FILE_VALIDATION_CONFIGS.documents
@@ -49,28 +50,37 @@ export async function uploadFiles(
 
     const uploadedPaths: string[] = []
 
-    await Promise.all(
-      validFiles.map(async (file) => {
-        const fileExt = file.name.split(".").pop()
-        const fileName = `${crypto.randomUUID()}.${fileExt}`
-        const filePath = `${userId}/${role}/${key}/${fileName}`
+    for (const file of validFiles) {
+      const fileExt = file.name.split(".").pop()
+      const fileName = `${crypto.randomUUID()}.${fileExt}`
+      const filePath = `${userId}/${role}/${key}/${fileName}`
 
+      try {
         const { error: uploadError } = await supabase.storage
           .from(STORAGE_BUCKET)
-          .upload(filePath, file, { cacheControl: "3600", upsert: false })
+          .upload(filePath, file, {
+            cacheControl: "3600",
+            upsert: false,
+          })
 
-        if (uploadError) throw new Error(`Ошибка загрузки для ${key}: ${uploadError.message}`)
+        if (uploadError) {
+          console.error(`Ошибка загрузки файла ${key}:`, uploadError)
+          throw new Error(`Не удалось загрузить файл ${key}: ${uploadError.message}`)
+        }
 
         uploadedPaths.push(filePath)
-      }),
-    )
+      } catch (uploadError) {
+        console.error(`Ошибка загрузки файла ${file.name}:`, uploadError)
+        throw new Error(
+          `Не удалось загрузить файл "${file.name}": ${uploadError instanceof Error ? uploadError.message : "Неизвестная ошибка"}`,
+        )
+      }
+    }
 
     if (uploadedPaths.length > 0) {
       paths[key] = Array.isArray(fileOrFiles) ? uploadedPaths : uploadedPaths[0]
     }
-  })
-
-  await Promise.all(uploadPromises)
+  }
 
   return paths
 }

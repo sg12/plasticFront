@@ -26,6 +26,14 @@ export const TimezoneSettings = () => {
             ))}
           </SelectContent>
         </Select>
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={detectTimezone}
+          title="Определить автоматически"
+        >
+          <MapPin className="h-4 w-4" />
+        </Button>
       </div>
       <p className="text-xs text-gray-500">Текущий часовой пояс: {timezone}</p>
     </div>

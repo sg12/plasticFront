@@ -24,7 +24,12 @@ export const ActiveSessions = () => {
             </div>
             <div>
               <p className="font-medium">{session.userAgent}</p>
-              <p className="text-sm text-gray-500">Текущая сессия</p>
+              <p className="text-sm text-gray-500">
+                Текущая сессия
+                {session.expiresAt && (
+                  <> · Истекает {session.expiresAt.toLocaleDateString("ru-RU")}</>
+                )}
+              </p>
             </div>
           </div>
           <div className="flex h-2 w-2 animate-pulse rounded-full bg-green-500" />

@@ -1,5 +1,7 @@
-import { createBrowserRouter } from "react-router"
+import { createBrowserRouter, Navigate } from "react-router-dom"
 import { App } from "../App"
+import { PublicRoute } from "./PublicRoute"
+import { ProtectedRoute } from "./ProtectedRoute"
 import { Main } from "@/pages/main/ui/Main"
 import { SignIn } from "@/pages/signIn/ui/SignIn"
 import { SignUp } from "@/pages/signUp/ui/SignUp"
@@ -9,9 +11,6 @@ import { AIVisualizer } from "@/pages/aiVisualizer/ui/AIVisualizer"
 import { Support } from "@/pages/support/ui/Support"
 import { General } from "@/widgets/settings/general/ui/General"
 import { PersonalData } from "@/widgets/settings/personalData/ui/PersonalData"
-import { CreateProfile } from "@/pages/createProfile/ui/CreateProfile"
-import { PublicRoute } from "@/app/routers/PublicRoute"
-import { ProtectedRoute } from "@/app/routers/ProtectedRoute"
 
 export const router = createBrowserRouter([
   {
@@ -19,19 +18,19 @@ export const router = createBrowserRouter([
     element: <App />,
     children: [
       {
+        index: true,
+        element: <Navigate to="/main" replace />,
+      },
+      {
         element: <PublicRoute />,
         children: [
-          { path: "signin", element: <SignIn /> },
-          { path: "signup", element: <SignUp /> },
+          { path: "signin", element: <SignIn />, handle: { title: "Вход" } },
+          { path: "signup", element: <SignUp />, handle: { title: "Регистрация" } },
         ],
       },
       {
         element: <ProtectedRoute />,
         children: [
-          {
-            path: "createProfile",
-            element: <CreateProfile />,
-          },
           {
             path: "main",
             element: <Main />,
@@ -43,6 +42,7 @@ export const router = createBrowserRouter([
               { path: "support", element: <Support />, handle: { title: "Поддержка" } },
               {
                 path: "settings",
+                // element: <Settings />,
                 handle: { title: "Настройки" },
                 children: [
                   {

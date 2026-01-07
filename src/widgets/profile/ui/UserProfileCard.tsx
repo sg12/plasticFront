@@ -1,28 +1,22 @@
 import { Mail, Phone } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "../../../shared/ui/avatar"
+import type { Props } from "../types/types"
 import { formatName, formatRole } from "../../../shared/lib/utils"
 import { Separator } from "../../../shared/ui/separator"
 import { Badge } from "../../../shared/ui/badge"
-import type { RoleProfile, UserRole } from "../../../entities/user/types/types"
-import { USER_ROLES } from "@/entities/user/model/constants"
-
-interface Props {
-  profile: RoleProfile | null
-}
+import type { UserRole } from "../../../entities/user/types/types"
 
 export const UserProfileCard = ({ profile }: Props) => {
   return (
-    <div className="space-y-2 rounded-xl border border-gray-200 bg-white p-6 text-center">
+    <div className="rounded-xl border border-gray-200 bg-white p-6 text-center">
       <Avatar className="mx-auto mb-4 size-32">
         <AvatarImage />
         <AvatarFallback className="text-3xl">
-          {profile?.role === USER_ROLES.CLINIC
-            ? formatName(profile?.legalName ?? "Клиника")
-            : formatName(profile?.fullName ?? "Имя Фамилия", true)}
+          {formatName(profile?.full_name ?? "Имя Фамилия", true)}
         </AvatarFallback>
       </Avatar>
       <Badge variant="outline">{formatRole(profile?.role as UserRole)}</Badge>
-      <h3>{profile?.role === USER_ROLES.CLINIC ? profile.legalName : profile?.fullName}</h3>
+      <h3>{profile?.full_name ?? "Имя Фамилия"}</h3>
       <p className="mt-1 text-gray-600">ID: {profile?.id ?? "—"}</p>
       <Separator className="my-6" />
       <div className="space-y-3 text-left">
