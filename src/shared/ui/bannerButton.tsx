@@ -1,33 +1,33 @@
 // src/shared/ui/card-button.tsx
 
-import * as React from "react";
-import { ChevronRight, type LucideIcon } from "lucide-react";
-import { Button, buttonVariants } from "@/shared/ui/button";
-import { cn } from "../lib/utils";
-import type { VariantProps } from "class-variance-authority";
+import * as React from "react"
+import { ChevronRight, type LucideIcon } from "lucide-react"
+import { Button, buttonVariants } from "@/shared/ui/button"
+import { cn } from "../lib/utils"
+import type { VariantProps } from "class-variance-authority"
 
 interface BannerButtonProps {
-  title: string;
-  description?: string;
-  icon?: LucideIcon;
-  onClick?: () => void;
-  className?: string;
-  size?: VariantProps<typeof buttonVariants>["size"];
+  title: string
+  description?: string
+  icon?: LucideIcon
+  onClick?: () => void
+  className?: string
+  size?: VariantProps<typeof buttonVariants>["size"]
   /**
    * Кастомные Tailwind-классы для разных частей карточки
    */
   colors?: {
     /** hover-бордер, например "hover:border-purple-500" */
-    border?: string;
+    border?: string
     /** hover-фон, например "hover:bg-purple-50" */
-    bg?: string;
+    bg?: string
     /** фон иконки (обычный + hover), например "bg-purple-200 group-hover:bg-purple-300" */
-    iconBg?: string;
+    iconBg?: string
     /** цвет иконки, например "text-purple-600" */
-    icon?: string;
+    icon?: string
     /** цвет шеврона (обычный + hover), например "text-gray-400 group-hover:text-purple-600" */
-    chevron?: string;
-  };
+    chevron?: string
+  }
 }
 
 const defaultColors = {
@@ -36,20 +36,11 @@ const defaultColors = {
   iconBg: "bg-gray-200 group-hover:bg-gray-300",
   icon: "text-gray-600",
   chevron: "text-gray-400 group-hover:text-gray-600",
-};
+}
 
 const BannerButton = React.forwardRef<HTMLButtonElement, BannerButtonProps>(
   (
-    {
-      title,
-      description,
-      icon: Icon,
-      onClick,
-      className,
-      size = "bannerXl",
-      colors = {},
-      ...rest
-    },
+    { title, description, icon: Icon, onClick, className, size = "bannerXl", colors = {}, ...rest },
     ref,
   ) => {
     const {
@@ -58,7 +49,7 @@ const BannerButton = React.forwardRef<HTMLButtonElement, BannerButtonProps>(
       iconBg = defaultColors.iconBg,
       icon: iconColor = defaultColors.icon,
       chevron = defaultColors.chevron,
-    } = colors;
+    } = colors
 
     return (
       <Button
@@ -67,36 +58,56 @@ const BannerButton = React.forwardRef<HTMLButtonElement, BannerButtonProps>(
         size={size}
         onClick={onClick}
         type="button"
-        className={cn("w-full group", border, bg, className)}
+        className={cn("group w-full", border, bg, className)}
         {...rest}
       >
-        <div className="flex items-center">
+        <div className="flex items-center gap-2 sm:gap-3 md:gap-4 lg:gap-6">
           <div
             className={cn(
-              "rounded-xl flex items-center justify-center transition-colors",
-              iconBg
+              "flex shrink-0 items-center justify-center rounded-xl transition-colors",
+              "size-8 sm:size-10 md:size-12 lg:size-14",
+              iconBg,
             )}
           >
-            {Icon && <Icon className={cn(iconColor)} />}
+            {Icon && <Icon className={cn(iconColor, "size-4 sm:size-5 md:size-6 lg:size-7")} />}
           </div>
 
-          <div className="flex-1 text-left">
-            <h3 className="font-bold text-gray-900">{title}</h3>
-            <p className="text-gray-600">{description}</p>
+          <div className="min-w-0 flex-1 text-left">
+            <h3
+              className={cn(
+                "font-bold text-gray-900",
+                "text-sm sm:text-base md:text-lg",
+                "truncate",
+              )}
+            >
+              {title}
+            </h3>
+            {description && (
+              <p
+                className={cn(
+                  "text-gray-600 max-xl:sr-only",
+                  "text-xs sm:text-sm",
+                  "line-clamp-2 sm:line-clamp-none",
+                )}
+              >
+                {description}
+              </p>
+            )}
           </div>
 
           <ChevronRight
             className={cn(
-              "transition-colors flex-shrink-0 text-gray-400",
-              chevron
+              "flex-shrink-0 text-gray-400 transition-colors",
+              "size-4 sm:size-5 md:size-6",
+              chevron,
             )}
           />
         </div>
       </Button>
-    );
-  }
-);
+    )
+  },
+)
 
-BannerButton.displayName = "BannerButton";
+BannerButton.displayName = "BannerButton"
 
-export { BannerButton };
+export { BannerButton }

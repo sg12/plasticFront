@@ -51,7 +51,7 @@ export function ConsentModal({
                 <User className="h-4 w-4 text-gray-500" />
                 Какие данные обрабатываются
               </h4>
-              <div className="space-y-2 rounded-lg bg-gray-50 p-4">
+              <div className="space-y-2 rounded-lg bg-gray-100 p-4">
                 <div className="flex items-start gap-2">
                   <div className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-gray-400" />
                   <span className="text-sm text-gray-700">
@@ -111,7 +111,7 @@ export function ConsentModal({
                 ].map((item) => (
                   <div
                     key={item}
-                    className="flex items-center gap-2 rounded-lg bg-gray-50 px-3 py-2"
+                    className="flex items-center gap-2 rounded-lg bg-gray-100 px-3 py-2"
                   >
                     <Check className="h-4 w-4 shrink-0 text-green-500" />
                     <span className="text-sm text-gray-700">{item}</span>
