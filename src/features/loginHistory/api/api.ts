@@ -1,14 +1,12 @@
-import type { LoginRecord } from "@/features/loginHistory/types/types"
+import type { LoginRecord } from '@/features/loginHistory/types/types'
 import { supabase } from "@/shared/api/supabase/client"
 import { parseBrowser, parseDevice, parseOS } from "@/shared/lib/userAgent"
-
-const LOGIN_HISTORY = "loginHistory"
 
 export const recordLogin = async (userId: string, success: boolean = true) => {
   const userAgent = navigator.userAgent
 
   try {
-    await supabase.from(LOGIN_HISTORY).insert({
+    await supabase.from("login_history").insert({
       user_id: userId,
       user_agent: userAgent,
       browser: parseBrowser(userAgent),
@@ -16,6 +14,8 @@ export const recordLogin = async (userId: string, success: boolean = true) => {
       device: parseDevice(userAgent),
       success,
     })
+
+
   } catch (e) {
     console.warn("Не удалось записать историю входа:", e)
   }
@@ -23,15 +23,15 @@ export const recordLogin = async (userId: string, success: boolean = true) => {
 
 export const fetchLoginHistory = async (userId: string): Promise<LoginRecord[]> => {
   const { data, error } = await supabase
-    .from(LOGIN_HISTORY)
+    .from("login_history")
     .select("*")
-    .eq("userId", userId)
-    .order("createdAt", { ascending: false })
-    .limit(5)
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false })
+    .limit(20)
 
   if (error) {
     if (error.code === "42P01") {
-      throw new Error("Таблица loginHistory не создана. Запустите миграцию.")
+      throw new Error("Таблица login_history не создана. Запустите миграцию.")
     }
     throw new Error(error.message)
   }
