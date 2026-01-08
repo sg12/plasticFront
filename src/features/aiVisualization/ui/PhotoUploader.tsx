@@ -1,7 +1,7 @@
 import { useCallback, useState, useEffect } from "react"
 import { useDropzone } from "react-dropzone"
 import type { BodyZone, OperationType } from "@/features/aiVisualization/types/types"
-import { BODY_ZONES, MAX_FILE_SIZE } from "@/features/aiVisualization/model/constants"
+import { BODY_ZONES } from "@/features/aiVisualization/model/constants"
 import { cn } from "@/shared/lib/utils"
 import { Upload, X, AlertCircle, Info } from "lucide-react"
 import { Alert, AlertDescription } from "@/shared/ui/alert"
@@ -11,8 +11,9 @@ import {
   isFileValidationError,
 } from "@/shared/lib/fileValidation"
 import { Label } from "@/shared/ui/label"
-import { Slider } from "@/shared/ui/slider"
 import { RadioGroup, RadioGroupItem } from "@/shared/ui/radioGroup"
+import { Textarea } from "@/shared/ui/textarea"
+import { MAX_FILE_SIZE } from '@/entities/document/model/constants'
 
 interface PhotoUploaderProps {
   selectedZone: BodyZone
@@ -30,11 +31,10 @@ export const PhotoUploader = ({
   selectedZone,
   photo,
   photoPreview,
-  intensity,
   operationType,
   onPhotoChange,
-  onIntensityChange,
   onOperationTypeChange,
+  onDescriptionChange,
 }: PhotoUploaderProps) => {
   const [error, setError] = useState<string | null>(null)
   const zone = BODY_ZONES[selectedZone]
@@ -149,22 +149,16 @@ export const PhotoUploader = ({
       )}
 
       <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <Label htmlFor="intensity" className="text-base font-semibold">
-            Интенсивность
-          </Label>
-          <span className="text-sm font-medium text-violet-600">{intensity}%</span>
-        </div>
-        <Slider
-          id="intensity"
-          min={10}
-          max={100}
-          step={5}
-          value={[intensity]}
-          onValueChange={([value]) => onIntensityChange(value)}
-          className="w-full"
+        <Label htmlFor="description" className="text-base font-semibold">
+          Дополнительное описание (необязательно)
+        </Label>
+        <Textarea
+          id="description"
+          placeholder="Опишите желаемые изменения или особые требования к визуализации..."
+          rows={4}
+          onChange={(e) => onDescriptionChange(e.target.value)}
+          className="resize-none"
         />
-        <p className="text-xs text-gray-500">Регулируйте интенсивность эффекта операции</p>
       </div>
 
       {!photoPreview ? (

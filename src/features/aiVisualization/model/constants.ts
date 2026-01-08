@@ -1,5 +1,4 @@
-import type { BodyZone, BodyZoneConfig, VisualizationStep } from "../types/types"
-import { defineSteps, stepsToLabelMap, type StepDefinition } from "@/shared/lib/steps"
+import type { BodyZone, BodyZoneConfig } from "../types/types"
 
 export const BODY_ZONES: Record<BodyZone, BodyZoneConfig> = {
   nose: {
@@ -136,17 +135,5 @@ export const BODY_ZONES: Record<BodyZone, BodyZoneConfig> = {
   },
 }
 
-export const AI_VISUALIZER_STEPS = defineSteps([
-  { id: "select-zone", label: "Выбор зоны" },
-  { id: "upload-photo", label: "Загрузка фото" },
-  { id: "processing", label: "Обработка" },
-  { id: "result", label: "Результат" },
-] as const satisfies readonly StepDefinition<VisualizationStep>[])
-
-export const STEP_CONFIG: Record<VisualizationStep, string> = stepsToLabelMap(AI_VISUALIZER_STEPS)
-
 export const FACE_ZONES: BodyZone[] = ["forehead", "eyes", "nose", "cheeks", "lips", "chin", "ears"]
 export const BODY_ZONES_LIST: BodyZone[] = ["breast", "abdomen", "arms", "buttocks", "thighs"]
-
-export const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
-export const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp"]

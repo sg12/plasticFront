@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react"
 import type { VisualizationState, BodyZone, VisualizationStep, OperationType } from "../types/types"
+import type { RoleProfile } from "@/entities/user/types/types"
 
 const initialState: VisualizationState = {
   step: "select-zone",
@@ -9,6 +10,7 @@ const initialState: VisualizationState = {
   resultImage: null,
   intensity: 50,
   operationType: null,
+  description: null,
   isProcessing: false,
   error: null,
 }
@@ -80,16 +82,22 @@ export const useVisualization = () => {
     })
   }, [])
 
-  const canProceed = useCallback(() => {
-    switch (state.step) {
-      case "select-zone":
-        return state.selectedZone !== null
-      case "upload-photo":
-        return state.uploadedPhoto !== null
-      default:
-        return false
-    }
-  }, [state.step, state.selectedZone, state.uploadedPhoto])
+  const canProceed = useCallback(
+    (profile: RoleProfile | null) => {
+      if (profile?.aiTokensUsed == 0) {
+        return
+      }
+      switch (state.step) {
+        case "select-zone":
+          return state.selectedZone !== null
+        case "upload-photo":
+          return state.uploadedPhoto !== null
+        default:
+          return false
+      }
+    },
+    [state.step, state.selectedZone, state.uploadedPhoto],
+  )
 
   return {
     state,
