@@ -2,16 +2,12 @@ import type { FallbackProps } from "react-error-boundary"
 import { Button } from "@/shared/ui/button"
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert"
 import { AlertCircle, RefreshCw, Home } from "lucide-react"
-import { useNavigate } from "react-router"
 
 export const Fallback = ({ error, resetErrorBoundary }: FallbackProps) => {
-  const navigate = useNavigate()
-
   console.error("Error Boundary caught an error:", error)
 
   const handleGoHome = () => {
-    navigate("/main")
-    resetErrorBoundary()
+    window.location.href = "/main"
   }
 
   const handleRetry = () => {
@@ -30,7 +26,7 @@ export const Fallback = ({ error, resetErrorBoundary }: FallbackProps) => {
           </AlertDescription>
         </Alert>
 
-        {import.meta.env.DEV && (
+        {import.meta.env.VITE_DEV && (
           <div className="border-destructive/50 bg-destructive/10 rounded-lg border p-4">
             <p className="text-destructive mb-2 text-sm font-semibold">
               Детали ошибки (только в режиме разработки):

@@ -10,6 +10,7 @@ import { Support } from "@/pages/support/ui/Support"
 import { General } from "@/widgets/settings/general/ui/General"
 import { PersonalData } from "@/widgets/settings/personalData/ui/PersonalData"
 import { CreateProfile } from "@/pages/createProfile/ui/CreateProfile"
+import { NotFound } from "@/pages/notFound/ui/NotFound"
 import { PublicRoute } from "@/app/routers/PublicRoute"
 import { ProtectedRoute } from "@/app/routers/ProtectedRoute"
 
@@ -60,6 +61,10 @@ export const router = createBrowserRouter([
             ],
           },
         ],
+      },
+      {
+        path: "*",
+        element: <NotFound />,
       },
     ],
   },
