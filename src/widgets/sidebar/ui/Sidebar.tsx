@@ -26,7 +26,6 @@ import { Logo } from "../../../shared/ui/logo"
 import type React from "react"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/shared/ui/collapsible"
 import { USER_ROLES } from "@/entities/user/model/constants"
-import { Separator } from "@/shared/ui/separator"
 
 export const Sidebar = ({ ...props }: React.ComponentProps<typeof SidebarUI>) => {
   const { profile, signOut } = useAuthStore()
