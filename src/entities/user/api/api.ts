@@ -21,7 +21,8 @@ export const createUser = async (
     fullName: data.fullName,
     phone: data.phone,
     email: data.email,
-    moderationStatus: data.role === USER_ROLES.PATIENT ? MODERATION_STATUS.APPROVED : MODERATION_STATUS.PENDING,
+    moderationStatus:
+      data.role === USER_ROLES.PATIENT ? MODERATION_STATUS.APPROVED : MODERATION_STATUS.PENDING,
   })
 
   if (error) {
