@@ -1,4 +1,4 @@
-import { NavLink, useLocation, useNavigate } from "react-router"
+import { NavLink, useLocation } from "react-router"
 import {
   Sidebar as SidebarUI,
   SidebarContent,
@@ -24,27 +24,14 @@ import type { UserRole } from "@/entities/user/types/types"
 import { navigationConfig, sectionLabels } from "../model/navigation"
 import { Logo } from "../../../shared/ui/logo"
 import type React from "react"
-import { useState } from "react"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/shared/ui/collapsible"
-import { ProcessingLoader } from "@/features/processingLoader/ui/ProcessingLoader"
 import { USER_ROLES } from "@/entities/user/model/constants"
+import { Separator } from "@/shared/ui/separator"
 
 export const Sidebar = ({ ...props }: React.ComponentProps<typeof SidebarUI>) => {
-  const { user, profile, signOut } = useAuthStore()
+  const { profile, signOut } = useAuthStore()
   const { pathname } = useLocation()
   const { openMobile, setOpenMobile } = useSidebar()
-  const navigate = useNavigate()
-  const [isSigningOut, setIsSigningOut] = useState(false)
-
-  const handleSignOut = async () => {
-    setIsSigningOut(true)
-    try {
-      await signOut()
-      navigate("/signin")
-    } finally {
-      setIsSigningOut(false)
-    }
-  }
 
   const navigation = navigationConfig[profile?.role as UserRole] ?? []
 
@@ -73,10 +60,18 @@ export const Sidebar = ({ ...props }: React.ComponentProps<typeof SidebarUI>) =>
 
   return (
     <SidebarUI collapsible="offcanvas" {...props}>
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild >
+              <a href="/main">
+                <Logo variant="text" />
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
       <SidebarContent>
-        <SidebarHeader>
-          <Logo />
-        </SidebarHeader>
         {Object.entries(groupedNavigation).map(([section, items]) => (
           <SidebarGroup key={section}>
             <SidebarGroupLabel>{sectionLabels[section] ?? section}</SidebarGroupLabel>
@@ -191,21 +186,15 @@ export const Sidebar = ({ ...props }: React.ComponentProps<typeof SidebarUI>) =>
           )}
           <ItemContent>
             <ItemTitle>
-              {profile?.role === USER_ROLES.CLINIC
+              {profile && profile.role === USER_ROLES.CLINIC
                 ? profile.legalName
                 : formatName(profile?.fullName || "-")}
             </ItemTitle>
             <ItemDescription>{formatRole(profile?.role as UserRole)}</ItemDescription>
           </ItemContent>
           <ItemActions>
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              onClick={handleSignOut}
-              disabled={isSigningOut}
-            >
-              {isSigningOut ? <ProcessingLoader /> : <LogOut />}
+            <Button type="button" variant="ghost" size="icon" onClick={() => signOut()}>
+              <LogOut />
             </Button>
           </ItemActions>
         </Item>
