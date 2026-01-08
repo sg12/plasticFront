@@ -172,6 +172,7 @@ export const userUpdateSchema = z.object({
   fullName: z.string().min(2, "Введите ФИО").optional(),
   email: z.email("Неверный формат email").optional(),
   phone: z.string().min(10, "Неверный номер телефона").optional(),
+  aiTokenUsed: z.number().optional(),
   // Ролевые поля (все опциональны при обновлении)
   role: z.enum(["patient", "doctor", "clinic"]).optional(),
   // Patient

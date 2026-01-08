@@ -133,6 +133,7 @@ export const updateUser = async (id: Profile["id"], data: UserUpdateFormData) =>
     fullName: data.fullName,
     phone: data.phone,
     email: data.email,
+    aiTokensUsed: data.aiTokenUsed,
     updatedAt: new Date().toISOString(),
   }
 
