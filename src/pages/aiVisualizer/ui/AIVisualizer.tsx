@@ -1,17 +1,20 @@
 import { useCallback } from "react"
 import { useVisualization } from "@/features/aiVisualization/hooks/useVisualization"
-import { processFaceImage } from "@/features/aiVisualization/api/api"
 import { BodySelector } from "@/widgets/bodySelector/ui/BodySelector"
 import { PhotoUploader } from "@/features/aiVisualization/ui/PhotoUploader"
 import { ProcessingLoader } from "@/features/processingLoader/ui/ProcessingLoader"
 import { ResultComparison } from "@/widgets/resultComparison/ui/ResultComparison"
 import { Button } from "@/shared/ui/button"
 import { Card, CardContent } from "@/shared/ui/card"
-import { ArrowLeft, ArrowRight, Sparkles } from "lucide-react"
-// import { AI_VISUALIZER_STEPS } from "../../../features/aiVisualization/model/constants"
-// import { StepIndicator } from "@/shared/ui/stepIndicator"
+import { ArrowLeft, ArrowRight, Gem, Sparkles } from "lucide-react"
+import { processFaceImageV2 } from "@/features/aiVisualization/api/apiV2"
+import { useAuthStore } from "@/entities/auth/model/store"
+import { Badge } from "@/shared/ui/badge"
+import { updateUser } from "@/entities/user/api/api"
+import { cn } from "@/shared/lib/utils"
 
 export const AIVisualizer = () => {
+  const { user, profile } = useAuthStore()
   const {
     state,
     setStep,
@@ -44,15 +47,36 @@ export const AIVisualizer = () => {
           )
         }
 
-        const result = await processFaceImage({
+        const result = await processFaceImageV2({
           image: state.uploadedPhoto,
           zone: state.selectedZone,
           operationType: state.operationType,
-          intensity: state.intensity,
+          description: state.description || undefined,
         })
-        completeProcessing(result.resultUrl)
+        console.log(
+          "Face Image V2\n",
+          `Zone:${state.selectedZone}\n`,
+          `Operation Type:${state.operationType}\n`,
+          `Decription${state.description}`,
+        )
+
+        if (result) {
+          completeProcessing(result.resultUrl)
+
+          if (result && user?.id) {
+            if (profile?.aiTokensUsed) {
+              const decrementToken = profile?.aiTokensUsed - 1
+              try {
+                await updateUser(user.id, { aiTokenUsed: decrementToken })
+                const { loadProfile } = useAuthStore.getState()
+                await loadProfile(user.id)
+              } catch (error) {
+                console.error("Ошибка при сохранении токенов:", error)
+              }
+            }
+          }
+        }
       } catch (error) {
-        console.error("AI processing error:", error)
         const errorMessage =
           error instanceof Error ? error.message : "Произошла ошибка при обработке изображения"
         alert(errorMessage)
@@ -86,47 +110,64 @@ export const AIVisualizer = () => {
             Визуализатор покажет, как вы можете выглядеть после пластической операции. Выберите
             зону, загрузите фото и получите визуализацию за секунды.
           </p>
+          {profile?.aiTokensUsed !== null && profile?.aiTokensUsed !== undefined && (
+            <div className="mt-4 flex justify-center gap-2">
+              <Badge variant={profile.aiTokensUsed == 0 ? "outline" : "primary"} className="gap-2">
+                <Gem className="size-3" />
+                {profile.aiTokensUsed == 0
+                  ? "Токены закончились"
+                  : `Осталось токенов: ${profile.aiTokensUsed.toLocaleString()}`}
+              </Badge>
+            </div>
+          )}
         </div>
 
-        {/* {AI_VISUALIZER_STEPS.length > 1 && (
-          <StepIndicator steps={AI_VISUALIZER_STEPS} currentStep={state.step} />
-        )} */}
+        <div className="relative">
+          <Card className={cn(profile?.aiTokensUsed == 0 && "pointer-events-none select-none")}>
+            <CardContent>
+              {state.step === "select-zone" && (
+                <BodySelector selectedZone={state.selectedZone} onSelectZone={selectZone} />
+              )}
 
-        <Card>
-          <CardContent className="p-6 md:p-8">
-            {state.step === "select-zone" && (
-              <BodySelector selectedZone={state.selectedZone} onSelectZone={selectZone} />
-            )}
-
-            {state.step === "upload-photo" && state.selectedZone && (
-              <PhotoUploader
-                selectedZone={state.selectedZone}
-                photo={state.uploadedPhoto}
-                photoPreview={state.photoPreview}
-                intensity={state.intensity}
-                operationType={state.operationType}
-                onPhotoChange={setPhoto}
-                onIntensityChange={setIntensity}
-                onOperationTypeChange={setOperationType}
-                onDescriptionChange={setDescription}
-              />
-            )}
-
-            {state.step === "processing" && <ProcessingLoader />}
-
-            {state.step === "result" &&
-              state.selectedZone &&
-              state.photoPreview &&
-              state.resultImage && (
-                <ResultComparison
+              {state.step === "upload-photo" && state.selectedZone && (
+                <PhotoUploader
                   selectedZone={state.selectedZone}
-                  originalImage={state.photoPreview}
-                  resultImage={state.resultImage}
-                  onReset={reset}
+                  photo={state.uploadedPhoto}
+                  photoPreview={state.photoPreview}
+                  intensity={state.intensity}
+                  operationType={state.operationType}
+                  onPhotoChange={setPhoto}
+                  onIntensityChange={setIntensity}
+                  onOperationTypeChange={setOperationType}
+                  onDescriptionChange={setDescription}
                 />
               )}
-          </CardContent>
-        </Card>
+
+              {state.step === "processing" && <ProcessingLoader />}
+
+              {state.step === "result" &&
+                state.selectedZone &&
+                state.photoPreview &&
+                state.resultImage && (
+                  <ResultComparison
+                    selectedZone={state.selectedZone}
+                    originalImage={state.photoPreview}
+                    resultImage={state.resultImage}
+                    onReset={reset}
+                  />
+                )}
+            </CardContent>
+          </Card>
+
+          {profile?.aiTokensUsed == 0 && (
+            <div className="absolute inset-0 flex items-center justify-center rounded-xl backdrop-blur-xs">
+              <div className="text-center">
+                <Gem className="mx-auto mb-3 size-12 text-violet-500" />
+                <h3>В скором времени добавим способ пополнять токены</h3>
+              </div>
+            </div>
+          )}
+        </div>
 
         {state.step !== "processing" && state.step !== "result" && (
           <div className="mt-6 flex justify-between">
@@ -142,7 +183,7 @@ export const AIVisualizer = () => {
 
             <Button
               onClick={() => handleNext()}
-              disabled={!canProceed()}
+              disabled={!canProceed(profile)}
               className="gap-2 bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:from-violet-600 hover:to-fuchsia-600"
             >
               {state.step === "upload-photo" ? (
