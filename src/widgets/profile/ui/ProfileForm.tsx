@@ -33,7 +33,7 @@ export const ProfileForm = () => {
               <div className="flex flex-wrap gap-2">
                 <Button
                   onClick={() => startEdit()}
-                  className="fixed bottom-4 left-1/2 z-10 -translate-x-1/2 sm:relative sm:bottom-auto sm:left-auto sm:translate-x-0"
+                  className="fixed bottom-4 left-1/2 -translate-x-1/2 max-xl:z-1 sm:relative sm:bottom-auto sm:left-auto sm:translate-x-0"
                 >
                   <Edit2 className="h-4 w-4" />
                   Редактировать
