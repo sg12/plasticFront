@@ -128,6 +128,8 @@ export interface Profile {
   updatedAt?: string
   /** Дата модерации (ISO строка) */
   moderatedAt: string | null
+  /** Количество токенов, потраченных на AI визуализацию */
+  aiTokensUsed: number | null
 }
 
 /**

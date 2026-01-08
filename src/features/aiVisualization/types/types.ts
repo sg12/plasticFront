@@ -58,6 +58,7 @@ export interface VisualizationState {
   resultImage: string | null
   intensity: number
   operationType: OperationType | null
+  description: string | null
   isProcessing: boolean
   error: string | null
 }

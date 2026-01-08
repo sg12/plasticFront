@@ -62,7 +62,7 @@ export const Sidebar = ({ ...props }: React.ComponentProps<typeof SidebarUI>) =>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild >
+            <SidebarMenuButton asChild>
               <a href="/main">
                 <Logo variant="text" />
               </a>
