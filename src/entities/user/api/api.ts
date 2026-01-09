@@ -3,6 +3,7 @@ import type { Profile, RoleProfile, UserUpdateFormData, UserCreateFormData } fro
 import { USER_ROLES, MODERATION_STATUS } from "../model/constants"
 import type { UploadedFilesByRole } from "@/entities/document/types/types"
 import { uploadFiles } from "@/entities/document/api/api"
+import { logger } from "@/shared/lib/logger"
 
 const PROFILES = "profiles"
 const PATIENT_PROFILES = "patientProfiles"
@@ -14,6 +15,12 @@ export const createUser = async (
   data: UserCreateFormData,
   uploadedFiles: UploadedFilesByRole = {},
 ) => {
+  logger.info("Начало создания пользователя", {
+    userId,
+    role: data.role,
+    email: data.email,
+  })
+
   // 1) Создаём базовый профиль
   const { error } = await supabase.from(PROFILES).insert({
     id: userId,
@@ -30,10 +37,18 @@ export const createUser = async (
       error.code === "23505" ||
       error.message?.includes("duplicate key value violates unique constraint")
     ) {
+      logger.warn("Попытка создать пользователя с существующим ID", {
+        userId,
+        errorCode: error.code,
+      })
       const duplicateError = new Error("USER_ALREADY_EXISTS")
       duplicateError.name = "DuplicateKeyError"
       throw duplicateError
     }
+    logger.error("Ошибка создания базового профиля", new Error(error.message), {
+      userId,
+      errorCode: error.code,
+    })
     throw new Error(`Не удалось создать профиль: ${error.message}`)
   }
 
@@ -41,8 +56,16 @@ export const createUser = async (
   let filePaths: Record<string, string | string[]> | null = null
 
   if (data.role === USER_ROLES.DOCTOR && uploadedFiles[USER_ROLES.DOCTOR]) {
+    logger.debug("Загрузка файлов для врача", {
+      userId,
+      fileCount: Object.keys(uploadedFiles[USER_ROLES.DOCTOR]!).length,
+    })
     filePaths = await uploadFiles(userId, "doctor", uploadedFiles[USER_ROLES.DOCTOR]!)
   } else if (data.role === USER_ROLES.CLINIC && uploadedFiles[USER_ROLES.CLINIC]) {
+    logger.debug("Загрузка файлов для клиники", {
+      userId,
+      fileCount: Object.keys(uploadedFiles[USER_ROLES.CLINIC]!).length,
+    })
     filePaths = await uploadFiles(userId, "clinic", uploadedFiles[USER_ROLES.CLINIC]!)
   }
 
@@ -87,12 +110,24 @@ export const createUser = async (
   }
 
   if (roleError) {
+    logger.error("Ошибка создания role-specific профиля", new Error(roleError.message), {
+      userId,
+      role: data.role,
+    })
     await supabase.from(PROFILES).delete().eq("id", userId)
+    logger.info("Базовый профиль удален из-за ошибки", { userId })
     throw new Error(`Role profile error: ${roleError.message}`)
   }
+
+  logger.info("Пользователь успешно создан", {
+    userId,
+    role: data.role,
+  })
 }
 
 export const getUser = async (userId: string): Promise<RoleProfile | null> => {
+  logger.debug("Получение профиля пользователя", { userId })
+
   // 1) Получаем базовый профиль
   const { data: profile, error: profileError } = await supabase
     .from(PROFILES)
@@ -100,8 +135,17 @@ export const getUser = async (userId: string): Promise<RoleProfile | null> => {
     .eq("id", userId)
     .maybeSingle<RoleProfile>()
 
-  if (profileError) throw profileError
-  if (!profile) return null
+  if (profileError) {
+    logger.error("Ошибка получения базового профиля", new Error(profileError.message), {
+      userId,
+      errorCode: profileError.code,
+    })
+    throw profileError
+  }
+  if (!profile) {
+    logger.warn("Профиль не найден", { userId })
+    return null
+  }
 
   if (!profile.role) return profile
 
@@ -118,16 +162,41 @@ export const getUser = async (userId: string): Promise<RoleProfile | null> => {
       .eq("id", userId)
       .maybeSingle()
 
-    if (specificError) throw specificError
+    if (specificError) {
+      logger.error("Ошибка получения role-specific данных", new Error(specificError.message), {
+        userId,
+        role: profile.role,
+        table: specificTable,
+      })
+      throw specificError
+    }
 
-    return specificData ? { ...profile, ...specificData } : profile
+    const fullProfile = specificData ? { ...profile, ...specificData } : profile
+    logger.debug("Профиль успешно получен", {
+      userId,
+      role: fullProfile.role,
+    })
+    return fullProfile
   }
 
+  logger.debug("Профиль получен без role-specific данных", {
+    userId,
+    role: profile.role,
+  })
   return profile
 }
 
 export const updateUser = async (id: Profile["id"], data: UserUpdateFormData) => {
-  if (!data) return
+  if (!data) {
+    logger.warn("Попытка обновить профиль без данных", { userId: id })
+    return
+  }
+
+  logger.info("Начало обновления профиля", {
+    userId: id,
+    role: data.role,
+  })
+
   // 1) Обновляем базовый профиль
   const baseUpdate: Partial<Profile> = {
     fullName: data.fullName,
@@ -138,7 +207,13 @@ export const updateUser = async (id: Profile["id"], data: UserUpdateFormData) =>
   }
 
   const { error: profileError } = await supabase.from(PROFILES).update(baseUpdate).eq("id", id)
-  if (profileError) throw profileError
+  if (profileError) {
+    logger.error("Ошибка обновления базового профиля", new Error(profileError.message), {
+      userId: id,
+      errorCode: profileError.code,
+    })
+    throw profileError
+  }
 
   // 2) Обновляем role-specific данные
   switch (data.role) {
@@ -152,7 +227,13 @@ export const updateUser = async (id: Profile["id"], data: UserUpdateFormData) =>
           updatedAt: new Date().toISOString(),
         })
         .eq("id", id)
-      if (error) throw error
+      if (error) {
+        logger.error("Ошибка обновления профиля пациента", new Error(error.message), {
+          userId: id,
+        })
+        throw error
+      }
+      logger.info("Профиль пациента успешно обновлен", { userId: id })
       break
     }
     case USER_ROLES.DOCTOR: {
@@ -173,7 +254,13 @@ export const updateUser = async (id: Profile["id"], data: UserUpdateFormData) =>
           updatedAt: new Date().toISOString(),
         })
         .eq("id", id)
-      if (error) throw error
+      if (error) {
+        logger.error("Ошибка обновления профиля врача", new Error(error.message), {
+          userId: id,
+        })
+        throw error
+      }
+      logger.info("Профиль врача успешно обновлен", { userId: id })
       break
     }
     case USER_ROLES.CLINIC: {
@@ -204,8 +291,19 @@ export const updateUser = async (id: Profile["id"], data: UserUpdateFormData) =>
           updatedAt: new Date().toISOString(),
         })
         .eq("id", id)
-      if (error) throw error
+      if (error) {
+        logger.error("Ошибка обновления профиля клиники", new Error(error.message), {
+          userId: id,
+        })
+        throw error
+      }
+      logger.info("Профиль клиники успешно обновлен", { userId: id })
       break
     }
   }
+
+  logger.info("Профиль успешно обновлен", {
+    userId: id,
+    role: data.role,
+  })
 }

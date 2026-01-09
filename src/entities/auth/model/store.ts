@@ -14,6 +14,8 @@ import { getFileUrls } from "@/entities/document/api/api"
 import type { DoctorProfile, ClinicProfile } from "@/entities/user/types/types"
 import { recordLogin } from "@/features/loginHistory/api/api"
 import { toast } from "sonner"
+import { logger } from "@/shared/lib/logger"
+import type { SignOut } from '@supabase/supabase-js'
 
 const initialState: AuthState = {
   error: null,
@@ -43,10 +45,18 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       },
     })
     if (result.error) {
+      logger.error("Ошибка регистрации", new Error(result.error.message), {
+        email: credentials.basic.email,
+        role: credentials.role,
+      })
       set({ error: result.error.message, loading: false })
+    } else {
+      logger.info("Пользователь успешно зарегистрирован", {
+        email: credentials.basic.email,
+        role: credentials.role,
+      })
     }
-    console.log(result);
-    
+
     return result
   },
 
@@ -61,8 +71,14 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     } else if (result.data.user) {
       try {
         await recordLogin(result.data.user.id, true)
+        logger.info("Пользователь успешно вошел в систему", {
+          userId: result.data.user.id,
+          email: result.data.user.email,
+        })
       } catch (error) {
-        console.error("Ошибка при записи входа", error)
+        logger.error("Ошибка при записи входа", error as Error, {
+          userId: result.data.user.id,
+        })
       }
       set({ loading: false })
     }
@@ -78,12 +94,17 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
 
   loadProfile: async (userId: string) => {
     try {
+      logger.debug("Начало загрузки профиля", { userId })
       const profile = await getUser(userId)
 
       set({ profile })
+      logger.info("Профиль успешно загружен", {
+        userId,
+        role: profile?.role,
+      })
       return profile
     } catch (error) {
-      console.error("Ошибка загрузки профиля:", error)
+      logger.error("Ошибка загрузки профиля", error as Error, { userId })
       set({ error: "Ошибка при загрузки профиля" })
       return null
     }
@@ -152,23 +173,35 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
           directorPosition: clinicProfile.directorPosition,
 
           documents: documentsRecord,
-        })
+        } as Parameters<typeof requestModeration>[0])
 
         if (resultModeration.data.code === "ALREADY_SUBMITTED") {
+          logger.info("Запрос на модерацию уже был отправлен", {
+            userId,
+            role: profile.role,
+          })
           toast.message("Запрос уже был отправлен, ожидайте.", {
             description: resultModeration.data.message,
           })
           return
         }
+        logger.info("Запрос на модерацию успешно отправлен", {
+          userId,
+          role: profile.role,
+        })
       }
     } catch (error) {
-      console.error("Failed during moderation check:", error)
+      logger.error("Ошибка при проверке модерации", error as Error, {
+        userId,
+        role: profile?.role,
+      })
     }
   },
 
   initialize: async () => {
     if (get().initialized) return
 
+    logger.debug("Инициализация auth store")
     set({ loading: true })
 
     const {
@@ -176,14 +209,19 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     } = await getSession()
 
     if (session) {
+      logger.info("Сессия найдена, загрузка профиля", {
+        userId: session.user.id,
+      })
       set({ session, user: session.user })
       await get().loadProfile(session.user.id)
       await get().handlePostLoginActions(session.user.id)
     } else {
+      logger.debug("Сессия не найдена")
       set({ session: null, user: null, profile: null })
     }
 
     set({ initialized: true, loading: false })
+    logger.debug("Auth store инициализирован")
 
     const subscription = onAuthStateChange(async (event, session) => {
       const currentSession = get().session
@@ -192,12 +230,16 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       }
 
       if (event === "SIGNED_IN" && session?.user.id) {
+        logger.info("Пользователь вошел в систему", {
+          userId: session.user.id,
+        })
         if (!get().profile) {
           await get().loadProfile(session.user.id)
         }
       }
 
       if (event === "SIGNED_OUT") {
+        logger.info("Пользователь вышел из системы")
         set({ profile: null, session: null, user: null })
       }
     })
@@ -205,11 +247,16 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
     set({ _authSubscription: subscription })
   },
 
-  signOut: async () => {
+  signOut: async (scope) => {
     set({ loading: true })
     try {
-      await signOut("local")
+      logger.info("Начало выхода из системы")
+      await signOut(scope)
       get().reset()
+      logger.info("Пользователь успешно вышел из системы")
+    } catch (error) {
+      logger.error("Ошибка при выходе из системы", error as Error)
+      throw error
     } finally {
       set({ loading: false })
     }
