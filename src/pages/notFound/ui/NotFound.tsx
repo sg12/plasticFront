@@ -19,12 +19,12 @@ export const NotFound = () => {
     <div className="flex min-h-screen items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardContent className="p-6">
-          <div className="space-y-4 text-center">
+          <div className="space-global text-center">
             <div className="bg-destructive/10 mx-auto flex size-16 items-center justify-center rounded-full">
               <AlertCircle className="text-destructive size-8" />
             </div>
 
-            <div className="space-y-2">
+            <div className="space-child">
               <h1 className="text-4xl font-bold text-gray-900">404</h1>
               <h2 className="text-xl font-semibold text-gray-700">Страница не найдена</h2>
             </div>

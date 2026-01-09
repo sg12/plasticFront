@@ -35,7 +35,7 @@ export const Dashboard = () => {
   ]
 
   return (
-    <div className="space-y-4">
+    <div className="space-global">
       <div className="relative h-48 overflow-hidden rounded-2xl bg-gradient-to-br from-purple-600 to-purple-800">
         <div className="relative z-10 flex h-full flex-col justify-center p-8">
           <h1 className="text-white">
