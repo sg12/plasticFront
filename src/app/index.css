@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&display=swap');
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -42,6 +45,9 @@
 }
 
 :root {
+  --space-global: 1.5rem;
+  --space-child: 1rem;
+  --space-text: 0.5rem;
   --radius: 0.625rem;
   --background: oklch(98% 0 0);
   --foreground: oklch(26.862% 0.00003 271.152);
@@ -114,6 +120,20 @@
   --sidebar-ring: oklch(0.556 0 0);
 } */
 
+@layer utilities {
+  .space-global>:not(:last-child) {
+    margin-bottom: var(--space-global);
+  }
+
+  .space-child>:not(:last-child) {
+    margin-bottom: var(--space-child);
+  }
+
+  .space-text>:not(:last-child) {
+    margin-bottom: var(--space-text);
+  }
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -184,9 +204,10 @@
   }
 }
 
+
 html {
   font-size: var(--font-size);
-  font-family: "Inter", sans-serif;
+  font-family: "Roboto", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
 }
