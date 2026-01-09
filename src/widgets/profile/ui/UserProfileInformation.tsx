@@ -10,6 +10,7 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shar
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/shared/ui/inputGroup"
 import { Badge } from "@/shared/ui/badge"
 import { Separator } from "@/shared/ui/separator"
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card"
 
 export interface Props {
   form: UseFormReturn<any>
@@ -23,11 +24,16 @@ export const UserProfileInformation = ({ form, profile, isEditing, isSaving }: P
   if (!profile) return null
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-6">
-      <h3 className="mb-6">Личная информация</h3>
-      <div className="space-y-6">
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          <h3>Личная информация</h3>
+        </CardTitle>
+      </CardHeader>
+
+      <CardContent className="space-child">
         {/* Основная информация */}
-        <div className="grid lg:grid-cols-2 gap-5 lg:grid-cols-2">
+        <div className="grid gap-4 lg:grid-cols-2">
           <FormField
             control={form.control}
             disabled={!isEditing || isSaving}
@@ -112,7 +118,7 @@ export const UserProfileInformation = ({ form, profile, isEditing, isSaving }: P
         {profile.role === USER_ROLES.CLINIC && (
           <ClinicForm form={form} mode={isEditing ? "edit" : "view"} isSaving={isSaving} />
         )}
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   )
 }

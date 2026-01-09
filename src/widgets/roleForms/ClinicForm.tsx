@@ -8,7 +8,7 @@ export const ClinicForm = ({ form, mode = "edit", isSaving }: Props) => {
   const isViewMode = mode === "view" || isSaving
 
   return (
-    <div className="grid items-start gap-5 lg:grid-cols-2">
+    <div className="grid items-start gap-4 lg:grid-cols-2">
       {clinicFields.map((field) => (
         <FormField
           key={field.name}

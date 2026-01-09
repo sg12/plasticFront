@@ -16,9 +16,9 @@ export function SignInForm() {
       <div className="flex min-h-screen items-center justify-center">
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="w-full max-w-2xl space-y-6"
+          className="w-full max-w-2xl space-global"
         >
-          <div className="w-full space-y-6 rounded-2xl border border-gray-200 bg-white p-8 shadow-xl">
+          <div className="w-full space-global rounded-2xl border border-gray-200 bg-white p-8 shadow-xl">
             <h2>Вход</h2>
             <FormField
               control={form.control}

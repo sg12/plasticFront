@@ -29,7 +29,7 @@ export function PrivacyModal({ onClose }: PrivacyModalProps) {
         </DialogHeader>
 
         <div className="max-h-[65vh] overflow-y-auto">
-          <div className="space-y-6 p-6">
+          <div className="space-global p-6">
             <div className="rounded-xl border border-purple-200 bg-gradient-to-br from-purple-50 via-purple-50/50 to-blue-50 p-5">
               <div className="flex gap-4">
                 <Shield className="h-8 w-8 shrink-0 text-purple-600" />
@@ -43,7 +43,7 @@ export function PrivacyModal({ onClose }: PrivacyModalProps) {
               </div>
             </div>
 
-            <section className="space-y-4">
+            <section className="space-child">
               <h4 className="flex items-center gap-2 font-semibold text-gray-900">
                 <Database className="h-5 w-5 text-purple-600" />
                 Какие данные мы собираем
@@ -70,7 +70,7 @@ export function PrivacyModal({ onClose }: PrivacyModalProps) {
               </div>
             </section>
 
-            <section className="space-y-4">
+            <section className="space-child">
               <h4 className="flex items-center gap-2 font-semibold text-gray-900">
                 <Lock className="h-5 w-5 text-green-600" />
                 Как мы защищаем ваши данные
@@ -92,13 +92,13 @@ export function PrivacyModal({ onClose }: PrivacyModalProps) {
               </div>
             </section>
 
-            <section className="space-y-4">
+            <section className="space-child">
               <h4 className="flex items-center gap-2 font-semibold text-gray-900">
                 <Eye className="h-5 w-5 text-blue-600" />
                 Как мы используем ваши данные
               </h4>
 
-              <div className="space-y-2 rounded-xl border border-blue-200 bg-blue-50 p-4">
+              <div className="space-text rounded-xl border border-blue-200 bg-blue-50 p-4">
                 <UsageItem title="Регистрация">Создание и поддержание вашего аккаунта</UsageItem>
                 <UsageItem title="Услуги">Обеспечение доступа к функционалу платформы</UsageItem>
                 <UsageItem title="Модерация">Проверка аккаунтов врачей и клиник</UsageItem>
@@ -110,9 +110,9 @@ export function PrivacyModal({ onClose }: PrivacyModalProps) {
             <div className="rounded-xl border border-amber-200 bg-amber-50 p-5">
               <div className="flex gap-3">
                 <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
-                <div className="space-y-2">
+                <div className="space-child">
                   <h4 className="font-semibold text-amber-900">Важная информация</h4>
-                  <ul className="space-y-1.5 text-sm text-amber-800">
+                  <ul className="space-text text-sm text-amber-800">
                     <li>• Мы не передаём данные третьим лицам без вашего согласия</li>
                     <li>• Вы можете запросить удаление данных в любой момент</li>
                     <li>• Данные хранятся только необходимое время</li>
@@ -123,7 +123,7 @@ export function PrivacyModal({ onClose }: PrivacyModalProps) {
             </div>
 
             <div className="text-center text-sm text-gray-500">
-              Последнее обновление: {new Date().toLocaleDateString("ru-RU")}
+              Последнее обновление: 01.01.2026 г. 
             </div>
           </div>
         </div>
@@ -156,7 +156,7 @@ function DataBlock({
   return (
     <div className={`rounded-lg border p-4 ${styles[variant]}`}>
       <h5 className="mb-2 font-medium text-gray-900">{title}</h5>
-      <div className="space-y-1">{children}</div>
+      <div className="space-text">{children}</div>
     </div>
   )
 }

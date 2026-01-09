@@ -82,7 +82,7 @@ export const ResultComparison = ({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-global">
       <div className="text-center">
         <h2 className="mb-2 text-2xl font-semibold text-gray-900">Результат готов!</h2>
         <p className="text-gray-500">

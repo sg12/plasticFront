@@ -6,6 +6,7 @@ import type { RoleProfile, UserUpdateFormData } from "@/entities/user/types/type
 import { toast } from "sonner"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { userUpdateSchema } from "@/entities/user/model/schema"
+import { logger } from "@/shared/lib/logger"
 
 
 export const useProfile = () => {
@@ -69,16 +70,25 @@ export const useProfile = () => {
 
     try {
       const updatedProfile = { ...profile, ...data }
-      console.log("Data from form:", data)
-      console.log("Merged profile data to be sent:", updatedProfile)
+      logger.debug("Обновление профиля", {
+        userId: profile.id,
+        role: profile.role,
+        changedFields: Object.keys(data),
+      })
 
       await updateUser(updatedProfile.id, updatedProfile)
+      logger.info("Профиль успешно обновлен через хук", {
+        userId: profile.id,
+        role: profile.role,
+      })
       toast.success("Профиль успешно обновлён")
       setIsEditing(false)
       setIsSaving(false)
     } catch (error) {
+      logger.error("Ошибка сохранения профиля через хук", error as Error, {
+        userId: profile.id,
+      })
       toast.error("Не удалось сохранить изменения")
-      console.error("Ошибка сохранения профиля:", error)
     }
   }
 

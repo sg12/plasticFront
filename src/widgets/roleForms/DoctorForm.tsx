@@ -15,7 +15,7 @@ export const DoctorForm = ({ mode = "edit", form, isSaving }: Props) => {
   eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18)
 
   return (
-    <div className="grid items-start gap-5 md:grid-cols-2">
+    <div className="grid items-start gap-4 md:grid-cols-2">
       {doctorFields.map((field) => (
         <FormField
           key={field.name}

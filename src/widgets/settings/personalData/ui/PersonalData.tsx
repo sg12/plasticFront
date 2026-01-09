@@ -1,15 +1,15 @@
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert"
 import { ConsentStatus } from "@/features/consentManagement/ui/ConsentStatus"
 import { FileText, Shield } from "lucide-react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card"
 
 export const PersonalData = () => {
   return (
-    <div className="space-y-4">
+    <div className="space-global">
       <div>
         <h2>Управление персональными данными</h2>
         <p className="mt-2 text-gray-600">В соответствии с 152-ФЗ "О персональных данных"</p>
       </div>
-
       <Alert variant="info" className="mb-6">
         <Shield />
         <AlertTitle>
@@ -21,20 +21,24 @@ export const PersonalData = () => {
         </AlertDescription>
       </Alert>
 
-      <div className="rounded-xl border border-gray-200 bg-white p-6">
-        <h3 className="mb-4 flex items-center gap-2 text-gray-900">
-          <FileText className="h-5 w-5 text-purple-600" />
-          Статус согласий на обработку данных
-        </h3>
-        <ConsentStatus />
-      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <FileText className="h-5 w-5 text-purple-600" />
+            <h4>Статус согласий на обработку данных</h4>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ConsentStatus />
+        </CardContent>
+      </Card>
 
       <Alert variant="info" className="mb-6">
         <AlertTitle>
           <strong>Как мы защищаем ваши данные:</strong>
         </AlertTitle>
         <AlertDescription>
-          <ul className="space-y-1">
+          <ul className="space-text">
             <li>• Шифрование данных при передаче (SSL/TLS)</li>
             <li>• Регулярные проверки безопасности</li>
             <li>• Ограниченный доступ сотрудников к данным</li>
@@ -42,13 +46,12 @@ export const PersonalData = () => {
           </ul>
         </AlertDescription>
       </Alert>
-
       <Alert variant="default" className="mb-6">
         <AlertTitle>
           <strong>Вопросы по персональным данным?</strong>
         </AlertTitle>
         <AlertDescription>
-          Свяжитесь с ответственным за обработку персональных данных:
+          <p>Свяжитесь с ответственным за обработку персональных данных:</p>
           <p>
             <strong>Email:</strong> privacy@novome.ru
           </p>

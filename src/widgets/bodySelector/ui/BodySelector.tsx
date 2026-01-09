@@ -15,7 +15,7 @@ export const BodySelector = ({ selectedZone, onSelectZone }: BodySelectorProps) 
   const [activeTab, setActiveTab] = useState<"face" | "body">("face")
 
   return (
-    <div className="space-y-6">
+    <div className="space-global">
       <div className="text-center">
         <h2 className="mb-2 text-2xl font-semibold text-gray-900">Выберите зону</h2>
         <p className="text-gray-500">Укажите область, которую хотите визуализировать</p>

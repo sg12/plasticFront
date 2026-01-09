@@ -192,7 +192,7 @@ export const Sidebar = ({ ...props }: React.ComponentProps<typeof SidebarUI>) =>
             <ItemDescription>{formatRole(profile?.role as UserRole)}</ItemDescription>
           </ItemContent>
           <ItemActions>
-            <Button type="button" variant="ghost" size="icon" onClick={() => signOut()}>
+            <Button type="button" variant="ghost" size="icon" onClick={() => signOut("local")}>
               <LogOut />
             </Button>
           </ItemActions>

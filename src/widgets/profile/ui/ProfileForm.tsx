@@ -22,8 +22,8 @@ export const ProfileForm = () => {
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <div className="flex flex-col justify-between gap-4 lg:flex-row">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-global">
+        <div className="flex flex-col justify-between lg:flex-row">
           <div>
             <h2>Мой профиль</h2>
             <p className="mt-2 text-gray-600">Управляйте вашей личной информацией</p>
@@ -63,11 +63,11 @@ export const ProfileForm = () => {
             ))}
         </div>
 
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div className="grid gap-6 lg:grid-cols-3">
           <div className="lg:col-span-1">
             <UserProfileCard profile={isEditing ? editableProfile : profile} />
           </div>
-          <div className="space-y-4 lg:col-span-2">
+          <div className="space-global lg:col-span-2">
             <UserProfileInformation
               form={form}
               profile={isEditing ? editableProfile : profile}

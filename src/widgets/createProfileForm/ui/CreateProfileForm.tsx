@@ -26,10 +26,10 @@ export const CreateProfileForm = () => {
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-global">
         <div className="flex min-h-screen items-center justify-center">
           <div className="w-full max-w-2xl">
-            <div className="w-full space-y-5 rounded-2xl border border-gray-200 bg-white p-8 shadow-xl">
+            <div className="w-full space-child rounded-2xl border border-gray-200 bg-white p-8 shadow-xl">
               <div className="mb-6">
                 <h1 className="mb-2 text-gray-900">Завершение регистрации</h1>
                 <p className="text-gray-600">
