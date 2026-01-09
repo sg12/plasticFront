@@ -16,6 +16,8 @@ export const FileUpload = <T extends FileRecord>({
   fileSlots,
   onFileChange,
   uploadedFiles,
+  disabled = false,
+  ...props
 }: FileUploadProps<T>) => {
   const [openSlots, setOpenSlots] = React.useState<Set<string>>(new Set())
   const [validationErrors, setValidationErrors] = useState<Record<string, string>>({})
@@ -62,7 +64,7 @@ export const FileUpload = <T extends FileRecord>({
   }
 
   return (
-    <div className="space-y-5">
+    <div className="space-global">
       {fileSlots.map((slot) => {
         const isSlotOpen = openSlots.has(slot.id as string)
         const slotFiles = uploadedFiles[slot.id]
@@ -81,6 +83,8 @@ export const FileUpload = <T extends FileRecord>({
                 multiple={slot.multiple}
                 onChange={(e) => handleFileChange(e, slot.id)}
                 accept={FILE_ACCEPT_TYPES}
+                disabled={disabled}
+                {...props}
               />
             </div>
 
@@ -106,7 +110,7 @@ export const FileUpload = <T extends FileRecord>({
                     </button>
                   </CollapsibleTrigger>
                   <CollapsibleContent>
-                    <div className="mt-2 space-y-1">
+                    <div className="mt-2">
                       {fileCount.map((file, idx) => (
                         <p key={idx} className="flex items-center gap-2 text-sm text-green-600">
                           <Check size={16} />

@@ -32,7 +32,7 @@ export const ChangePassword = () => {
         </DialogHeader>
 
         <FormProvider {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-global">
             <FormField
               control={form.control}
               name="newPassword"

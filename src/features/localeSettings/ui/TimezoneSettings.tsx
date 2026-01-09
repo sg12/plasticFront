@@ -8,7 +8,7 @@ export const TimezoneSettings = () => {
   const { timezone, setTimezone, detectTimezone, timezones } = useLocaleSettings()
 
   return (
-    <div className="space-y-2">
+    <div className="space-child">
       <Label htmlFor="timezone" className="flex items-center gap-2">
         <MapPin className="h-4 w-4 text-gray-500" />
         Часовой пояс

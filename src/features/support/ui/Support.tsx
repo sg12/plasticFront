@@ -1,111 +1,61 @@
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Mail, Phone, MessageCircle, MessageSquare, Send } from "lucide-react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card"
+import { Clock, MessageCircleQuestionMark, RefreshCw, Send } from "lucide-react"
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/shared/ui/card"
 import { Button } from "@/shared/ui/button"
-import { Input } from "@/shared/ui/input"
-import { Textarea } from "@/shared/ui/textarea"
 import { Alert, AlertDescription } from "@/shared/ui/alert"
-import { useSupportTickets, useCreateSupportTicket } from "../hooks/useSupport"
-import { CONTACT_METHODS, WORKING_HOURS } from "../model/constants"
-import { createSupportTicketSchema, type CreateSupportTicketFormData } from "../model/schema"
+import { useSupport } from "../hooks/useSupport"
+import { WORKING_HOURS } from "../../../entities/support/model/constants"
 
 import { FileUpload } from "@/features/fileUpload/ui/FileUpload"
-import type { FileRecord } from "@/features/fileUpload/types/types"
 import { TicketCard } from "@/features/support/ui/TicketCard"
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/form"
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+  InputGroupTextarea,
+} from "@/shared/ui/inputGroup"
+import { cn } from "@/shared/lib/utils"
 
-const iconMap = {
-  Mail,
-  Phone,
-  MessageCircle,
-  MessageSquare,
-}
-
-type SupportFileRecord = FileRecord & {
+type SupportFileRecord = {
   attachments?: File | File[]
 }
 
 export const Support = () => {
-  const [attachedFiles, setAttachedFiles] = useState<SupportFileRecord>({})
-  const { tickets, isLoading: isLoadingTickets, error } = useSupportTickets()
-  const { createTicket, isCreating } = useCreateSupportTicket()
-
-  const form = useForm<CreateSupportTicketFormData>({
-    resolver: zodResolver(createSupportTicketSchema),
-    defaultValues: {
-      subject: "",
-      message: "",
-      attachments: [],
-    },
-  })
-
-  const onSubmit = async (data: CreateSupportTicketFormData) => {
-    const files: File[] = []
-    if (attachedFiles.attachments) {
-      if (Array.isArray(attachedFiles.attachments)) {
-        files.push(...attachedFiles.attachments)
-      } else {
-        files.push(attachedFiles.attachments)
-      }
-    }
-
-    try {
-      await createTicket({
-        subject: data.subject,
-        message: data.message,
-        attachments: files.length > 0 ? files : undefined,
-      })
-
-      form.reset()
-      setAttachedFiles({})
-    } catch (error) {}
-  }
-
-  const handleFileChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    fileType: keyof SupportFileRecord,
-  ) => {
-    const files = Array.from(e.target.files || [])
-
-    // Проверка на максимальное количество файлов
-    const existingFiles = attachedFiles.attachments
-      ? Array.isArray(attachedFiles.attachments)
-        ? attachedFiles.attachments
-        : [attachedFiles.attachments]
-      : []
-
-    const totalFiles = existingFiles.length + files.length
-
-    if (totalFiles > 5) {
-      form.setError("attachments", {
-        type: "manual",
-        message: "Можно прикрепить максимум 5 файлов",
-      })
-      e.target.value = ""
-      return
-    }
-
-    setAttachedFiles((prev) => ({
-      ...prev,
-      [fileType]: files.length > 1 ? files : files[0],
-    }))
-  }
+  const {
+    tickets,
+    isLoadingTickets,
+    isLoadingReplies,
+    ticketsError: error,
+    form,
+    FormProvider,
+    onSubmit,
+    handleFileChange,
+    isCreating,
+    attachedFiles,
+    refreshReplies,
+  } = useSupport()
 
   return (
-    <div className="space-y-4">
+    <div className="space-global">
       <div>
         <h2>Поддержка</h2>
         <p className="mt-2 text-gray-600">Свяжитесь с нами для получения помощи</p>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <div className="space-y-4 lg:col-span-1">
-          <Card>
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <div className="space-global lg:col-span-1">
+          {/* <Card>
             <CardHeader>
               <CardTitle>Способы связи</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-child">
               {CONTACT_METHODS.map((method) => {
                 const Icon = iconMap[method.icon as keyof typeof iconMap]
                 return (
@@ -121,14 +71,17 @@ export const Support = () => {
                 )
               })}
             </CardContent>
-          </Card>
+          </Card> */}
 
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">Часы работы</CardTitle>
+              <CardTitle className="flex items-center gap-2">
+                <Clock className="h-5 w-5 text-purple-600" />
+                Часы работы
+              </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3 text-sm">
+              <div className="space-child text-sm">
                 {WORKING_HOURS.days.map((day, index) => (
                   <div key={index} className="flex justify-between">
                     <span className="text-gray-600">{day}</span>
@@ -140,50 +93,60 @@ export const Support = () => {
           </Card>
         </div>
 
-        <div className="space-y-4 lg:col-span-2">
+        <div className="space-global lg:col-span-2">
           <Card>
             <CardHeader>
               <CardTitle>Написать в поддержку</CardTitle>
               <CardDescription>Опишите вашу проблему, и мы обязательно поможем</CardDescription>
             </CardHeader>
             <CardContent>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                <div>
-                  <label htmlFor="subject" className="mb-2 block text-sm font-medium">
-                    Тема обращения *
-                  </label>
-                  <Input
-                    id="subject"
-                    {...form.register("subject")}
-                    placeholder="Например: Проблема с регистрацией"
-                    className={form.formState.errors.subject ? "border-red-500" : ""}
+              <FormProvider {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-global">
+                  <FormField
+                    control={form.control}
+                    disabled={isLoadingTickets || isCreating}
+                    name={"subject"}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Тема обращения</FormLabel>
+                        <FormControl>
+                          <InputGroup>
+                            <InputGroupAddon>
+                              <MessageCircleQuestionMark />
+                            </InputGroupAddon>
+                            <InputGroupInput
+                              id="subject"
+                              placeholder="Например: Проблема с регистрацией"
+                              {...field}
+                            />
+                          </InputGroup>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                  {form.formState.errors.subject && (
-                    <p className="mt-1 text-sm text-red-500">
-                      {form.formState.errors.subject.message}
-                    </p>
-                  )}
-                </div>
 
-                <div>
-                  <label htmlFor="message" className="mb-2 block text-sm font-medium">
-                    Сообщение *
-                  </label>
-                  <Textarea
-                    id="message"
-                    {...form.register("message")}
-                    placeholder="Опишите вашу проблему подробно..."
-                    rows={6}
-                    className={form.formState.errors.message ? "border-red-500" : ""}
+                  <FormField
+                    control={form.control}
+                    disabled={isLoadingTickets || isCreating}
+                    name={"message"}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Сообщение</FormLabel>
+                        <FormControl>
+                          <InputGroup>
+                            <InputGroupTextarea
+                              id="message"
+                              placeholder="Опишите вашу проблему подробно..."
+                              {...field}
+                            />
+                          </InputGroup>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                  {form.formState.errors.message && (
-                    <p className="mt-1 text-sm text-red-500">
-                      {form.formState.errors.message.message}
-                    </p>
-                  )}
-                </div>
 
-                <div>
                   <FileUpload<SupportFileRecord>
                     fileSlots={[
                       {
@@ -194,20 +157,21 @@ export const Support = () => {
                     ]}
                     uploadedFiles={attachedFiles}
                     onFileChange={handleFileChange}
+                    disabled={isLoadingTickets || isCreating}
                   />
-                </div>
 
-                <Button type="submit" disabled={isCreating} className="w-full">
-                  {isCreating ? (
-                    <>Отправка...</>
-                  ) : (
-                    <>
-                      <Send className="mr-2 h-4 w-4" />
-                      Отправить обращение
-                    </>
-                  )}
-                </Button>
-              </form>
+                  <Button type="submit" disabled={isCreating} className="w-full">
+                    {isCreating ? (
+                      <>Отправка...</>
+                    ) : (
+                      <>
+                        <Send className="mr-2 h-4 w-4" />
+                        Отправить обращение
+                      </>
+                    )}
+                  </Button>
+                </form>
+              </FormProvider>
             </CardContent>
           </Card>
 
@@ -215,16 +179,26 @@ export const Support = () => {
             <CardHeader>
               <CardTitle>Мои обращения</CardTitle>
               <CardDescription>История ваших обращений в поддержку</CardDescription>
+              <CardAction>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => refreshReplies()}
+                  disabled={isLoadingReplies || isCreating}
+                >
+                  <RefreshCw className={cn(isLoadingReplies && "animate-spin", "h-4 w-4")} />
+                </Button>
+              </CardAction>
             </CardHeader>
             <CardContent>
-              {isLoadingTickets ? (
+              {isLoadingReplies ? (
                 <div className="py-8 text-center text-gray-500">Загрузка...</div>
               ) : error ? (
                 <Alert variant="destructive">
                   <AlertDescription>{error}</AlertDescription>
                 </Alert>
               ) : tickets && tickets.length > 0 ? (
-                <div className="space-y-4">
+                <div className="space-global">
                   {tickets.map((ticket) => (
                     <TicketCard key={ticket.id} ticket={ticket} />
                   ))}

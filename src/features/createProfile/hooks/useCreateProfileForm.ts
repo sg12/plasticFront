@@ -5,6 +5,7 @@ import { useNavigate } from "react-router"
 import { toast } from "sonner"
 import { useAuthStore } from "@/entities/auth/model/store"
 import { createUser } from "@/entities/user/api/api"
+import { logger } from "@/shared/lib/logger"
 import type {
   ClinicUploadedFiles,
   DoctorUploadedFiles,
@@ -124,7 +125,7 @@ export const useCreateProfileForm = () => {
     const fullData = {
       ...data,
       email: sessionData.session.user.email!,
-      fullName: sessionData.session.user.user_metadata.full_name,
+      fullName: sessionData.session.user.user_metadata.fullName,
       phone: sessionData.session.user.user_metadata.phone,
     }
 
@@ -133,7 +134,10 @@ export const useCreateProfileForm = () => {
       toast.success("Профиль успешно создан!")
       navigate(0)
     } catch (error: any) {
-      console.error("Ошибка создания профиля:", error)
+      logger.error("Ошибка создания профиля", error as Error, {
+        userId: user.id,
+        role: fullData.role,
+      })
       if (error?.message === "USER_ALREADY_EXISTS" || error?.code === "23505") {
         toast.info("Профиль для этого пользователя уже существует.")
         navigate("/main")

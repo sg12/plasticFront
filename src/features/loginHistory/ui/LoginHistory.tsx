@@ -1,13 +1,14 @@
 import { Skeleton } from "@/shared/ui/skeleton"
 import { Monitor, Smartphone, Tablet, XCircle, Check } from "lucide-react"
 import { useLoginHistory, type LoginRecord } from "../hooks/useLoginHistory"
+import { ScrollArea } from "@/shared/ui/scrollArea"
 
 export const LoginHistory = () => {
   const { history, isLoading } = useLoginHistory()
 
   if (isLoading) {
     return (
-      <div className="space-y-3">
+      <div className="space-child">
         <Skeleton className="h-12 w-full" />
         <Skeleton className="h-12 w-full" />
         <Skeleton className="h-12 w-full" />
@@ -24,13 +25,15 @@ export const LoginHistory = () => {
   }
 
   return (
-    <div className="space-y-4">
-      <div className="space-y-2">
+    <>
+      <ScrollArea className="h-[176px]">
+      <div className="space-child">
         {history.map((record) => (
           <LoginRecordItem key={record.id} record={record} />
         ))}
       </div>
-    </div>
+      </ScrollArea>
+    </>
   )
 }
 

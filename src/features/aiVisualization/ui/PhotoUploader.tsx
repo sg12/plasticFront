@@ -13,7 +13,7 @@ import {
 import { Label } from "@/shared/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/shared/ui/radioGroup"
 import { Textarea } from "@/shared/ui/textarea"
-import { MAX_FILE_SIZE } from '@/entities/document/model/constants'
+import { MAX_FILE_SIZE } from "@/entities/document/model/constants"
 
 interface PhotoUploaderProps {
   selectedZone: BodyZone
@@ -106,7 +106,7 @@ export const PhotoUploader = ({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-global">
       <div className="text-center">
         <h2 className="mb-2 text-2xl font-semibold text-gray-900">Загрузите фото</h2>
         <p className="text-gray-500">
@@ -120,7 +120,7 @@ export const PhotoUploader = ({
       </Alert>
 
       {availableOperations.length > 0 && (
-        <div className="space-y-3">
+        <div className="space-child">
           <Label className="text-base font-semibold">Тип операции</Label>
           <RadioGroup
             value={selectedOperation || undefined}
@@ -138,7 +138,7 @@ export const PhotoUploader = ({
                 )}
               >
                 <RadioGroupItem value={operation.id} id={operation.id} className="mt-1" />
-                <label htmlFor={operation.id} className="flex-1 cursor-pointer space-y-1">
+                <label htmlFor={operation.id} className="flex-1 cursor-pointer">
                   <div className="font-medium text-gray-900">{operation.label}</div>
                   <div className="text-sm text-gray-500">{operation.description}</div>
                 </label>
@@ -148,7 +148,7 @@ export const PhotoUploader = ({
         </div>
       )}
 
-      <div className="space-y-3">
+      <div className="space-child">
         <Label htmlFor="description" className="text-base font-semibold">
           Дополнительное описание (необязательно)
         </Label>

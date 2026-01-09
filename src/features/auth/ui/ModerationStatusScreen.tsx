@@ -9,7 +9,7 @@ export const ModerationStatusScreen = () => {
 
   return (
     <div className="flex h-screen w-screen items-center justify-center bg-gray-50 p-4">
-      <div className="bg-background w-full max-w-md space-y-4 rounded-xl border p-6 shadow-sm">
+      <div className="bg-background w-full max-w-md space-global rounded-xl border p-6 shadow-sm">
         <div className="flex flex-col items-center gap-3 text-center">
           {isRejected ? (
             <div className="rounded-full bg-red-100 p-3">
@@ -33,13 +33,13 @@ export const ModerationStatusScreen = () => {
 
           {isRejected && rejectionReason && <p>{rejectionReason}</p>}
 
-          <div className="w-full space-y-2">
+          <div className="w-full space-child">
             {isRejected && (
               <Button className="w-full" variant="default">
                 Связаться с поддержкой / Исправить
               </Button>
             )}
-            <Button className="w-full" variant="outline" onClick={() => signOut()}>
+            <Button className="w-full" variant="outline" onClick={() => signOut("local")}>
               Выйти из аккаунта
             </Button>
           </div>

@@ -1,21 +1,23 @@
 import { Button } from "@/shared/ui/button"
 import { Skeleton } from "@/shared/ui/skeleton"
-import { Monitor, LogOut, RefreshCw } from "lucide-react"
+import { Monitor, LogOut } from "lucide-react"
 import { useActiveSessions } from "@/features/activeSessions/hooks/useActiveSessions"
+import { useAuthStore } from "@/entities/auth/model/store"
 
 export const ActiveSessions = () => {
-  const { session, isLoading, isSigningOut, signOutAll, refresh } = useActiveSessions()
+  const { session, isLoading } = useActiveSessions()
+  const { signOut } = useAuthStore()
 
   if (isLoading) {
     return (
-      <div className="space-y-3">
+      <div className="space-child">
         <Skeleton className="h-16 w-full" />
       </div>
     )
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-global">
       {session && (
         <div className="flex items-center justify-between rounded-lg bg-gray-50 p-4">
           <div className="flex items-center gap-3">
@@ -32,18 +34,14 @@ export const ActiveSessions = () => {
       )}
 
       <div className="flex flex-wrap gap-2">
-        <Button variant="outline" size="sm" onClick={() => refresh()} disabled={isLoading}>
-          <RefreshCw className="h-4 w-4" />
-          Обновить
-        </Button>
         <Button
           variant="destructive"
-          size="sm"
-          onClick={() => signOutAll()}
-          disabled={isSigningOut}
+          size="default"
+          onClick={() => signOut("global")}
+          disabled={isLoading}
         >
           <LogOut className="h-4 w-4" />
-          {isSigningOut ? "Выход..." : "Выйти со всех устройств"}
+          {isLoading ? "Выход..." : "Выйти со всех устройств"}
         </Button>
       </div>
 
