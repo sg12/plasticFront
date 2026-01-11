@@ -16,6 +16,7 @@ import type { FileSlot } from "@/features/fileUpload/types/types"
 import type { UserCreateFormData, UserRole } from "@/entities/user/types/types"
 import { userCreateSchema } from "@/entities/user/model/schema"
 import { FormProvider } from "react-hook-form"
+import { ROUTES } from "@/shared/model/routes"
 
 export const useCreateProfileForm = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -27,7 +28,7 @@ export const useCreateProfileForm = () => {
 
   useEffect(() => {
     if (profile) {
-      navigate("/main")
+      navigate(ROUTES.MAIN)
     }
   }, [profile])
 
@@ -46,6 +47,7 @@ export const useCreateProfileForm = () => {
       experience: undefined,
       education: "",
       workplace: "",
+      clinic: null,
       inn: "",
       // Clinic fields
       legalName: "",
@@ -63,7 +65,7 @@ export const useCreateProfileForm = () => {
 
   useEffect(() => {
     if (initialized && !session) {
-      navigate("/signup")
+      navigate(ROUTES.SIGNUP)
       toast.info("Пожалуйста, войдите в систему, чтобы продолжить.")
     }
     if (role) {
@@ -117,7 +119,7 @@ export const useCreateProfileForm = () => {
 
     if (!sessionData.session) {
       toast.error("Сессия не найдена, пожалуйста, войдите снова.")
-      navigate("/signin")
+      navigate(ROUTES.SIGNIN)
       setIsLoading(false)
       return
     }
@@ -140,7 +142,7 @@ export const useCreateProfileForm = () => {
       })
       if (error?.message === "USER_ALREADY_EXISTS" || error?.code === "23505") {
         toast.info("Профиль для этого пользователя уже существует.")
-        navigate("/main")
+        navigate(ROUTES.MAIN)
       } else {
         toast.error(error.message || "Ошибка при создании профиля.")
       }
