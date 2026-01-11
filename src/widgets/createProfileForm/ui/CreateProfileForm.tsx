@@ -46,7 +46,7 @@ export const CreateProfileForm = () => {
                   <FileUpload<DoctorUploadedFiles>
                     fileSlots={doctorFileSlots}
                     uploadedFiles={uploadedFiles.doctor || {}}
-                    onFileChange={(e, key) => handleFileChange("doctor", e, key)}
+                    onFileChange={(e, key) => handleFileChange(USER_ROLES.DOCTOR, e, key)}
                   />
                 ))}
               {role === USER_ROLES.CLINIC &&
@@ -56,7 +56,7 @@ export const CreateProfileForm = () => {
                   <FileUpload<ClinicUploadedFiles>
                     fileSlots={clinicFileSlots}
                     uploadedFiles={uploadedFiles.clinic || {}}
-                    onFileChange={(e, key) => handleFileChange("clinic", e, key)}
+                    onFileChange={(e, key) => handleFileChange(USER_ROLES.CLINIC, e, key)}
                   />
                 ))}
 

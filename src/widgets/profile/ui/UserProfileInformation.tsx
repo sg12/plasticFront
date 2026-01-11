@@ -26,9 +26,7 @@ export const UserProfileInformation = ({ form, profile, isEditing, isSaving }: P
   return (
     <Card>
       <CardHeader>
-        <CardTitle>
-          <h3>Личная информация</h3>
-        </CardTitle>
+        <CardTitle>Личная информация</CardTitle>
       </CardHeader>
 
       <CardContent className="space-child">

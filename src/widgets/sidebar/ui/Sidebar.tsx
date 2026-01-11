@@ -26,6 +26,7 @@ import { Logo } from "../../../shared/ui/logo"
 import type React from "react"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/shared/ui/collapsible"
 import { USER_ROLES } from "@/entities/user/model/constants"
+import { ROUTES } from '@/shared/model/routes'
 
 export const Sidebar = ({ ...props }: React.ComponentProps<typeof SidebarUI>) => {
   const { profile, signOut } = useAuthStore()
@@ -63,7 +64,7 @@ export const Sidebar = ({ ...props }: React.ComponentProps<typeof SidebarUI>) =>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
-              <a href="/main">
+              <a href={ROUTES.MAIN}>
                 <Logo variant="text" />
               </a>
             </SidebarMenuButton>
@@ -186,7 +187,7 @@ export const Sidebar = ({ ...props }: React.ComponentProps<typeof SidebarUI>) =>
           <ItemContent>
             <ItemTitle>
               {profile && profile.role === USER_ROLES.CLINIC
-                ? profile.legalName
+                ? profile.fullName
                 : formatName(profile?.fullName || "-")}
             </ItemTitle>
             <ItemDescription>{formatRole(profile?.role as UserRole)}</ItemDescription>

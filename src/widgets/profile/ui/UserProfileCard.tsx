@@ -1,4 +1,4 @@
-import { Mail, Phone } from "lucide-react"
+import { Hospital, Mail, Phone } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "../../../shared/ui/avatar"
 import { formatName, formatRole } from "../../../shared/lib/utils"
 import { Separator } from "../../../shared/ui/separator"
@@ -18,15 +18,15 @@ export const UserProfileCard = ({ profile }: Props) => {
         <Avatar className="mx-auto mb-4 size-32">
           <AvatarImage />
           <AvatarFallback className="text-3xl">
-            {profile && profile.role === USER_ROLES.CLINIC
-              ? formatName(profile.legalName ?? "Клиника")
-              : formatName(profile?.fullName ?? "Имя Фамилия", true)}
+            {profile && profile.role === USER_ROLES.CLINIC ? (
+              <Hospital className="size-16" />
+            ) : (
+              formatName(profile?.fullName ?? "Имя Фамилия", true)
+            )}
           </AvatarFallback>
         </Avatar>
         <Badge variant="outline">{formatRole(profile?.role as UserRole)}</Badge>
-        <h3>
-          {profile && profile.role === USER_ROLES.CLINIC ? profile.legalName : profile?.fullName}
-        </h3>
+        <h3>{profile && profile?.fullName}</h3>
         <p className="text-gray-600">ID: {profile?.id ?? "—"}</p>
         <Separator />
         <div className="space-text">

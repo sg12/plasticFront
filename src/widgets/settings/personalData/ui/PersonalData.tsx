@@ -25,7 +25,7 @@ export const PersonalData = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <FileText className="h-5 w-5 text-purple-600" />
-            <h4>Статус согласий на обработку данных</h4>
+            Статус согласий на обработку данных
           </CardTitle>
         </CardHeader>
         <CardContent>

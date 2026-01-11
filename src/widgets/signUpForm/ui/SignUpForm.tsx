@@ -10,6 +10,8 @@ import { Separator } from "@/shared/ui/separator"
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/form"
 import { useState } from "react"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/shared/ui/inputGroup"
+import { USER_ROLES } from "@/entities/user/model/constants"
+import { ROUTES } from "@/shared/model/routes"
 
 export function SignUpForm() {
   const {
@@ -56,8 +58,8 @@ export function SignUpForm() {
   return (
     <FormProvider {...form}>
       <div className="flex min-h-screen items-center justify-center">
-        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-2xl space-global">
-          <div className="w-full space-global rounded-2xl border border-gray-200 bg-white p-8 shadow-xl">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-global w-full max-w-2xl">
+          <div className="space-global w-full rounded-2xl border border-gray-200 bg-white p-8 shadow-xl">
             <div className="mb-6">
               <h2 className="mb-2 text-gray-900">Регистрация</h2>
               <p className="text-gray-600">
@@ -98,7 +100,9 @@ export function SignUpForm() {
                   name="basic.fullName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Фамилия Имя Отчество</FormLabel>
+                      <FormLabel>
+                        {role === USER_ROLES.CLINIC ? "Название клиники" : "Фамилия Имя Отчество"}
+                      </FormLabel>
                       <FormControl>
                         <InputGroup>
                           <InputGroupAddon>
@@ -106,7 +110,11 @@ export function SignUpForm() {
                           </InputGroupAddon>
                           <InputGroupInput
                             id="fullName"
-                            placeholder="Иванов Иван Иванович"
+                            placeholder={
+                              role === USER_ROLES.CLINIC
+                                ? "Клиника 'Эстетика'"
+                                : "Иванов Иван Иванович"
+                            }
                             {...field}
                           />
                         </InputGroup>
@@ -236,7 +244,7 @@ export function SignUpForm() {
                   userRole={role}
                 />
 
-                <div className="grid lg:grid-cols-2 gap-5">
+                <div className="grid gap-5 lg:grid-cols-2">
                   <Button
                     disabled={loading}
                     variant="secondary"
@@ -259,7 +267,7 @@ export function SignUpForm() {
             <div className="text-center">
               <p className="text-sm text-gray-600">
                 Уже есть аккаунт?{" "}
-                <NavLink to="/signin" className="text-purple-600 hover:text-purple-700">
+                <NavLink to={ROUTES.SIGNIN} className="text-purple-600 hover:text-purple-700">
                   Войти
                 </NavLink>
               </p>

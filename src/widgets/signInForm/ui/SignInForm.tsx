@@ -7,6 +7,7 @@ import { Button } from "@/shared/ui/button"
 import { Separator } from "@/shared/ui/separator"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/shared/ui/inputGroup"
 import { Label } from "@/shared/ui/label"
+import { ROUTES } from '@/shared/model/routes'
 
 export function SignInForm() {
   const { form, showPassword, isLoading, setShowPassword, onSubmit } = useSignInForm()
@@ -98,7 +99,7 @@ export function SignInForm() {
             <div className="text-center">
               <p className="text-gray-600">
                 Нет аккаунта?{" "}
-                <NavLink to="/signup" className="text-purple-600 hover:text-purple-700">
+                <NavLink to={ROUTES.SIGNUP} className="text-purple-600 hover:text-purple-700">
                   Зарегистрироваться
                 </NavLink>
               </p>

@@ -34,7 +34,7 @@ export const General = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Monitor className="h-5 w-5 text-purple-600" />
-              <h4>Активные сессии</h4>
+              Активные сессии
             </CardTitle>
             <CardAction>
               <Button variant="outline" size="icon" onClick={() => refresh()} disabled={isLoading}>
@@ -51,7 +51,7 @@ export const General = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <History className="h-5 w-5 text-purple-600" />
-              <h4>История входов</h4>
+              История входов
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -64,7 +64,7 @@ export const General = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Globe className="h-5 w-5 text-purple-600" />
-            <h4>Регион</h4>
+            Регион
           </CardTitle>
         </CardHeader>
         <CardContent>

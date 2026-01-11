@@ -6,6 +6,10 @@ import { UserProfileInformation } from "@/widgets/profile/ui/UserProfileInformat
 import { UserProfileHistory } from "@/widgets/profile/ui/UserProfileHistory"
 import { USER_ROLES } from "@/entities/user/model/constants"
 
+/**
+ * Компонент для просмотра своего профиля
+ */
+
 export const ProfileForm = () => {
   const {
     profile,

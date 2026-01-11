@@ -1,6 +1,6 @@
 import type { RoleProfile } from "@/entities/user/types/types"
 import { pluralRu } from "@/shared/lib/utils"
-import { Card, CardContent } from "@/shared/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card"
 import dayjs from "dayjs"
 
 interface Props {
@@ -40,8 +40,10 @@ export const UserProfileHistory = ({ profile }: Props) => {
 
   return (
     <Card>
+      <CardHeader>
+        <CardTitle>Медицинская история</CardTitle>
+      </CardHeader>
       <CardContent>
-        <h3 className="mb-4">Медицинская история</h3>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           <div className="rounded-lg bg-purple-50 p-4 text-center blur-xs">
             <p className="text-purple-600">0</p>
