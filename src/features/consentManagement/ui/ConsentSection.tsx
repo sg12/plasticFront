@@ -1,10 +1,11 @@
 import { FileText, Check } from "lucide-react"
 import { BannerButton } from "@/shared/ui/bannerButton"
+import type { UserRole } from '@/entities/user/types/types'
 
 interface Props {
   hasConsent: boolean
   onShowConsentModal: () => void
-  userRole: "patient" | "doctor" | "clinic"
+  userRole: UserRole
 }
 
 export const ConsentSection = ({ hasConsent, onShowConsentModal }: Props) => {

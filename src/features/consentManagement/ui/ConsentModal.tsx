@@ -9,6 +9,7 @@ import {
   DialogTitle,
 } from "@/shared/ui/dialog"
 import type { UserRole } from '@/entities/user/types/types'
+import { USER_ROLES } from '@/entities/user/model/constants'
 
 interface Props {
   userRole: UserRole
@@ -69,7 +70,7 @@ export function ConsentModal({
                   <div className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-gray-400" />
                   <span className="text-sm text-gray-700">Пароль в зашифрованном виде</span>
                 </div>
-                {userRole === "doctor" && (
+                {userRole === USER_ROLES.DOCTOR && (
                   <>
                     <div className="flex items-start gap-2">
                       <div className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-purple-400" />
@@ -85,7 +86,7 @@ export function ConsentModal({
                     </div>
                   </>
                 )}
-                {userRole === "clinic" && (
+                {userRole === USER_ROLES.CLINIC && (
                   <>
                     <div className="flex items-start gap-2">
                       <div className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-purple-400" />
