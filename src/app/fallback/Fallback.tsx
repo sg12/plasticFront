@@ -3,6 +3,7 @@ import { Button } from "@/shared/ui/button"
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert"
 import { AlertCircle, RefreshCw, Home } from "lucide-react"
 import { logger } from "@/shared/lib/logger"
+import { ROUTES } from '@/shared/model/routes'
 
 export const Fallback = ({ error, resetErrorBoundary }: FallbackProps) => {
   logger.error("Error Boundary caught an error", error, {
@@ -11,7 +12,7 @@ export const Fallback = ({ error, resetErrorBoundary }: FallbackProps) => {
   })
 
   const handleGoHome = () => {
-    window.location.href = "/main"
+    window.location.href = ROUTES.MAIN
   }
 
   const handleRetry = () => {

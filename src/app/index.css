@@ -61,7 +61,7 @@
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.96 0 0);
   --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.962 0.044 156.743);
+  --accent: oklch(0.95 0 156.743);
   --accent-foreground: oklch(0.527 0.154 150.069);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(87.2% 0.01 258.338);
@@ -141,7 +141,7 @@
 
   body {
     @apply bg-background text-foreground;
-    /* @apply bg-gradient-to-br from-purple-100 via-white to-orange-100; */
+    @apply bg-gradient-to-br from-purple-100 via-white to-orange-100;
   }
 
   h1 {
@@ -207,7 +207,7 @@
 
 html {
   font-size: var(--font-size);
-  font-family: "Roboto", sans-serif;
+  font-family: "Inter", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
 }

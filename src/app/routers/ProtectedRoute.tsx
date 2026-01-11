@@ -1,8 +1,9 @@
 import { Navigate, Outlet } from "react-router"
 import { useAuthStore } from "@/entities/auth/model/store"
-import { USER_ROLES } from "@/entities/user/model/constants"
+import { MODERATION_STATUS, USER_ROLES } from "@/entities/user/model/constants"
 import { Loader } from "@/shared/ui/loader"
 import { ModerationStatusScreen } from "@/features/auth/ui/ModerationStatusScreen"
+import { ROUTES } from '@/shared/model/routes'
 
 export const ProtectedRoute = () => {
   const { session, initialized, profile, loading } = useAuthStore()
@@ -12,15 +13,15 @@ export const ProtectedRoute = () => {
   }
 
   if (!session) {
-    return <Navigate to="/signin" replace />
+    return <Navigate to={ROUTES.SIGNIN} replace />
   }
 
-  const isCreateProfilePage = location.pathname === "/createProfile"
+  const isCreateProfilePage = location.pathname === ROUTES.CREATE_PROFILE
 
   if (!initialized) return
 
   if (session && !profile && !isCreateProfilePage) {
-    return <Navigate to="/createProfile" replace />
+    return <Navigate to={ROUTES.CREATE_PROFILE} replace />
   }
 
   if (!profile && isCreateProfilePage) {
@@ -30,7 +31,7 @@ export const ProtectedRoute = () => {
   const isDoctorOrClinic =
     profile?.role === USER_ROLES.DOCTOR || profile?.role === USER_ROLES.CLINIC
 
-  if (isDoctorOrClinic && profile?.moderationStatus !== "approved") {
+  if (isDoctorOrClinic && profile?.moderationStatus !== MODERATION_STATUS.APPROVED) {
     return <ModerationStatusScreen />
   }
 
