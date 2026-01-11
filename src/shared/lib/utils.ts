@@ -8,7 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const formatName = (
-  fullName: string,
+  fullName: string | null,
   isFirstSymbol?: boolean,
   parts?: "firstName" | "lastName" | "patronymic",
 ): string => {

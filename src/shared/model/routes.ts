@@ -5,7 +5,7 @@ export const ROUTES = {
   CREATE_PROFILE: "/createProfile",
   MAIN: "/main",
   PROFILE: "/main/profile",
-  PROFILE_USER: "/main/profile/:userId",
+  PROFILE_SOME_USER: "/main/profile/:userId",
   CATALOG: "/main/catalog",
   AIVISUALIZER: "/main/ai",
   SUPPORT: "/main/support",
@@ -15,7 +15,7 @@ export const ROUTES = {
 }
 
 export type PathParams = {
-  [ROUTES.PROFILE]: {
+  [ROUTES.PROFILE_SOME_USER]: {
     userId: string
   }
 }
