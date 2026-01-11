@@ -1,7 +1,8 @@
 import { useAuthStore } from "@/entities/auth/model/store"
 import { formatName } from "@/shared/lib/utils"
+import { ROUTES } from "@/shared/model/routes"
 import { Item, ItemTitle, ItemDescription, ItemContent } from "@/shared/ui/item"
-import { Database, MessageCircle, Settings, User } from "lucide-react"
+import { Database, MessageCircle, Settings, User, Search } from "lucide-react"
 import { NavLink } from "react-router"
 
 export const Dashboard = () => {
@@ -9,28 +10,34 @@ export const Dashboard = () => {
 
   const quickMenu = [
     {
+      icon: Search,
+      title: "Каталог",
+      description: "Найдите подходящего специалиста или клинику",
+      to: ROUTES.CATALOG,
+    },
+    {
       icon: User,
       title: "Профиль",
       description: "Управляйте вашей личной информацией",
-      to: "/main/profile",
+      to: ROUTES.PROFILE,
     },
     {
       icon: Settings,
       title: "Настройки",
       description: "Общие настройки профиля",
-      to: "/main/settings/general",
+      to: ROUTES.GENERAL,
     },
     {
       icon: Database,
       title: "Персональные данные",
       description: "Управляйте персональными данными",
-      to: "/main/settings/personalData",
+      to: ROUTES.PERSONAL_DATA,
     },
     {
       icon: MessageCircle,
       title: "Поддержка",
       description: "Связаться со службой поддержки",
-      to: "/main/support",
+      to: ROUTES.SUPPORT,
     },
   ]
 

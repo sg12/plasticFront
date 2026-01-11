@@ -3,12 +3,13 @@ import { Button } from "@/shared/ui/button"
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert"
 import { AlertCircle, Home, ArrowLeft } from "lucide-react"
 import { Card, CardContent } from "@/shared/ui/card"
+import { ROUTES } from '@/shared/model/routes'
 
 export const NotFound = () => {
   const navigate = useNavigate()
 
   const handleGoHome = () => {
-    navigate("/main")
+    navigate(ROUTES.MAIN)
   }
 
   const handleGoBack = () => {
