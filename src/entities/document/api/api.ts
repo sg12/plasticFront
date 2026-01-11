@@ -7,6 +7,7 @@ import {
   type FileValidationConfig,
 } from "@/shared/lib/fileValidation"
 import { logger } from "@/shared/lib/logger"
+import type { USER_ROLES } from '@/entities/user/model/constants'
 
 const STORAGE_BUCKET = "documents"
 
@@ -24,7 +25,7 @@ const DOCUMENT_VALIDATION_CONFIGS: Record<string, FileValidationConfig> = {
 
 export async function uploadFiles(
   userId: string,
-  role: "doctor" | "clinic",
+  role: typeof USER_ROLES.DOCTOR | typeof USER_ROLES.CLINIC,
   files: DoctorUploadedFiles | ClinicUploadedFiles,
 ): Promise<UploadedFilePaths> {
   logger.info("Начало загрузки файлов", {
