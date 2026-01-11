@@ -15,7 +15,6 @@ import type { DoctorProfile, ClinicProfile } from "@/entities/user/types/types"
 import { recordLogin } from "@/features/loginHistory/api/api"
 import { toast } from "sonner"
 import { logger } from "@/shared/lib/logger"
-import type { SignOut } from '@supabase/supabase-js'
 
 const initialState: AuthState = {
   error: null,

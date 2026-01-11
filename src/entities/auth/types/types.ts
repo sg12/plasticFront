@@ -1,4 +1,4 @@
-import type { RoleProfile } from "@/entities/user/types/types"
+import type {  RoleProfile } from "@/entities/user/types/types"
 import type { SignInFormData } from "@/features/auth/ui/signIn/model/types"
 import type { SignUpFormData } from "@/features/auth/ui/signUp/types/types"
 import type { Session, SignOut, User as SupabaseUser } from "@supabase/supabase-js"
