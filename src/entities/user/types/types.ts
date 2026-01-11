@@ -100,18 +100,15 @@ export type ModerationStatus = (typeof MODERATION_STATUS)[keyof typeof MODERATIO
  * ```typescript
  * const baseProfile: Profile = {
  *   id: "123",
- *   role: USER_ROLES.PATIENT,
- *   fullName: "Иван Иванов",
- *   email: "ivan@example.com",
  *   // ...
  * }
  * ```
  */
-export interface Profile {
+export interface Profile<Role> {
   /** Уникальный идентификатор профиля (UUID) */
   readonly id: string
   /** Роль пользователя в системе */
-  readonly role: UserRole
+  readonly role: Role
   /** Полное имя пользователя */
   fullName: string | null
   /** Email адрес (обязательное поле) */
@@ -141,11 +138,6 @@ export interface Profile {
  * ```typescript
  * const patient: PatientProfile = {
  *   id: "123",
- *   role: USER_ROLES.PATIENT, // литеральный тип "patient"
- *   fullName: "Иван Иванов",
- *   email: "ivan@example.com",
- *   birthDate: "1990-01-01",
- *   gender: "male",
  *   // ... остальные поля из Profile
  * }
  *
@@ -156,13 +148,17 @@ export interface Profile {
  * }
  * ```
  */
-export interface PatientProfile extends Profile {
-  /** Роль пациента (литеральный тип для Discriminated Union) */
+export interface PatientProfile extends Profile<typeof USER_ROLES.PATIENT> {
+  /** Роль клиники (литеральный тип для Discriminated Union) */
   readonly role: typeof USER_ROLES.PATIENT
   /** Дата рождения (ISO строка формата YYYY-MM-DD) */
   birthDate: string | null
   /** Пол пациента */
   gender: Gender
+  /** Массив ID избранных врачей (jsonb в базе данных) */
+  favoriteDoctors?: string[]
+  /** Массив ID избранных клиник (jsonb в базе данных) */
+  favoriteClinics?: string[]
 }
 
 /**
@@ -175,18 +171,6 @@ export interface PatientProfile extends Profile {
  * ```typescript
  * const doctor: DoctorProfile = {
  *   id: "456",
- *   role: USER_ROLES.DOCTOR, // литеральный тип "doctor"
- *   fullName: "Доктор Смирнов",
- *   email: "doctor@example.com",
- *   licenseNumber: "123456",
- *   specialization: "Пластическая хирургия",
- *   experience: 10,
- *   education: "МГМУ",
- *   workplace: "Клиника красоты",
- *   inn: "1234567890",
- *   gender: "male",
- *   birthDate: "1985-05-15",
- *   documents: { license: "path/to/license.pdf" },
  *   // ... остальные поля из Profile
  * }
  *
@@ -198,8 +182,8 @@ export interface PatientProfile extends Profile {
  * }
  * ```
  */
-export interface DoctorProfile extends Profile {
-  /** Роль врача (литеральный тип для Discriminated Union) */
+export interface DoctorProfile extends Profile<typeof USER_ROLES.DOCTOR> {
+  /** Роль клиники (литеральный тип для Discriminated Union) */
   readonly role: typeof USER_ROLES.DOCTOR
   /** Пол врача */
   gender: Gender
@@ -213,8 +197,10 @@ export interface DoctorProfile extends Profile {
   experience: number
   /** Образование */
   education: string
-  /** Место работы */
-  workplace: string
+  /** Место работы (опционально, для частной практики или дополнительной информации) */
+  workplace: string | null
+  /** ID клиники, куда врач принял приглашение */
+  clinic: string | null
   /** ИНН врача */
   inn: string
   /**
@@ -234,19 +220,6 @@ export interface DoctorProfile extends Profile {
  * ```typescript
  * const clinic: ClinicProfile = {
  *   id: "789",
- *   role: USER_ROLES.CLINIC, // литеральный тип "clinic"
- *   fullName: "Клиника красоты",
- *   email: "clinic@example.com",
- *   legalName: "ООО Клиника красоты",
- *   clinicInn: "1234567890",
- *   ogrn: "1234567890123",
- *   legalAddress: "г. Москва, ул. Ленина, д. 1",
- *   actualAddress: "г. Москва, ул. Ленина, д. 1",
- *   clinicLicense: "LIC-123456",
- *   directorName: "Иванов Иван Иванович",
- *   directorPosition: "Директор",
- *   documents: { license: "path/to/license.pdf" },
- *   // ... остальные поля из Profile
  * }
  *
  * // Проверка типа
@@ -257,7 +230,7 @@ export interface DoctorProfile extends Profile {
  * }
  * ```
  */
-export interface ClinicProfile extends Profile {
+export interface ClinicProfile extends Profile<typeof USER_ROLES.CLINIC> {
   /** Роль клиники (литеральный тип для Discriminated Union) */
   readonly role: typeof USER_ROLES.CLINIC
   /** Юридическое название клиники */
@@ -281,6 +254,8 @@ export interface ClinicProfile extends Profile {
    * Ключ - название документа, значение - путь к файлу или массив путей
    */
   documents: Record<string, string | string[]> | null
+  /** Массив ID врачей, принявших приглашение в клинику (JSONB) */
+  doctors: string[]
 }
 
 /**
