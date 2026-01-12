@@ -12,6 +12,8 @@ export const ROUTES = {
   SETTINGS: "/main/settings",
   GENERAL: "/main/settings/general",
   PERSONAL_DATA: "/main/settings/personalData",
+  CLINIC_DOCTORS: "/main/clinic/doctors",
+  DOCTOR_CLINICS: "/main/doctor/clinics",
 }
 
 export type PathParams = {
