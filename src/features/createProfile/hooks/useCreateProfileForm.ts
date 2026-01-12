@@ -58,6 +58,7 @@ export const useCreateProfileForm = () => {
       clinicLicense: "",
       directorName: "",
       directorPosition: "",
+      doctors: [],
       documents: {},
     },
     mode: "all",
