@@ -6,7 +6,7 @@
  * @module features/catalog/ui/DoctorList
  */
 
-import { UserCard } from '@/features/catalog/ui/UserCard'
+import { UserCard } from "@/widgets/userCard/ui/UserCard"
 import type { CatalogDoctor } from "../../../entities/catalog/types/types"
 import { Skeleton } from "@/shared/ui/skeleton"
 

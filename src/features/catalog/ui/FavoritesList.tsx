@@ -10,7 +10,7 @@
 import type { CatalogClinic, CatalogDoctor } from "@/entities/catalog/types/types"
 import { Skeleton } from "@/shared/ui/skeleton"
 import { useCatalogStore } from "@/entities/catalog/model/store"
-import { UserCard } from "@/features/catalog/ui/UserCard"
+import { UserCard } from "@/widgets/userCard/ui/UserCard"
 
 interface FavoritesListProps {
   doctors: CatalogDoctor[]
