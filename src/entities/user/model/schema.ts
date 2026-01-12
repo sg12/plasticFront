@@ -167,7 +167,7 @@ export const userCreateSchema = z.discriminatedUnion("role", [
       .min(1, "Укажите должность директора")
       .min(2, "Должность директора должна содержать минимум 2 символа"),
     documents: documentsSchema,
-    doctors: z.array(z.string().uuid("Неверный формат UUID врача")).default([]),
+    doctors: z.array(z.uuid("Неверный формат UUID врача")).default([]),
   }),
 ])
 
@@ -245,5 +245,5 @@ export const userUpdateSchema = z.object({
     .min(2, "Должность директора должна содержать минимум 2 символа")
     .optional(),
   documents: documentsSchema.optional(),
-  doctors: z.array(z.string().uuid("Неверный формат UUID врача")).optional(),
+  doctors: z.array(z.uuid("Неверный формат UUID врача")).optional(),
 })

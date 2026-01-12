@@ -1,3 +1,9 @@
+/**
+ * @fileoverview API методы для работы с пользователем
+ *
+ * @module entities/user/api/api
+ */
+
 import { supabase } from "@/shared/api/supabase/client"
 import type {
   Profile,
