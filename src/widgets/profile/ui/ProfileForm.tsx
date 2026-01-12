@@ -50,7 +50,7 @@ export const ProfileForm = () => {
                 )} */}
               </div>
             ) : (
-              <div className="fixed bottom-4 left-1/2 z-10 flex -translate-x-1/2 gap-2 sm:relative sm:bottom-auto sm:left-auto sm:translate-x-0">
+              <div className="fixed bottom-4 left-1/2 flex -translate-x-1/2 gap-2 max-xl:z-1 sm:relative sm:bottom-auto sm:left-auto sm:translate-x-0">
                 <Button onClick={() => handleSaveClick()} variant="save" disabled={isSaving}>
                   {isSaving ? (
                     <Loader className="h-4 w-4 animate-spin" />

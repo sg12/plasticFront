@@ -25,12 +25,12 @@ export const UserProfileHistory = ({ profile }: Props) => {
     const days = now.diff(cursor, "day")
 
     const parts: string[] = []
-    if (years > 0) parts.push(`${years} ${pluralRu(years, "год", "года", "лет")}`)
+    if (years > 0) parts.push(pluralRu(years, "год", "года", "лет"))
     if (months > 0 && parts.length < 2) {
-      parts.push(`${months} ${pluralRu(months, "месяц", "месяца", "месяцев")}`)
+      parts.push(pluralRu(months, "месяц", "месяца", "месяцев"))
     }
     if (days > 0 && parts.length < 2) {
-      parts.push(`${days} ${pluralRu(days, "день", "дня", "дней")}`)
+      parts.push(pluralRu(days, "день", "дня", "дней"))
     }
 
     return parts.length ? parts.join(" ") : "сегодня"

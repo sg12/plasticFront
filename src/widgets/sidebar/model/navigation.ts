@@ -14,6 +14,7 @@ import {
   Database,
   Settings2,
   Search,
+  Stethoscope,
 } from "lucide-react"
 
 export const sectionLabels: Record<string, string> = {
@@ -42,6 +43,13 @@ export const navigationConfig = {
       name: "Каталог",
       icon: Search,
       url: ROUTES.CATALOG,
+      section: "main",
+    },
+    {
+      id: "clinic_doctors",
+      name: "Врачи",
+      icon: Users,
+      url: ROUTES.CLINIC_DOCTORS,
       section: "main",
     },
     // {
@@ -130,13 +138,13 @@ export const navigationConfig = {
       url: ROUTES.CATALOG,
       section: "main",
     },
-    // {
-    //     id: "clinic",
-    //     name: "Клиника",
-    //     icon: Building2,
-    //     url: "/main/clinic",
-    //     section: "main",
-    // },
+    {
+      id: "clinic",
+      name: "Клиника",
+      icon: Building2,
+      url: ROUTES.DOCTOR_CLINICS,
+      section: "main",
+    },
     // {
     //     id: "services",
     //     name: "Услуги",

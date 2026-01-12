@@ -6,6 +6,7 @@ import { format } from "date-fns"
 import { ru } from "date-fns/locale"
 import { formatRole } from "@/shared/lib/utils"
 import { Badge } from "@/shared/ui/badge"
+import { pluralRu } from "@/shared/lib/utils"
 import {
   CheckCircle,
   Mail,
@@ -83,7 +84,7 @@ export const UserProfileView = ({ profile }: UserProfileViewProps) => {
               Опыт работы
             </label>
             <p className="mt-1 text-sm">
-              {profile.experience ? `${profile.experience} ${profile.experience}` : "—"}
+              {profile.experience ? pluralRu(profile.experience, "год", "года", "лет") : "—"}
             </p>
           </div>
           <div>
@@ -192,11 +193,9 @@ export const UserProfileView = ({ profile }: UserProfileViewProps) => {
           <div>
             <label className="flex items-center gap-2 text-sm font-medium text-gray-500">
               <User className="h-4 w-4" />
-              Полное имя
+              {profile.role === USER_ROLES.CLINIC ? "Название клиники" : "Полное имя"}
             </label>
-            <p className="mt-1 text-sm">
-              {profile.role === USER_ROLES.CLINIC ? profile.legalName : profile.fullName || "—"}
-            </p>
+            <p className="mt-1 text-sm">{profile.fullName || "—"}</p>
           </div>
 
           <div>

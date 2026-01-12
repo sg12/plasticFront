@@ -80,7 +80,7 @@ export const doctorFields = [
   },
   {
     name: "workplace",
-    label: "Место работы (опционально)",
+    label: "Место работы",
     placeholder: "Частная практика или доп. информация",
     id: "workplace",
     type: "text" as const,

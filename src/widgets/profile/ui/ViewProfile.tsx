@@ -5,7 +5,7 @@ import { UserProfileHistory } from "./UserProfileHistory"
 import { useViewProfile } from "../hooks/useViewProfile"
 import { AlertCircle } from "lucide-react"
 import { Alert, AlertDescription } from "@/shared/ui/alert"
-import { USER_ROLES } from '@/entities/user/model/constants'
+import { USER_ROLES } from "@/entities/user/model/constants"
 
 interface ViewProfileProps {
   userId: string
