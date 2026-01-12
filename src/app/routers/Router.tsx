@@ -54,6 +54,22 @@ export const router = createBrowserRouter([
                 handle: { title: "Каталог" },
               },
               {
+                path: ROUTES.CLINIC_DOCTORS,
+                ...lazyRoute(
+                  () => import("@/pages/clinicDoctors/ui/ClinicDoctors"),
+                  "ClinicDoctors",
+                ),
+                handle: { title: "Врачи клиники" },
+              },
+              {
+                path: ROUTES.DOCTOR_CLINICS,
+                ...lazyRoute(
+                  () => import("@/pages/doctorClinics/ui/DoctorClinics"),
+                  "DoctorClinics",
+                ),
+                handle: { title: "Клиники" },
+              },
+              {
                 path: ROUTES.AIVISUALIZER,
                 ...lazyRoute(() => import("@/pages/aiVisualizer/ui/AIVisualizer"), "AIVisualizer"),
                 handle: { title: "AI Визуализатор" },
