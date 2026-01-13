@@ -7,38 +7,27 @@
  * @module features/catalog/ui/Catalog
  */
 
-import { useEffect, useState } from "react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs"
-import { useDoctorSearch } from "../hooks/useDoctorSearch"
-import { useClinicSearch } from "../hooks/useClinicSearch"
 import { DoctorList } from "./DoctorList"
 import { ClinicList } from "./ClinicList"
 import { CatalogSearch } from "./CatalogSearch"
-import { useAuthStore } from "@/entities/auth/model/store"
-import { USER_ROLES } from "@/entities/user/model/constants"
-import type { CatalogTab } from "../../../entities/catalog/types/types"
+import type { CatalogTab } from "@/entities/catalog/types/types"
 import { FavoritesList } from "@/features/catalog/ui/FavoritesList"
+import { useCatalog } from "../hooks/useCatalog"
+import { Building, Building2, Heart, Stethoscope } from "lucide-react"
 
 export const Catalog = () => {
-  const { profile } = useAuthStore()
-  const userRole = profile?.role
-  const showDoctors = userRole === USER_ROLES.PATIENT || userRole === USER_ROLES.CLINIC
-  const showClinics = userRole === USER_ROLES.PATIENT || userRole === USER_ROLES.DOCTOR
-
-  const [activeTab, setActiveTab] = useState<CatalogTab>(showDoctors ? "doctors" : "clinics")
-
-  const doctorSearch = useDoctorSearch()
-  const clinicSearch = useClinicSearch()
-
-  useEffect(() => {
-    if (showDoctors) {
-      doctorSearch.executeSearch({})
-    }
-    if (showClinics) {
-      clinicSearch.executeSearch({})
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showDoctors, showClinics])
+  const {
+    doctorSearch,
+    clinicSearch,
+    activeTab,
+    setActiveTab,
+    showDoctors,
+    showClinics,
+    currentSearchQuery,
+    setCurrentSearchQuery,
+    searchPlaceholder,
+  } = useCatalog()
 
   return (
     <div className="space-global">
@@ -51,32 +40,34 @@ export const Catalog = () => {
         <div className="space-y-4">
           {
             <CatalogSearch
-              value={activeTab === "doctors" ? doctorSearch.searchQuery : clinicSearch.searchQuery}
-              onChange={
-                activeTab === "doctors" ? doctorSearch.setSearchQuery : clinicSearch.setSearchQuery
-              }
-              placeholder={
-                activeTab === "doctors"
-                  ? "Поиск врачей по имени, фамилию или отчеству..."
-                  : activeTab === "clinics"
-                    ? "Поиск клиник по названию..."
-                    : "Поиск врачей или клиник..."
-              }
+              value={currentSearchQuery}
+              onChange={(value) => setCurrentSearchQuery(value)}
+              placeholder={searchPlaceholder}
             />
           }
 
           {showDoctors && showClinics && (
             <TabsList className="max-lg:w-full">
-              {showDoctors && <TabsTrigger value="doctors">Врачи</TabsTrigger>}
-              {showClinics && <TabsTrigger value="clinics">Клиники</TabsTrigger>}
-              <TabsTrigger value="favorites">Избранные</TabsTrigger>
+              {showDoctors && (
+                <TabsTrigger value="doctors">
+                  <Stethoscope /> Врачи
+                </TabsTrigger>
+              )}
+              {showClinics && (
+                <TabsTrigger value="clinics">
+                  <Building2 /> Клиники
+                </TabsTrigger>
+              )}
+              <TabsTrigger value="favorites">
+                <Heart /> Избранные
+              </TabsTrigger>
             </TabsList>
           )}
 
           {showDoctors && (
             <TabsContent value="doctors">
               <DoctorList
-                doctors={doctorSearch.doctors || []}
+                doctors={doctorSearch.data || []}
                 isLoading={doctorSearch.isLoading}
                 error={doctorSearch.error}
               />
@@ -86,7 +77,7 @@ export const Catalog = () => {
           {showClinics && (
             <TabsContent value="clinics">
               <ClinicList
-                clinics={clinicSearch.clinics || []}
+                clinics={clinicSearch.data || []}
                 isLoading={clinicSearch.isLoading}
                 error={clinicSearch.error}
               />
@@ -95,8 +86,8 @@ export const Catalog = () => {
 
           <TabsContent value="favorites">
             <FavoritesList
-              doctors={doctorSearch.doctors || []}
-              clinics={clinicSearch.clinics || []}
+              doctors={doctorSearch.data || []}
+              clinics={clinicSearch.data || []}
               isLoading={doctorSearch.isLoading || clinicSearch.isLoading}
               error={doctorSearch.error || clinicSearch.error}
             />

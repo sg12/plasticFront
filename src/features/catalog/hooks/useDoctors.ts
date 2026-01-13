@@ -8,13 +8,13 @@
  */
 
 import useSWR from "swr"
-import { getDoctors } from "../../../entities/catalog/api/api"
+import { getDoctors } from "@/entities/catalog/api/api"
 import type {
   DoctorSearchParams,
   PaginatedResult,
   CatalogDoctor,
-} from "../../../entities/catalog/types/types"
-import { DEFAULT_DOCTOR_SEARCH_PARAMS } from "../../../entities/catalog/model/constants"
+} from "@/entities/catalog/types/types"
+import { DEFAULT_DOCTOR_SEARCH_PARAMS } from "@/entities/catalog/model/constants"
 
 /**
  * Хук для получения списка врачей с фильтрацией и пагинацией
@@ -30,7 +30,6 @@ export const useDoctors = (params?: DoctorSearchParams) => {
   }
 
   // Создаем ключ SWR из параметров поиска
-  // Сортируем ключи для стабильности ключа кэша
   const swrKey = [
     "doctors",
     JSON.stringify(

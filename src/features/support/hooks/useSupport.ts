@@ -8,14 +8,14 @@ import {
   createSupportTicket,
   getTicketReplies,
   deleteSupportTicket,
-} from "../../../entities/support/api/api"
+} from "@/entities/support/api/api"
 import type {
   SupportTicket,
   SupportTicketReply,
   CreateSupportTicketData,
   CreateSupportTicketFormData,
   SupportFileRecord,
-} from "../../../entities/support/types/types"
+} from "@/entities/support/types/types"
 import { logger } from "@/shared/lib/logger"
 import { useForm, FormProvider } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -34,12 +34,18 @@ export const useSupport = (ticketId?: string | null) => {
     error: ticketsError,
     isValidating: isLoadingTickets,
     mutate: refreshTickets,
-  } = useSWR<SupportTicket[]>(user?.id ? ["supportTickets", user.id] : null, () => {
-    if (!user?.id) {
-      throw new Error("Пользователь не авторизован")
-    }
-    return getUserTickets(user.id)
-  })
+  } = useSWR<SupportTicket[]>(
+    user?.id ? ["supportTickets", user.id] : null,
+    () => {
+      if (!user?.id) {
+        throw new Error("Пользователь не авторизован")
+      }
+      return getUserTickets(user.id)
+    },
+    {
+      refreshInterval: 10000,
+    },
+  )
 
   // Получение ответов на тикет
   const {
@@ -47,12 +53,18 @@ export const useSupport = (ticketId?: string | null) => {
     error: repliesError,
     isValidating: isLoadingReplies,
     mutate: refreshReplies,
-  } = useSWR<SupportTicketReply[]>(ticketId ? ["supportTicketReplies", ticketId] : null, () => {
-    if (!ticketId) {
-      throw new Error("Ticket ID is required")
-    }
-    return getTicketReplies(ticketId)
-  })
+  } = useSWR<SupportTicketReply[]>(
+    ticketId && user?.id ? ["supportTicketReplies", ticketId, user.id] : null,
+    () => {
+      if (!ticketId) {
+        throw new Error("ID билета обязательно")
+      }
+      return getTicketReplies(ticketId)
+    },
+    {
+      refreshInterval: 5000,
+    },
+  )
 
   // Форма для создания тикета
   const form = useForm<CreateSupportTicketFormData>({
@@ -209,7 +221,7 @@ export const useSupport = (ticketId?: string | null) => {
 
     // Создание тикета
     form,
-    FormProvider: FormProvider,
+    FormProvider,
     onSubmit,
     handleFileChange,
     createTicket,

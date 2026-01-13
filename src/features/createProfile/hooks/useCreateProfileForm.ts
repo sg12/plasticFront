@@ -17,11 +17,13 @@ import type { UserCreateFormData, UserRole } from "@/entities/user/types/types"
 import { userCreateSchema } from "@/entities/user/model/schema"
 import { FormProvider } from "react-hook-form"
 import { ROUTES } from "@/shared/model/routes"
+import { useUserStore } from "@/entities/user/model/store"
 
 export const useCreateProfileForm = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFilesByRole>({})
-  const { user, session, initialized, profile } = useAuthStore()
+  const { user, session, initialized } = useAuthStore()
+  const { profile } = useUserStore()
   const [currentStep, setCurrentStep] = useState(0)
 
   const navigate = useNavigate()

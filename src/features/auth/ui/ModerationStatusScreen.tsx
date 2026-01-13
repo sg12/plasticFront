@@ -1,15 +1,17 @@
 import { useAuthStore } from "@/entities/auth/model/store"
+import { useUserStore } from "@/entities/user/model/store"
 import { Button } from "@/shared/ui/button"
 import { AlertCircle, Clock } from "lucide-react"
 
 export const ModerationStatusScreen = () => {
-  const { profile, signOut } = useAuthStore()
+  const { signOut } = useAuthStore()
+  const { profile } = useUserStore()
   const isRejected = profile?.moderationStatus === "rejected"
   const rejectionReason = profile?.moderationComment
 
   return (
     <div className="flex h-screen w-screen items-center justify-center bg-gray-50 p-4">
-      <div className="bg-background w-full max-w-md space-global rounded-xl border p-6 shadow-sm">
+      <div className="bg-background space-global w-full max-w-md rounded-xl border p-6 shadow-sm">
         <div className="flex flex-col items-center gap-3 text-center">
           {isRejected ? (
             <div className="rounded-full bg-red-100 p-3">
@@ -33,7 +35,7 @@ export const ModerationStatusScreen = () => {
 
           {isRejected && rejectionReason && <p>{rejectionReason}</p>}
 
-          <div className="w-full space-child">
+          <div className="space-child w-full">
             {isRejected && (
               <Button className="w-full" variant="default">
                 Связаться с поддержкой / Исправить
