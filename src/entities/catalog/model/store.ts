@@ -15,8 +15,9 @@ import { logger } from "@/shared/lib/logger"
 import { addFavorite, removeFavorite } from "@/entities/user/api/api"
 import { useAuthStore } from "@/entities/auth/model/store"
 import { toast } from "sonner"
-import type { PatientProfile, UserRole } from "@/entities/user/types/types"
+import type { PatientProfile, RoleProfile, UserRole } from "@/entities/user/types/types"
 import { USER_ROLES } from "@/entities/user/model/constants"
+import { useUserStore } from "@/entities/user/model/store"
 
 interface CatalogState {
   // === ФИЛЬТРЫ ===
@@ -29,6 +30,7 @@ interface CatalogState {
 
   // === ДЕЙСТВИЯ (Actions) ===
   toggleFavorite: (favoriteId: string, who: UserRole) => Promise<void>
+  syncFavoritesFromProfile: (favorites: { favoriteDoctors: string[]; favoriteClinics: string[] }) => void
 
   clearFilters: () => void
   reset: () => void
@@ -36,7 +38,7 @@ interface CatalogState {
 
 // Получаем избранное из профиля, если он уже загружен
 const getInitialFavorites = () => {
-  const profile = useAuthStore.getState().profile
+  const profile = useUserStore.getState().profile
   if (profile && profile.role === USER_ROLES.PATIENT) {
     const patientProfile = profile as PatientProfile
     return {
@@ -60,6 +62,17 @@ const initialState = {
 
 export const useCatalogStore = create<CatalogState>()((set, get) => ({
   ...initialState,
+
+  syncFavoritesFromProfile: (favorites) => {
+    set({
+      favoriteDoctors: favorites.favoriteDoctors,
+      favoriteClinics: favorites.favoriteClinics,
+    })
+    logger.debug("Избранное синхронизировано из профиля", {
+      doctorsCount: favorites.favoriteDoctors.length,
+      clinicsCount: favorites.favoriteClinics.length,
+    })
+  },
 
   toggleFavorite: async (favoriteId, who) => {
     const userId = useAuthStore.getState().session?.user?.id
@@ -103,28 +116,28 @@ export const useCatalogStore = create<CatalogState>()((set, get) => ({
 
       // Обновляем состояние на серверную версию (на случай, если сервер вернул другие данные)
       // Это обеспечивает синхронизацию, если избранное было изменено с другого устройства
-      const currentOptimistic = who === "doctor" ? get().favoriteDoctors : get().favoriteClinics
-
-      const arraysEqual =
-        serverFavorites.length === currentOptimistic.length &&
-        serverFavorites.every((id, index) => id === currentOptimistic[index])
-
-      if (!arraysEqual) {
-        if (who === "doctor") {
-          set({ favoriteDoctors: serverFavorites })
-        } else {
-          set({ favoriteClinics: serverFavorites })
-        }
-        logger.info(`Состояние избранного синхронизировано с сервером для ${who}`, {
-          userId,
-          favoriteId,
-        })
+      if (who === "doctor") {
+        set({ favoriteDoctors: serverFavorites })
       } else {
-        logger.info(`Синхронизация избранного для ${who} завершена успешно`, {
-          userId,
-          favoriteId,
-        })
+        set({ favoriteClinics: serverFavorites })
       }
+
+      // Обновляем профиль в useUserStore, чтобы синхронизировать изменения
+      // Подписка автоматически обновит catalogStore, если значения отличаются
+      const currentProfile = useUserStore.getState().profile
+      if (currentProfile && currentProfile.role === USER_ROLES.PATIENT) {
+        const updatedProfile = {
+          ...currentProfile,
+          favoriteDoctors: who === "doctor" ? serverFavorites : (currentProfile as PatientProfile).favoriteDoctors || [],
+          favoriteClinics: who === "clinic" ? serverFavorites : (currentProfile as PatientProfile).favoriteClinics || [],
+        } as PatientProfile
+        useUserStore.getState().setProfile(updatedProfile)
+      }
+
+      logger.info(`Синхронизация избранного для ${who} завершена успешно`, {
+        userId,
+        favoriteId,
+      })
     } catch (error) {
       // Откат изменений при ошибке (rollback)
       if (who === "doctor") {
@@ -163,3 +176,46 @@ export const useCatalogStore = create<CatalogState>()((set, get) => ({
     logger.info("Состояние каталога сброшено")
   },
 }))
+
+// Подписка на изменения profile.favoriteDoctors и profile.favoriteClinics
+// Синхронизирует избранное в catalog store при изменении профиля
+let previousProfile: RoleProfile | null = null
+let previousFavorites: { favoriteDoctors: string[]; favoriteClinics: string[] } | null = null
+
+useUserStore.subscribe((state) => {
+  const profile = state.profile
+  
+  // Проверяем, изменился ли профиль
+  if (profile === previousProfile) return
+  
+  previousProfile = profile
+  
+  if (profile && profile.role === USER_ROLES.PATIENT) {
+    const patientProfile = profile as PatientProfile
+    const newFavorites = {
+      favoriteDoctors: patientProfile.favoriteDoctors || [],
+      favoriteClinics: patientProfile.favoriteClinics || [],
+    }
+    
+    // Проверяем, действительно ли изменилось избранное
+    const favoritesChanged =
+      !previousFavorites ||
+      JSON.stringify(newFavorites.favoriteDoctors) !== JSON.stringify(previousFavorites.favoriteDoctors) ||
+      JSON.stringify(newFavorites.favoriteClinics) !== JSON.stringify(previousFavorites.favoriteClinics)
+    
+    if (favoritesChanged) {
+      previousFavorites = newFavorites
+      useCatalogStore.getState().syncFavoritesFromProfile(newFavorites)
+    }
+  } else {
+    // Если профиль не загружен или пользователь не пациент, очищаем избранное
+    const catalogStore = useCatalogStore.getState()
+    if (catalogStore.favoriteDoctors.length > 0 || catalogStore.favoriteClinics.length > 0) {
+      previousFavorites = { favoriteDoctors: [], favoriteClinics: [] }
+      catalogStore.syncFavoritesFromProfile({
+        favoriteDoctors: [],
+        favoriteClinics: [],
+      })
+    }
+  }
+})

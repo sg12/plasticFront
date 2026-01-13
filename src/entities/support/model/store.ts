@@ -1,7 +1,7 @@
 import { create } from "zustand"
 import { immer } from "zustand/middleware/immer"
 import type { SupportTicket, SupportTicketReply, CreateSupportTicketData } from "../types/types"
-import { fetchUserTickets, createSupportTicket, fetchTicketReplies } from "../api/api"
+import { createSupportTicket, getTicketReplies, getUserTickets } from "../api/api"
 import { toast } from "sonner"
 import { useAuthStore } from "@/entities/auth/model/store"
 import { logger } from "@/shared/lib/logger"
@@ -49,7 +49,7 @@ export const useSupportStore = create<SupportState>()(
       })
 
       try {
-        const tickets = await fetchUserTickets(user.id)
+        const tickets = await getUserTickets(user.id)
         set((state) => {
           state.tickets = tickets
           state.isLoading = false
@@ -74,7 +74,7 @@ export const useSupportStore = create<SupportState>()(
       })
 
       try {
-        const replies = await fetchTicketReplies(ticketId)
+        const replies = await getTicketReplies(ticketId)
         set((state) => {
           state.ticketReplies[ticketId] = replies
           state.isLoadingReplies[ticketId] = false
@@ -124,7 +124,7 @@ export const useSupportStore = create<SupportState>()(
       }
 
       try {
-        const updatedTickets = await fetchUserTickets(user.id)
+        const updatedTickets = await getUserTickets(user.id)
         set((state) => {
           state.tickets = updatedTickets
         })
