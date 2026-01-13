@@ -3,10 +3,10 @@
  */
 
 import { ClinicDoctorsList } from "@/widgets/clinicDoctorsList/ui/ClinicDoctorsList"
-import { useAuthStore } from "@/entities/auth/model/store"
+import { useUserStore } from "@/entities/user/model/store"
 
 export const ClinicDoctors = () => {
-  const { profile } = useAuthStore()
+  const { profile } = useUserStore()
   const clinicId = profile?.id
 
   return (

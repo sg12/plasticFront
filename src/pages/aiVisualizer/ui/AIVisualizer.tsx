@@ -13,9 +13,11 @@ import { Badge } from "@/shared/ui/badge"
 import { updateUser } from "@/entities/user/api/api"
 import { cn } from "@/shared/lib/utils"
 import { logger } from "@/shared/lib/logger"
+import { useUserStore } from "@/entities/user/model/store"
 
 export const AIVisualizer = () => {
-  const { user, profile } = useAuthStore()
+  const { user } = useAuthStore()
+  const { profile } = useUserStore()
   const {
     state,
     setStep,
@@ -68,7 +70,7 @@ export const AIVisualizer = () => {
               const decrementToken = profile?.aiTokensUsed - 1
               try {
                 await updateUser(user.id, { aiTokenUsed: decrementToken })
-                const { loadProfile } = useAuthStore.getState()
+                const { loadProfile } = useUserStore.getState()
                 await loadProfile(user.id)
               } catch (error) {
                 logger.error("Ошибка при сохранении токенов", error as Error, {
