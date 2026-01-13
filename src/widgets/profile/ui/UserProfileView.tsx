@@ -100,20 +100,9 @@ export const UserProfileView = ({ profile }: UserProfileViewProps) => {
               Клиника
             </label>
             <p className="mt-1 text-sm">
-              {profile.role === USER_ROLES.DOCTOR && profile.clinic
-                ? "Работает в клинике" // TODO: можно загрузить название клиники по ID
-                : profile.workplace || "—"}
+              {profile.role === USER_ROLES.DOCTOR && profile.clinic && profile.workplace}
             </p>
           </div>
-          {profile.role === USER_ROLES.DOCTOR && profile.clinic && profile.workplace && (
-            <div>
-              <label className="flex items-center gap-2 text-sm font-medium text-gray-500">
-                <Building2 className="h-4 w-4" />
-                Дополнительная информация
-              </label>
-              <p className="mt-1 text-sm">{profile.workplace}</p>
-            </div>
-          )}
           <div>
             <label className="text-sm font-medium text-gray-500">ИНН</label>
             <p className="mt-1 text-sm">{profile.inn || "—"}</p>

@@ -14,7 +14,6 @@ import {
   SidebarMenuSub,
   SidebarMenuSubItem,
   useSidebar,
-  SidebarTrigger,
 } from "@/shared/ui/sidebar"
 import { Item, ItemActions, ItemDescription, ItemTitle, ItemContent } from "@/shared/ui/item"
 import { Button } from "@/shared/ui/button"
@@ -28,9 +27,11 @@ import type React from "react"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/shared/ui/collapsible"
 import { USER_ROLES } from "@/entities/user/model/constants"
 import { ROUTES } from "@/shared/model/routes"
+import { useUserStore } from "@/entities/user/model/store"
 
 export const Sidebar = ({ ...props }: React.ComponentProps<typeof SidebarUI>) => {
-  const { profile, signOut } = useAuthStore()
+  const { signOut } = useAuthStore()
+  const { profile } = useUserStore()
   const { pathname } = useLocation()
   const { openMobile, setOpenMobile } = useSidebar()
 

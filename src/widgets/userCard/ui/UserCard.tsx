@@ -55,7 +55,7 @@ export const UserCard = ({ user, className, showFavorite = true }: UserCardProps
   const getDisplayName = () => {
     if (user.role === USER_ROLES.CLINIC) {
       const clinic = user as CatalogClinic
-      return clinic.legalName || clinic.fullName || "Название не указано"
+      return clinic.fullName || "Название не указано"
     }
     return user.fullName || "Имя не указано"
   }
@@ -77,7 +77,7 @@ export const UserCard = ({ user, className, showFavorite = true }: UserCardProps
   // Получаем текст для аватара
   const getAvatarText = () => {
     if (user.role === USER_ROLES.CLINIC) {
-      return null // Для клиники используем иконку
+      return null
     }
     return formatName(user.fullName, true)
   }

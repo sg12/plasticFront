@@ -1,16 +1,16 @@
 import { useEffect, useMemo, useState } from "react"
 import { FormProvider, useForm } from "react-hook-form"
-import { useAuthStore } from "@/entities/auth/model/store"
 import { updateUser } from "@/entities/user/api/api"
 import type { RoleProfile, UserUpdateFormData } from "@/entities/user/types/types"
 import { toast } from "sonner"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { userUpdateSchema } from "@/entities/user/model/schema"
 import { logger } from "@/shared/lib/logger"
+import { useUserStore } from "@/entities/user/model/store"
 
 
 export const useProfile = () => {
-  const { profile } = useAuthStore()
+  const { profile } = useUserStore()
   const [isEditing, setIsEditing] = useState(false)
   const [editableProfile, setEditableProfile] = useState<RoleProfile | null>(profile as RoleProfile)
 
