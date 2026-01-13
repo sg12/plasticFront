@@ -3,10 +3,12 @@ import { useAuthStore } from "@/entities/auth/model/store"
 import { MODERATION_STATUS, USER_ROLES } from "@/entities/user/model/constants"
 import { Loader } from "@/shared/ui/loader"
 import { ModerationStatusScreen } from "@/features/auth/ui/ModerationStatusScreen"
-import { ROUTES } from '@/shared/model/routes'
+import { ROUTES } from "@/shared/model/routes"
+import { useUserStore } from "@/entities/user/model/store"
 
 export const ProtectedRoute = () => {
-  const { session, initialized, profile, loading } = useAuthStore()
+  const { session, initialized, loading } = useAuthStore()
+  const { profile } = useUserStore()
 
   if (loading || !initialized) {
     return <Loader message="Проверка сессии..." />
