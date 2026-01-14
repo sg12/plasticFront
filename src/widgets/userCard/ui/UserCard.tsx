@@ -21,6 +21,7 @@ import { USER_ROLES } from "@/entities/user/model/constants"
 import type { RoleProfile } from "@/entities/user/types/types"
 import type { CatalogDoctor, CatalogClinic } from "@/entities/catalog/types/types"
 import { differenceInDays } from "date-fns"
+import { useUserStore } from "@/entities/user/model/store"
 
 type UserCardProfile = CatalogDoctor | CatalogClinic | RoleProfile
 
@@ -32,6 +33,7 @@ interface UserCardProps {
 
 export const UserCard = ({ user, className, showFavorite = true }: UserCardProps) => {
   const { toggleFavorite, favoriteDoctors, favoriteClinics } = useCatalogStore()
+  const { profile } = useUserStore()
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -154,7 +156,7 @@ export const UserCard = ({ user, className, showFavorite = true }: UserCardProps
                     </p>
                   )}
               </div>
-              {showFavorite && user.role === USER_ROLES.PATIENT && (
+              {showFavorite && profile?.role === USER_ROLES.PATIENT && (
                 <Button
                   variant="ghost"
                   size="icon"
