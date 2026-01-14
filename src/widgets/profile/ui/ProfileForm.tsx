@@ -6,6 +6,10 @@ import { UserProfileInformation } from "@/widgets/profile/ui/UserProfileInformat
 import { UserProfileHistory } from "@/widgets/profile/ui/UserProfileHistory"
 import { USER_ROLES } from "@/entities/user/model/constants"
 
+/**
+ * Компонент для просмотра своего профиля
+ */
+
 export const ProfileForm = () => {
   const {
     profile,
@@ -22,52 +26,47 @@ export const ProfileForm = () => {
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <div className="flex flex-col justify-between gap-4 lg:flex-row">
-          <div>
-            <h2>Мой профиль</h2>
-            <p className="mt-2 text-gray-600">Управляйте вашей личной информацией</p>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-global">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div className="min-w-0">
+            <h2 className="min-w-0 truncate">Профиль</h2>
+            <p className="text-muted-foreground mt-1 text-sm">
+              Проверьте данные и обновляйте информацию при необходимости
+            </p>
           </div>
-          {profile?.role != USER_ROLES.CLINIC &&
-            (!isEditing ? (
-              <div className="flex flex-wrap gap-2">
-                <Button
-                  onClick={() => startEdit()}
-                  className="fixed bottom-4 left-1/2 -translate-x-1/2 max-xl:z-1 sm:relative sm:bottom-auto sm:left-auto sm:translate-x-0"
-                >
+
+          {profile?.role != USER_ROLES.CLINIC && (
+            <div className="hidden flex-wrap items-center justify-end gap-2 sm:flex">
+              {!isEditing ? (
+                <Button onClick={startEdit} size="sm">
                   <Edit2 className="h-4 w-4" />
                   Редактировать
                 </Button>
-                {/* {profile?.role === "doctor" && (
-                  <Button type="button">
-                  <QrCode className="h-4 w-4" />
-                  QR-код
+              ) : (
+                <>
+                  <Button onClick={handleSaveClick} variant="save" size="sm" disabled={isSaving}>
+                    {isSaving ? (
+                      <Loader className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Save className="h-4 w-4" />
+                    )}
+                    Сохранить
                   </Button>
-                )} */}
-              </div>
-            ) : (
-              <div className="fixed bottom-4 left-1/2 z-10 flex -translate-x-1/2 gap-2 sm:relative sm:bottom-auto sm:left-auto sm:translate-x-0">
-                <Button onClick={() => handleSaveClick()} variant="save" disabled={isSaving}>
-                  {isSaving ? (
-                    <Loader className="h-4 w-4 animate-spin" />
-                  ) : (
-                    <Save className="h-4 w-4" />
-                  )}
-                  Сохранить
-                </Button>
-                <Button variant="cancel" disabled={isSaving} onClick={() => cancelEdit()}>
-                  <X className="h-4 w-4" />
-                  Отмена
-                </Button>
-              </div>
-            ))}
+                  <Button variant="outline" size="sm" disabled={isSaving} onClick={cancelEdit}>
+                    <X className="h-4 w-4" />
+                    Отмена
+                  </Button>
+                </>
+              )}
+            </div>
+          )}
         </div>
 
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <div className="grid gap-6 lg:grid-cols-3">
           <div className="lg:col-span-1">
             <UserProfileCard profile={isEditing ? editableProfile : profile} />
           </div>
-          <div className="space-y-4 lg:col-span-2">
+          <div className="space-global lg:col-span-2">
             <UserProfileInformation
               form={form}
               profile={isEditing ? editableProfile : profile}
@@ -77,6 +76,46 @@ export const ProfileForm = () => {
             <UserProfileHistory profile={profile} />
           </div>
         </div>
+
+        {profile?.role != USER_ROLES.CLINIC && (
+          <div className="bg-background/90 fixed inset-x-0 bottom-0 z-10 border-t p-3 backdrop-blur sm:hidden">
+            <div className="mx-auto flex max-w-7xl items-center justify-end gap-2 px-1">
+              {!isEditing ? (
+                <Button onClick={startEdit} className="flex-1" size="sm">
+                  <Edit2 className="h-4 w-4" />
+                  Редактировать
+                </Button>
+              ) : (
+                <>
+                  <Button
+                    onClick={handleSaveClick}
+                    variant="save"
+                    size="sm"
+                    disabled={isSaving}
+                    className="flex-1"
+                  >
+                    {isSaving ? (
+                      <Loader className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Save className="h-4 w-4" />
+                    )}
+                    Сохранить
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={isSaving}
+                    onClick={cancelEdit}
+                    className="flex-1"
+                  >
+                    <X className="h-4 w-4" />
+                    Отмена
+                  </Button>
+                </>
+              )}
+            </div>
+          </div>
+        )}
       </form>
     </FormProvider>
   )

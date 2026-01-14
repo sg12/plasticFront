@@ -1,9 +1,8 @@
-import { useState } from "react"
 import useSWR from "swr"
-import { toast } from "sonner"
 import type { Session } from "@supabase/supabase-js"
 import { parseBrowser } from "@/shared/lib/userAgent"
-import { getSession, signOut } from "@/entities/auth/api/api"
+import { getSession } from "@/entities/auth/api/api"
+import { logger } from "@/shared/lib/logger"
 
 export interface SessionInfo {
   accessToken: string
@@ -30,8 +29,9 @@ const fetchSession = async (): Promise<SessionInfo | null> => {
     const { data, error } = await getSession()
 
     if (error) {
-      console.error("Ошибка получения сессии:", error)
-      // Выбрасываем ошибку, чтобы SWR правильно обработал состояние
+      logger.error("Ошибка получения сессии", new Error(error.message), {
+        errorCode: error.status,
+      })
       throw error
     }
 
@@ -41,49 +41,17 @@ const fetchSession = async (): Promise<SessionInfo | null> => {
 
     return null
   } catch (error) {
-    // Гарантируем, что ошибка будет выброшена для SWR
-    console.error("Ошибка в fetchSession:", error)
+    logger.error("Ошибка в fetchSession", error as Error)
     throw error
   }
 }
 
 export const useActiveSessions = () => {
-  const [isSigningOut, setIsSigningOut] = useState(false)
-
-  const { data, isLoading, error, mutate } = useSWR("activeSession", fetchSession, {
-    revalidateOnFocus: false,
-    refreshInterval: 30 * 1000,
-    dedupingInterval: 1 * 60 * 1000,
-    errorRetryCount: 2,
-    errorRetryInterval: 1000,
-    shouldRetryOnError: (error) => {
-      return error?.message?.includes("network") || error?.message?.includes("timeout")
-    },
-    keepPreviousData: true,
-    onError: (error) => {
-      console.error("SWR error in useActiveSessions:", error)
-    },
-  })
-
-  const signOutAll = async () => {
-    setIsSigningOut(true)
-    try {
-      await signOut("global")
-      toast.success("Вы вышли со всех устройств")
-      await mutate()
-      window.location.reload()
-    } catch (error) {
-      toast.error("Ошибка при выходе")
-    } finally {
-      setIsSigningOut(false)
-    }
-  }
+  const { data, isLoading, error, mutate } = useSWR(["activeSession"], fetchSession)
 
   return {
     session: data ?? null,
     isLoading: isLoading && !error,
-    isSigningOut,
-    signOutAll,
     refresh: mutate,
     error: error?.message ?? null,
   }

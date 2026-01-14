@@ -7,6 +7,7 @@ import { Button } from "@/shared/ui/button"
 import { Separator } from "@/shared/ui/separator"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/shared/ui/inputGroup"
 import { Label } from "@/shared/ui/label"
+import { ROUTES } from '@/shared/model/routes'
 
 export function SignInForm() {
   const { form, showPassword, isLoading, setShowPassword, onSubmit } = useSignInForm()
@@ -16,9 +17,9 @@ export function SignInForm() {
       <div className="flex min-h-screen items-center justify-center">
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="w-full max-w-2xl space-y-6"
+          className="w-full max-w-2xl space-global"
         >
-          <div className="w-full space-y-6 rounded-2xl border border-gray-200 bg-white p-8 shadow-xl">
+          <div className="w-full space-global rounded-2xl border border-gray-200 bg-white p-8 shadow-xl">
             <h2>Вход</h2>
             <FormField
               control={form.control}
@@ -98,7 +99,7 @@ export function SignInForm() {
             <div className="text-center">
               <p className="text-gray-600">
                 Нет аккаунта?{" "}
-                <NavLink to="/signup" className="text-purple-600 hover:text-purple-700">
+                <NavLink to={ROUTES.SIGNUP} className="text-purple-600 hover:text-purple-700">
                   Зарегистрироваться
                 </NavLink>
               </p>

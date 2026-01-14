@@ -8,6 +8,7 @@ import { signUpSchema } from "../model/schema"
 import { toast } from "sonner"
 import { useAuthStore } from "@/entities/auth/model/store"
 import { FormProvider } from "react-hook-form"
+import { logger } from "@/shared/lib/logger"
 
 export const useSignUpForm = () => {
   const [currentStep, setCurrentStep] = useState(0)
@@ -62,15 +63,22 @@ export const useSignUpForm = () => {
         return
       }
 
-      if (authData && !!authData.user?.identities) {
+      if (authData && !authData.user?.identities?.length) {
         toast.warning("Пользователь с таким email уже существует. Войдите в систему.")
         return
       }
 
+      logger.info("Регистрация прошла успешно через форму", {
+        email: data.basic.email,
+        role: data.role,
+      })
       toast.success("Регистрация прошла успешно. Пожалуйста, подтвердите свой email.")
     } catch (error) {
+      logger.error("Ошибка регистрации через форму", error as Error, {
+        email: data.basic.email,
+        role: data.role,
+      })
       toast.error("Произошла неизвестная ошибка при регистрации.")
-      console.error("Ошибка регистрации:", error)
     }
   }
 

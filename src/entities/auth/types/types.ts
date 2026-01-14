@@ -1,7 +1,6 @@
-import type { RoleProfile } from "@/entities/user/types/types"
 import type { SignInFormData } from "@/features/auth/ui/signIn/model/types"
 import type { SignUpFormData } from "@/features/auth/ui/signUp/types/types"
-import type { Session, User as SupabaseUser } from "@supabase/supabase-js"
+import type { Session, SignOut, User as SupabaseUser } from "@supabase/supabase-js"
 import {
   onAuthStateChange,
   signInWithPassword as apiSignInWithPassword,
@@ -14,7 +13,6 @@ export interface AuthState {
   user: SupabaseUser | null
   loading: boolean
   initialized: boolean
-  profile: RoleProfile | null
 }
 
 type AuthSubscription = ReturnType<typeof onAuthStateChange>
@@ -30,11 +28,9 @@ export interface AuthStore extends AuthState {
 
   signUp: (credentials: SignUpFormData) => ReturnType<typeof apiSignUp>
   signIn: (credentials: SignInFormData) => ReturnType<typeof apiSignInWithPassword>
-  signOut: () => Promise<void>
+  signOut: (scope: SignOut["scope"]) => Promise<void>
   initialize: () => Promise<void>
   reset: () => void
 
-  loadProfile: (userId: string) => Promise<RoleProfile | null>
-  handlePostLoginActions: (userId: string) => Promise<void>
   _authSubscription: AuthSubscription | null
 }

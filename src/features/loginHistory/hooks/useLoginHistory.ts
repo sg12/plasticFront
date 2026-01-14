@@ -1,6 +1,7 @@
 import useSWR from "swr"
 import { useAuthStore } from "@/entities/auth/model/store"
-import { fetchLoginHistory } from "@/features/loginHistory/api/api"
+import { getLoginHistory } from "@/features/loginHistory/api/api"
+import { logger } from "@/shared/lib/logger"
 export type { LoginRecord } from "@/features/loginHistory/types/types"
 
 export const useLoginHistory = () => {
@@ -12,7 +13,7 @@ export const useLoginHistory = () => {
       if (!user?.id) {
         throw new Error("User not authenticated")
       }
-      return fetchLoginHistory(user.id)
+      return getLoginHistory(user.id)
     },
     {
       revalidateOnFocus: false,
@@ -20,9 +21,13 @@ export const useLoginHistory = () => {
       dedupingInterval: 2 * 60 * 1000,
       onError: (err) => {
         if (err instanceof Error && err.message.includes("миграцию")) {
-          console.warn("Ошибка: таблица loginHistory не создана. Запустите миграцию.")
+          logger.warn("Таблица loginHistory не создана. Запустите миграцию.", {
+            userId: user?.id,
+          })
         } else {
-          console.error("Ошибка загрузки истории входов:", err)
+          logger.error("Ошибка загрузки истории входов", err as Error, {
+            userId: user?.id,
+          })
         }
       },
     },

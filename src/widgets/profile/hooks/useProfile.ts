@@ -1,15 +1,17 @@
 import { useEffect, useMemo, useState } from "react"
 import { FormProvider, useForm } from "react-hook-form"
-import { useAuthStore } from "@/entities/auth/model/store"
 import { updateUser } from "@/entities/user/api/api"
 import type { RoleProfile, UserUpdateFormData } from "@/entities/user/types/types"
 import { toast } from "sonner"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { userUpdateSchema } from "@/entities/user/model/schema"
+import { logger } from "@/shared/lib/logger"
+import { useUserStore } from "@/entities/user/model/store"
 
 
 export const useProfile = () => {
-  const { profile } = useAuthStore()
+  const { profile } = useUserStore()
+  
   const [isEditing, setIsEditing] = useState(false)
   const [editableProfile, setEditableProfile] = useState<RoleProfile | null>(profile as RoleProfile)
 
@@ -69,16 +71,25 @@ export const useProfile = () => {
 
     try {
       const updatedProfile = { ...profile, ...data }
-      console.log("Data from form:", data)
-      console.log("Merged profile data to be sent:", updatedProfile)
+      logger.debug("Обновление профиля", {
+        userId: profile.id,
+        role: profile.role,
+        changedFields: Object.keys(data),
+      })
 
       await updateUser(updatedProfile.id, updatedProfile)
+      logger.info("Профиль успешно обновлен через хук", {
+        userId: profile.id,
+        role: profile.role,
+      })
       toast.success("Профиль успешно обновлён")
       setIsEditing(false)
       setIsSaving(false)
     } catch (error) {
+      logger.error("Ошибка сохранения профиля через хук", error as Error, {
+        userId: profile.id,
+      })
       toast.error("Не удалось сохранить изменения")
-      console.error("Ошибка сохранения профиля:", error)
     }
   }
 

@@ -12,9 +12,12 @@ import { useAuthStore } from "@/entities/auth/model/store"
 import { Badge } from "@/shared/ui/badge"
 import { updateUser } from "@/entities/user/api/api"
 import { cn } from "@/shared/lib/utils"
+import { logger } from "@/shared/lib/logger"
+import { useUserStore } from "@/entities/user/model/store"
 
 export const AIVisualizer = () => {
-  const { user, profile } = useAuthStore()
+  const { user } = useAuthStore()
+  const { profile } = useUserStore()
   const {
     state,
     setStep,
@@ -53,12 +56,11 @@ export const AIVisualizer = () => {
           operationType: state.operationType,
           description: state.description || undefined,
         })
-        console.log(
-          "Face Image V2\n",
-          `Zone:${state.selectedZone}\n`,
-          `Operation Type:${state.operationType}\n`,
-          `Decription${state.description}`,
-        )
+        logger.debug("Обработка изображения через Face Image V2", {
+          zone: state.selectedZone,
+          operationType: state.operationType,
+          description: state.description,
+        })
 
         if (result) {
           completeProcessing(result.resultUrl)
@@ -68,10 +70,13 @@ export const AIVisualizer = () => {
               const decrementToken = profile?.aiTokensUsed - 1
               try {
                 await updateUser(user.id, { aiTokenUsed: decrementToken })
-                const { loadProfile } = useAuthStore.getState()
+                const { loadProfile } = useUserStore.getState()
                 await loadProfile(user.id)
               } catch (error) {
-                console.error("Ошибка при сохранении токенов:", error)
+                logger.error("Ошибка при сохранении токенов", error as Error, {
+                  userId: user.id,
+                  tokensUsed: decrementToken,
+                })
               }
             }
           }
@@ -122,9 +127,15 @@ export const AIVisualizer = () => {
           )}
         </div>
 
-        <div className="relative">
-          <Card className={cn(profile?.aiTokensUsed == 0 && "pointer-events-none select-none")}>
-            <CardContent>
+        <Card>
+          <CardContent
+            className={cn(
+              profile?.aiTokensUsed === 0 &&
+                state.step !== "result" &&
+                "pointer-events-none select-none",
+            )}
+          >
+            <div className="relative">
               {state.step === "select-zone" && (
                 <BodySelector selectedZone={state.selectedZone} onSelectZone={selectZone} />
               )}
@@ -145,29 +156,29 @@ export const AIVisualizer = () => {
 
               {state.step === "processing" && <ProcessingLoader />}
 
-              {state.step === "result" &&
-                state.selectedZone &&
-                state.photoPreview &&
-                state.resultImage && (
-                  <ResultComparison
-                    selectedZone={state.selectedZone}
-                    originalImage={state.photoPreview}
-                    resultImage={state.resultImage}
-                    onReset={reset}
-                  />
-                )}
-            </CardContent>
-          </Card>
-
-          {profile?.aiTokensUsed == 0 && (
-            <div className="absolute inset-0 flex items-center justify-center rounded-xl backdrop-blur-xs">
-              <div className="text-center">
-                <Gem className="mx-auto mb-3 size-12 text-violet-500" />
-                <h3>В скором времени добавим способ пополнять токены</h3>
-              </div>
+              {profile?.aiTokensUsed === 0 && state.step !== "result" && (
+                <div className="absolute inset-0 flex items-center justify-center rounded-xl backdrop-blur-xs">
+                  <div className="text-center">
+                    <Gem className="mx-auto mb-3 size-12 text-violet-500" />
+                    <h3>В скором времени добавим способ пополнять токены</h3>
+                  </div>
+                </div>
+              )}
             </div>
-          )}
-        </div>
+
+            {state.step === "result" &&
+              state.selectedZone &&
+              state.photoPreview &&
+              state.resultImage && (
+                <ResultComparison
+                  selectedZone={state.selectedZone}
+                  originalImage={state.photoPreview}
+                  resultImage={state.resultImage}
+                  onReset={reset}
+                />
+              )}
+          </CardContent>
+        </Card>
 
         {state.step !== "processing" && state.step !== "result" && (
           <div className="mt-6 flex justify-between">

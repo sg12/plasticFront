@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { supabase } from "@/shared/api/supabase/client"
 import { changePasswordSchema, type ChangePasswordFormValues } from "../model/schema"
+import { logger } from "@/shared/lib/logger"
 
 export function useChangePassword() {
   const [open, setOpen] = useState(false)

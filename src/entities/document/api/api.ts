@@ -6,6 +6,8 @@ import {
   isFileValidationError,
   type FileValidationConfig,
 } from "@/shared/lib/fileValidation"
+import { logger } from "@/shared/lib/logger"
+import type { USER_ROLES } from '@/entities/user/model/constants'
 
 const STORAGE_BUCKET = "documents"
 
@@ -23,9 +25,15 @@ const DOCUMENT_VALIDATION_CONFIGS: Record<string, FileValidationConfig> = {
 
 export async function uploadFiles(
   userId: string,
-  role: "doctor" | "clinic",
+  role: typeof USER_ROLES.DOCTOR | typeof USER_ROLES.CLINIC,
   files: DoctorUploadedFiles | ClinicUploadedFiles,
 ): Promise<UploadedFilePaths> {
+  logger.info("Начало загрузки файлов", {
+    userId,
+    role,
+    fileCount: Object.keys(files).length,
+  })
+
   const paths: UploadedFilePaths = {}
 
   const uploadPromises = Object.entries(files).map(async ([key, fileOrFiles]) => {
@@ -41,7 +49,12 @@ export async function uploadFiles(
       await validateFiles(validFiles, config)
     } catch (error) {
       if (isFileValidationError(error)) {
-        console.error(`Валидация файла не пройдена для ${key}:`, error.message)
+        logger.error(`Валидация файла не пройдена для ${key}`, error as Error, {
+          userId,
+          role,
+          documentType: key,
+          fileName: (error as { fileName?: string }).fileName,
+        })
         throw new Error(`Ошибка валидации файла "${error.fileName}": ${error.message}`)
       }
       throw error
@@ -59,8 +72,22 @@ export async function uploadFiles(
           .from(STORAGE_BUCKET)
           .upload(filePath, file, { cacheControl: "3600", upsert: false })
 
-        if (uploadError) throw new Error(`Ошибка загрузки для ${key}: ${uploadError.message}`)
+        if (uploadError) {
+          logger.error(`Ошибка загрузки файла для ${key}`, new Error(uploadError.message), {
+            userId,
+            role,
+            documentType: key,
+            filePath,
+          })
+          throw new Error(`Ошибка загрузки для ${key}: ${uploadError.message}`)
+        }
 
+        logger.debug("Файл успешно загружен", {
+          userId,
+          role,
+          documentType: key,
+          filePath,
+        })
         uploadedPaths.push(filePath)
       }),
     )
@@ -71,6 +98,12 @@ export async function uploadFiles(
   })
 
   await Promise.all(uploadPromises)
+
+  logger.info("Все файлы успешно загружены", {
+    userId,
+    role,
+    uploadedCount: Object.keys(paths).length,
+  })
 
   return paths
 }
@@ -89,7 +122,10 @@ export async function getFileUrls(
         .createSignedUrl(path, 3600) // URL действителен 1 час
 
       if (error) {
-        console.error(`Ошибка получения URL для ${path}:`, error)
+        logger.error(`Ошибка получения URL для файла`, new Error(error.message), {
+          path,
+          documentType: key,
+        })
         continue
       }
 

@@ -1,59 +1,99 @@
 import { createBrowserRouter } from "react-router"
-import { App } from "../App"
-import { Main } from "@/pages/main/ui/Main"
-import { SignIn } from "@/pages/signIn/ui/SignIn"
-import { SignUp } from "@/pages/signUp/ui/SignUp"
-import { Dashboard } from "@/pages/dashboard/ui/Dashboard"
-import { Profile } from "@/pages/profile/ui/Profile"
-import { AIVisualizer } from "@/pages/aiVisualizer/ui/AIVisualizer"
-import { Support } from "@/pages/support/ui/Support"
-import { General } from "@/widgets/settings/general/ui/General"
-import { PersonalData } from "@/widgets/settings/personalData/ui/PersonalData"
-import { CreateProfile } from "@/pages/createProfile/ui/CreateProfile"
-import { NotFound } from "@/pages/notFound/ui/NotFound"
-import { PublicRoute } from "@/app/routers/PublicRoute"
-import { ProtectedRoute } from "@/app/routers/ProtectedRoute"
+import { ROUTES } from "@/shared/model/routes"
+import { Loader } from "@/shared/ui/loader"
+import { lazyRoute } from "./lazyRoute"
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    HydrateFallback: () => <Loader message="Загрузка приложения..." />,
+    ...lazyRoute(() => import("@/app/App"), "App"),
     children: [
       {
-        element: <PublicRoute />,
+        ...lazyRoute(() => import("@/app/routers/PublicRoute"), "PublicRoute"),
         children: [
-          { path: "signin", element: <SignIn /> },
-          { path: "signup", element: <SignUp /> },
+          {
+            path: ROUTES.SIGNIN,
+            ...lazyRoute(() => import("@/pages/signIn/ui/SignIn"), "SignIn"),
+          },
+          {
+            path: ROUTES.SIGNUP,
+            ...lazyRoute(() => import("@/pages/signUp/ui/SignUp"), "SignUp"),
+          },
         ],
       },
       {
-        element: <ProtectedRoute />,
+        ...lazyRoute(() => import("@/app/routers/ProtectedRoute"), "ProtectedRoute"),
         children: [
           {
-            path: "createProfile",
-            element: <CreateProfile />,
+            path: ROUTES.CREATE_PROFILE,
+            ...lazyRoute(() => import("@/pages/createProfile/ui/CreateProfile"), "CreateProfile"),
           },
           {
-            path: "main",
-            element: <Main />,
-            handle: { title: "Главная" },
+            path: ROUTES.MAIN,
+            ...lazyRoute(() => import("@/pages/main/ui/Main"), "Main"),
             children: [
-              { index: true, element: <Dashboard />, handle: { title: "Главная" } },
-              { path: "profile", element: <Profile />, handle: { title: "Профиль" } },
-              { path: "ai", element: <AIVisualizer />, handle: { title: "AI Визуализатор" } },
-              { path: "support", element: <Support />, handle: { title: "Поддержка" } },
               {
-                path: "settings",
+                index: true,
+                ...lazyRoute(() => import("@/pages/dashboard/ui/Dashboard"), "Dashboard"),
+                handle: { title: "Главная" },
+              },
+              {
+                path: ROUTES.PROFILE_SOME_USER,
+                ...lazyRoute(() => import("@/pages/profile/ui/Profile"), "Profile"),
+                handle: { title: "Профиль пользователя" },
+              },
+              {
+                path: ROUTES.PROFILE,
+                ...lazyRoute(() => import("@/pages/profile/ui/Profile"), "Profile"),
+                handle: { title: "Профиль" },
+              },
+              {
+                path: ROUTES.CATALOG,
+                ...lazyRoute(() => import("@/pages/catalog/ui/Catalog"), "Catalog"),
+                handle: { title: "Каталог" },
+              },
+              {
+                path: ROUTES.CLINIC_DOCTORS,
+                ...lazyRoute(
+                  () => import("@/pages/clinicDoctors/ui/ClinicDoctors"),
+                  "ClinicDoctors",
+                ),
+                handle: { title: "Врачи клиники" },
+              },
+              {
+                path: ROUTES.DOCTOR_CLINICS,
+                ...lazyRoute(
+                  () => import("@/pages/doctorClinics/ui/DoctorClinics"),
+                  "DoctorClinics",
+                ),
+                handle: { title: "Клиники" },
+              },
+              {
+                path: ROUTES.AIVISUALIZER,
+                ...lazyRoute(() => import("@/pages/aiVisualizer/ui/AIVisualizer"), "AIVisualizer"),
+                handle: { title: "AI Визуализатор" },
+              },
+              {
+                path: ROUTES.SUPPORT,
+                ...lazyRoute(() => import("@/pages/support/ui/Support"), "Support"),
+                handle: { title: "Поддержка" },
+              },
+              {
+                path: ROUTES.SETTINGS,
                 handle: { title: "Настройки" },
                 children: [
                   {
-                    path: "general",
-                    element: <General />,
+                    path: ROUTES.GENERAL,
+                    ...lazyRoute(() => import("@/pages/settings/general/General"), "General"),
                     handle: { title: "Основные настройки" },
                   },
                   {
-                    path: "personalData",
-                    element: <PersonalData />,
+                    path: ROUTES.PERSONAL_DATA,
+                    ...lazyRoute(
+                      () => import("@/pages/settings/personalData/PersonalData"),
+                      "PersonalData",
+                    ),
                     handle: { title: "Персональные данные" },
                   },
                 ],
@@ -64,7 +104,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "*",
-        element: <NotFound />,
+        ...lazyRoute(() => import("@/pages/notFound/ui/NotFound"), "NotFound"),
       },
     ],
   },

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router"
 import { toast } from "sonner"
 import { useAuthStore } from "@/entities/auth/model/store"
 import { createUser } from "@/entities/user/api/api"
+import { logger } from "@/shared/lib/logger"
 import type {
   ClinicUploadedFiles,
   DoctorUploadedFiles,
@@ -15,18 +16,21 @@ import type { FileSlot } from "@/features/fileUpload/types/types"
 import type { UserCreateFormData, UserRole } from "@/entities/user/types/types"
 import { userCreateSchema } from "@/entities/user/model/schema"
 import { FormProvider } from "react-hook-form"
+import { ROUTES } from "@/shared/model/routes"
+import { useUserStore } from "@/entities/user/model/store"
 
 export const useCreateProfileForm = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFilesByRole>({})
-  const { user, session, initialized, profile } = useAuthStore()
+  const { user, session, initialized } = useAuthStore()
+  const { profile } = useUserStore()
   const [currentStep, setCurrentStep] = useState(0)
 
   const navigate = useNavigate()
 
   useEffect(() => {
     if (profile) {
-      navigate("/main")
+      navigate(ROUTES.MAIN)
     }
   }, [profile])
 
@@ -45,6 +49,7 @@ export const useCreateProfileForm = () => {
       experience: undefined,
       education: "",
       workplace: "",
+      clinic: null,
       inn: "",
       // Clinic fields
       legalName: "",
@@ -55,6 +60,7 @@ export const useCreateProfileForm = () => {
       clinicLicense: "",
       directorName: "",
       directorPosition: "",
+      doctors: [],
       documents: {},
     },
     mode: "all",
@@ -62,7 +68,7 @@ export const useCreateProfileForm = () => {
 
   useEffect(() => {
     if (initialized && !session) {
-      navigate("/signup")
+      navigate(ROUTES.SIGNUP)
       toast.info("Пожалуйста, войдите в систему, чтобы продолжить.")
     }
     if (role) {
@@ -116,7 +122,7 @@ export const useCreateProfileForm = () => {
 
     if (!sessionData.session) {
       toast.error("Сессия не найдена, пожалуйста, войдите снова.")
-      navigate("/signin")
+      navigate(ROUTES.SIGNIN)
       setIsLoading(false)
       return
     }
@@ -124,7 +130,7 @@ export const useCreateProfileForm = () => {
     const fullData = {
       ...data,
       email: sessionData.session.user.email!,
-      fullName: sessionData.session.user.user_metadata.full_name,
+      fullName: sessionData.session.user.user_metadata.fullName,
       phone: sessionData.session.user.user_metadata.phone,
     }
 
@@ -133,10 +139,13 @@ export const useCreateProfileForm = () => {
       toast.success("Профиль успешно создан!")
       navigate(0)
     } catch (error: any) {
-      console.error("Ошибка создания профиля:", error)
+      logger.error("Ошибка создания профиля", error as Error, {
+        userId: user.id,
+        role: fullData.role,
+      })
       if (error?.message === "USER_ALREADY_EXISTS" || error?.code === "23505") {
         toast.info("Профиль для этого пользователя уже существует.")
-        navigate("/main")
+        navigate(ROUTES.MAIN)
       } else {
         toast.error(error.message || "Ошибка при создании профиля.")
       }

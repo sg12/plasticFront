@@ -30,7 +30,7 @@ interface LogoProps
 const LogoIcon = () => <Dessert />
 
 const Logo = React.forwardRef<HTMLDivElement, LogoProps>(
-  ({ className, variant, size, name = "Novome", ...props }, ref) => {
+  ({ className, variant, size, name = "NOVOME", ...props }, ref) => {
     const showIcon = variant !== "text"
     const showText = variant !== "icon"
 

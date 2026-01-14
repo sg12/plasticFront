@@ -1,8 +1,7 @@
 import type { BodyZone, OperationType } from "../types/types"
 import { BODY_ZONES } from "../model/constants"
-
-const API_BASE_URL = import.meta.env.VITE_ROUTERAI_URL || "https://routerai.ru/api/v1"
-const API_KEY = import.meta.env.VITE_ROUTERAI_KEY
+import { supabase } from "@/shared/api/supabase/client"
+import { logger } from "@/shared/lib/logger"
 
 interface Params {
   image: File
@@ -55,12 +54,13 @@ export const processFaceImageV2 = async ({
   description,
 }: Params): Promise<{ resultUrl: string; tokensUsed?: number }> => {
   try {
-    // Валидация API ключа
-    if (!API_KEY) {
-      throw new Error(
-        "API ключ RouterAI не настроен. Установите VITE_ROUTERAI_KEY в переменных окружения",
-      )
-    }
+    logger.info("Начало обработки изображения через API V2", {
+      zone,
+      operationType,
+      hasDescription: !!description,
+      imageSize: image.size,
+      imageType: image.type,
+    })
 
     // Валидация входных данных
     if (!image) {
@@ -104,112 +104,45 @@ export const processFaceImageV2 = async ({
 
 Это инструмент визуализации для демонстрации возможных эстетических изменений. Отредактируйте это конкретное изображение, сохранив идентичность человека.`
 
-    // Редактирование изображения через chat/completions с мультимодальностью
-    // Отправляем исходное изображение вместе с промптом для редактирования
-    try {
-      const imageResponse = await fetch(`${API_BASE_URL}/chat/completions`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${API_KEY}`,
-        },
-        body: JSON.stringify({
-          model: "google/gemini-3-pro-image-preview",
-          messages: [
-            {
-              role: "user",
-              content: [
-                {
-                  type: "image_url",
-                  image_url: {
-                    url: `data:${mimeType};base64,${base64Image}`,
-                  },
-                },
-                {
-                  type: "text",
-                  text: editPrompt,
-                },
-              ],
-            },
-          ],
-          modalities: ["image", "text"],
-          max_tokens: 1000,
-        }),
+    // Вызываем Supabase Edge Function
+    const { data, error } = await supabase.functions.invoke("router-ai", {
+      body: {
+        image: base64Image,
+        mimeType,
+        zone,
+        operationType,
+        description,
+        editPrompt,
+      },
+    })
+
+    if (error) {
+      throw new Error(error.message || "Ошибка обработки изображения")
+    }
+
+    if (!data || !data.resultUrl) {
+      logger.error("Не удалось получить обработанное изображение", new Error("No resultUrl in response"), {
+        zone,
+        operationType,
       })
+      throw new Error("Не удалось получить обработанное изображение")
+    }
 
-      if (!imageResponse.ok) {
-        const errorText = await imageResponse.text()
-        throw new Error(`Ошибка API генерации: ${imageResponse.status} ${errorText}`)
-      }
+    logger.info("Изображение успешно обработано через API V2", {
+      zone,
+      operationType,
+      tokensUsed: data.tokensUsed,
+    })
 
-      const responseData = await imageResponse.json()
-
-      const message = responseData.choices?.[0]?.message
-      if (!message) {
-        throw new Error("Не удалось получить ответ от модели генерации изображений")
-      }
-
-      let imageUrl: string | null = null
-
-      if (message.images && Array.isArray(message.images) && message.images.length > 0) {
-        const imageItem = message.images[0]
-        if (imageItem.type === "image_url" && imageItem.image_url?.url) {
-          imageUrl = imageItem.image_url.url
-        } else if (imageItem.image) {
-          imageUrl = imageItem.image
-        }
-      }
-
-      if (!imageUrl && message.content) {
-        const content = Array.isArray(message.content) ? message.content : [message.content]
-
-        for (const item of content) {
-          // Проверяем разные форматы ответа
-          if (item && typeof item === "object") {
-            if (item.type === "image_url" && item.image_url?.url) {
-              imageUrl = item.image_url.url
-              break
-            } else if (item.type === "image" && item.image) {
-              imageUrl = item.image
-              break
-            }
-          } else if (typeof item === "string" && item.startsWith("data:image")) {
-            imageUrl = item
-            break
-          }
-        }
-      }
-
-      if (!imageUrl) {
-        throw new Error("Не удалось найти изображение в ответе API")
-      }
-
-      if (imageUrl.startsWith("data:image")) {
-        return {
-          resultUrl: imageUrl,
-        }
-      }
-
-      const imageBlob = await fetch(imageUrl).then((res) => res.blob())
-      const imageDataUrl = await new Promise<string>((resolve, reject) => {
-        const reader = new FileReader()
-        reader.onload = () => resolve(reader.result as string)
-        reader.onerror = reject
-        reader.readAsDataURL(imageBlob)
-      })
-
-      return {
-        resultUrl: imageDataUrl,
-      }
-    } catch (generationError) {
-      console.error("Ошибка генерации изображения:", generationError)
-      if (generationError instanceof Error) {
-        throw new Error(`Ошибка генерации изображения: ${generationError.message}`)
-      }
-      throw new Error("Не удалось сгенерировать изображение")
+    return {
+      resultUrl: data.resultUrl,
+      tokensUsed: data.tokensUsed,
     }
   } catch (error) {
-    console.error("Ошибка обработки изображения с помощью API V2:", error)
+    logger.error("Ошибка обработки изображения с помощью API V2", error as Error, {
+      zone,
+      operationType,
+    })
     if (error instanceof Error) {
       throw error
     }

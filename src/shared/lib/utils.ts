@@ -8,7 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const formatName = (
-  fullName: string,
+  fullName: string | null,
   isFirstSymbol?: boolean,
   parts?: "firstName" | "lastName" | "patronymic",
 ): string => {
@@ -64,11 +64,20 @@ export const formatGender = (value: Gender) => {
   return value === "male" ? "Мужской" : value === "female" ? "Женский" : ""
 }
 
-export const pluralRu = (n: number, one: string, few: string, many: string) => {
+export const pluralRu = (n: number, one: string, few: string, many: string): string => {
   const mod10 = n % 10
   const mod100 = n % 100
-  if (mod100 >= 11 && mod100 <= 14) return many
-  if (mod10 === 1) return one
-  if (mod10 >= 2 && mod10 <= 4) return few
-  return many
+  let word: string
+
+  if (mod100 >= 11 && mod100 <= 14) {
+    word = many
+  } else if (mod10 === 1) {
+    word = one
+  } else if (mod10 >= 2 && mod10 <= 4) {
+    word = few
+  } else {
+    word = many
+  }
+
+  return `${n} ${word}`
 }

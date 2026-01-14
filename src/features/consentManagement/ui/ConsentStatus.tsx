@@ -8,13 +8,15 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/shared/ui/dialog"
-import { ShieldCheck, ShieldX, AlertTriangle } from "lucide-react"
+import { AlertTriangle } from "lucide-react"
 import { useState } from "react"
 import { useConsentManagement } from "../hooks/useConsentManagement"
-import type { Consent } from "../types/types"
+import type { Consent } from "@/entities/consent/types/types"
+import { ConsentItem } from "./ConsentItem"
+import { CONSENT_TYPES } from "@/entities/consent/model/constants"
 
 export const ConsentStatus = () => {
-  const { consents, isLoading, revokeConsent, grantConsent } = useConsentManagement()
+  const { data: consents, isLoading, revokeConsent, grantConsent } = useConsentManagement()
   const [revokeDialogOpen, setRevokeDialogOpen] = useState(false)
   const [selectedConsent, setSelectedConsent] = useState<Consent | null>(null)
 
@@ -33,7 +35,8 @@ export const ConsentStatus = () => {
 
   if (isLoading) {
     return (
-      <div className="space-y-3">
+      <div className="space-child">
+        <Skeleton className="h-20 w-full" />
         <Skeleton className="h-20 w-full" />
         <Skeleton className="h-20 w-full" />
         <Skeleton className="h-20 w-full" />
@@ -43,8 +46,8 @@ export const ConsentStatus = () => {
 
   return (
     <>
-      <div className="space-y-3">
-        {consents.map((consent) => (
+      <div className="space-child">
+        {consents?.map((consent: Consent) => (
           <ConsentItem
             key={consent.id}
             consent={consent}
@@ -62,12 +65,14 @@ export const ConsentStatus = () => {
               Отзыв согласия
             </DialogTitle>
             <DialogDescription>
-              Вы уверены, что хотите отозвать согласие на "{selectedConsent?.title}"?
-              {selectedConsent?.type === "medical_data" && (
-                <span className="mt-2 block text-amber-600">
-                  Внимание: это может ограничить функциональность сервиса.
-                </span>
-              )}
+              Вы уверены, что хотите отозвать согласие на "
+              {selectedConsent?.type ? CONSENT_TYPES[selectedConsent.type]?.title : ""}"?
+              {selectedConsent?.type &&
+                ["medicalData", "personalData"].includes(selectedConsent.type) && (
+                  <span className="mt-2 block text-amber-600">
+                    Внимание: это может ограничить функциональность сервиса.
+                  </span>
+                )}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -81,85 +86,5 @@ export const ConsentStatus = () => {
         </DialogContent>
       </Dialog>
     </>
-  )
-}
-
-interface ConsentItemProps {
-  consent: Consent
-  onRevoke: () => void
-  onGrant: () => void
-}
-
-function ConsentItem({ consent, onRevoke, onGrant }: ConsentItemProps) {
-  const isMedical = consent.type === "medical_data"
-
-  return (
-    <div
-      className={`flex items-start justify-between rounded-lg p-4 ${
-        isMedical ? "border border-purple-200 bg-purple-50" : "bg-gray-50"
-      }`}
-    >
-      <div className="flex gap-3">
-        <div className="mt-0.5">
-          {consent.isActive ? (
-            <ShieldCheck className="h-5 w-5 text-green-500" />
-          ) : (
-            <ShieldX className="h-5 w-5 text-red-500" />
-          )}
-        </div>
-        <div className="flex-1">
-          <div className="mb-1 flex flex-wrap items-center gap-2">
-            <p className="text-sm font-medium text-gray-900">{consent.title}</p>
-            <span
-              className={`rounded px-2 py-0.5 text-xs ${
-                consent.isActive ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
-              }`}
-            >
-              {consent.isActive ? "Активно" : "Отозвано"}
-            </span>
-            {consent.isRequired && (
-              <span className="rounded bg-gray-200 px-2 py-0.5 text-xs text-gray-600">
-                Обязательное
-              </span>
-            )}
-          </div>
-          <p className="text-sm text-gray-600">{consent.description}</p>
-          {consent.grantedAt && (
-            <p className="mt-1 text-xs text-gray-500">
-              {consent.isActive ? "Дата согласия: " : "Отозвано: "}
-              {new Date(consent.revokedAt || consent.grantedAt).toLocaleDateString("ru-RU", {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-              })}
-            </p>
-          )}
-        </div>
-      </div>
-
-      <div className="ml-4">
-        {consent.isActive ? (
-          !consent.isRequired && (
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-red-600 hover:text-red-700"
-              onClick={onRevoke}
-            >
-              Отозвать
-            </Button>
-          )
-        ) : (
-          <Button
-            variant="ghost"
-            size="sm"
-            className="text-green-600 hover:text-green-700"
-            onClick={onGrant}
-          >
-            Восстановить
-          </Button>
-        )}
-      </div>
-    </div>
   )
 }

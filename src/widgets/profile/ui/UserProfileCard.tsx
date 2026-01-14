@@ -1,42 +1,66 @@
-import { Mail, Phone } from "lucide-react"
+import { Hospital, Mail, Phone, Check, Copy } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "../../../shared/ui/avatar"
 import { formatName, formatRole } from "../../../shared/lib/utils"
 import { Separator } from "../../../shared/ui/separator"
 import { Badge } from "../../../shared/ui/badge"
 import type { RoleProfile, UserRole } from "../../../entities/user/types/types"
 import { USER_ROLES } from "@/entities/user/model/constants"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card"
+import { useClipboard } from "@/shared/hooks/useClipboard"
 
 interface Props {
   profile: RoleProfile | null
 }
 
 export const UserProfileCard = ({ profile }: Props) => {
+  const roleLabel = profile?.role ? formatRole(profile.role as UserRole) : "—"
+  const fullName = profile?.fullName?.trim() || "—"
+  const email = profile?.email?.trim() || "—"
+  const phone = profile?.phone?.trim() || "—"
+  const { copy: copyId, copied } = useClipboard(profile?.id, {
+    successMessage: "ID скопирован в буфер обмена",
+    errorMessage: "Не удалось скопировать ID",
+  })
+
   return (
-    <div className="space-y-2 rounded-xl border border-gray-200 bg-white p-6 text-center">
-      <Avatar className="mx-auto mb-4 size-32">
-        <AvatarImage />
-        <AvatarFallback className="text-3xl">
-          {profile && profile.role === USER_ROLES.CLINIC
-            ? formatName(profile.legalName ?? "Клиника")
-            : formatName(profile?.fullName ?? "Имя Фамилия", true)}
-        </AvatarFallback>
-      </Avatar>
-      <Badge variant="outline">{formatRole(profile?.role as UserRole)}</Badge>
-      <h3>
-        {profile && profile.role === USER_ROLES.CLINIC ? profile.legalName : profile?.fullName}
-      </h3>
-      <p className="mt-1 text-gray-600">ID: {profile?.id ?? "—"}</p>
-      <Separator className="my-6" />
-      <div className="space-y-3 text-left">
-        <div className="flex items-center gap-3 text-gray-600">
-          <Mail className="h-4 w-4" />
-          <span className="text-sm">{profile?.email ?? "example@mail.ru"}</span>
+    <Card>
+      <CardHeader className="text-center">
+        <div className="mx-auto">
+          <Avatar className="mx-auto size-24">
+            <AvatarImage />
+            <AvatarFallback className="text-3xl">
+              {profile && profile.role === USER_ROLES.CLINIC ? (
+                <Hospital className="size-10" />
+              ) : (
+                formatName(profile?.fullName ?? "", true) || "—"
+              )}
+            </AvatarFallback>
+          </Avatar>
         </div>
-        <div className="flex items-center gap-3 text-gray-600">
-          <Phone className="h-4 w-4" />
-          <span className="text-sm">{profile?.phone ?? "+79999999999"}</span>
+        <div className="mt-3 flex flex-col items-center gap-2">
+          <Badge variant="outline">{roleLabel}</Badge>
+          <CardTitle className="text-base">{fullName}</CardTitle>
+          <CardDescription>
+            <span className="inline-flex cursor-pointer items-center gap-2" onClick={copyId}>
+              {profile?.id ?? "—"}{" "}
+              {copied ? <Check className="size-4 text-green-600" /> : <Copy className="size-4" />}
+            </span>
+          </CardDescription>
         </div>
-      </div>
-    </div>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        <Separator />
+        <div className="space-y-2 text-sm">
+          <div className="text-muted-foreground flex items-center gap-3">
+            <Mail className="h-4 w-4" />
+            <span className="min-w-0 truncate">{email}</span>
+          </div>
+          <div className="text-muted-foreground flex items-center gap-3">
+            <Phone className="h-4 w-4" />
+            <span className="min-w-0 truncate">{phone}</span>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   )
 }

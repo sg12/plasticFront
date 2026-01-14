@@ -5,16 +5,20 @@ import { Header } from "@/widgets/header/ui/Header"
 
 export const Main = () => {
   return (
-    <SidebarProvider>
-      <Sidebar />
-      <SidebarInset>
+    <div className="[--header-height:calc(--spacing(14))]">
+      <SidebarProvider className="flex flex-col">
         <Header />
-        <main className="flex-1 p-4">
-          <div className="mx-auto max-w-7xl">
-            <Outlet />
-          </div>
-        </main>
-      </SidebarInset>
-    </SidebarProvider>
+        <div className="flex flex-1">
+          <Sidebar />
+          <SidebarInset>
+            <div>
+              <div className="mx-auto max-w-7xl p-4">
+                <Outlet />
+              </div>
+            </div>
+          </SidebarInset>
+        </div>
+      </SidebarProvider>
+    </div>
   )
 }

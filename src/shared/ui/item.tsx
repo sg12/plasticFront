@@ -37,6 +37,7 @@ const itemVariants = cva(
                 default: "bg-transparent",
                 outline: "border-border",
                 muted: "bg-muted",
+                white: "bg-white"
             },
             size: {
                 xs: "py-1.5 px-2 gap-1.5 text-xs",
@@ -136,7 +137,7 @@ function ItemDescription({ className, ...props }: React.ComponentProps<"p">) {
         <p
             data-slot="item-description"
             className={cn(
-                "text-muted-foreground line-clamp-2 text-sm leading-normal font-normal text-balance",
+                "text-muted-foreground line-clamp-3 text-sm leading-normal font-normal text-balance",
                 "[&>a:hover]:text-primary [&>a]:underline [&>a]:underline-offset-4",
                 className
             )}

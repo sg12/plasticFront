@@ -2,12 +2,17 @@ import type { FallbackProps } from "react-error-boundary"
 import { Button } from "@/shared/ui/button"
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert"
 import { AlertCircle, RefreshCw, Home } from "lucide-react"
+import { logger } from "@/shared/lib/logger"
+import { ROUTES } from '@/shared/model/routes'
 
 export const Fallback = ({ error, resetErrorBoundary }: FallbackProps) => {
-  console.error("Error Boundary caught an error:", error)
+  logger.error("Error Boundary caught an error", error, {
+    errorBoundary: true,
+    userAction: "error_displayed",
+  })
 
   const handleGoHome = () => {
-    window.location.href = "/main"
+    window.location.href = ROUTES.MAIN
   }
 
   const handleRetry = () => {
