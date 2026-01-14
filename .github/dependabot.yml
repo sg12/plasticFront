@@ -1,0 +1,68 @@
+# Конфигурация Dependabot для автоматического обновления зависимостей
+# Документация: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+# TODO
+# 1. Перейти в репозиторий на GitHub
+# 2. Открыть **Settings** → **Code security and analysis**
+# 3. В разделе **Dependabot alerts** включить:
+#    - ✅ Dependabot alerts
+#    - ✅ Dependabot security updates
+#    - ✅ Dependabot version updates
+
+version: 2
+updates:
+  # Обновление npm зависимостей (production и dev)
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly" # Проверка раз в неделю
+      day: "monday" # День недели для проверки
+      time: "09:00" # Время проверки (UTC)
+    open-pull-requests-limit: 10 # Максимум открытых PR одновременно
+    reviewers:
+      - "vlnt-trsv"
+    labels:
+      - "dependencies"
+      - "automated"
+      - "security" # Для обновлений безопасности
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+    # Группировка обновлений (создает один PR для нескольких обновлений)
+    groups:
+      production-dependencies:
+        dependency-type: "production"
+        update-types:
+          - "minor"
+          - "patch"
+      development-dependencies:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
+    # Игнорирование определенных зависимостей (если нужно)
+    ignore:
+      # Игнорируем major обновления для критических зависимостей
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+    # Всегда создавать PR для обновлений безопасности
+    allow:
+      - dependency-type: "direct"
+      - dependency-type: "indirect"
+    # Версионирование стратегии
+    versioning-strategy: "increase"
+
+  # Обновление GitHub Actions (если используются)
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    labels:
+      - "github-actions"
+      - "automated"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
