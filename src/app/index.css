@@ -129,6 +129,36 @@
   .space-text>:not(:last-child) {
     margin-bottom: var(--space-text);
   }
+
+  @keyframes collapsible-down {
+    from {
+      height: 0;
+      opacity: 0;
+    }
+    to {
+      height: var(--radix-collapsible-content-height);
+      opacity: 1;
+    }
+  }
+
+  @keyframes collapsible-up {
+    from {
+      height: var(--radix-collapsible-content-height);
+      opacity: 1;
+    }
+    to {
+      height: 0;
+      opacity: 0;
+    }
+  }
+
+  .animate-collapsible-down {
+    animation: collapsible-down 0.2s ease-out;
+  }
+
+  .animate-collapsible-up {
+    animation: collapsible-up 0.2s ease-out;
+  }
 }
 
 @layer base {
@@ -138,7 +168,7 @@
 
   body {
     @apply bg-background text-foreground;
-    @apply bg-gradient-to-br from-purple-100 via-white to-orange-100;
+    /* @apply bg-gradient-to-br from-purple-100 via-white to-orange-100; */
   }
 
   h1 {

@@ -1,4 +1,4 @@
-import { Navigate, Outlet } from "react-router"
+import { Navigate, Outlet, useLocation } from "react-router"
 import { useAuthStore } from "@/entities/auth/model/store"
 import { MODERATION_STATUS, USER_ROLES } from "@/entities/user/model/constants"
 import { Loader } from "@/shared/ui/loader"
@@ -9,6 +9,7 @@ import { useUserStore } from "@/entities/user/model/store"
 export const ProtectedRoute = () => {
   const { session, initialized, loading } = useAuthStore()
   const { profile } = useUserStore()
+  const location = useLocation()
 
   if (loading || !initialized) {
     return <Loader message="Проверка сессии..." />

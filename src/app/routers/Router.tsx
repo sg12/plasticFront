@@ -85,13 +85,13 @@ export const router = createBrowserRouter([
                 children: [
                   {
                     path: ROUTES.GENERAL,
-                    ...lazyRoute(() => import("@/widgets/settings/general/ui/General"), "General"),
+                    ...lazyRoute(() => import("@/pages/settings/general/General"), "General"),
                     handle: { title: "Основные настройки" },
                   },
                   {
                     path: ROUTES.PERSONAL_DATA,
                     ...lazyRoute(
-                      () => import("@/widgets/settings/personalData/ui/PersonalData"),
+                      () => import("@/pages/settings/personalData/PersonalData"),
                       "PersonalData",
                     ),
                     handle: { title: "Персональные данные" },
