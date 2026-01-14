@@ -9,7 +9,7 @@ import {
   InputGroupInput,
   InputGroupTextarea,
 } from "@/shared/ui/inputGroup"
-import { MessageCircleQuestionMark, Send } from "lucide-react"
+import { Loader, MessageCircleQuestionMark, Send } from "lucide-react"
 import { useSupport } from "../hooks/useSupport"
 
 export const SupportForm = () => {
@@ -22,7 +22,7 @@ export const SupportForm = () => {
       </CardHeader>
       <CardContent>
         <FormProvider {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-global">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
               control={form.control}
               disabled={isCreating}
@@ -33,7 +33,7 @@ export const SupportForm = () => {
                   <FormControl>
                     <InputGroup>
                       <InputGroupAddon>
-                        <MessageCircleQuestionMark />
+                        <MessageCircleQuestionMark className="h-4 w-4" />
                       </InputGroupAddon>
                       <InputGroupInput
                         id="subject"
@@ -59,6 +59,7 @@ export const SupportForm = () => {
                       <InputGroupTextarea
                         id="message"
                         placeholder="Опишите вашу проблему подробно..."
+                        rows={5}
                         {...field}
                       />
                     </InputGroup>
@@ -81,9 +82,12 @@ export const SupportForm = () => {
               disabled={isCreating}
             />
 
-            <Button type="submit" disabled={isCreating} className="w-full">
+            <Button type="submit" disabled={isCreating} className="w-full" size="lg">
               {isCreating ? (
-                <>Отправка...</>
+                <>
+                  <Loader className="mr-2 h-4 w-4 animate-spin" />
+                  Отправка...
+                </>
               ) : (
                 <>
                   <Send className="mr-2 h-4 w-4" />

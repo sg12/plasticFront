@@ -2,10 +2,8 @@
  * @fileoverview Хук для приглашения врача в клинику
  */
 
-import { useState } from "react"
 import { inviteDoctorToClinic } from "@/entities/user/api/invitations"
-import { logger } from "@/shared/lib/logger"
-import { toast } from "sonner"
+import { useAsyncAction } from "@/shared/hooks/useAsyncAction"
 
 interface UseInviteDoctorReturn {
   inviteDoctor: (doctorId: string) => Promise<boolean>
@@ -23,39 +21,31 @@ export const useInviteDoctor = (
   clinicId: string | undefined,
   onSuccess?: () => void,
 ): UseInviteDoctorReturn => {
-  const [isInviting, setIsInviting] = useState(false)
+  const { execute, isLoading: isInviting } = useAsyncAction<
+    string,
+    Awaited<ReturnType<typeof inviteDoctorToClinic>>
+  >({
+    action: async (doctorId: string) => {
+      if (!clinicId) {
+        throw new Error("ID клиники не указан")
+      }
+      if (!doctorId.trim()) {
+        throw new Error("Введите ID врача")
+      }
+      return inviteDoctorToClinic(clinicId, doctorId.trim())
+    },
+    successMessage: "Приглашение отправлено врачу",
+    errorMessage: "Не удалось отправить приглашение",
+    onSuccess: () => {
+      onSuccess?.()
+    },
+    logContext: (doctorId) => ({ clinicId, doctorId }),
+    logActionName: "приглашение врача",
+  })
 
   const inviteDoctor = async (doctorId: string): Promise<boolean> => {
-    if (!clinicId) {
-      toast.error("ID клиники не указан")
-      return false
-    }
-
-    if (!doctorId.trim()) {
-      toast.error("Введите ID врача")
-      return false
-    }
-
-    setIsInviting(true)
-
-    try {
-      await inviteDoctorToClinic(clinicId, doctorId.trim())
-      toast.success("Приглашение отправлено врачу")
-      onSuccess?.()
-      return true
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Не удалось отправить приглашение"
-      toast.error(errorMessage)
-      logger.error(
-        "Ошибка приглашения врача",
-        error instanceof Error ? error : new Error(String(error)),
-        { clinicId, doctorId },
-      )
-      return false
-    } finally {
-      setIsInviting(false)
-    }
+    const result = await execute(doctorId)
+    return result !== null
   }
 
   return {

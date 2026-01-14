@@ -8,9 +8,8 @@
  */
 
 import type { CatalogClinic, CatalogDoctor } from "@/entities/catalog/types/types"
-import { Skeleton } from "@/shared/ui/skeleton"
 import { useCatalogStore } from "@/entities/catalog/model/store"
-import { UserCard } from "@/widgets/userCard/ui/UserCard"
+import { EntityList } from "./EntityList"
 
 interface FavoritesListProps {
   doctors: CatalogDoctor[]
@@ -26,42 +25,51 @@ export const FavoritesList = ({ doctors, clinics, isLoading, error }: FavoritesL
   const favoriteDoctorsList = doctors.filter((doctor) => favoriteDoctors.includes(doctor.id))
   const favoriteClinicsList = clinics.filter((clinic) => favoriteClinics.includes(clinic.id))
 
-  if (isLoading) {
-    return (
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-        <Skeleton className="h-[300px]" />
-        <Skeleton className="h-[300px]" />
-        <Skeleton className="h-[300px]" />
-        <Skeleton className="h-[300px]" />
-      </div>
-    )
-  }
+  const totalFavorites = favoriteDoctorsList.length + favoriteClinicsList.length
 
-  if (error) {
+  if (totalFavorites === 0 && !isLoading) {
     return (
-      <div className="py-12 text-center">
-        <p className="text-destructive">Ошибка: {error}</p>
-      </div>
-    )
-  }
-
-  if (favoriteDoctorsList.length + favoriteClinicsList.length === 0) {
-    return (
-      <div className="py-12 text-center">
-        <p className="text-muted-foreground">Избранные не найдены</p>
-        <p className="text-muted-foreground mt-2 text-sm">Добавьте врача или клинику в избранные</p>
-      </div>
+      <EntityList
+        entities={[]}
+        isLoading={isLoading}
+        error={error}
+        emptyMessage="У вас пока нет избранных"
+        descriptionMessage="Добавьте врачей или клиники в избранное, чтобы быстро находить их здесь"
+      />
     )
   }
 
   return (
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-      {favoriteDoctorsList.map((doctor) => (
-        <UserCard key={doctor.id} user={doctor} />
-      ))}
-      {favoriteClinicsList.map((clinic) => (
-        <UserCard key={clinic.id} user={clinic} />
-      ))}
+    <div className="space-y-6">
+      {favoriteDoctorsList.length > 0 && (
+        <div>
+          <div className="mb-4 flex items-center gap-2">
+            <h3 className="text-lg font-semibold">Врачи</h3>
+            <span className="text-muted-foreground text-sm">({favoriteDoctorsList.length})</span>
+          </div>
+          <EntityList
+            entities={favoriteDoctorsList}
+            isLoading={isLoading}
+            error={error}
+            emptyMessage="Врачи не найдены"
+          />
+        </div>
+      )}
+
+      {favoriteClinicsList.length > 0 && (
+        <div>
+          <div className="mb-4 flex items-center gap-2">
+            <h3 className="text-lg font-semibold">Клиники</h3>
+            <span className="text-muted-foreground text-sm">({favoriteClinicsList.length})</span>
+          </div>
+          <EntityList
+            entities={favoriteClinicsList}
+            isLoading={isLoading}
+            error={error}
+            emptyMessage="Клиники не найдены"
+          />
+        </div>
+      )}
     </div>
   )
 }

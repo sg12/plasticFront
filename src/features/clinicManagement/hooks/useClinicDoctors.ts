@@ -2,10 +2,9 @@
  * @fileoverview Хук для получения списка врачей клиники
  */
 
-import { useEffect, useState } from "react"
 import { getClinicDoctors } from "@/entities/user/api/invitations"
 import type { ClinicMembership } from "@/entities/user/types/invitations"
-import { logger } from "@/shared/lib/logger"
+import { useEntityList } from "@/shared/hooks/useEntityList"
 
 interface UseClinicDoctorsReturn {
   doctors: ClinicMembership[]
@@ -21,42 +20,18 @@ interface UseClinicDoctorsReturn {
  * @returns Объект с данными врачей, состоянием загрузки и функцией обновления
  */
 export const useClinicDoctors = (clinicId: string | undefined): UseClinicDoctorsReturn => {
-  const [doctors, setDoctors] = useState<ClinicMembership[]>([])
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  const fetchDoctors = async () => {
-    if (!clinicId) {
-      setDoctors([])
-      return
-    }
-
-    setIsLoading(true)
-    setError(null)
-
-    try {
-      const data = await getClinicDoctors(clinicId)
-      setDoctors(data)
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Не удалось загрузить список врачей"
-      setError(errorMessage)
-      logger.error("Ошибка загрузки врачей клиники", err instanceof Error ? err : new Error(String(err)), {
-        clinicId,
-      })
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    fetchDoctors()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clinicId])
+  const { data, isLoading, error, refresh } = useEntityList<ClinicMembership, string>({
+    fetchFn: getClinicDoctors,
+    id: clinicId,
+    errorMessage: "Не удалось загрузить список врачей",
+    entityName: "врачи клиники",
+    logContext: (id) => ({ clinicId: id }),
+  })
 
   return {
-    doctors,
+    doctors: data,
     isLoading,
     error,
-    refresh: fetchDoctors,
+    refresh,
   }
 }

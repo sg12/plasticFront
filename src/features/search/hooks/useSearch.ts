@@ -11,8 +11,8 @@
  * @module features/catalog/hooks/useSearch
  */
 
+import type { PaginationInfo } from "@/features/pagination/types/types";
 import { useCallback, useEffect, useRef, useState } from "react"
-import type { PaginationInfo } from "../../../entities/catalog/types/types"
 
 const DEBOUNCE_DELAY = 500
 

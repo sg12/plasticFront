@@ -8,11 +8,9 @@
  */
 
 import { useEffect, useState } from "react"
-import { useSearch, type UseSearchReturn } from "./useSearch"
+import { useSearch } from "../../search/hooks/useSearch"
 import { useCatalogStore } from "@/entities/catalog/model/store"
 import { USER_ROLES } from "@/entities/user/model/constants"
-import { useClinics } from "./useClinics"
-import { useDoctors } from "./useDoctors"
 import {
   DEFAULT_CLINIC_SEARCH_PARAMS,
   DEFAULT_DOCTOR_SEARCH_PARAMS,
@@ -25,27 +23,9 @@ import type {
   DoctorSearchParams,
 } from "@/entities/catalog/types/types"
 import { useUserStore } from "@/entities/user/model/store"
-
-export interface UseCatalogReturn {
-  /** Поиск врачей */
-  doctorSearch: UseSearchReturn<DoctorSearchParams, CatalogDoctor>
-  /** Поиск клиник */
-  clinicSearch: UseSearchReturn<ClinicSearchParams, CatalogClinic>
-  /** Активная вкладка */
-  activeTab: CatalogTab
-  /** Установить активную вкладку */
-  setActiveTab: (tab: CatalogTab) => void
-  /** Показывать ли вкладку врачей */
-  showDoctors: boolean
-  /** Показывать ли вкладку клиник */
-  showClinics: boolean
-  /** Текущий поисковый запрос в зависимости от активной вкладки */
-  currentSearchQuery: string
-  /** Установить поисковый запрос для активной вкладки */
-  setCurrentSearchQuery: (query: string) => void
-  /** Плейсхолдер для поиска в зависимости от активной вкладки */
-  searchPlaceholder: string
-}
+import type { UseCatalogReturn } from "../types/types"
+import { useDoctors } from "./useDoctors"
+import { useClinics } from "./useClinics"
 
 /**
  * Хук для работы с каталогом
@@ -102,7 +82,10 @@ export const useCatalog = (): UseCatalogReturn => {
   const setCurrentSearchQuery = (query: string) => {
     if (activeTab === "doctors") {
       doctorSearch.setSearchQuery(query)
+    } else if (activeTab === "clinics") {
+      clinicSearch.setSearchQuery(query)
     } else {
+      doctorSearch.setSearchQuery(query)
       clinicSearch.setSearchQuery(query)
     }
   }

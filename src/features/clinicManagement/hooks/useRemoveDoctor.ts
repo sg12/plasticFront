@@ -2,10 +2,8 @@
  * @fileoverview Хук для удаления врача из клиники
  */
 
-import { useState } from "react"
 import { removeDoctorFromClinic } from "@/entities/user/api/invitations"
-import { logger } from "@/shared/lib/logger"
-import { toast } from "sonner"
+import { useAsyncAction } from "@/shared/hooks/useAsyncAction"
 
 interface UseRemoveDoctorReturn {
   removeDoctor: (doctorId: string) => Promise<boolean>
@@ -23,33 +21,28 @@ export const useRemoveDoctor = (
   clinicId: string | undefined,
   onSuccess?: () => void,
 ): UseRemoveDoctorReturn => {
-  const [isRemoving, setIsRemoving] = useState(false)
+  const { execute, isLoading: isRemoving } = useAsyncAction<
+    string,
+    Awaited<ReturnType<typeof removeDoctorFromClinic>>
+  >({
+    action: async (doctorId: string) => {
+      if (!clinicId) {
+        throw new Error("ID клиники не указан")
+      }
+      return removeDoctorFromClinic(clinicId, doctorId)
+    },
+    successMessage: "Врач удален из клиники",
+    errorMessage: "Не удалось удалить врача",
+    onSuccess: () => {
+      onSuccess?.()
+    },
+    logContext: (doctorId) => ({ clinicId, doctorId }),
+    logActionName: "удаление врача",
+  })
 
   const removeDoctor = async (doctorId: string): Promise<boolean> => {
-    if (!clinicId) {
-      toast.error("ID клиники не указан")
-      return false
-    }
-
-    setIsRemoving(true)
-
-    try {
-      await removeDoctorFromClinic(clinicId, doctorId)
-      toast.success("Врач удален из клиники")
-      onSuccess?.()
-      return true
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "Не удалось удалить врача"
-      toast.error(errorMessage)
-      logger.error(
-        "Ошибка удаления врача",
-        error instanceof Error ? error : new Error(String(error)),
-        { clinicId, doctorId },
-      )
-      return false
-    } finally {
-      setIsRemoving(false)
-    }
+    const result = await execute(doctorId)
+    return result !== null
   }
 
   return {

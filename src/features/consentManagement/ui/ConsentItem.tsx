@@ -1,4 +1,5 @@
 import { Button } from "@/shared/ui/button"
+import { Badge } from "@/shared/ui/badge"
 import { ShieldCheck, ShieldX } from "lucide-react"
 import type { Consent } from "@/entities/consent/types/types"
 import { format } from "date-fns"
@@ -13,40 +14,39 @@ export interface ConsentItemProps {
 
 export const ConsentItem = ({ consent, onRevoke, onGrant }: ConsentItemProps) => {
   const isNecessary = ["medicalData", "personalData"].includes(consent.type)
+  const consentType = CONSENT_TYPES[consent.type]
 
   return (
     <div
-      className={`flex items-start justify-between rounded-lg p-4 ${
-        isNecessary ? "border border-purple-200 bg-purple-50" : "bg-gray-50"
+      className={`flex items-start justify-between rounded-lg border p-4 transition-colors ${
+        isNecessary
+          ? "border-purple-200 bg-purple-50/50 hover:bg-purple-50"
+          : "bg-muted/30 hover:bg-muted/50"
       }`}
     >
-      <div className="flex gap-3">
-        <div className="mt-0.5">
+      <div className="flex min-w-0 gap-3">
+        <div className="mt-0.5 shrink-0">
           {consent.isActive ? (
-            <ShieldCheck className="h-5 w-5 text-green-500" />
+            <ShieldCheck className="h-5 w-5 text-green-600" />
           ) : (
-            <ShieldX className="h-5 w-5 text-red-500" />
+            <ShieldX className="h-5 w-5 text-red-600" />
           )}
         </div>
-        <div className="flex-1">
-          <div className="mb-1 flex flex-wrap items-center gap-2">
-            <p className="text-sm font-medium text-gray-900">{CONSENT_TYPES[consent.type].title}</p>
-            <span
-              className={`rounded px-2 py-0.5 text-xs ${
-                consent.isActive ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
-              }`}
-            >
+        <div className="min-w-0 flex-1">
+          <div className="mb-2 flex flex-wrap items-center gap-2">
+            <p className="font-semibold">{consentType.title}</p>
+            <Badge variant={consent.isActive ? "accent" : "destructive"} className="text-xs">
               {consent.isActive ? "Активно" : "Отозвано"}
-            </span>
-            {CONSENT_TYPES[consent.type].isRequired && (
-              <span className="rounded bg-gray-200 px-2 py-0.5 text-xs text-gray-600">
+            </Badge>
+            {consentType.isRequired && (
+              <Badge variant="secondary" className="text-xs">
                 Обязательное
-              </span>
+              </Badge>
             )}
           </div>
-          <p className="text-sm text-gray-600">{CONSENT_TYPES[consent.type].description}</p>
+          <p className="text-muted-foreground text-sm">{consentType.description}</p>
           {consent.grantedAt && (
-            <p className="mt-1 text-xs text-gray-500">
+            <p className="text-muted-foreground mt-2 text-xs">
               {consent.isActive ? "Дата согласия: " : "Отозвано: "}
               {format(consent.revokedAt || consent.grantedAt, "dd MMMM yyyy г.", { locale: ru })}
             </p>
@@ -54,13 +54,13 @@ export const ConsentItem = ({ consent, onRevoke, onGrant }: ConsentItemProps) =>
         </div>
       </div>
 
-      <div className="ml-4">
+      <div className="ml-4 shrink-0">
         {consent.isActive ? (
           !consent.isRequired && (
             <Button
-              variant="ghost"
+              variant="outline"
               size="sm"
-              className="text-red-600 hover:text-red-700"
+              className="text-red-600 hover:bg-red-50 hover:text-red-700"
               onClick={onRevoke}
             >
               Отозвать
@@ -68,9 +68,9 @@ export const ConsentItem = ({ consent, onRevoke, onGrant }: ConsentItemProps) =>
           )
         ) : (
           <Button
-            variant="ghost"
+            variant="outline"
             size="sm"
-            className="text-green-600 hover:text-green-700"
+            className="text-green-600 hover:bg-green-50 hover:text-green-700"
             onClick={onGrant}
           >
             Восстановить

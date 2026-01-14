@@ -2,10 +2,8 @@
  * @fileoverview Хук для отклонения приглашения в клинику
  */
 
-import { useState } from "react"
 import { rejectInvitation } from "@/entities/user/api/invitations"
-import { logger } from "@/shared/lib/logger"
-import { toast } from "sonner"
+import { useAsyncAction } from "@/shared/hooks/useAsyncAction"
 
 interface UseRejectInvitationReturn {
   rejectInvitationById: (membershipId: string) => Promise<boolean>
@@ -23,33 +21,28 @@ export const useRejectInvitation = (
   doctorId: string | undefined,
   onSuccess?: () => void,
 ): UseRejectInvitationReturn => {
-  const [isRejecting, setIsRejecting] = useState(false)
+  const { execute, isLoading: isRejecting } = useAsyncAction<
+    string,
+    Awaited<ReturnType<typeof rejectInvitation>>
+  >({
+    action: async (membershipId: string) => {
+      if (!doctorId) {
+        throw new Error("ID врача не указан")
+      }
+      return rejectInvitation(doctorId, membershipId)
+    },
+    successMessage: "Приглашение отклонено",
+    errorMessage: "Не удалось отклонить приглашение",
+    onSuccess: () => {
+      onSuccess?.()
+    },
+    logContext: (membershipId) => ({ doctorId, membershipId }),
+    logActionName: "отклонение приглашения",
+  })
 
   const rejectInvitationById = async (membershipId: string): Promise<boolean> => {
-    if (!doctorId) {
-      toast.error("ID врача не указан")
-      return false
-    }
-
-    setIsRejecting(true)
-
-    try {
-      await rejectInvitation(doctorId, membershipId)
-      toast.success("Приглашение отклонено")
-      onSuccess?.()
-      return true
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "Не удалось отклонить приглашение"
-      toast.error(errorMessage)
-      logger.error(
-        "Ошибка отклонения приглашения",
-        error instanceof Error ? error : new Error(String(error)),
-        { doctorId, membershipId },
-      )
-      return false
-    } finally {
-      setIsRejecting(false)
-    }
+    const result = await execute(membershipId)
+    return result !== null
   }
 
   return {

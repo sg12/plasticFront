@@ -9,7 +9,8 @@ import {
   CardHeader,
   CardContent,
 } from "@/shared/ui/card"
-import { RefreshCw } from "lucide-react"
+import { Skeleton } from "@/shared/ui/skeleton"
+import { RefreshCw, MessageSquare } from "lucide-react"
 import { TicketCard } from "./TicketCard"
 import { useSupport } from "../hooks/useSupport"
 
@@ -19,38 +20,51 @@ export const SupportReplies = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Мои обращения</CardTitle>
-        <CardDescription>История ваших обращений в поддержку</CardDescription>
-        <CardAction>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => refreshReplies()}
-            disabled={isLoadingReplies || isLoadingTickets}
-          >
-            <RefreshCw
-              className={cn((isLoadingReplies || isLoadingTickets) && "animate-spin", "h-4 w-4")}
-            />
-          </Button>
-        </CardAction>
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle className="mb-1.5">Мои обращения</CardTitle>
+            <CardDescription>История ваших обращений в поддержку</CardDescription>
+          </div>
+          <CardAction>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8"
+              onClick={() => refreshReplies()}
+              disabled={isLoadingReplies || isLoadingTickets}
+              aria-label="Обновить список обращений"
+            >
+              <RefreshCw
+                className={cn((isLoadingReplies || isLoadingTickets) && "animate-spin", "h-4 w-4")}
+              />
+            </Button>
+          </CardAction>
+        </div>
       </CardHeader>
       <CardContent>
-        {isLoadingReplies ? (
-          <div className="py-8 text-center text-gray-500">Загрузка...</div>
+        {isLoadingReplies || isLoadingTickets ? (
+          <div className="space-y-3">
+            <Skeleton className="h-32 w-full rounded-lg" />
+            <Skeleton className="h-32 w-full rounded-lg" />
+          </div>
         ) : ticketsError ? (
           <Alert variant="destructive">
             <AlertDescription>{ticketsError}</AlertDescription>
           </Alert>
         ) : tickets && tickets.length > 0 ? (
-          <div className="space-global">
+          <div className="space-y-3">
             {tickets.map((ticket) => (
               <TicketCard key={ticket.id} ticket={ticket} />
             ))}
           </div>
         ) : (
-          <Alert>
-            <AlertDescription>У вас пока нет обращений в поддержку</AlertDescription>
-          </Alert>
+          <div className="flex min-h-[200px] flex-col items-center justify-center rounded-lg border border-dashed p-6 text-center">
+            <MessageSquare className="text-muted-foreground mb-2 h-8 w-8" />
+            <p className="text-muted-foreground text-sm font-medium">Нет обращений</p>
+            <p className="text-muted-foreground mt-1 text-xs">
+              Ваши обращения в поддержку будут отображаться здесь
+            </p>
+          </div>
         )}
       </CardContent>
     </Card>

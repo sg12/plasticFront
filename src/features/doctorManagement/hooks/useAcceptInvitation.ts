@@ -2,10 +2,8 @@
  * @fileoverview Хук для принятия приглашения в клинику
  */
 
-import { useState } from "react"
 import { acceptInvitation } from "@/entities/user/api/invitations"
-import { logger } from "@/shared/lib/logger"
-import { toast } from "sonner"
+import { useAsyncAction } from "@/shared/hooks/useAsyncAction"
 
 interface UseAcceptInvitationReturn {
   acceptInvitationById: (membershipId: string) => Promise<boolean>
@@ -23,33 +21,28 @@ export const useAcceptInvitation = (
   doctorId: string | undefined,
   onSuccess?: () => void,
 ): UseAcceptInvitationReturn => {
-  const [isAccepting, setIsAccepting] = useState(false)
+  const { execute, isLoading: isAccepting } = useAsyncAction<
+    string,
+    Awaited<ReturnType<typeof acceptInvitation>>
+  >({
+    action: async (membershipId: string) => {
+      if (!doctorId) {
+        throw new Error("ID врача не указан")
+      }
+      return acceptInvitation(doctorId, membershipId)
+    },
+    successMessage: "Приглашение принято",
+    errorMessage: "Не удалось принять приглашение",
+    onSuccess: () => {
+      onSuccess?.()
+    },
+    logContext: (membershipId) => ({ doctorId, membershipId }),
+    logActionName: "принятие приглашения",
+  })
 
   const acceptInvitationById = async (membershipId: string): Promise<boolean> => {
-    if (!doctorId) {
-      toast.error("ID врача не указан")
-      return false
-    }
-
-    setIsAccepting(true)
-
-    try {
-      await acceptInvitation(doctorId, membershipId)
-      toast.success("Приглашение принято")
-      onSuccess?.()
-      return true
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "Не удалось принять приглашение"
-      toast.error(errorMessage)
-      logger.error(
-        "Ошибка принятия приглашения",
-        error instanceof Error ? error : new Error(String(error)),
-        { doctorId, membershipId },
-      )
-      return false
-    } finally {
-      setIsAccepting(false)
-    }
+    const result = await execute(membershipId)
+    return result !== null
   }
 
   return {

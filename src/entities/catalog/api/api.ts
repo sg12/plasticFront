@@ -16,11 +16,11 @@ import { USER_ROLES, MODERATION_STATUS } from "@/entities/user/model/constants"
 import type {
   DoctorSearchParams,
   ClinicSearchParams,
-  PaginatedResult,
   CatalogDoctor,
   CatalogClinic,
 } from "../types/types"
 import { logger } from "@/shared/lib/logger"
+import type { PaginatedResult } from "@/features/pagination/types/types"
 
 // Названия таблиц в Supabase (должны совпадать с реальными названиями)
 const PROFILES_TABLE = "profiles"
