@@ -1,6 +1,7 @@
 import type { RoleProfile } from "@/entities/user/types/types"
 import { pluralRu } from "@/shared/lib/utils"
 import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card"
+import { Badge } from "@/shared/ui/badge"
 import dayjs from "dayjs"
 
 interface Props {
@@ -41,25 +42,28 @@ export const UserProfileHistory = ({ profile }: Props) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Медицинская история</CardTitle>
+        <div className="flex items-center justify-between gap-2">
+          <CardTitle>Активность</CardTitle>
+          <Badge variant="secondary">Скоро</Badge>
+        </div>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-          <div className="rounded-lg bg-purple-50 p-4 text-center blur-xs">
-            <p className="text-purple-600">0</p>
-            <p className="mt-1 text-gray-600">Процедур</p>
+          <div className="rounded-lg bg-purple-50 p-4 text-center opacity-70">
+            <p className="text-lg font-semibold text-purple-700">0</p>
+            <p className="text-muted-foreground mt-1 text-xs">Процедур</p>
           </div>
-          <div className="rounded-lg bg-blue-50 p-4 text-center blur-xs">
-            <p className="text-blue-600">0</p>
-            <p className="mt-1 text-gray-600">Клиник</p>
+          <div className="rounded-lg bg-blue-50 p-4 text-center opacity-70">
+            <p className="text-lg font-semibold text-blue-700">0</p>
+            <p className="text-muted-foreground mt-1 text-xs">Клиник</p>
           </div>
-          <div className="rounded-lg bg-green-50 p-4 text-center blur-xs">
-            <p className="text-green-600">0</p>
-            <p className="mt-1 text-gray-600">Врачей</p>
+          <div className="rounded-lg bg-green-50 p-4 text-center opacity-70">
+            <p className="text-lg font-semibold text-green-700">0</p>
+            <p className="text-muted-foreground mt-1 text-xs">Врачей</p>
           </div>
           <div className="rounded-lg bg-orange-50 p-4 text-center">
-            <p className="text-orange-600">{withUsLabel}</p>
-            <p className="mt-1 text-gray-600">С нами</p>
+            <p className="text-lg font-semibold text-orange-700">{withUsLabel}</p>
+            <p className="text-muted-foreground mt-1 text-xs">С нами</p>
           </div>
         </div>
       </CardContent>

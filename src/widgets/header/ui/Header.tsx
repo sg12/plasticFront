@@ -12,21 +12,25 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/shared/ui/breadcrumb"
+import { Logo } from "@/shared/ui/logo"
+import { useIsMobile } from "@/shared/hooks/useMobile"
 
 export const Header = () => {
   const matches = useMatches()
   const current = matches[matches.length - 1]
   const title =
     (current?.handle as { title?: string } | undefined)?.title ?? current?.pathname ?? ""
-
+  const isMobile = useIsMobile()
   const breadcrumbs = useBreadcrumbs()
 
   return (
     <header className="bg-sidebar text-sidebar-foreground sticky top-0 right-0 left-0 z-1 flex h-14 items-center gap-2 border-b px-4">
       <SidebarTrigger />
       <Separator orientation="vertical" className="mx-2" />
+      <Logo variant="text" />
+      <Separator orientation="vertical" className="mx-2" />
 
-      {breadcrumbs.length > 1 ? (
+      {!isMobile && breadcrumbs.length > 1 ? (
         <Breadcrumb>
           <BreadcrumbList>
             {breadcrumbs.map((item, index) => (

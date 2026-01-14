@@ -12,35 +12,36 @@ export const General = () => {
 
   return (
     <div className="space-global">
-      <div>
-        <h2>Настройки</h2>
-        <p className="mt-2 text-gray-600">Управление параметрами аккаунта и приложения</p>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0">
+          <h2 className="min-w-0 truncate">Основные настройки</h2>
+          <p className="text-muted-foreground mt-1 text-sm">
+            Управление параметрами аккаунта и приложения
+          </p>
+        </div>
       </div>
-
-      {/* <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Lock className="h-5 w-5 text-purple-600" />
-            <h4>Безопасность</h4>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ChangePassword />
-        </CardContent>
-      </Card> */}
 
       <div className="grid gap-6 lg:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Monitor className="h-5 w-5 text-purple-600" />
-              Активные сессии
-            </CardTitle>
-            <CardAction>
-              <Button variant="outline" size="icon" onClick={() => refresh()} disabled={isLoading}>
-                <RefreshCw className={cn(isLoading && "animate-spin", "h-4 w-4")} />
-              </Button>
-            </CardAction>
+            <div className="flex items-center justify-between">
+              <CardTitle className="flex items-center gap-2">
+                <Monitor className="h-5 w-5 text-purple-600" />
+                Активные сессии
+              </CardTitle>
+              <CardAction>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8"
+                  onClick={() => refresh()}
+                  disabled={isLoading}
+                  aria-label="Обновить список сессий"
+                >
+                  <RefreshCw className={cn(isLoading && "animate-spin", "h-4 w-4")} />
+                </Button>
+              </CardAction>
+            </div>
           </CardHeader>
           <CardContent>
             <ActiveSessions />
@@ -64,7 +65,7 @@ export const General = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Globe className="h-5 w-5 text-purple-600" />
-            Регион
+            Регион и часовой пояс
           </CardTitle>
         </CardHeader>
         <CardContent>

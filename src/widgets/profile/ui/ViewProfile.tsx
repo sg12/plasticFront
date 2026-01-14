@@ -6,6 +6,9 @@ import { useViewProfile } from "../hooks/useViewProfile"
 import { AlertCircle } from "lucide-react"
 import { Alert, AlertDescription } from "@/shared/ui/alert"
 import { USER_ROLES } from "@/entities/user/model/constants"
+import { formatRole } from "@/shared/lib/utils"
+import { Badge } from "@/shared/ui/badge"
+import type { UserRole } from "@/entities/user/types/types"
 
 interface ViewProfileProps {
   userId: string
@@ -21,18 +24,18 @@ export const ViewProfile = ({ userId }: ViewProfileProps) => {
   if (isLoading) {
     return (
       <div className="space-global">
-        <div className="flex flex-col justify-between lg:flex-row">
-          <div>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div className="min-w-0">
             <Skeleton className="h-8 w-48" />
             <Skeleton className="mt-2 h-4 w-64" />
           </div>
         </div>
         <div className="grid gap-6 lg:grid-cols-3">
           <div className="lg:col-span-1">
-            <Skeleton className="h-96 w-full" />
+            <Skeleton className="h-96 w-full rounded-xl" />
           </div>
           <div className="space-global lg:col-span-2">
-            <Skeleton className="h-96 w-full" />
+            <Skeleton className="h-96 w-full rounded-xl" />
           </div>
         </div>
       </div>
@@ -50,18 +53,22 @@ export const ViewProfile = ({ userId }: ViewProfileProps) => {
     )
   }
 
+  const getProfileTitle = () => {
+    if (profile.role === USER_ROLES.CLINIC) return "Профиль клиники"
+    if (profile.role === USER_ROLES.DOCTOR) return "Профиль врача"
+    return "Профиль пользователя"
+  }
+
   return (
     <div className="space-global">
-      <div className="flex flex-col justify-between lg:flex-row">
-        <div>
-          <h2>
-            {profile.role === USER_ROLES.CLINIC
-              ? "Профиль клиники"
-              : profile.role === "doctor"
-                ? "Профиль доктора"
-                : "Профиль пользователя"}
-          </h2>
-          <p className="mt-2 text-gray-600">Просмотр профиля</p>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0">
+          <div className="flex items-center gap-3">
+            <h2 className="min-w-0 truncate">{getProfileTitle()}</h2>
+          </div>
+          <p className="text-muted-foreground mt-1 text-sm">
+            Просмотр информации о профиле пользователя
+          </p>
         </div>
       </div>
 

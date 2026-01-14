@@ -9,7 +9,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarFooter,
-  SidebarHeader,
   SidebarMenuSubButton,
   SidebarMenuSub,
   SidebarMenuSubItem,
@@ -22,18 +21,17 @@ import { formatName, formatRole } from "@/shared/lib/utils"
 import { ChevronRight, Hospital, LogOut, Sparkles, Stethoscope, User } from "lucide-react"
 import type { UserRole } from "@/entities/user/types/types"
 import { navigationConfig, sectionLabels } from "../model/navigation"
-import { Logo } from "../../../shared/ui/logo"
-import type React from "react"
+import React from "react"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/shared/ui/collapsible"
 import { USER_ROLES } from "@/entities/user/model/constants"
-import { ROUTES } from "@/shared/model/routes"
 import { useUserStore } from "@/entities/user/model/store"
+import { cn } from "@/shared/lib/utils"
 
 export const Sidebar = ({ ...props }: React.ComponentProps<typeof SidebarUI>) => {
   const { signOut } = useAuthStore()
   const { profile } = useUserStore()
   const { pathname } = useLocation()
-  const { openMobile, setOpenMobile } = useSidebar()
+  const { setOpenMobile } = useSidebar()
 
   const navigation = navigationConfig[profile?.role as UserRole] ?? []
 
@@ -61,142 +59,177 @@ export const Sidebar = ({ ...props }: React.ComponentProps<typeof SidebarUI>) =>
   )
 
   return (
-    <SidebarUI collapsible="offcanvas" {...props}>
-      <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild>
-              <a href={ROUTES.MAIN}>
-                <Logo variant="text" />
-              </a>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarHeader>
-      <SidebarContent>
+    <SidebarUI
+      collapsible="offcanvas"
+      className="top-(--header-height) h-[calc(100svh-var(--header-height))]!"
+      {...props}
+    >
+      <SidebarContent className="gap-1">
         {Object.entries(groupedNavigation).map(([section, items]) => (
-          <SidebarGroup key={section}>
-            <SidebarGroupLabel>{sectionLabels[section] ?? section}</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {items.map((item) => {
-                  const hasChildren = Boolean(item.items?.length)
-                  const isSubActive = Boolean(item.items?.some((sub) => pathname === sub.url))
-                  const isItemActive = activeId === item.id || isSubActive
+          <React.Fragment key={section}>
+            <SidebarGroup>
+              <SidebarGroupLabel className="text-muted-foreground/70 px-3 text-[10px] font-semibold tracking-wider">
+                {sectionLabels[section] ?? section}
+              </SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {items.map((item) => {
+                    const hasChildren = Boolean(item.items?.length)
+                    const isSubActive = Boolean(item.items?.some((sub) => pathname === sub.url))
+                    const isItemActive = activeId === item.id || isSubActive
 
-                  if (!hasChildren) {
-                    return (
-                      <SidebarMenuItem key={item.id}>
-                        <SidebarMenuButton
-                          asChild
-                          className={
-                            isItemActive
-                              ? "bg-purple-50 text-purple-600"
-                              : "text-gray-600 hover:bg-gray-50"
-                          }
-                          onClick={() => setOpenMobile(hasChildren ?? openMobile)}
-                        >
-                          <NavLink to={item.url}>
-                            <item.icon />
-                            <span>{item.name}</span>
-                          </NavLink>
-                        </SidebarMenuButton>
-                      </SidebarMenuItem>
-                    )
-                  }
-
-                  return (
-                    <Collapsible
-                      key={item.id}
-                      defaultOpen={isSubActive}
-                      asChild
-                      className="group/collapsible"
-                    >
-                      <SidebarMenuItem>
-                        <CollapsibleTrigger asChild className="font-normal">
+                    if (!hasChildren) {
+                      return (
+                        <SidebarMenuItem key={item.id}>
                           <SidebarMenuButton
-                            className={
+                            asChild
+                            isActive={isItemActive}
+                            className={cn(
+                              "relative transition-all duration-200",
                               isItemActive
-                                ? "bg-purple-50 text-purple-600"
-                                : "text-gray-600 hover:bg-gray-50"
-                            }
+                                ? "bg-primary/10 text-primary"
+                                : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+                            )}
+                            onClick={() => setOpenMobile(false)}
                           >
-                            <item.icon />
-                            <span>{item.name}</span>
-                            <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                            <NavLink to={item.url} className="relative flex items-center gap-3">
+                              {isItemActive && (
+                                <span className="bg-primary absolute top-1/2 left-0 h-5 w-1 -translate-y-1/2 rounded-r-full" />
+                              )}
+                              <item.icon
+                                className={cn("size-4 shrink-0", isItemActive && "text-primary")}
+                              />
+                              <span className="truncate">{item.name}</span>
+                            </NavLink>
                           </SidebarMenuButton>
-                        </CollapsibleTrigger>
+                        </SidebarMenuItem>
+                      )
+                    }
 
-                        <CollapsibleContent>
-                          <SidebarMenuSub>
-                            {item.items!.map((sub) => {
-                              const isActive = activeId === sub.id || pathname === sub.url
-                              return (
-                                <SidebarMenuSubItem key={sub.id}>
-                                  <SidebarMenuSubButton
-                                    asChild
-                                    className={
-                                      isActive
-                                        ? "bg-purple-50 text-purple-600"
-                                        : "text-gray-600 hover:bg-gray-50"
-                                    }
-                                    onClick={() => setOpenMobile(!openMobile)}
-                                  >
-                                    <NavLink to={sub.url}>
-                                      <sub.icon />
-                                      <span>{sub.name}</span>
-                                    </NavLink>
-                                  </SidebarMenuSubButton>
-                                </SidebarMenuSubItem>
-                              )
-                            })}
-                          </SidebarMenuSub>
-                        </CollapsibleContent>
-                      </SidebarMenuItem>
-                    </Collapsible>
-                  )
-                })}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
+                    return (
+                      <Collapsible
+                        key={item.id}
+                        defaultOpen={isSubActive}
+                        asChild
+                        className="group/collapsible"
+                      >
+                        <SidebarMenuItem>
+                          <CollapsibleTrigger asChild>
+                            <SidebarMenuButton
+                              isActive={isItemActive}
+                              className={cn(
+                                "relative transition-all duration-200",
+                                isItemActive
+                                  ? "bg-primary/10 text-primary"
+                                  : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+                              )}
+                            >
+                              {isItemActive && (
+                                <span className="bg-primary absolute top-1/2 left-0 h-5 w-1 -translate-y-1/2 rounded-r-full" />
+                              )}
+                              <item.icon
+                                className={cn("size-4 shrink-0", isItemActive && "text-primary")}
+                              />
+                              <span className="flex-1 truncate">{item.name}</span>
+                              <ChevronRight className="ml-auto size-4 shrink-0 transition-transform duration-200 ease-in-out group-data-[state=open]/collapsible:rotate-90" />
+                            </SidebarMenuButton>
+                          </CollapsibleTrigger>
+
+                          <CollapsibleContent className="data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down overflow-hidden">
+                            <SidebarMenuSub className="mt-1">
+                              {item.items!.map((sub) => {
+                                const isActive = activeId === sub.id || pathname === sub.url
+                                return (
+                                  <SidebarMenuSubItem key={sub.id}>
+                                    <SidebarMenuSubButton
+                                      asChild
+                                      isActive={isActive}
+                                      className={cn(
+                                        "relative transition-all duration-200",
+                                        isActive
+                                          ? "bg-primary/10 text-primary"
+                                          : "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+                                      )}
+                                      onClick={() => setOpenMobile(false)}
+                                    >
+                                      <NavLink
+                                        to={sub.url}
+                                        className="relative flex items-center gap-3"
+                                      >
+                                        {isActive && (
+                                          <span className="bg-primary absolute top-1/2 left-0 h-4 w-0.5 -translate-y-1/2 rounded-full" />
+                                        )}
+                                        <sub.icon
+                                          className={cn(
+                                            "size-3.5 shrink-0",
+                                            isActive && "text-primary",
+                                          )}
+                                        />
+                                        <span className="truncate text-sm">{sub.name}</span>
+                                      </NavLink>
+                                    </SidebarMenuSubButton>
+                                  </SidebarMenuSubItem>
+                                )
+                              })}
+                            </SidebarMenuSub>
+                          </CollapsibleContent>
+                        </SidebarMenuItem>
+                      </Collapsible>
+                    )
+                  })}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          </React.Fragment>
         ))}
       </SidebarContent>
-      <SidebarFooter>
+      <SidebarFooter className="border-border/40 gap-2 border-t p-2">
         <Item
           asChild
-          className="relative overflow-hidden border-0 bg-linear-to-r from-violet-500 to-fuchsia-700 text-white hover:scale-[1.02]"
+          className="relative overflow-hidden border-0 bg-gradient-to-br from-violet-500 via-purple-500 to-fuchsia-600 text-white shadow-lg transition-all duration-300 hover:scale-[1.01] hover:shadow-xl"
         >
-          <NavLink to="ai" onClick={() => setOpenMobile(!openMobile)}>
-            <Sparkles className="pointer-events-none absolute right-3 size-24 text-white/90 opacity-40" />
-            <ItemContent>
+          <NavLink to="ai" onClick={() => setOpenMobile(false)} className="group">
+            <Sparkles className="pointer-events-none absolute top-1/2 right-2 size-20 -translate-y-1/2 text-white/20 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-12" />
+            <ItemContent className="relative z-10">
               <ItemTitle className="font-semibold text-white">Визуализатор</ItemTitle>
-              <ItemDescription className="text-white/80">
+              <ItemDescription className="text-xs text-white/90">
                 Посмотрите на себя после операции
               </ItemDescription>
             </ItemContent>
           </NavLink>
         </Item>
-        <Item variant="muted" className="relative overflow-hidden">
+        <Item
+          variant="muted"
+          className="border-border/50 bg-card/50 hover:border-border hover:bg-card/80 relative overflow-hidden border backdrop-blur-sm transition-all duration-200"
+        >
           {profile?.role === USER_ROLES.DOCTOR && (
-            <Stethoscope className="pointer-events-none absolute right-3 size-24 opacity-10" />
+            <Stethoscope className="text-muted-foreground/5 pointer-events-none absolute top-1/2 right-2 size-16 -translate-y-1/2" />
           )}
           {profile?.role === USER_ROLES.CLINIC && (
-            <Hospital className="pointer-events-none absolute right-3 size-24 opacity-10" />
+            <Hospital className="text-muted-foreground/5 pointer-events-none absolute top-1/2 right-2 size-16 -translate-y-1/2" />
           )}
           {profile?.role === USER_ROLES.PATIENT && (
-            <User className="pointer-events-none absolute right-3 size-24 opacity-10" />
+            <User className="text-muted-foreground/5 pointer-events-none absolute top-1/2 right-2 size-16 -translate-y-1/2" />
           )}
-          <ItemContent>
-            <ItemTitle>
+          <ItemContent className="relative z-10">
+            <ItemTitle className="text-foreground font-medium">
               {profile && profile.role === USER_ROLES.CLINIC
                 ? profile.fullName
                 : formatName(profile?.fullName || "-")}
             </ItemTitle>
-            <ItemDescription>{formatRole(profile?.role as UserRole)}</ItemDescription>
+            <ItemDescription className="text-muted-foreground text-xs">
+              {formatRole(profile?.role as UserRole)}
+            </ItemDescription>
           </ItemContent>
           <ItemActions>
-            <Button type="button" variant="ghost" size="icon" onClick={() => signOut("local")}>
-              <LogOut />
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              onClick={() => signOut("local")}
+              className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive h-8 w-8 transition-colors"
+            >
+              <LogOut className="size-4" />
             </Button>
           </ItemActions>
         </Item>

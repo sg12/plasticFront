@@ -11,6 +11,7 @@ import { useUserStore } from "@/entities/user/model/store"
 
 export const useProfile = () => {
   const { profile } = useUserStore()
+  
   const [isEditing, setIsEditing] = useState(false)
   const [editableProfile, setEditableProfile] = useState<RoleProfile | null>(profile as RoleProfile)
 

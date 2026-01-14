@@ -34,16 +34,24 @@ export const UserProfileView = ({ profile }: UserProfileViewProps) => {
       return (
         <div className="grid gap-4 lg:grid-cols-2">
           <div>
-            <label className="text-sm font-medium text-gray-500">Дата рождения</label>
-            <p className="mt-1 text-sm">
+            <label className="text-muted-foreground mb-1.5 flex items-center gap-2 text-sm font-medium">
+              <Calendar className="h-4 w-4" />
+              Дата рождения
+            </label>
+            <p className="text-sm">
               {profile.birthDate
                 ? format(new Date(profile.birthDate), "dd MMMM yyyy", { locale: ru })
                 : "—"}
             </p>
           </div>
           <div>
-            <label className="text-sm font-medium text-gray-500">Пол</label>
-            <p className="mt-1 text-sm">{profile.gender === "male" ? "Мужской" : "Женский"}</p>
+            <label className="text-muted-foreground mb-1.5 flex items-center gap-2 text-sm font-medium">
+              <User className="h-4 w-4" />
+              Пол
+            </label>
+            <p className="text-sm">
+              {profile.gender === "male" ? "Мужской" : profile.gender === "female" ? "Женский" : "—"}
+            </p>
           </div>
         </div>
       )
@@ -53,59 +61,65 @@ export const UserProfileView = ({ profile }: UserProfileViewProps) => {
       return (
         <div className="grid gap-4 lg:grid-cols-2">
           <div>
-            <label className="text-sm font-medium text-gray-500">Дата рождения</label>
-            <p className="mt-1 text-sm">
+            <label className="text-muted-foreground mb-1.5 flex items-center gap-2 text-sm font-medium">
+              <Calendar className="h-4 w-4" />
+              Дата рождения
+            </label>
+            <p className="text-sm">
               {profile.birthDate
                 ? format(new Date(profile.birthDate), "dd MMMM yyyy", { locale: ru })
                 : "—"}
             </p>
           </div>
           <div>
-            <label className="text-sm font-medium text-gray-500">Пол</label>
-            <p className="mt-1 text-sm">{profile.gender === "male" ? "Мужской" : "Женский"}</p>
+            <label className="text-muted-foreground mb-1.5 flex items-center gap-2 text-sm font-medium">
+              <User className="h-4 w-4" />
+              Пол
+            </label>
+            <p className="text-sm">
+              {profile.gender === "male" ? "Мужской" : profile.gender === "female" ? "Женский" : "—"}
+            </p>
           </div>
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-500">
+            <label className="text-muted-foreground mb-1.5 flex items-center gap-2 text-sm font-medium">
               <FileText className="h-4 w-4" />
               Номер лицензии
             </label>
-            <p className="mt-1 text-sm">{profile.licenseNumber || "—"}</p>
+            <p className="text-sm">{profile.licenseNumber?.trim() || "—"}</p>
           </div>
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-500">
+            <label className="text-muted-foreground mb-1.5 flex items-center gap-2 text-sm font-medium">
               <Briefcase className="h-4 w-4" />
               Специализация
             </label>
-            <p className="mt-1 text-sm">{profile.specialization || "—"}</p>
+            <p className="text-sm">{profile.specialization?.trim() || "—"}</p>
           </div>
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-500">
-              <Calendar className="h-4 w-4" />
+            <label className="text-muted-foreground mb-1.5 flex items-center gap-2 text-sm font-medium">
+              <Briefcase className="h-4 w-4" />
               Опыт работы
             </label>
-            <p className="mt-1 text-sm">
+            <p className="text-sm">
               {profile.experience ? pluralRu(profile.experience, "год", "года", "лет") : "—"}
             </p>
           </div>
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-500">
+            <label className="text-muted-foreground mb-1.5 flex items-center gap-2 text-sm font-medium">
               <GraduationCap className="h-4 w-4" />
               Образование
             </label>
-            <p className="mt-1 text-sm">{profile.education || "—"}</p>
+            <p className="text-sm">{profile.education?.trim() || "—"}</p>
           </div>
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-500">
+            <label className="text-muted-foreground mb-1.5 flex items-center gap-2 text-sm font-medium">
               <Building2 className="h-4 w-4" />
-              Клиника
+              Место работы
             </label>
-            <p className="mt-1 text-sm">
-              {profile.role === USER_ROLES.DOCTOR && profile.clinic && profile.workplace}
-            </p>
+            <p className="text-sm">{profile.workplace?.trim() || "—"}</p>
           </div>
           <div>
-            <label className="text-sm font-medium text-gray-500">ИНН</label>
-            <p className="mt-1 text-sm">{profile.inn || "—"}</p>
+            <label className="text-muted-foreground mb-1.5 text-sm font-medium">ИНН</label>
+            <p className="text-sm">{profile.inn?.trim() || "—"}</p>
           </div>
         </div>
       )
@@ -115,48 +129,54 @@ export const UserProfileView = ({ profile }: UserProfileViewProps) => {
       return (
         <div className="grid gap-4 lg:grid-cols-2">
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-500">
+            <label className="text-muted-foreground mb-1.5 flex items-center gap-2 text-sm font-medium">
               <Building2 className="h-4 w-4" />
               Юридическое название
             </label>
-            <p className="mt-1 text-sm">{profile.legalName || "—"}</p>
+            <p className="text-sm">{profile.legalName?.trim() || "—"}</p>
           </div>
           <div>
-            <label className="text-sm font-medium text-gray-500">ИНН</label>
-            <p className="mt-1 text-sm">{profile.clinicInn || "—"}</p>
+            <label className="text-muted-foreground mb-1.5 text-sm font-medium">ИНН</label>
+            <p className="text-sm">{profile.clinicInn?.trim() || "—"}</p>
           </div>
           <div>
-            <label className="text-sm font-medium text-gray-500">ОГРН</label>
-            <p className="mt-1 text-sm">{profile.ogrn || "—"}</p>
+            <label className="text-muted-foreground mb-1.5 text-sm font-medium">ОГРН</label>
+            <p className="text-sm">{profile.ogrn?.trim() || "—"}</p>
           </div>
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-500">
+            <label className="text-muted-foreground mb-1.5 flex items-center gap-2 text-sm font-medium">
               <FileText className="h-4 w-4" />
               Номер лицензии
             </label>
-            <p className="mt-1 text-sm">{profile.clinicLicense || "—"}</p>
+            <p className="text-sm">{profile.clinicLicense?.trim() || "—"}</p>
           </div>
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-500">
+            <label className="text-muted-foreground mb-1.5 flex items-center gap-2 text-sm font-medium">
               <MapPin className="h-4 w-4" />
               Юридический адрес
             </label>
-            <p className="mt-1 text-sm">{profile.legalAddress || "—"}</p>
+            <p className="text-sm">{profile.legalAddress?.trim() || "—"}</p>
           </div>
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-500">
+            <label className="text-muted-foreground mb-1.5 flex items-center gap-2 text-sm font-medium">
               <MapPin className="h-4 w-4" />
               Фактический адрес
             </label>
-            <p className="mt-1 text-sm">{profile.actualAddress || "—"}</p>
+            <p className="text-sm">{profile.actualAddress?.trim() || "—"}</p>
           </div>
           <div>
-            <label className="text-sm font-medium text-gray-500">ФИО директора</label>
-            <p className="mt-1 text-sm">{profile.directorName || "—"}</p>
+            <label className="text-muted-foreground mb-1.5 flex items-center gap-2 text-sm font-medium">
+              <User className="h-4 w-4" />
+              ФИО директора
+            </label>
+            <p className="text-sm">{profile.directorName?.trim() || "—"}</p>
           </div>
           <div>
-            <label className="text-sm font-medium text-gray-500">Должность директора</label>
-            <p className="mt-1 text-sm">{profile.directorPosition || "—"}</p>
+            <label className="text-muted-foreground mb-1.5 flex items-center gap-2 text-sm font-medium">
+              <Briefcase className="h-4 w-4" />
+              Должность директора
+            </label>
+            <p className="text-sm">{profile.directorPosition?.trim() || "—"}</p>
           </div>
         </div>
       )
@@ -168,42 +188,37 @@ export const UserProfileView = ({ profile }: UserProfileViewProps) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>
-          <div className="flex items-center justify-between">
-            Личная информация
-            <Badge variant="outline">{formatRole(profile.role)}</Badge>
-          </div>
-        </CardTitle>
+        <CardTitle>Личная информация</CardTitle>
       </CardHeader>
 
-      <CardContent className="space-child grid">
+      <CardContent className="space-child">
         {/* Основная информация */}
         <div className="grid gap-4 lg:grid-cols-2">
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-500">
+            <label className="text-muted-foreground mb-1.5 flex items-center gap-2 text-sm font-medium">
               <User className="h-4 w-4" />
               {profile.role === USER_ROLES.CLINIC ? "Название клиники" : "Полное имя"}
             </label>
-            <p className="mt-1 text-sm">{profile.fullName || "—"}</p>
+            <p className="text-sm">{profile.fullName?.trim() || "—"}</p>
           </div>
 
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-500">
+            <label className="text-muted-foreground mb-1.5 flex items-center gap-2 text-sm font-medium">
               <Mail className="h-4 w-4" />
               Email
             </label>
-            <p className="mt-1 flex items-center gap-2 text-sm">
-              {profile.email || "—"}
-              <CheckCircle className="h-3 w-3 text-green-500" />
+            <p className="flex items-center gap-2 text-sm">
+              <span className="min-w-0 truncate">{profile.email?.trim() || "—"}</span>
+              {profile.email && <CheckCircle className="h-3.5 w-3.5 shrink-0 text-green-600" />}
             </p>
           </div>
 
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium text-gray-500">
+            <label className="text-muted-foreground mb-1.5 flex items-center gap-2 text-sm font-medium">
               <Phone className="h-4 w-4" />
               Телефон
             </label>
-            <p className="mt-1 text-sm">{profile.phone || "—"}</p>
+            <p className="min-w-0 truncate text-sm">{profile.phone?.trim() || "—"}</p>
           </div>
         </div>
 

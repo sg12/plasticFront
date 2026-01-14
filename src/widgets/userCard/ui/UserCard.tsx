@@ -7,7 +7,7 @@
  * @module features/catalog/ui/UserCard
  */
 
-import { Heart, MapPin, Star, User, Hospital, Stethoscope } from "lucide-react"
+import { Heart, MapPin, Star, User, Hospital, Stethoscope, Phone } from "lucide-react"
 import { Link } from "react-router"
 import { Button } from "@/shared/ui/button"
 import { Card, CardContent, CardFooter, CardHeader } from "@/shared/ui/card"
@@ -100,117 +100,168 @@ export const UserCard = ({ user, className, showFavorite = true }: UserCardProps
     return undefined
   }
 
+  const displayName = getDisplayName()
+  const specialization =
+    user.role === USER_ROLES.DOCTOR ? (user as CatalogDoctor).specialization?.trim() : null
+  const rating = getRating()
+  const reviewCount = getReviewCount()
+  const experience =
+    user.role === USER_ROLES.DOCTOR && (user as CatalogDoctor).experience
+      ? pluralRu((user as CatalogDoctor).experience, "год", "года", "лет")
+      : null
+
+  // Данные для клиники
+  const clinicData =
+    user.role === USER_ROLES.CLINIC
+      ? {
+          legalName: (user as CatalogClinic).legalName?.trim() || null,
+          actualAddress: (user as CatalogClinic).actualAddress?.trim() || null,
+          legalAddress: (user as CatalogClinic).legalAddress?.trim() || null,
+          phone: user.phone?.trim() || null,
+          email: user.email?.trim() || null,
+        }
+      : null
+
   return (
     <Link
       to={`${ROUTES.PROFILE_SOME_USER.replace(":userId", user.id)}`}
       className={cn("block", className)}
     >
-      <Card className="h-full cursor-pointer transition-all hover:shadow-lg">
-        <CardHeader className="flex items-start gap-4 lg:flex-row">
-          <Avatar className="size-16 lg:size-24">
-            <AvatarFallback className="text-lg">
+      <Card className="group h-full transition-all hover:-translate-y-1 hover:shadow-lg">
+        <CardHeader className="flex flex-row items-start gap-4">
+          <Avatar className="size-16 shrink-0 lg:size-20">
+            <AvatarFallback className="text-base lg:text-lg">
               {getAvatarText() || getAvatarIcon()}
             </AvatarFallback>
           </Avatar>
 
           <div className="min-w-0 flex-1">
-            <h3>{getDisplayName()}</h3>
-            {user.role === USER_ROLES.DOCTOR && (
-              <p className="text-muted-foreground">{(user as CatalogDoctor).specialization}</p>
-            )}
+            <div className="flex items-start justify-between gap-2">
+              <div className="min-w-0 flex-1">
+                <h3 className="group-hover:text-primary line-clamp-2 font-semibold transition-colors">
+                  {displayName}
+                </h3>
+                {specialization && (
+                  <p className="text-muted-foreground mt-1 line-clamp-1 text-sm">
+                    {specialization}
+                  </p>
+                )}
+                {user.role === USER_ROLES.CLINIC &&
+                  clinicData?.legalName &&
+                  clinicData.legalName !== displayName && (
+                    <p className="text-muted-foreground mt-1 line-clamp-1 text-sm">
+                      {clinicData.legalName}
+                    </p>
+                  )}
+              </div>
+              {showFavorite && user.role === USER_ROLES.PATIENT && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-8 w-8 shrink-0"
+                  onClick={handleFavoriteClick}
+                  aria-label={isFavorite ? "Удалить из избранного" : "Добавить в избранное"}
+                >
+                  <Heart
+                    className={cn(
+                      "size-4 transition-all",
+                      isFavorite
+                        ? "fill-red-500 text-red-500"
+                        : "text-muted-foreground group-hover:text-red-500",
+                    )}
+                  />
+                </Button>
+              )}
+            </div>
           </div>
         </CardHeader>
 
-        <CardContent className="space-y-3">
-          {/* Бейджи и мета-информация */}
-          <div className="flex flex-wrap items-center gap-2 text-sm">
-            {isNewProfile && <Badge variant="accent">Новый</Badge>}
-
-            {user.role === USER_ROLES.DOCTOR && (
-              <Badge variant="secondary">
-                Опыт: {pluralRu((user as CatalogDoctor).experience, "год", "года", "лет")}
-              </Badge>
+        <CardContent className="space-y-4">
+          {/* Рейтинг и бейджи */}
+          <div className="flex flex-col gap-3">
+            {rating !== undefined && (
+              <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1">
+                  <Star className="size-4 fill-yellow-400 text-yellow-400" />
+                  <span className="font-semibold">{rating.toFixed(1)}</span>
+                </div>
+                {reviewCount !== undefined && (
+                  <span className="text-muted-foreground text-sm">
+                    {reviewCount}{" "}
+                    {reviewCount === 1 ? "отзыв" : reviewCount < 5 ? "отзыва" : "отзывов"}
+                  </span>
+                )}
+              </div>
             )}
 
-            {user.role === USER_ROLES.CLINIC &&
-              "doctorCount" in user &&
-              user.doctorCount !== undefined && (
-                <Badge variant="secondary">Врачей: {user.doctorCount}</Badge>
-              )}
-
-            {user.role === USER_ROLES.PATIENT && "birthDate" in user && user.birthDate && (
-              <Badge variant="secondary">
-                {new Date(user.birthDate).toLocaleDateString("ru-RU", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </Badge>
+            {/* Бейджи */}
+            {(isNewProfile ||
+              experience ||
+              (user.role === USER_ROLES.CLINIC && "doctorCount" in user && user.doctorCount)) && (
+              <div className="flex flex-wrap items-center gap-2">
+                {isNewProfile && <Badge variant="accent">Новый</Badge>}
+                {experience && (
+                  <Badge variant="secondary" className="text-xs">
+                    Опыт: {experience}
+                  </Badge>
+                )}
+                {user.role === USER_ROLES.CLINIC &&
+                  "doctorCount" in user &&
+                  user.doctorCount !== undefined && (
+                    <Badge variant="secondary" className="text-xs">
+                      Врачей: {user.doctorCount}
+                    </Badge>
+                  )}
+              </div>
             )}
           </div>
-
-          {/* Рейтинг */}
-          {getRating() !== undefined && (
-            <div className="flex items-center gap-1 text-sm">
-              <Star className="size-4 fill-yellow-400 text-yellow-400" />
-              <span className="font-medium">{getRating()!.toFixed(1)}</span>
-              {getReviewCount() !== undefined && (
-                <span className="text-muted-foreground">
-                  ({getReviewCount()} {getReviewCount() === 1 ? "отзыв" : "отзывов"})
-                </span>
-              )}
-            </div>
-          )}
 
           {/* Клиника/Место работы */}
           {user.role === USER_ROLES.DOCTOR && (
             <>
-              {(user as CatalogDoctor).clinicInfo ? (
+              {(user as CatalogDoctor).clinicInfo?.legalName ? (
                 <div className="text-muted-foreground flex items-start gap-2 text-sm">
                   <MapPin className="mt-0.5 size-4 shrink-0" />
                   <span className="line-clamp-2">
-                    Работает в: {(user as CatalogDoctor).clinicInfo?.legalName || "Клиника"}
+                    {(user as CatalogDoctor).clinicInfo?.legalName || ""}
                   </span>
                 </div>
-              ) : (user as CatalogDoctor).clinic ? (
+              ) : (user as CatalogDoctor).workplace?.trim() ? (
                 <div className="text-muted-foreground flex items-start gap-2 text-sm">
                   <MapPin className="mt-0.5 size-4 shrink-0" />
-                  <span className="line-clamp-2">Работает в клинике</span>
+                  <span className="line-clamp-2">
+                    {(user as CatalogDoctor).workplace?.trim() || ""}
+                  </span>
                 </div>
-              ) : (
-                (user as CatalogDoctor).workplace && (
-                  <div className="text-muted-foreground flex items-start gap-2 text-sm">
-                    <MapPin className="mt-0.5 size-4 shrink-0" />
-                    <span className="line-clamp-2">{(user as CatalogDoctor).workplace}</span>
-                  </div>
-                )
-              )}
+              ) : null}
             </>
+          )}
+
+          {/* Информация о клинике */}
+          {user.role === USER_ROLES.CLINIC && clinicData && (
+            <div className="space-y-2">
+              {clinicData.actualAddress && (
+                <div className="text-muted-foreground flex items-start gap-2 text-sm">
+                  <MapPin className="mt-0.5 size-4 shrink-0" />
+                  <span className="line-clamp-2">{clinicData.actualAddress}</span>
+                </div>
+              )}
+              {clinicData.phone && (
+                <div className="text-muted-foreground flex items-center gap-2 text-sm">
+                  <Phone className="size-4 shrink-0" />
+                  <span className="line-clamp-1">{clinicData.phone}</span>
+                </div>
+              )}
+            </div>
           )}
         </CardContent>
 
         <Separator />
 
-        <CardFooter className="justify-between pt-4">
-          <Button variant="outline" className="w-max" asChild>
+        <CardFooter className="pt-4">
+          <Button variant="outline" size="sm" className="w-full" asChild>
             <span>Подробнее</span>
           </Button>
-          {showFavorite && (user.role === USER_ROLES.DOCTOR || user.role === USER_ROLES.CLINIC) && (
-            <Button
-              variant="outline"
-              onClick={handleFavoriteClick}
-              aria-label={isFavorite ? "Удалить из избранного" : "Добавить в избранное"}
-            >
-              <Heart
-                className={cn(
-                  "size-5 transition-colors",
-                  isFavorite
-                    ? "fill-red-500 text-red-500"
-                    : "text-muted-foreground hover:text-red-500",
-                )}
-              />
-            </Button>
-          )}
         </CardFooter>
       </Card>
     </Link>
