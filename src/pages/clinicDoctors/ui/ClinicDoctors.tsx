@@ -2,7 +2,7 @@
  * @fileoverview Страница управления врачами клиники
  */
 
-import { ClinicDoctorsList } from "@/widgets/clinicDoctorsList/ui/ClinicDoctorsList"
+import { ClinicDoctorsList } from "@/widgets/clinic/clinicDoctorsList/ui/ClinicDoctorsList"
 import { useUserStore } from "@/entities/user/model/store"
 
 export const ClinicDoctors = () => {
@@ -12,8 +12,10 @@ export const ClinicDoctors = () => {
   return (
     <div className="space-global">
       <div>
-        <h2>Врачи клиники</h2>
-        <p className="mt-2 text-gray-600">Управляйте списком врачей вашей клиники</p>
+        <h3 className="text-3xl font-semibold">Врачи клиники</h3>
+        <p className="text-muted-foreground mt-2">
+          Управляйте списком врачей вашей клиники
+        </p>
       </div>
       <ClinicDoctorsList clinicId={clinicId} />
     </div>

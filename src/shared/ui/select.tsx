@@ -32,7 +32,7 @@ function SelectTrigger({
       data-slot="select-trigger"
       data-size={size}
       className={cn(
-        "border-input data-[placeholder]:text-muted-foreground disabled:bg-muted [&_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 bg-input-background flex w-full items-center justify-between gap-2 rounded-xl border px-3 py-6.5 text-base text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 md:text-sm [&_[data-slot=select-value]]:font-normal disabled:[&_[data-slot=select-value]]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "border-input data-[placeholder]:text-muted-foreground disabled:bg-muted [&_svg:not([class*='text-'])]:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:bg-input/30 dark:hover:bg-input/50 bg-input-background flex w-full items-center justify-between gap-2 rounded-xl border px-3 py-5.5 text-base font-medium whitespace-nowrap transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 md:text-sm [&_[data-slot=select-value]]:font-normal disabled:[&_[data-slot=select-value]]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
 
         className,
       )}
@@ -47,7 +47,7 @@ function SelectTrigger({
 }
 
 const selectGroupAddonVariants = cva(
-  "text-muted-foreground flex h-auto items-center justify-center gap-2 text-sm font-medium select-none [&>svg:not([class*='size-'])]:size-5 [&>kbd]:rounded-[calc(var(--radius)-5px)] pointer-events-none",
+  "data-[placeholder]:text-muted-foreground text-foreground flex h-auto items-center justify-center gap-2 select-none [&>svg:not([class*='size-'])]:size-5 [&>kbd]:rounded-[calc(var(--radius)-5px)] pointer-events-none",
   {
     variants: {
       align: {

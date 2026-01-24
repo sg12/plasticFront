@@ -14,7 +14,7 @@ export const Profile = () => {
 
   const isOwnProfile = !userId || userId === user?.id
 
-  if (!isOwnProfile) {
+  if (!isOwnProfile && userId) {
     return <ViewProfile userId={userId} />
   }
   return <ProfileForm />

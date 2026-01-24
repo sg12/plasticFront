@@ -1,3 +1,5 @@
+import { MAX_FILE_SIZE } from "../model/constants"
+
 export interface FileValidationConfig {
   maxSize: number // в байтах
   allowedTypes: string[] // MIME типы
@@ -33,7 +35,7 @@ export const isFileValidationError = (error: any): error is FileValidationError 
 export const FILE_VALIDATION_CONFIGS = {
   // Документы (паспорта, дипломы, лицензии)
   documents: {
-    maxSize: 10 * 1024 * 1024, // 10MB
+    maxSize: MAX_FILE_SIZE,
     allowedTypes: [
       "application/pdf",
       "image/jpeg",
@@ -48,14 +50,14 @@ export const FILE_VALIDATION_CONFIGS = {
 
   // Изображения для AI обработки
   images: {
-    maxSize: 25 * 1024 * 1024, // 25MB
+    maxSize: MAX_FILE_SIZE,
     allowedTypes: ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif"],
     maxFiles: 1,
   },
 
   // Общие документы клиники
   clinicDocuments: {
-    maxSize: 15 * 1024 * 1024, // 15MB
+    maxSize: MAX_FILE_SIZE, // 15MB
     allowedTypes: [
       "application/pdf",
       "image/jpeg",
@@ -325,7 +327,7 @@ export async function validateFiles(files: File[], config: FileValidationConfig)
  * Безопасная функция для получения размера файла в человеко-читаемом формате
  */
 export function formatFileSize(bytes: number): string {
-  if (bytes === 0) return "0 Bytes"
+  if (!bytes || bytes === 0 || isNaN(bytes)) return "0 Bytes"
 
   const k = 1024
   const sizes = ["Bytes", "KB", "MB", "GB"]
@@ -341,12 +343,14 @@ export function getFileInfo(file: File): {
   name: string
   size: string
   type: string
+  mime: string
   lastModified: Date
 } {
   return {
-    name: file.name,
+    name: file.name.split(".")[0],
     size: formatFileSize(file.size),
     type: file.type || "Неизвестный тип",
+    mime: file.name.split(".")[1],
     lastModified: new Date(file.lastModified),
   }
 }

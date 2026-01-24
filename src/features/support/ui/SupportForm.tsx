@@ -1,19 +1,21 @@
-import type { SupportFileRecord } from "@/entities/support/types/types"
+import type { FileRecord } from "@/features/fileUpload/types/types"
 import { FileUpload } from "@/features/fileUpload/ui/FileUpload"
 import { Button } from "@/shared/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/ui/card"
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/form"
 import {
   InputGroup,
-  InputGroupAddon,
   InputGroupInput,
   InputGroupTextarea,
 } from "@/shared/ui/inputGroup"
-import { Loader, MessageCircleQuestionMark, Send } from "lucide-react"
+import { Loader, Send } from "lucide-react"
 import { useSupport } from "../hooks/useSupport"
+import { useIsMobile } from "@/shared/hooks/useMobile"
 
 export const SupportForm = () => {
-  const { form, FormProvider, onSubmit, handleFileChange, isCreating, attachedFiles } = useSupport()
+  const { form, FormProvider, onSubmit, handleFileChange, isCreating, uploadedFiles } = useSupport()
+  const isMobile = useIsMobile()
+
   return (
     <Card>
       <CardHeader>
@@ -32,9 +34,6 @@ export const SupportForm = () => {
                   <FormLabel>Тема обращения</FormLabel>
                   <FormControl>
                     <InputGroup>
-                      <InputGroupAddon>
-                        <MessageCircleQuestionMark className="h-4 w-4" />
-                      </InputGroupAddon>
                       <InputGroupInput
                         id="subject"
                         placeholder="Например: Проблема с регистрацией"
@@ -69,20 +68,18 @@ export const SupportForm = () => {
               )}
             />
 
-            <FileUpload<SupportFileRecord>
-              fileSlots={[
-                {
-                  id: "attachments",
-                  label: "Прикрепить файлы (опционально, максимум 5)",
-                  multiple: true,
-                },
-              ]}
-              uploadedFiles={attachedFiles}
+            <FileUpload<FileRecord>
+              fileSlot={{
+                id: "attachments",
+                label: "Прикрепить файлы (опционально)",
+                multiple: true,
+              }}
+              uploadedFiles={uploadedFiles}
               onFileChange={handleFileChange}
               disabled={isCreating}
             />
 
-            <Button type="submit" disabled={isCreating} className="w-full" size="lg">
+            <Button type="submit" disabled={isCreating} className="w-full" size={isMobile ? "lg" : "md"}>
               {isCreating ? (
                 <>
                   <Loader className="mr-2 h-4 w-4 animate-spin" />

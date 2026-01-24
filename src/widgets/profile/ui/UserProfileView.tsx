@@ -1,11 +1,9 @@
 import type { RoleProfile } from "@/entities/user/types/types"
 import { USER_ROLES } from "@/entities/user/model/constants"
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card"
+import { CardTitle } from "@/shared/ui/card"
 import { Separator } from "@/shared/ui/separator"
 import { format } from "date-fns"
 import { ru } from "date-fns/locale"
-import { formatRole } from "@/shared/lib/utils"
-import { Badge } from "@/shared/ui/badge"
 import { pluralRu } from "@/shared/lib/utils"
 import {
   CheckCircle,
@@ -50,7 +48,11 @@ export const UserProfileView = ({ profile }: UserProfileViewProps) => {
               Пол
             </label>
             <p className="text-sm">
-              {profile.gender === "male" ? "Мужской" : profile.gender === "female" ? "Женский" : "—"}
+              {profile.gender === "male"
+                ? "Мужской"
+                : profile.gender === "female"
+                  ? "Женский"
+                  : "—"}
             </p>
           </div>
         </div>
@@ -77,7 +79,11 @@ export const UserProfileView = ({ profile }: UserProfileViewProps) => {
               Пол
             </label>
             <p className="text-sm">
-              {profile.gender === "male" ? "Мужской" : profile.gender === "female" ? "Женский" : "—"}
+              {profile.gender === "male"
+                ? "Мужской"
+                : profile.gender === "female"
+                  ? "Женский"
+                  : "—"}
             </p>
           </div>
           <div>
@@ -186,12 +192,10 @@ export const UserProfileView = ({ profile }: UserProfileViewProps) => {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Личная информация</CardTitle>
-      </CardHeader>
+    <>
+      <CardTitle className="mb-4">Личная информация</CardTitle>
 
-      <CardContent className="space-child">
+      <div className="space-child">
         {/* Основная информация */}
         <div className="grid gap-4 lg:grid-cols-2">
           <div>
@@ -226,7 +230,7 @@ export const UserProfileView = ({ profile }: UserProfileViewProps) => {
 
         {/* Ролевая информация */}
         {renderRoleSpecificInfo()}
-      </CardContent>
-    </Card>
+      </div>
+    </>
   )
 }

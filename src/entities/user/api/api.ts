@@ -17,11 +17,17 @@ import type { UploadedFilesByRole } from "@/entities/document/types/types"
 import { uploadFiles } from "@/entities/document/api/api"
 import { logger } from "@/shared/lib/logger"
 import type { User } from "@supabase/supabase-js"
+import {
+  validateFile,
+  FILE_VALIDATION_CONFIGS,
+  isFileValidationError,
+} from "@/shared/lib/fileValidation"
 
 const PROFILES = "profiles"
 const PATIENT_PROFILES = "patientProfiles"
 const DOCTOR_PROFILES = "doctorProfiles"
 const CLINIC_PROFILES = "clinicProfiles"
+const AVATARS_STORAGE_BUCKET = "avatars"
 
 export const createUser = async (
   userId: User["id"],
@@ -65,24 +71,27 @@ export const createUser = async (
     throw new Error(`Не удалось создать профиль: ${error.message}`)
   }
 
-  // 2) Загружаем файлы в Storage (если есть) и получаем пути
-  let filePaths: Record<string, string | string[]> | null = null
+  const fileUploadPromise =
+    data.role === USER_ROLES.DOCTOR && uploadedFiles[USER_ROLES.DOCTOR]
+      ? (() => {
+          logger.debug("Загрузка файлов для врача", {
+            userId,
+            fileCount: Object.keys(uploadedFiles[USER_ROLES.DOCTOR]!).length,
+          })
+          return uploadFiles(userId, "doctor", uploadedFiles[USER_ROLES.DOCTOR]!)
+        })()
+      : data.role === USER_ROLES.CLINIC && uploadedFiles[USER_ROLES.CLINIC]
+        ? (() => {
+            logger.debug("Загрузка файлов для клиники", {
+              userId,
+              fileCount: Object.keys(uploadedFiles[USER_ROLES.CLINIC]!).length,
+            })
+            return uploadFiles(userId, USER_ROLES.CLINIC, uploadedFiles[USER_ROLES.CLINIC]!)
+          })()
+        : Promise.resolve<Record<string, string | string[]> | null>(null)
 
-  if (data.role === USER_ROLES.DOCTOR && uploadedFiles[USER_ROLES.DOCTOR]) {
-    logger.debug("Загрузка файлов для врача", {
-      userId,
-      fileCount: Object.keys(uploadedFiles[USER_ROLES.DOCTOR]!).length,
-    })
-    filePaths = await uploadFiles(userId, "doctor", uploadedFiles[USER_ROLES.DOCTOR]!)
-  } else if (data.role === USER_ROLES.CLINIC && uploadedFiles[USER_ROLES.CLINIC]) {
-    logger.debug("Загрузка файлов для клиники", {
-      userId,
-      fileCount: Object.keys(uploadedFiles[USER_ROLES.CLINIC]!).length,
-    })
-    filePaths = await uploadFiles(userId, USER_ROLES.CLINIC, uploadedFiles[USER_ROLES.CLINIC]!)
-  }
+  const filePaths = await fileUploadPromise
 
-  // 3) Создаём role-specific данные
   let roleError = null
 
   if (data.role === USER_ROLES.PATIENT) {
@@ -90,6 +99,7 @@ export const createUser = async (
       id: userId,
       birthDate: data.birthDate || null,
       gender: data.gender || null,
+      avatarUrl: null,
     })
     roleError = error
   } else if (data.role === USER_ROLES.DOCTOR) {
@@ -105,6 +115,7 @@ export const createUser = async (
       birthDate: data.birthDate || null,
       gender: data.gender || null,
       documents: filePaths,
+      avatarUrl: null,
     })
     roleError = error
   } else if (data.role === USER_ROLES.CLINIC) {
@@ -119,7 +130,7 @@ export const createUser = async (
       directorName: data.directorName,
       directorPosition: data.directorPosition,
       documents: filePaths,
-      doctors: data.doctors || [],
+      avatarUrl: null,
     })
     roleError = error
   }
@@ -143,12 +154,14 @@ export const createUser = async (
 export const getUser = async (userId: User["id"]): Promise<RoleProfile | null> => {
   logger.debug("Получение профиля пользователя", { userId })
 
-  // 1) Получаем базовый профиль
-  const { data: profile, error: profileError } = await supabase
+  // Получаем базовый профиль
+  const profilePromise = supabase
     .from(PROFILES)
     .select("*")
     .eq("id", userId)
     .maybeSingle<RoleProfile>()
+
+  const { data: profile, error: profileError } = await profilePromise
 
   if (profileError) {
     logger.error("Ошибка получения базового профиля", new Error(profileError.message), {
@@ -169,7 +182,7 @@ export const getUser = async (userId: User["id"]): Promise<RoleProfile | null> =
   else if (profile.role === USER_ROLES.DOCTOR) specificTable = DOCTOR_PROFILES
   else if (profile.role === USER_ROLES.CLINIC) specificTable = CLINIC_PROFILES
 
-  // 2) Получаем role-specific данные
+  // Получаем role-specific данные параллельно (если таблица определена)
   if (specificTable) {
     const { data: specificData, error: specificError } = await supabase
       .from(specificTable)
@@ -204,13 +217,15 @@ export const getUser = async (userId: User["id"]): Promise<RoleProfile | null> =
 export const getUserById = async (userId: User["id"]): Promise<RoleProfile | null> => {
   logger.debug("Получение профиля пользователя", { userId })
 
-  // 1) Получаем базовый профиль
-  const { data: profile, error: profileError } = await supabase
+  // Получаем базовый профиль
+  const profilePromise = supabase
     .from(PROFILES)
     .select("id, role, fullName, email, phone, moderationStatus, createdAt, updatedAt")
     .eq("id", userId)
     .eq("moderationStatus", MODERATION_STATUS.APPROVED)
     .single<RoleProfile>()
+
+  const { data: profile, error: profileError } = await profilePromise
 
   if (profileError) {
     logger.error(
@@ -230,12 +245,13 @@ export const getUserById = async (userId: User["id"]): Promise<RoleProfile | nul
 
   if (!profile.role) return profile
 
+  // Определяем таблицу для role-specific данных
   let specificTable = ""
   if (profile.role === USER_ROLES.PATIENT) specificTable = PATIENT_PROFILES
   else if (profile.role === USER_ROLES.DOCTOR) specificTable = DOCTOR_PROFILES
   else if (profile.role === USER_ROLES.CLINIC) specificTable = CLINIC_PROFILES
 
-  // 2) Получаем role-specific данные
+  // Получаем role-specific данные (если таблица определена)
   if (specificTable) {
     const { data: specificData, error: specificError } = await supabase
       .from(specificTable)
@@ -265,6 +281,89 @@ export const getUserById = async (userId: User["id"]): Promise<RoleProfile | nul
     role: profile.role,
   })
   return profile
+}
+
+/**
+ * Загружает аватар пользователя в Supabase Storage
+ *
+ * @param userId - ID пользователя
+ * @param avatarFile - Файл изображения аватара
+ * @returns Promise с URL загруженного аватара
+ */
+export const uploadAvatar = async (userId: User["id"], avatarFile: File): Promise<string> => {
+  logger.info("Начало загрузки аватара", {
+    userId,
+    fileName: avatarFile.name,
+    fileSize: avatarFile.size,
+  })
+
+  try {
+    await validateFile(avatarFile, FILE_VALIDATION_CONFIGS.images)
+  } catch (error) {
+    if (isFileValidationError(error)) {
+      logger.error("Ошибка валидации аватара", new Error(error.message), {
+        userId,
+        fileName: avatarFile.name,
+      })
+      throw new Error(`Ошибка валидации аватара: ${error.message}`)
+    }
+    throw error
+  }
+
+  // Удаляем старый аватар, если он существует
+  const { data: existingFiles } = await supabase.storage
+    .from(AVATARS_STORAGE_BUCKET)
+    .list(`${userId}/`)
+
+  if (existingFiles && existingFiles.length > 0) {
+    const filesToDelete = existingFiles.map((file) => `${userId}/${file.name}`)
+    const { error: deleteError } = await supabase.storage
+      .from(AVATARS_STORAGE_BUCKET)
+      .remove(filesToDelete)
+
+    if (deleteError) {
+      logger.warn("Ошибка удаления старого аватара (продолжаем загрузку)", {
+        userId,
+        deletedFiles: filesToDelete,
+        error: deleteError.message,
+      })
+    } else {
+      logger.debug("Старый аватар удален", { userId, deletedFiles: filesToDelete })
+    }
+  }
+
+  // Загружаем новый аватар с уникальным именем для обхода кэша
+  const fileExt = avatarFile.name.split(".").pop()
+  const timestamp = Date.now()
+  const fileName = `avatar_${timestamp}.${fileExt || "jpg"}`
+  const filePath = `${userId}/${fileName}`
+
+  const { error: uploadError } = await supabase.storage
+    .from(AVATARS_STORAGE_BUCKET)
+    .upload(filePath, avatarFile, {
+      cacheControl: "3600",
+      upsert: true,
+    })
+
+  if (uploadError) {
+    logger.error("Ошибка загрузки аватара", new Error(uploadError.message), {
+      userId,
+      filePath,
+    })
+    throw new Error(`Ошибка загрузки аватара: ${uploadError.message}`)
+  }
+
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from(AVATARS_STORAGE_BUCKET).getPublicUrl(filePath)
+
+  logger.info("Аватар успешно загружен", {
+    userId,
+    filePath,
+    publicUrl,
+  })
+
+  return publicUrl
 }
 
 export const updateUser = async (id: User["id"], data: UserUpdateFormData) => {
@@ -305,6 +404,7 @@ export const updateUser = async (id: User["id"], data: UserUpdateFormData) => {
         .update({
           birthDate: patient.birthDate ?? null,
           gender: patient.gender ?? null,
+          avatarUrl: patient.avatarUrl ?? null,
           updatedAt: new Date().toISOString(),
         })
         .eq("id", id)
@@ -333,6 +433,7 @@ export const updateUser = async (id: User["id"], data: UserUpdateFormData) => {
           clinic: doctor.clinic ?? null,
           inn: doctor.inn,
           documents: doctor.documents ?? null,
+          avatarUrl: doctor.avatarUrl ?? null,
           updatedAt: new Date().toISOString(),
         })
         .eq("id", id)
@@ -371,6 +472,7 @@ export const updateUser = async (id: User["id"], data: UserUpdateFormData) => {
           directorPosition: clinic.directorPosition,
           documents: documentsNormalized ?? null,
           doctors: clinic.doctors || [],
+          avatarUrl: clinic.avatarUrl ?? null,
           updatedAt: new Date().toISOString(),
         })
         .eq("id", id)
@@ -401,11 +503,10 @@ export const updateUser = async (id: User["id"], data: UserUpdateFormData) => {
  */
 export const addFavorite = async (
   userId: User["id"],
-  favoriteId: RoleProfile["id"],
+  favoriteId: string,
   type: UserRole,
 ): Promise<string[]> => {
   try {
-    // Получаем оба поля, чтобы избежать проблем с типизацией
     const { data: currentData, error: fetchError } = await supabase
       .from(PATIENT_PROFILES)
       .select("favoriteDoctors, favoriteClinics")
@@ -424,15 +525,12 @@ export const addFavorite = async (
         ? (currentData?.favoriteDoctors as string[]) || []
         : (currentData?.favoriteClinics as string[]) || []
 
-    // Проверяем, не добавлен ли уже
     if (currentFavorites.includes(favoriteId)) {
       return currentFavorites
     }
 
-    // Добавляем новый ID
     const updatedFavorites = [...currentFavorites, favoriteId]
 
-    // Обновляем в базе данных
     const updateData =
       type === "doctor"
         ? { favoriteDoctors: updatedFavorites }
@@ -484,7 +582,7 @@ export const addFavorite = async (
  */
 export const removeFavorite = async (
   userId: User["id"],
-  favoriteId: RoleProfile["id"],
+  favoriteId: string,
   type: UserRole,
 ): Promise<string[]> => {
   try {

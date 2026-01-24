@@ -1,8 +1,15 @@
 import type { RoleProfile } from "@/entities/user/types/types"
 import { pluralRu } from "@/shared/lib/utils"
-import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card"
+import { CardTitle } from "@/shared/ui/card"
 import { Badge } from "@/shared/ui/badge"
-import dayjs from "dayjs"
+import {
+  differenceInYears,
+  differenceInMonths,
+  differenceInDays,
+  isBefore,
+  isValid,
+  parseISO,
+} from "date-fns"
 
 interface Props {
   profile: RoleProfile | null
@@ -12,18 +19,15 @@ export const UserProfileHistory = ({ profile }: Props) => {
   const formatWithUs = () => {
     if (!profile?.createdAt) return "—"
 
-    const created = dayjs(profile.createdAt)
-    if (!created.isValid()) return "—"
+    const created = parseISO(profile.createdAt)
+    if (!isValid(created)) return "—"
 
-    const now = dayjs()
-    if (now.isBefore(created)) return "—"
+    const now = new Date()
+    if (isBefore(now, created)) return "—"
 
-    let cursor = created
-    const years = now.diff(cursor, "year")
-    cursor = cursor.add(years, "year")
-    const months = now.diff(cursor, "month")
-    cursor = cursor.add(months, "month")
-    const days = now.diff(cursor, "day")
+    const years = differenceInYears(now, created)
+    const months = differenceInMonths(now, created) % 12
+    const days = differenceInDays(now, created) % 30
 
     const parts: string[] = []
     if (years > 0) parts.push(pluralRu(years, "год", "года", "лет"))
@@ -40,33 +44,23 @@ export const UserProfileHistory = ({ profile }: Props) => {
   const withUsLabel = formatWithUs()
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center justify-between gap-2">
-          <CardTitle>Активность</CardTitle>
-          <Badge variant="secondary">Скоро</Badge>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-          <div className="rounded-lg bg-purple-50 p-4 text-center opacity-70">
-            <p className="text-lg font-semibold text-purple-700">0</p>
-            <p className="text-muted-foreground mt-1 text-xs">Процедур</p>
-          </div>
-          <div className="rounded-lg bg-blue-50 p-4 text-center opacity-70">
-            <p className="text-lg font-semibold text-blue-700">0</p>
-            <p className="text-muted-foreground mt-1 text-xs">Клиник</p>
-          </div>
-          <div className="rounded-lg bg-green-50 p-4 text-center opacity-70">
-            <p className="text-lg font-semibold text-green-700">0</p>
-            <p className="text-muted-foreground mt-1 text-xs">Врачей</p>
-          </div>
+    <>
+      <div className="flex items-center justify-between gap-2 mb-4">
+        <CardTitle>Активность</CardTitle>
+        <Badge variant="secondary">Скоро</Badge>
+      </div>
+      <>
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-6">
           <div className="rounded-lg bg-orange-50 p-4 text-center">
             <p className="text-lg font-semibold text-orange-700">{withUsLabel}</p>
             <p className="text-muted-foreground mt-1 text-xs">С нами</p>
           </div>
+          {Array.from({ length: 5 })
+            .map((_, index) => (
+              <div key={index} className="rounded-lg bg-gray-50 p-4 text-center" />
+            ))}
         </div>
-      </CardContent>
-    </Card>
+      </>
+    </>
   )
 }

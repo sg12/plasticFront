@@ -88,9 +88,7 @@ export type RoleProfile = PatientProfile | DoctorProfile | ClinicProfile
 export type ModerationStatus = (typeof MODERATION_STATUS)[keyof typeof MODERATION_STATUS]
 
 /**
- * Базовый интерфейс профиля пользователя.
- *
- * Содержит общие поля, которые есть у всех типов профилей.
+ * Базовый интерфейс пользователя системы.
  *
  * @remarks
  * Поле `role` имеет тип `UserRole`, но в конкретных профилях оно переопределяется
@@ -98,7 +96,7 @@ export type ModerationStatus = (typeof MODERATION_STATUS)[keyof typeof MODERATIO
  *
  * @example
  * ```typescript
- * const baseProfile: Profile = {
+ * const baseUser: User = {
  *   id: "123",
  *   // ...
  * }
@@ -110,11 +108,11 @@ export interface Profile<Role> {
   /** Роль пользователя в системе */
   readonly role: Role
   /** Полное имя пользователя */
-  fullName: string | null
+  fullName: string
   /** Email адрес (обязательное поле) */
   email: string
   /** Номер телефона */
-  phone: string | null
+  phone: string
   /** Статус модерации профиля */
   moderationStatus: ModerationStatus | null
   /** Комментарий модератора при отклонении/одобрении */
@@ -132,13 +130,13 @@ export interface Profile<Role> {
 /**
  * Профиль пациента.
  *
- * Расширяет базовый `Profile` специфичными для пациента полями.
+ * Расширяет базовый `User` специфичными для пациента полями.
  *
  * @example
  * ```typescript
  * const patient: PatientProfile = {
  *   id: "123",
- *   // ... остальные поля из Profile
+ *   // ... остальные поля из User
  * }
  *
  * // Проверка типа
@@ -159,19 +157,21 @@ export interface PatientProfile extends Profile<typeof USER_ROLES.PATIENT> {
   favoriteDoctors?: string[]
   /** Массив ID избранных клиник (jsonb в базе данных) */
   favoriteClinics?: string[]
+  /** URL аватара пользователя */
+  avatarUrl: string | null
 }
 
 /**
  * Профиль врача.
  *
- * Расширяет базовый `Profile` специфичными для врача полями,
+ * Расширяет базовый `User` специфичными для врача полями,
  * включая информацию о лицензии, специализации, опыте работы и документах.
  *
  * @example
  * ```typescript
  * const doctor: DoctorProfile = {
  *   id: "456",
- *   // ... остальные поля из Profile
+ *   // ... остальные поля из User
  * }
  *
  * // Проверка типа
@@ -208,12 +208,14 @@ export interface DoctorProfile extends Profile<typeof USER_ROLES.DOCTOR> {
    * Ключ - название документа, значение - путь к файлу или массив путей
    */
   documents: Record<string, string | string[]> | null
+  /** URL аватара пользователя */
+  avatarUrl: string | null
 }
 
 /**
  * Профиль клиники.
  *
- * Расширяет базовый `Profile` специфичными для клиники полями,
+ * Расширяет базовый `User` специфичными для клиники полями,
  * включая юридическую информацию, адреса, лицензии и документы.
  *
  * @example
@@ -256,6 +258,8 @@ export interface ClinicProfile extends Profile<typeof USER_ROLES.CLINIC> {
   documents: Record<string, string | string[]> | null
   /** Массив ID врачей, принявших приглашение в клинику (JSONB) */
   doctors: string[]
+  /** URL аватара пользователя */
+  avatarUrl: string | null
 }
 
 /**

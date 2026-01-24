@@ -14,10 +14,8 @@ export const General = () => {
     <div className="space-global">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
-          <h2 className="min-w-0 truncate">Основные настройки</h2>
-          <p className="text-muted-foreground mt-1 text-sm">
-            Управление параметрами аккаунта и приложения
-          </p>
+          <h3 className="text-3xl font-semibold">Основные настройки</h3>
+          <p className="text-muted-foreground mt-2">Управление параметрами аккаунта и приложения</p>
         </div>
       </div>
 
@@ -32,7 +30,7 @@ export const General = () => {
               <CardAction>
                 <Button
                   variant="ghost"
-                  size="icon"
+                  size="iconSm"
                   className="h-8 w-8"
                   onClick={() => refresh()}
                   disabled={isLoading}

@@ -13,7 +13,7 @@ import {
 import { Label } from "@/shared/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/shared/ui/radioGroup"
 import { Textarea } from "@/shared/ui/textarea"
-import { MAX_FILE_SIZE } from "@/entities/document/model/constants"
+import { IMAGE_ACCEPT_TYPES_OBJECT, MAX_FILE_SIZE } from "@/shared/model/constants"
 
 interface PhotoUploaderProps {
   selectedZone: BodyZone
@@ -91,11 +91,7 @@ export const PhotoUploader = ({
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: {
-      "image/jpeg": [".jpg", ".jpeg"],
-      "image/png": [".png"],
-      "image/webp": [".webp"],
-    },
+    accept: IMAGE_ACCEPT_TYPES_OBJECT,
     maxSize: MAX_FILE_SIZE,
     multiple: false,
   })
@@ -125,7 +121,7 @@ export const PhotoUploader = ({
           <RadioGroup
             value={selectedOperation || undefined}
             onValueChange={(value) => onOperationTypeChange(value as OperationType)}
-            className="grid grid-cols-1 gap-3 sm:grid-cols-2"
+            className="grid grid-cols-1 gap-4 sm:grid-cols-2"
           >
             {availableOperations.map((operation) => (
               <div

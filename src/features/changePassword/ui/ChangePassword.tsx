@@ -64,7 +64,7 @@ export const ChangePassword = () => {
             <DialogFooter>
               <Button
                 type="button"
-                variant="outline"
+                variant="secondary"
                 disabled={isLoading}
                 onClick={() => setOpen(false)}
               >

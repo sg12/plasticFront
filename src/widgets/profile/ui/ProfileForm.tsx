@@ -1,10 +1,13 @@
 import { Edit2, Loader, Save, X } from "lucide-react"
 import { Button } from "../../../shared/ui/button"
-import { useProfile } from "../../../widgets/profile/hooks/useProfile"
+import { useProfile } from "@/features/profile/hooks/useProfile"
 import { UserProfileCard } from "@/widgets/profile/ui/UserProfileCard"
 import { UserProfileInformation } from "@/widgets/profile/ui/UserProfileInformation"
 import { UserProfileHistory } from "@/widgets/profile/ui/UserProfileHistory"
 import { USER_ROLES } from "@/entities/user/model/constants"
+import { useUserStore } from "@/entities/user/model/store"
+import { Card, CardContent } from "@/shared/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs"
 
 /**
  * Компонент для просмотра своего профиля
@@ -26,62 +29,73 @@ export const ProfileForm = () => {
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-global">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-global pb-10 sm:pb-0">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-          <div className="min-w-0">
-            <h2 className="min-w-0 truncate">Профиль</h2>
-            <p className="text-muted-foreground mt-1 text-sm">
+          <div>
+            <h3 className="text-3xl font-semibold">Профиль</h3>
+            <p className="text-muted-foreground mt-2">
               Проверьте данные и обновляйте информацию при необходимости
             </p>
           </div>
+        </div>
 
-          {profile?.role != USER_ROLES.CLINIC && (
-            <div className="hidden flex-wrap items-center justify-end gap-2 sm:flex">
-              {!isEditing ? (
-                <Button onClick={startEdit} size="sm">
-                  <Edit2 className="h-4 w-4" />
-                  Редактировать
-                </Button>
-              ) : (
-                <>
-                  <Button onClick={handleSaveClick} variant="save" size="sm" disabled={isSaving}>
-                    {isSaving ? (
-                      <Loader className="h-4 w-4 animate-spin" />
-                    ) : (
-                      <Save className="h-4 w-4" />
-                    )}
-                    Сохранить
-                  </Button>
-                  <Button variant="outline" size="sm" disabled={isSaving} onClick={cancelEdit}>
-                    <X className="h-4 w-4" />
-                    Отмена
-                  </Button>
-                </>
+        <Card>
+          <CardContent className="space-child">
+            <div className="flex justify-between items-start">
+              <UserProfileCard
+                profile={isEditing ? editableProfile : profile}
+                isEditing={isEditing}
+                onProfileUpdate={async () => {
+                  if (profile) {
+                    const { loadProfile } = useUserStore.getState()
+                    await loadProfile(profile.id)
+                  }
+                }}
+              />
+              {profile?.role != USER_ROLES.CLINIC && (
+                <div className="hidden flex-wrap items-center justify-end gap-2 sm:flex">
+                  {!isEditing ? (
+                    <Button onClick={startEdit} variant="secondary">
+                      Редактировать
+                    </Button>
+                  ) : (
+                    <>
+                      <Button onClick={handleSaveClick} variant="primary" disabled={isSaving}>
+                        Сохранить
+                      </Button>
+                      <Button variant="secondary" disabled={isSaving} onClick={cancelEdit}>
+                        Отмена
+                      </Button>
+                    </>
+                  )}
+                </div>
               )}
             </div>
-          )}
-        </div>
-
-        <div className="grid gap-6 lg:grid-cols-3">
-          <div className="lg:col-span-1">
-            <UserProfileCard profile={isEditing ? editableProfile : profile} />
-          </div>
-          <div className="space-global lg:col-span-2">
-            <UserProfileInformation
-              form={form}
-              profile={isEditing ? editableProfile : profile}
-              isEditing={isEditing}
-              isSaving={isSaving}
-            />
-            <UserProfileHistory profile={profile} />
-          </div>
-        </div>
+            <Tabs defaultValue="information">
+              <TabsList className="w-full mb-4">
+                <TabsTrigger value="information">Данные</TabsTrigger>
+                <TabsTrigger value="history">История</TabsTrigger>
+              </TabsList>
+              <TabsContent value="information">
+                <UserProfileInformation
+                  form={form}
+                  profile={isEditing ? editableProfile : profile}
+                  isEditing={isEditing}
+                  isSaving={isSaving}
+                />
+              </TabsContent>
+              <TabsContent value="history">
+                <UserProfileHistory profile={profile} />
+              </TabsContent>
+            </Tabs>
+          </CardContent>
+        </Card>
 
         {profile?.role != USER_ROLES.CLINIC && (
-          <div className="bg-background/90 fixed inset-x-0 bottom-0 z-10 border-t p-3 backdrop-blur sm:hidden">
+          <div className="bg-background/90 h-[calc(100svh-var(--header-height))]!] fixed inset-x-0 bottom-(--header-height) bottom-0 z-10 border-t p-3 backdrop-blur sm:hidden">
             <div className="mx-auto flex max-w-7xl items-center justify-end gap-2 px-1">
               {!isEditing ? (
-                <Button onClick={startEdit} className="flex-1" size="sm">
+                <Button onClick={startEdit} className="flex-1" size="sm" variant="secondary">
                   <Edit2 className="h-4 w-4" />
                   Редактировать
                 </Button>
@@ -89,7 +103,6 @@ export const ProfileForm = () => {
                 <>
                   <Button
                     onClick={handleSaveClick}
-                    variant="save"
                     size="sm"
                     disabled={isSaving}
                     className="flex-1"
@@ -102,7 +115,7 @@ export const ProfileForm = () => {
                     Сохранить
                   </Button>
                   <Button
-                    variant="outline"
+                    variant="secondary"
                     size="sm"
                     disabled={isSaving}
                     onClick={cancelEdit}
@@ -117,6 +130,6 @@ export const ProfileForm = () => {
           </div>
         )}
       </form>
-    </FormProvider>
+    </FormProvider >
   )
 }

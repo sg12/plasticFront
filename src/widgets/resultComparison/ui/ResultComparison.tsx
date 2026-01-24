@@ -145,12 +145,12 @@ export const ResultComparison = ({
       <p className="text-center text-sm text-gray-400">Перетащите слайдер для сравнения</p>
 
       <div className="mx-auto flex max-w-lg flex-col gap-3 sm:flex-row">
-        <Button variant="outline" className="flex-1" onClick={() => handleDownload()}>
+        <Button variant="secondary" className="flex-1" onClick={() => handleDownload()}>
           <Download className="mr-2 size-4" />
           Скачать
         </Button>
 
-        <Button variant="outline" className="flex-1" onClick={() => onReset()}>
+        <Button variant="secondary" className="flex-1" onClick={() => onReset()}>
           <RotateCcw className="mr-2 size-4" />
           Заново
         </Button>

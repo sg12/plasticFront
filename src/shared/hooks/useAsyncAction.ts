@@ -167,7 +167,17 @@ export const useAsyncAction = <TParams, TResult>(
         setIsLoading(false)
       }
     },
-    [action, successMessage, errorMessage, onSuccess, onError, validate, logContext, logActionName, showToast],
+    [
+      action,
+      successMessage,
+      errorMessage,
+      onSuccess,
+      onError,
+      validate,
+      logContext,
+      logActionName,
+      showToast,
+    ],
   )
 
   return {

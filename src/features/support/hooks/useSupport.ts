@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useState, useMemo } from "react"
+import type { FileRecord } from "@/features/fileUpload/types/types"
 import useSWR from "swr"
 import { useSWRConfig } from "swr"
 import { toast } from "sonner"
@@ -14,17 +15,18 @@ import type {
   SupportTicketReply,
   CreateSupportTicketData,
   CreateSupportTicketFormData,
-  SupportFileRecord,
 } from "@/entities/support/types/types"
 import { logger } from "@/shared/lib/logger"
 import { useForm, FormProvider } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { createSupportTicketSchema } from "@/entities/support/model/schema"
+import type { UploadedFilesByRole } from "@/entities/document/types/types"
+import { USER_ROLES } from "@/entities/user/model/constants"
 
 export const useSupport = (ticketId?: string | null) => {
   const { user } = useAuthStore()
   const { mutate: globalMutate } = useSWRConfig()
-  const [attachedFiles, setAttachedFiles] = useState<SupportFileRecord>({})
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFilesByRole>({})
   const [isCreating, setIsCreating] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
 
@@ -34,20 +36,13 @@ export const useSupport = (ticketId?: string | null) => {
     error: ticketsError,
     isValidating: isLoadingTickets,
     mutate: refreshTickets,
-  } = useSWR<SupportTicket[]>(
-    user?.id ? ["supportTickets", user.id] : null,
-    () => {
-      if (!user?.id) {
-        throw new Error("Пользователь не авторизован")
-      }
-      return getUserTickets(user.id)
-    },
-    {
-      refreshInterval: 10000,
-    },
-  )
+  } = useSWR<SupportTicket[]>(user?.id ? ["supportTickets", user.id] : null, () => {
+    if (!user?.id) {
+      throw new Error("Пользователь не авторизован")
+    }
+    return getUserTickets(user.id)
+  })
 
-  // Получение ответов на тикет
   const {
     data: replies,
     error: repliesError,
@@ -114,59 +109,72 @@ export const useSupport = (ticketId?: string | null) => {
 
   // Обработка отправки формы
   const onSubmit = async (data: CreateSupportTicketFormData) => {
-    const files: File[] = []
-    if (attachedFiles.attachments) {
-      if (Array.isArray(attachedFiles.attachments)) {
-        files.push(...attachedFiles.attachments)
-      } else {
-        files.push(attachedFiles.attachments)
+    console.log(uploadedFiles)
+
+    // Преобразуем UploadedFilesByRole в File[]
+    const filesArray: File[] = []
+    Object.values(uploadedFiles).forEach((roleFiles) => {
+      if (roleFiles) {
+        Object.values(roleFiles).forEach((fileOrArray) => {
+          if (Array.isArray(fileOrArray)) {
+            filesArray.push(...fileOrArray)
+          } else {
+            filesArray.push(fileOrArray)
+          }
+        })
       }
-    }
+    })
 
     try {
       await createTicket({
         subject: data.subject,
         message: data.message,
-        attachments: files.length > 0 ? files : undefined,
+        attachments: filesArray.length > 0 ? filesArray : undefined,
       })
 
       form.reset()
-      setAttachedFiles({})
+      setUploadedFiles({})
     } catch (error) {
       // Ошибка уже обработана в createTicket
     }
   }
 
-  // Обработка изменения файлов
   const handleFileChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    fileType: keyof SupportFileRecord,
+    fileType: string | number | symbol,
   ) => {
-    const files = Array.from(e.target.files || [])
-
-    // Проверка на максимальное количество файлов
-    const existingFiles = attachedFiles.attachments
-      ? Array.isArray(attachedFiles.attachments)
-        ? attachedFiles.attachments
-        : [attachedFiles.attachments]
-      : []
-
-    const totalFiles = existingFiles.length + files.length
-
-    if (totalFiles > 5) {
-      form.setError("attachments", {
-        type: "manual",
-        message: "Можно прикрепить максимум 5 файлов",
-      })
-      e.target.value = ""
+    const files = e.target.files
+    if (!files?.length) {
       return
     }
 
-    setAttachedFiles((prev) => ({
-      ...prev,
-      [fileType]: files.length > 1 ? files : files[0],
-    }))
+    const key = String(fileType)
+    // Для поддержки используем PATIENT как дефолтную роль
+    const defaultRole = USER_ROLES.PATIENT as keyof UploadedFilesByRole
+
+    setUploadedFiles((prev) => {
+      return {
+        ...prev,
+        [defaultRole]: {
+          ...(prev[defaultRole] ?? {}),
+          [key]: files.length > 1 ? Array.from(files) : files[0],
+        },
+      }
+    })
   }
+
+  // Преобразуем UploadedFilesByRole в FileRecord для FileUpload компонента
+  const uploadedFilesForForm: FileRecord = useMemo(() => {
+    const result: FileRecord = {}
+    Object.values(uploadedFiles).forEach((roleFiles) => {
+      if (roleFiles) {
+        Object.entries(roleFiles).forEach(([key, value]) => {
+          result[key] = value
+        })
+      }
+    })
+    return result
+  }, [uploadedFiles])
 
   // Удаление тикета
   const deleteTicket = async (ticketId: string) => {
@@ -226,55 +234,11 @@ export const useSupport = (ticketId?: string | null) => {
     handleFileChange,
     createTicket,
     isCreating,
-    attachedFiles,
-    setAttachedFiles,
+    uploadedFiles: uploadedFilesForForm,
+    setUploadedFiles,
 
     // Удаление тикета
     deleteTicket,
     isDeleting,
-  }
-}
-
-// Обратная совместимость - экспортируем старые хуки как алиасы
-export const useSupportTickets = () => {
-  const { tickets, isLoadingTickets, ticketsError, refreshTickets } = useSupport()
-  return {
-    tickets,
-    isLoading: isLoadingTickets,
-    error: ticketsError,
-    refresh: refreshTickets,
-  }
-}
-
-export const useTicketReplies = (ticketId: string | null) => {
-  const { replies, isLoadingReplies, repliesError, refreshReplies } = useSupport(ticketId)
-  return {
-    replies,
-    isLoading: isLoadingReplies,
-    error: repliesError,
-    refresh: refreshReplies,
-  }
-}
-
-export const useCreateSupportTicket = () => {
-  const {
-    form,
-    FormProvider,
-    onSubmit,
-    handleFileChange,
-    createTicket,
-    isCreating,
-    attachedFiles,
-    setAttachedFiles,
-  } = useSupport()
-  return {
-    form,
-    FormProvider,
-    onSubmit,
-    handleFileChange,
-    createTicket,
-    isLoading: isCreating,
-    attachedFiles,
-    setAttachedFiles,
   }
 }

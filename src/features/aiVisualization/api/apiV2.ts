@@ -121,10 +121,14 @@ export const processFaceImageV2 = async ({
     }
 
     if (!data || !data.resultUrl) {
-      logger.error("Не удалось получить обработанное изображение", new Error("No resultUrl in response"), {
-        zone,
-        operationType,
-      })
+      logger.error(
+        "Не удалось получить обработанное изображение",
+        new Error("No resultUrl in response"),
+        {
+          zone,
+          operationType,
+        },
+      )
       throw new Error("Не удалось получить обработанное изображение")
     }
 

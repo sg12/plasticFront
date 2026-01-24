@@ -123,7 +123,7 @@ export function PrivacyModal({ onClose }: PrivacyModalProps) {
             </div>
 
             <div className="text-center text-sm text-gray-500">
-              Последнее обновление: 01.01.2026 г. 
+              Последнее обновление: 01.01.2026 г.
             </div>
           </div>
         </div>

@@ -107,12 +107,15 @@ export const useEntityList = <TEntity, TId = string>(
         count: result.length,
       })
     } catch (err) {
-      const errorMessageFinal =
-        err instanceof Error ? err.message : errorMessage
+      const errorMessageFinal = err instanceof Error ? err.message : errorMessage
       setError(errorMessageFinal)
-      logger.error(`Ошибка загрузки ${entityName}`, err instanceof Error ? err : new Error(String(err)), {
-        ...(logContext ? logContext(id) : { id }),
-      })
+      logger.error(
+        `Ошибка загрузки ${entityName}`,
+        err instanceof Error ? err : new Error(String(err)),
+        {
+          ...(logContext ? logContext(id) : { id }),
+        },
+      )
       setData([])
     } finally {
       setIsLoading(false)

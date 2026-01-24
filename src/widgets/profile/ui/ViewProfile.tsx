@@ -2,13 +2,14 @@ import { Skeleton } from "@/shared/ui/skeleton"
 import { UserProfileCard } from "./UserProfileCard"
 import { UserProfileView } from "./UserProfileView"
 import { UserProfileHistory } from "./UserProfileHistory"
-import { useViewProfile } from "../hooks/useViewProfile"
+import { useViewProfile } from "@/features/profile/hooks/useViewProfile"
 import { AlertCircle } from "lucide-react"
 import { Alert, AlertDescription } from "@/shared/ui/alert"
 import { USER_ROLES } from "@/entities/user/model/constants"
-import { formatRole } from "@/shared/lib/utils"
-import { Badge } from "@/shared/ui/badge"
-import type { UserRole } from "@/entities/user/types/types"
+import { Card, CardContent } from "@/shared/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs"
+import { AppointmentButton } from "@/features/appointments/ui/AppointmentButton"
+import { useUserStore } from "@/entities/user/model/store"
 
 interface ViewProfileProps {
   userId: string
@@ -19,7 +20,8 @@ interface ViewProfileProps {
  * Используется когда пользователь просматривает профиль другого пользователя
  */
 export const ViewProfile = ({ userId }: ViewProfileProps) => {
-  const { profile, isLoading, error } = useViewProfile(userId)
+  const { profile: viewProfile, isLoading, error } = useViewProfile(userId)
+  const { profile: userProfile } = useUserStore()
 
   if (isLoading) {
     return (
@@ -42,7 +44,7 @@ export const ViewProfile = ({ userId }: ViewProfileProps) => {
     )
   }
 
-  if (error || !profile) {
+  if (error || !viewProfile) {
     return (
       <div className="space-global">
         <Alert variant="destructive">
@@ -54,33 +56,64 @@ export const ViewProfile = ({ userId }: ViewProfileProps) => {
   }
 
   const getProfileTitle = () => {
-    if (profile.role === USER_ROLES.CLINIC) return "Профиль клиники"
-    if (profile.role === USER_ROLES.DOCTOR) return "Профиль врача"
+    if (viewProfile.role === USER_ROLES.CLINIC) return "Профиль клиники"
+    if (viewProfile.role === USER_ROLES.DOCTOR) return "Профиль врача"
     return "Профиль пользователя"
   }
 
   return (
     <div className="space-global">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div className="min-w-0">
-          <div className="flex items-center gap-3">
-            <h2 className="min-w-0 truncate">{getProfileTitle()}</h2>
-          </div>
-          <p className="text-muted-foreground mt-1 text-sm">
+        <div>
+          <h3 className="text-3xl font-semibold">{getProfileTitle()}</h3>
+          <p className="text-muted-foreground mt-2">
             Просмотр информации о профиле пользователя
           </p>
         </div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-1">
-          <UserProfileCard profile={profile} />
+      <Card>
+        <CardContent className="space-child">
+          <div className="flex justify-between items-start">
+            <UserProfileCard
+              profile={viewProfile}
+            />
+            {userProfile?.role === USER_ROLES.PATIENT && (
+              <div className="hidden flex-wrap items-center justify-end gap-2 sm:flex">
+                <AppointmentButton
+                  doctorId={viewProfile.role === USER_ROLES.DOCTOR ? viewProfile.id : null}
+                  clinicId={viewProfile.role === USER_ROLES.CLINIC ? viewProfile.id : null}
+                  className="max-md:w-full"
+                />
+              </div>
+            )}
+          </div>
+          <Tabs defaultValue="information">
+            <TabsList className="w-full mb-4">
+              <TabsTrigger value="information">Данные</TabsTrigger>
+              <TabsTrigger value="history">История</TabsTrigger>
+            </TabsList>
+            <TabsContent value="information">
+              <UserProfileView profile={viewProfile} />
+            </TabsContent>
+            <TabsContent value="history">
+              <UserProfileHistory profile={viewProfile} />
+            </TabsContent>
+          </Tabs>
+        </CardContent>
+      </Card>
+
+      {userProfile?.role != USER_ROLES.PATIENT && (
+        <div className="bg-background/90 h-[calc(100svh-var(--header-height))]!] fixed inset-x-0 bottom-(--header-height) bottom-0 z-10 border-t p-3 backdrop-blur sm:hidden">
+          <div className="mx-auto flex max-w-7xl items-center justify-end gap-2 px-1">
+            <AppointmentButton
+              doctorId={viewProfile.role === USER_ROLES.DOCTOR ? viewProfile.id : null}
+              clinicId={viewProfile.role === USER_ROLES.CLINIC ? viewProfile.id : null}
+              className="max-md:w-full"
+            />
+          </div>
         </div>
-        <div className="space-global lg:col-span-2">
-          <UserProfileView profile={profile} />
-          <UserProfileHistory profile={profile} />
-        </div>
-      </div>
-    </div>
+      )}
+    </div >
   )
 }

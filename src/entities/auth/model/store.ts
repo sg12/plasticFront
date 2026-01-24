@@ -8,6 +8,7 @@ import {
 } from "../api/api"
 import type { AuthState, AuthStore } from "../types/types"
 import { useUserStore } from "@/entities/user/model/store"
+import { useNotificationStore } from "@/entities/notification/model/store"
 import { recordLogin } from "@/features/loginHistory/api/api"
 import { logger } from "@/shared/lib/logger"
 
@@ -102,10 +103,17 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       set({ session, user: session.user })
       await useUserStore.getState().loadProfile(session.user.id)
       await useUserStore.getState().handlePostLoginActions(session.user.id)
+
+      // Инициализация уведомлений
+      const notificationStore = useNotificationStore.getState()
+      notificationStore.loadNotifications()
+      notificationStore.loadUnreadCount()
+      notificationStore.subscribeToNotifications(session.user.id)
     } else {
       logger.debug("Сессия не найдена")
       set({ session: null, user: null })
       useUserStore.getState().reset()
+      useNotificationStore.getState().reset()
     }
 
     set({ initialized: true, loading: false })
@@ -117,19 +125,27 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
         set({ session, user: session?.user ?? null })
       }
 
+      if (!useUserStore.getState().profile) {
+        await useUserStore.getState().loadProfile(currentSession?.user.id || "")
+      }
+
       if (event === "SIGNED_IN" && session?.user.id) {
         logger.info("Пользователь вошел в систему", {
           userId: session.user.id,
         })
-        if (!useUserStore.getState().profile) {
-          await useUserStore.getState().loadProfile(session.user.id)
-        }
+
+        // Инициализация уведомлений при входе
+        const notificationStore = useNotificationStore.getState()
+        notificationStore.loadNotifications()
+        notificationStore.loadUnreadCount()
+        notificationStore.subscribeToNotifications(session.user.id)
       }
 
       if (event === "SIGNED_OUT") {
         logger.info("Пользователь вышел из системы")
         set({ session: null, user: null })
         useUserStore.getState().reset()
+        useNotificationStore.getState().reset()
       }
     })
 

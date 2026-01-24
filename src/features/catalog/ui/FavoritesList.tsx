@@ -35,6 +35,7 @@ export const FavoritesList = ({ doctors, clinics, isLoading, error }: FavoritesL
         error={error}
         emptyMessage="У вас пока нет избранных"
         descriptionMessage="Добавьте врачей или клиники в избранное, чтобы быстро находить их здесь"
+        onRetry={error ? () => window.location.reload() : undefined}
       />
     )
   }

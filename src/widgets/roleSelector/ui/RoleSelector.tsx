@@ -1,86 +1,72 @@
 import { USER_ROLES } from "@/entities/user/model/constants"
 import { User, Stethoscope, Hospital } from "lucide-react"
 import type { RoleSelectorProps } from "../types/types"
-import { BannerButton } from "@/shared/ui/bannerButton"
-import { useIsMobile } from "@/shared/hooks/useMobile"
-import * as React from "react"
+import { cn } from "@/shared/lib/utils"
 
-export function RoleSelector({ onRoleSelect }: RoleSelectorProps) {
-  const isMobile = useIsMobile()
-  const [isTablet, setIsTablet] = React.useState(false)
+const roles = [
+  {
+    type: USER_ROLES.PATIENT,
+    title: "Пациент",
+    description: "Поиск клиник и врачей, запись на консультации, отзывы",
+    icon: User,
+    iconColor: "text-purple-600",
+    iconBg: "bg-purple-100",
+  },
+  {
+    type: USER_ROLES.DOCTOR,
+    title: "Врач",
+    description: "Управление расписанием, пациентами и услугами",
+    icon: Stethoscope,
+    iconColor: "text-orange-600",
+    iconBg: "bg-orange-100",
+  },
+  {
+    type: USER_ROLES.CLINIC,
+    title: "Клиника",
+    description: "Управление клиникой, специалистами и услугами",
+    icon: Hospital,
+    iconColor: "text-green-600",
+    iconBg: "bg-green-100",
+  },
+]
 
-  React.useEffect(() => {
-    const checkTablet = () => {
-      setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024)
-    }
-
-    checkTablet()
-    window.addEventListener("resize", checkTablet)
-    return () => window.removeEventListener("resize", checkTablet)
-  }, [])
-
-  const buttonSize = isMobile ? "bannerSm" : isTablet ? "bannerLg" : "bannerXl"
-  const roles = [
-    {
-      type: USER_ROLES.PATIENT,
-      title: "Пациент",
-      description: "Поиск клиник и врачей, запись на консультации, отзывы",
-      icon: User,
-      styles: {
-        border: "hover:border-purple-500",
-        bg: "hover:bg-purple-50",
-        iconBg: "group-hover:bg-purple-300 bg-purple-200",
-        icon: "text-purple-600",
-        chevron: "group-hover:text-purple-600",
-      },
-    },
-    {
-      type: USER_ROLES.DOCTOR,
-      title: "Врач",
-      description: "Управление расписанием, пациентами и услугами",
-      icon: Stethoscope,
-      styles: {
-        border: "hover:border-orange-500",
-        bg: "hover:bg-orange-50",
-        iconBg: "group-hover:bg-orange-300 bg-orange-200",
-        icon: "text-orange-600",
-        chevron: "group-hover:text-orange-600",
-      },
-    },
-    {
-      type: USER_ROLES.CLINIC,
-      title: "Клиника",
-      description: "Управление клиникой, специалистами и услугами",
-      icon: Hospital,
-      styles: {
-        border: "hover:border-green-500",
-        bg: "hover:bg-green-50",
-        iconBg: "group-hover:bg-green-300 bg-green-200",
-        icon: "text-green-600",
-        chevron: "group-hover:text-green-600",
-      },
-    },
-  ]
-
+export const RoleSelector = ({ onRoleSelect }: RoleSelectorProps) => {
   return (
-    <>
-      {roles.map((role, index) => (
-        <BannerButton
-          key={index}
-          title={role.title}
-          size={buttonSize}
-          description={role.description}
-          icon={role.icon}
+    <div className="space-child grid w-full">
+      {roles.map((role) => (
+        <button
+          key={role.type}
           onClick={() => onRoleSelect(role.type)}
-          colors={{
-            border: role.styles.border,
-            bg: role.styles.bg,
-            iconBg: role.styles.iconBg,
-            icon: role.styles.icon,
-            chevron: role.styles.chevron,
-          }}
-        />
+          className={cn(
+            "group relative flex flex-col rounded-xl border-2 border-[#E5E7EB] p-6",
+            "overflow-hidden bg-white hover:border-[#0070ff]",
+            "cursor-pointer transition-all duration-200",
+            "text-left focus:ring-2 focus:ring-[#0070ff] focus:ring-offset-2 focus:outline-none",
+          )}
+        >
+          {role.icon && (
+            <div
+              className={cn(
+                "absolute top-4 right-4 flex items-center justify-center",
+                "opacity-10 transition-opacity group-hover:opacity-20",
+                role.iconColor,
+              )}
+            >
+              <role.icon className="size-24" />
+            </div>
+          )}
+
+          <h3 className="relative z-10 mb-2 text-lg font-semibold text-[#1A1B23] transition-colors group-hover:text-[#0070ff]">
+            {role.title}
+          </h3>
+
+          {role.description && (
+            <p className="relative z-10 text-sm leading-relaxed text-[#6B7280]">
+              {role.description}
+            </p>
+          )}
+        </button>
       ))}
-    </>
+    </div>
   )
 }

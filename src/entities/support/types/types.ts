@@ -1,5 +1,5 @@
 import type { createSupportTicketSchema } from "@/entities/support/model/schema"
-import type { FileRecord } from '@/features/fileUpload/types/types'
+import type { FileRecord } from "@/features/fileUpload/types/types"
 import type z from "zod"
 
 export interface SupportTicket {
@@ -40,10 +40,6 @@ export interface SupportTicketReply {
   isFromModerator: boolean
   createdAt: string
   createdBy?: string
-}
-
-export type SupportFileRecord = FileRecord & {
-  attachments?: File | File[]
 }
 
 export type CreateSupportTicketFormData = z.infer<typeof createSupportTicketSchema>

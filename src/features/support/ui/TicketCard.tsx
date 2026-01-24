@@ -1,15 +1,8 @@
 import { SUPPORT_TICKET_STATUSES } from "@/entities/support/model/constants"
 import { useSupport } from "../hooks/useSupport"
-import { Badge } from "@/shared/ui/badge"
 import { format } from "date-fns"
 import { ru } from "date-fns/locale"
-import {
-  ChevronDown,
-  MessageSquareReply,
-  Paperclip,
-  Trash2,
-  AlertTriangle,
-} from "lucide-react"
+import { ChevronDown, MessageSquareReply, Paperclip, Trash2, AlertTriangle } from "lucide-react"
 import { useState } from "react"
 import { Button } from "@/shared/ui/button"
 import {
@@ -24,11 +17,13 @@ import {
   AlertDialogTrigger,
 } from "@/shared/ui/alertDialog"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/shared/ui/collapsible"
+import type { SupportTicket } from "@/entities/support/types/types"
+import { Badge } from "@/shared/ui/badge"
 
 export const TicketCard = ({
   ticket: initialTicket,
 }: {
-  ticket: import("../../../entities/support/types/types").SupportTicket
+  ticket: SupportTicket
 }) => {
   const [isExpanded, setIsExpanded] = useState(false)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
@@ -36,20 +31,15 @@ export const TicketCard = ({
     initialTicket.id,
   )
 
-  // Получаем актуальный статус из списка обращений
   const ticket = tickets.find((t) => t.id === initialTicket.id) || initialTicket
 
   const handleDelete = async () => {
-    try {
-      await deleteTicket(ticket.id)
-      setIsDeleteDialogOpen(false)
-    } catch (error) {
-      // Ошибка уже обработана в deleteTicket
-    }
+    await deleteTicket(ticket.id)
+    setIsDeleteDialogOpen(false)
   }
 
   return (
-    <div className="rounded-lg border bg-card p-4 transition-colors hover:bg-muted/30">
+    <div className="bg-card hover:bg-muted/30 rounded-lg border p-4 transition-colors">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0 flex-1">
           <div className="mb-2 flex flex-wrap items-center gap-2">
@@ -57,7 +47,7 @@ export const TicketCard = ({
             <Badge
               variant={
                 ticket.status === "resolved"
-                  ? "default"
+                  ? "primary"
                   : ticket.status === "inProgress"
                     ? "secondary"
                     : ticket.status === "closed"
@@ -85,13 +75,17 @@ export const TicketCard = ({
             )}
           </div>
 
-          <Collapsible open={isExpanded} onOpenChange={setIsExpanded} className="group/collapsible mt-3">
+          <Collapsible
+            open={isExpanded}
+            onOpenChange={setIsExpanded}
+            className="group/collapsible mt-3"
+          >
             <CollapsibleTrigger asChild>
               <Button
                 type="button"
                 variant="ghost"
                 size="sm"
-                className="text-purple-600 hover:text-purple-700 hover:bg-purple-50"
+                className="text-purple-600 hover:bg-purple-50 hover:text-purple-700"
               >
                 <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-180" />
                 {isExpanded ? "Скрыть ответы" : "Показать ответы"}
@@ -112,17 +106,15 @@ export const TicketCard = ({
                     {replies.map((reply) => (
                       <div
                         key={reply.id}
-                        className={`rounded-lg border p-3 text-sm ${
-                          reply.isFromModerator
-                            ? "bg-purple-50/50 border-purple-200"
-                            : "bg-muted/30"
-                        }`}
+                        className={`rounded-lg border p-3 text-sm ${reply.isFromModerator
+                          ? "border-purple-200 bg-purple-50/50"
+                          : "bg-muted/30"
+                          }`}
                       >
                         <div className="mb-2 flex items-center gap-2">
                           <span
-                            className={`font-semibold ${
-                              reply.isFromModerator ? "text-purple-700" : "text-foreground"
-                            }`}
+                            className={`font-semibold ${reply.isFromModerator ? "text-purple-700" : "text-foreground"
+                              }`}
                           >
                             {reply.isFromModerator ? "Модератор" : "Вы"}
                           </span>
@@ -151,7 +143,7 @@ export const TicketCard = ({
             <AlertDialogTrigger asChild>
               <Button
                 variant="ghost"
-                size="icon"
+                size="iconSm"
                 className="h-8 w-8 text-red-600 hover:bg-red-50 hover:text-red-700"
                 disabled={isDeleting}
                 aria-label="Удалить обращение"

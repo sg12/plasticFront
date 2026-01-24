@@ -3,7 +3,7 @@ import { Button } from "@/shared/ui/button"
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert"
 import { AlertCircle, Home, ArrowLeft } from "lucide-react"
 import { Card, CardContent } from "@/shared/ui/card"
-import { ROUTES } from '@/shared/model/routes'
+import { ROUTES } from "@/shared/model/routes"
 
 export const NotFound = () => {
   const navigate = useNavigate()
@@ -39,11 +39,11 @@ export const NotFound = () => {
             </Alert>
 
             <div className="flex flex-col gap-2">
-              <Button onClick={handleGoHome} variant="default" className="w-full">
+              <Button onClick={handleGoHome} variant="primary" className="w-full">
                 <Home className="mr-2 h-4 w-4" />
                 На главную
               </Button>
-              <Button onClick={handleGoBack} variant="outline" className="w-full">
+              <Button onClick={handleGoBack} variant="secondary" className="w-full">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Назад
               </Button>

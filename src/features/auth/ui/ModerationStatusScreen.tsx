@@ -37,11 +37,11 @@ export const ModerationStatusScreen = () => {
 
           <div className="space-child w-full">
             {isRejected && (
-              <Button className="w-full" variant="default">
+              <Button className="w-full" variant="primary">
                 Связаться с поддержкой / Исправить
               </Button>
             )}
-            <Button className="w-full" variant="outline" onClick={() => signOut("local")}>
+            <Button className="w-full" variant="secondary" onClick={() => signOut("local")}>
               Выйти из аккаунта
             </Button>
           </div>

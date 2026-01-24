@@ -183,7 +183,7 @@ export const AIVisualizer = () => {
         {state.step !== "processing" && state.step !== "result" && (
           <div className="mt-6 flex justify-between">
             <Button
-              variant="outline"
+              variant="secondary"
               onClick={() => goBack()}
               disabled={state.step === "select-zone"}
               className="gap-2"

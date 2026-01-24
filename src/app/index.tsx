@@ -36,7 +36,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       }}
     >
       <RouterProvider router={router} />
-      <Toaster />
+      <Toaster position="top-center" />
     </SWRConfig>
   </ErrorBoundary>,
 )

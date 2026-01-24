@@ -1,5 +1,4 @@
 import { supabase } from "@/shared/api/supabase/client"
-import type { DoctorUploadedFiles, ClinicUploadedFiles } from "../types/types"
 import {
   validateFiles,
   FILE_VALIDATION_CONFIGS,
@@ -7,7 +6,7 @@ import {
   type FileValidationConfig,
 } from "@/shared/lib/fileValidation"
 import { logger } from "@/shared/lib/logger"
-import type { USER_ROLES } from '@/entities/user/model/constants'
+import type { USER_ROLES } from "@/entities/user/model/constants"
 
 const STORAGE_BUCKET = "documents"
 
@@ -26,7 +25,7 @@ const DOCUMENT_VALIDATION_CONFIGS: Record<string, FileValidationConfig> = {
 export async function uploadFiles(
   userId: string,
   role: typeof USER_ROLES.DOCTOR | typeof USER_ROLES.CLINIC,
-  files: DoctorUploadedFiles | ClinicUploadedFiles,
+  files: any,
 ): Promise<UploadedFilePaths> {
   logger.info("Начало загрузки файлов", {
     userId,

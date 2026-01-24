@@ -6,7 +6,7 @@ export interface Consent {
   isActive: boolean
   grantedAt: string | null
   revokedAt: string | null
-  isRequired: boolean 
+  isRequired: boolean
 }
 
 export type ConsentType = "personalData" | "medicalData" | "marketing" | "analytics"

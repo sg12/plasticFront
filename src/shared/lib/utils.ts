@@ -81,3 +81,22 @@ export const pluralRu = (n: number, one: string, few: string, many: string): str
 
   return `${n} ${word}`
 }
+
+export const formatPhoneNumber = (phoneNumber: string): string => {
+  if (!phoneNumber) return ""
+  let cleaned = phoneNumber.replace(/\D/g, "")
+  if (cleaned.startsWith("8")) {
+    cleaned = "7" + cleaned.slice(1)
+  }
+  if (cleaned.startsWith("7")) {
+    cleaned = cleaned.slice(1)
+  }
+
+  // Форматируем: (999) 999-99-99
+  const match = cleaned.match(/^(\d{3})(\d{3})(\d{2})(\d{2})$/)
+  if (match) {
+    return `+7 (${match[1]}) ${match[2]}-${match[3]}-${match[4]}`
+  }
+
+  return phoneNumber
+}

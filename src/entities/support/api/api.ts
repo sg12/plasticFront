@@ -2,6 +2,7 @@ import { supabase } from "@/shared/api/supabase/client"
 import type { SupportTicket, CreateSupportTicketData, SupportTicketReply } from "../types/types"
 import { logger } from "@/shared/lib/logger"
 import type { User } from "@supabase/supabase-js"
+import { createSupportTicketCreatedNotification } from "@/entities/notification/utils/helpers"
 
 const TABLE_NAME = "supportTickets" // TABLE
 const REPLIES_TABLE_NAME = "supportTicketReplies" // TABLE
@@ -101,6 +102,14 @@ export const createSupportTicket = async (
   logger.info("Обращение успешно создано", {
     userId,
     ticketId: data.id,
+  })
+
+  // Создаём уведомление пользователю
+  createSupportTicketCreatedNotification(userId, data.id).catch((error) => {
+    logger.error("Ошибка создания уведомления о создании обращения", error as Error, {
+      userId,
+      ticketId: data.id,
+    })
   })
 
   sendToTelegram(data, userId).catch((error) => {
