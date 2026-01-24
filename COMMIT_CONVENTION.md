@@ -128,6 +128,7 @@ npm install --save-dev commitizen cz-conventional-changelog
 ```
 
 Добавить в `package.json`:
+
 ```json
 {
   "config": {
@@ -142,6 +143,7 @@ npm install --save-dev commitizen cz-conventional-changelog
 ```
 
 Теперь можно использовать:
+
 ```bash
 npm run commit
 ```
