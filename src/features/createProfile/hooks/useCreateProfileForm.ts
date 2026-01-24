@@ -6,14 +6,9 @@ import { toast } from "sonner"
 import { useAuthStore } from "@/entities/auth/model/store"
 import { createUser } from "@/entities/user/api/api"
 import { logger } from "@/shared/lib/logger"
-import type {
-  ClinicUploadedFiles,
-  DoctorUploadedFiles,
-  UploadedFilesByRole,
-} from "@/entities/document/types/types"
 import { getSession } from "@/entities/auth/api/api"
-import type { FileSlot } from "@/features/fileUpload/types/types"
 import type { UserCreateFormData, UserRole } from "@/entities/user/types/types"
+import type { UploadedFilesByRole } from "@/entities/document/types/types"
 import { userCreateSchema } from "@/entities/user/model/schema"
 import { FormProvider } from "react-hook-form"
 import { ROUTES } from "@/shared/model/routes"
@@ -72,38 +67,26 @@ export const useCreateProfileForm = () => {
     }
   }, [session, initialized, navigate, role, form, profile])
 
-  const doctorFileSlots: FileSlot<DoctorUploadedFiles>[] = [
-    { id: "diploma", label: "Диплом о медицинском образовании" },
-    { id: "license", label: "Медицинская лицензия" },
-    { id: "certificate", label: "Сертификат специалиста" },
-  ]
-
-  const clinicFileSlots: FileSlot<ClinicUploadedFiles>[] = [
-    {
-      id: "clinicDocuments",
-      label: "Документы клиники (можно загрузить несколько файлов)",
-      multiple: true,
-    },
-  ]
-
-  const handleFileChange = <
-    R extends keyof UploadedFilesByRole,
-    K extends keyof NonNullable<UploadedFilesByRole[R]>,
-  >(
+  const handleFileChange = <R extends keyof UploadedFilesByRole, K extends string>(
     role: R,
     e: React.ChangeEvent<HTMLInputElement>,
     key: K,
   ) => {
     const files = e.target.files
-    if (!files?.length) return
+    if (!files?.length) {
+      return
+    }
 
-    setUploadedFiles((prev) => ({
-      ...prev,
-      [role]: {
-        ...(prev?.[role] ?? {}),
-        [key]: files.length > 1 ? Array.from(files) : files[0],
-      },
-    }))
+    setUploadedFiles((prev) => {
+      const newState = {
+        ...prev,
+        [role]: {
+          ...(prev[role] ?? {}),
+          [key]: files.length > 1 ? Array.from(files) : files[0],
+        },
+      }
+      return newState
+    })
   }
 
   const onSubmit = async (data: UserCreateFormData) => {
@@ -114,32 +97,46 @@ export const useCreateProfileForm = () => {
 
     setIsLoading(true)
 
-    const { data: sessionData } = await getSession()
-
-    if (!sessionData.session) {
-      toast.error("Сессия не найдена, пожалуйста, войдите снова.")
-      navigate(ROUTES.SIGNIN)
-      setIsLoading(false)
-      return
-    }
-
-    const fullData = {
-      ...data,
-      email: sessionData.session.user.email!,
-      fullName: sessionData.session.user.user_metadata.fullName,
-      phone: sessionData.session.user.user_metadata.phone,
-    }
-
     try {
+      // Используем существующую сессию из store, если она есть
+      let sessionData = { session }
+
+      // Если сессии нет в store, получаем её
+      if (!sessionData.session) {
+        const result = await Promise.race([
+          getSession(),
+          new Promise<{ data: { session: null } }>((_, reject) =>
+            setTimeout(() => reject(new Error("Timeout: сессия не получена")), 10000),
+          ),
+        ])
+        sessionData = result.data || { session: null }
+      }
+
+      if (!sessionData.session) {
+        toast.error("Сессия не найдена, пожалуйста, войдите снова.")
+        navigate(ROUTES.SIGNIN)
+        return
+      }
+
+      const fullData = {
+        ...data,
+        email: sessionData.session.user.email!,
+        fullName: sessionData.session.user.user_metadata.fullName,
+        phone: sessionData.session.user.user_metadata.phone,
+      }
+
       await createUser(user.id, fullData, uploadedFiles)
       toast.success("Профиль успешно создан!")
       navigate(0)
     } catch (error: any) {
       logger.error("Ошибка создания профиля", error as Error, {
         userId: user.id,
-        role: fullData.role,
+        role: data.role,
       })
-      if (error?.message === "USER_ALREADY_EXISTS" || error?.code === "23505") {
+
+      if (error?.message?.includes("Timeout")) {
+        toast.error("Превышено время ожидания. Пожалуйста, попробуйте снова.")
+      } else if (error?.message === "USER_ALREADY_EXISTS" || error?.code === "23505") {
         toast.info("Профиль для этого пользователя уже существует.")
         navigate(ROUTES.MAIN)
       } else {
@@ -150,7 +147,8 @@ export const useCreateProfileForm = () => {
     }
   }
 
-  const handleSaveClick = async () => {
+  const handleSaveClick = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault()
     const isValid = await form.trigger()
 
     if (!isValid) {
@@ -169,8 +167,6 @@ export const useCreateProfileForm = () => {
     isLoading,
     uploadedFiles,
     handleFileChange,
-    doctorFileSlots,
-    clinicFileSlots,
     onSubmit,
     handleSaveClick,
     FormProvider,

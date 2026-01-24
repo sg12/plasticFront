@@ -1,6 +1,5 @@
 import { SUPPORT_TICKET_STATUSES } from "@/entities/support/model/constants"
 import { useSupport } from "../hooks/useSupport"
-import { Badge } from "@/shared/ui/badge"
 import { format } from "date-fns"
 import { ru } from "date-fns/locale"
 import { ChevronDown, MessageSquareReply, Paperclip, Trash2, AlertTriangle } from "lucide-react"
@@ -18,11 +17,13 @@ import {
   AlertDialogTrigger,
 } from "@/shared/ui/alertDialog"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/shared/ui/collapsible"
+import type { SupportTicket } from "@/entities/support/types/types"
+import { Badge } from "@/shared/ui/badge"
 
 export const TicketCard = ({
   ticket: initialTicket,
 }: {
-  ticket: import("../../../entities/support/types/types").SupportTicket
+  ticket: SupportTicket
 }) => {
   const [isExpanded, setIsExpanded] = useState(false)
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
@@ -30,16 +31,11 @@ export const TicketCard = ({
     initialTicket.id,
   )
 
-  // Получаем актуальный статус из списка обращений
   const ticket = tickets.find((t) => t.id === initialTicket.id) || initialTicket
 
   const handleDelete = async () => {
-    try {
-      await deleteTicket(ticket.id)
-      setIsDeleteDialogOpen(false)
-    } catch (error) {
-      // Ошибка уже обработана в deleteTicket
-    }
+    await deleteTicket(ticket.id)
+    setIsDeleteDialogOpen(false)
   }
 
   return (
@@ -51,7 +47,7 @@ export const TicketCard = ({
             <Badge
               variant={
                 ticket.status === "resolved"
-                  ? "default"
+                  ? "primary"
                   : ticket.status === "inProgress"
                     ? "secondary"
                     : ticket.status === "closed"
@@ -110,17 +106,15 @@ export const TicketCard = ({
                     {replies.map((reply) => (
                       <div
                         key={reply.id}
-                        className={`rounded-lg border p-3 text-sm ${
-                          reply.isFromModerator
-                            ? "border-purple-200 bg-purple-50/50"
-                            : "bg-muted/30"
-                        }`}
+                        className={`rounded-lg border p-3 text-sm ${reply.isFromModerator
+                          ? "border-purple-200 bg-purple-50/50"
+                          : "bg-muted/30"
+                          }`}
                       >
                         <div className="mb-2 flex items-center gap-2">
                           <span
-                            className={`font-semibold ${
-                              reply.isFromModerator ? "text-purple-700" : "text-foreground"
-                            }`}
+                            className={`font-semibold ${reply.isFromModerator ? "text-purple-700" : "text-foreground"
+                              }`}
                           >
                             {reply.isFromModerator ? "Модератор" : "Вы"}
                           </span>

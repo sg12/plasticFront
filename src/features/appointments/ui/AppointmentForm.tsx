@@ -398,6 +398,13 @@ export const AppointmentForm = ({
                                                     <span>{profile.phone}</span>
                                                 </div>
                                             )}
+                                            {form.getValues("notes") && (
+                                                <div className="flex items-center gap-2 text-right">
+                                                    <span className="text-muted-foreground">Комментарии:</span>
+                                                    <span className="border-muted-foreground/30 flex-1 border-b border-dashed"></span>
+                                                    <span>{form.getValues("notes")}</span>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 </div>

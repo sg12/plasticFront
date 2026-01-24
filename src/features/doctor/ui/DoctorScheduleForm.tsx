@@ -34,19 +34,19 @@ export const DoctorScheduleForm = () => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-global">
-        <div className="flex items-start justify-between">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <h3 className="text-3xl font-semibold">Расписание приёма</h3>
-            <p className="text-muted-foreground mt-2">
+            <h3 className="text-2xl font-semibold sm:text-3xl">Расписание приёма</h3>
+            <p className="text-muted-foreground mt-2 text-sm sm:text-base">
               Настройте расписание работы и доступные временные слоты для записи пациентов
             </p>
           </div>
-          <Button type="submit" disabled={isLoadingSchedule}>
+          <Button type="submit" disabled={isLoadingSchedule} className="w-full sm:w-auto">
             Сохранить расписание
           </Button>
         </div>
 
-        <div className="grid-row-3 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {fields.map((_, index) => (
             <DoctorScheduleCard
               key={fields[index].id}
@@ -58,7 +58,7 @@ export const DoctorScheduleForm = () => {
 
         <Separator />
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <FormField
             control={form.control}
             name="defaultDuration"

@@ -12,17 +12,17 @@
 import { useEffect, useMemo, useState } from "react"
 import { useAppointmentsStore } from "@/entities/appointments/model/store"
 import { Card } from "@/shared/ui/card"
-import { Button } from "@/shared/ui/button"
 import { Skeleton } from "@/shared/ui/skeleton"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select"
 import { Calendar } from "lucide-react"
-import { APPOINTMENT_STATUS_LABELS } from "@/entities/appointments/model/constants"
 import type { AppointmentStatus } from "@/entities/appointments/types/types"
 import { AppointmentCard } from "@/widgets/appointmentCard/ui/AppointmentCard"
 import type { UserRole } from "@/entities/user/types/types"
 import { USER_ROLES } from "@/entities/user/model/constants"
 import { EmptyState } from "@/shared/ui/emptyState"
 import { ErrorState } from "@/shared/ui/errorState"
+import { useIsMobile } from "@/shared/hooks/useMobile"
+import { AppointmentStatusFilter } from "./AppointmentStatusFilter"
 
 interface AppointmentsListProps {
   /** Роль пользователя */
@@ -65,6 +65,7 @@ export const AppointmentsList = ({
   const { appointments, isLoading, error, loadAppointments, clearError } = useAppointmentsStore()
   const [selectedStatus, setSelectedStatus] = useState<AppointmentStatus | "all">("all")
   const [selectedDoctor, setSelectedDoctor] = useState<string>("all")
+  const isMobile = useIsMobile()
 
   const getFilters = useMemo(() => {
     const baseFilters: {
@@ -176,30 +177,24 @@ export const AppointmentsList = ({
         className={`mb-6 ${headerActions ? "flex items-start justify-between max-lg:flex-col max-lg:gap-4" : ""}`}
       >
         <div>
-          <h1 className="text-3xl font-bold">{title}</h1>
-          <p className="text-muted-foreground mt-2">{description}</p>
+          <h3 className="text-3xl font-semibold">{title}</h3>
+          <p className="text-muted-foreground mt-2">
+            {description}
+          </p>
         </div>
-        {headerActions && <div>{headerActions}</div>}
+
+        {headerActions && <>{headerActions}</>}
       </div>
 
       <div className={`mb-6 flex flex-wrap gap-4 ${showDoctorFilter ? "" : "gap-2"}`}>
-        <div
-          className={`flex gap-2 ${userRole === USER_ROLES.DOCTOR ? "grid md:grid-cols-2 lg:grid-cols-5" : ""}`}
-        >
-          {(["all", "pending", "confirmed", "cancelled", "completed"] as const).map((status) => (
-            <Button
-              key={status}
-              variant={selectedStatus === status ? "primary" : "secondary"}
-              size="sm"
-              onClick={() => setSelectedStatus(status)}
-            >
-              {status === "all" ? "Все" : APPOINTMENT_STATUS_LABELS[status]}
-            </Button>
-          ))}
-        </div>
+        <AppointmentStatusFilter
+          selectedStatus={selectedStatus}
+          onStatusChange={setSelectedStatus}
+          userRole={userRole}
+        />
         {showDoctorFilter && doctors.length > 0 && (
           <Select value={selectedDoctor} onValueChange={setSelectedDoctor}>
-            <SelectTrigger className="w-[200px]">
+            <SelectTrigger className={isMobile ? "w-full" : "w-[200px]"}>
               <SelectValue placeholder="Все врачи" />
             </SelectTrigger>
             <SelectContent>
