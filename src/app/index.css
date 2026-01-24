@@ -126,7 +126,7 @@
     margin-bottom: var(--space-child);
   }
 
-  .space-text > :not(:last-child):not([data-slot]) {
+  .space-text > :not(:last-of-type) {
     margin-bottom: var(--space-text);
   }
 
