@@ -73,7 +73,7 @@ export const SupportForm = () => {
               fileSlots={[
                 {
                   id: "attachments",
-                  label: "Прикрепить файлы (опционально, максимум 5)",
+                  label: "Прикрепить файлы (опционально)",
                   multiple: true,
                 },
               ]}

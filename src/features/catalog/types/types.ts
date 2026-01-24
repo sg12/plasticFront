@@ -1,10 +1,16 @@
-import type { CatalogClinic, CatalogDoctor, CatalogTab, ClinicSearchParams, DoctorSearchParams } from "@/entities/catalog/types/types"
+import type {
+  CatalogClinic,
+  CatalogDoctor,
+  CatalogTab,
+  ClinicSearchParams,
+  DoctorSearchParams,
+} from "@/entities/catalog/types/types"
 import type { UseSearchReturn } from "@/features/search/hooks/useSearch"
 
 export interface UseCatalogReturn {
   /** Поиск врачей */
   doctorSearch: UseSearchReturn<DoctorSearchParams, CatalogDoctor>
-  /** Поиск клиник */   
+  /** Поиск клиник */
   clinicSearch: UseSearchReturn<ClinicSearchParams, CatalogClinic>
   /** Активная вкладка */
   activeTab: CatalogTab

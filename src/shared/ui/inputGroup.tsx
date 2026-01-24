@@ -15,7 +15,7 @@ function InputGroup({ className, ...props }: React.ComponentProps<"div">) {
       role="group"
       className={cn(
         "group/input-group border-input dark:bg-input/30 relative flex w-full items-center rounded-xl border transition-[color,box-shadow] outline-none",
-        "has-[&:disabled]:bg-muted min-w-0 py-1 has-[>textarea]:h-auto",
+        "has-[&:disabled]:bg-muted min-w-0 py-0 has-[>textarea]:h-auto",
 
         // Variants based on alignment.
         "has-[>[data-align=inline-start]]:[&>input]:pl-2",
@@ -122,13 +122,16 @@ function InputGroupText({ className, ...props }: React.ComponentProps<"span">) {
   )
 }
 
-function InputGroupInput({ className, ...props }: React.ComponentProps<"input">) {
+function InputGroupInput({ className, type, ...props }: React.ComponentProps<"input">) {
   return (
     <Input
       data-slot="input-group-control"
+      type={type}
       className={cn(
         "disabled:bg-muted",
         "flex-1 rounded-none border-0 bg-transparent shadow-none focus-visible:ring-0 dark:bg-transparent",
+        type === "time" &&
+          "appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none",
         className,
       )}
       {...props}

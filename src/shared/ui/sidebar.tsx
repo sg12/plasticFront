@@ -11,34 +11,70 @@ import { Skeleton } from "./skeleton"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./tooltip"
 import { useIsMobile } from "../hooks/useMobile"
 import { cn } from "../lib/utils"
-import { PanelLeftIcon } from "lucide-react"
+import { PanelLeftIcon, type LucideIcon } from "lucide-react"
 
-const SIDEBAR_COOKIE_NAME = "sidebar_state"
+const SIDEBAR_COOKIE_PREFIX = "sidebar_"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
 const SIDEBAR_WIDTH = "18rem"
 const SIDEBAR_WIDTH_MOBILE = "100%"
 const SIDEBAR_WIDTH_ICON = "3rem"
 const SIDEBAR_KEYBOARD_SHORTCUT = "b"
 
-type SidebarContextProps = {
-  state: "expanded" | "collapsed"
+type SidebarName = "navigation" | "action"
+
+type SidebarState = {
   open: boolean
-  setOpen: (open: boolean) => void
   openMobile: boolean
-  setOpenMobile: (open: boolean) => void
+}
+
+type SidebarContextProps = {
+  sidebars: Record<string, SidebarState>
+  registerSidebar: (name: string, defaultOpen?: boolean) => void
+  setSidebarOpen: (name: string, open: boolean) => void
+  setSidebarOpenMobile: (name: string, open: boolean) => void
+  toggleSidebar: (name?: string) => void
+  getSidebarState: (name?: string) => SidebarState | null
   isMobile: boolean
-  toggleSidebar: () => void
 }
 
 const SidebarContext = React.createContext<SidebarContextProps | null>(null)
 
-function useSidebar() {
+function useSidebar(sidebarName?: string) {
   const context = React.useContext(SidebarContext)
   if (!context) {
     throw new Error("useSidebar must be used within a SidebarProvider.")
   }
 
-  return context
+  const state = context.getSidebarState(sidebarName)
+
+  return {
+    state: state?.open ? "expanded" : ("collapsed" as "expanded" | "collapsed"),
+    open: state?.open ?? false,
+    setOpen: (open: boolean) => context.setSidebarOpen(sidebarName || "navigation", open),
+    openMobile: state?.openMobile ?? false,
+    setOpenMobile: (open: boolean) =>
+      context.setSidebarOpenMobile(sidebarName || "navigation", open),
+    isMobile: context.isMobile,
+    toggleSidebar: () => context.toggleSidebar(sidebarName),
+  }
+}
+
+// Helper functions for cookies
+function getCookie(name: string): string | null {
+  if (typeof document === "undefined") return null
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop()?.split(";").shift() || null
+  return null
+}
+
+function setCookie(name: string, value: string, maxAge: number = SIDEBAR_COOKIE_MAX_AGE) {
+  if (typeof document === "undefined") return
+  document.cookie = `${name}=${value}; path=/; max-age=${maxAge}`
+}
+
+function getSidebarCookieName(name: string): string {
+  return `${SIDEBAR_COOKIE_PREFIX}${name}`
 }
 
 function SidebarProvider({
@@ -55,33 +91,114 @@ function SidebarProvider({
   onOpenChange?: (open: boolean) => void
 }) {
   const isMobile = useIsMobile()
-  const [openMobile, setOpenMobile] = React.useState(false)
+  const [sidebars, setSidebars] = React.useState<Record<string, SidebarState>>({})
 
-  // This is the internal state of the sidebar.
-  // We use openProp and setOpenProp for control from outside the component.
-  const [_open, _setOpen] = React.useState(defaultOpen)
-  const open = openProp ?? _open
-  const setOpen = React.useCallback(
-    (value: boolean | ((value: boolean) => boolean)) => {
-      const openState = typeof value === "function" ? value(open) : value
-      if (setOpenProp) {
-        setOpenProp(openState)
-      } else {
-        _setOpen(openState)
-      }
+  // Register a new sidebar and initialize its state from cookie or default
+  const registerSidebar = React.useCallback(
+    (name: string, defaultOpenState: boolean = defaultOpen) => {
+      setSidebars((prev) => {
+        // Don't re-register if already exists
+        if (prev[name]) return prev
 
-      // This sets the cookie to keep the sidebar state.
-      document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
+        // Try to get state from cookie
+        const cookieValue = getCookie(getSidebarCookieName(name))
+        const initialOpen = cookieValue !== null ? cookieValue === "true" : defaultOpenState
+
+        // Save to cookie if not exists
+        if (cookieValue === null) {
+          setCookie(getSidebarCookieName(name), String(initialOpen))
+        }
+
+        return {
+          ...prev,
+          [name]: {
+            open: initialOpen,
+            openMobile: false,
+          },
+        }
+      })
     },
-    [setOpenProp, open],
+    [defaultOpen],
   )
 
-  // Helper to toggle the sidebar.
-  const toggleSidebar = React.useCallback(() => {
-    return isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open)
-  }, [isMobile, setOpen, setOpenMobile])
+  // Set sidebar open state and save to cookie
+  const setSidebarOpen = React.useCallback(
+    (name: string, open: boolean) => {
+      setSidebars((prev) => {
+        if (!prev[name]) return prev
 
-  // Adds a keyboard shortcut to toggle the sidebar.
+        // Save to cookie
+        setCookie(getSidebarCookieName(name), String(open))
+
+        return {
+          ...prev,
+          [name]: {
+            ...prev[name],
+            open,
+          },
+        }
+      })
+
+      // Legacy support for single sidebar control
+      if (setOpenProp) {
+        setOpenProp(open)
+      }
+    },
+    [setOpenProp],
+  )
+
+  // Set sidebar mobile open state
+  const setSidebarOpenMobile = React.useCallback((name: string, open: boolean) => {
+    setSidebars((prev) => {
+      if (!prev[name]) return prev
+
+      return {
+        ...prev,
+        [name]: {
+          ...prev[name],
+          openMobile: open,
+        },
+      }
+    })
+  }, [])
+
+  // Toggle sidebar (defaults to first registered sidebar or "navigation")
+  const toggleSidebar = React.useCallback(
+    (name?: string) => {
+      const sidebarName = name || Object.keys(sidebars)[0] || "navigation"
+      const sidebar = sidebars[sidebarName]
+
+      if (!sidebar) return
+
+      if (isMobile) {
+        setSidebarOpenMobile(sidebarName, !sidebar.openMobile)
+      } else {
+        setSidebarOpen(sidebarName, !sidebar.open)
+      }
+    },
+    [sidebars, isMobile, setSidebarOpen, setSidebarOpenMobile],
+  )
+
+  // Get sidebar state
+  const getSidebarState = React.useCallback(
+    (name?: string): SidebarState | null => {
+      const sidebarName = name || Object.keys(sidebars)[0] || "navigation"
+      return sidebars[sidebarName] || null
+    },
+    [sidebars],
+  )
+
+  // Legacy support: sync with openProp if provided
+  React.useEffect(() => {
+    if (openProp !== undefined) {
+      const firstSidebar = Object.keys(sidebars)[0] || "navigation"
+      if (sidebars[firstSidebar] && sidebars[firstSidebar].open !== openProp) {
+        setSidebarOpen(firstSidebar, openProp)
+      }
+    }
+  }, [openProp, sidebars, setSidebarOpen])
+
+  // Adds a keyboard shortcut to toggle the first sidebar
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === SIDEBAR_KEYBOARD_SHORTCUT && (event.metaKey || event.ctrlKey)) {
@@ -94,21 +211,25 @@ function SidebarProvider({
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [toggleSidebar])
 
-  // We add a state so that we can do data-state="expanded" or "collapsed".
-  // This makes it easier to style the sidebar with Tailwind classes.
-  const state = open ? "expanded" : "collapsed"
-
   const contextValue = React.useMemo<SidebarContextProps>(
     () => ({
-      state,
-      open,
-      setOpen,
-      isMobile,
-      openMobile,
-      setOpenMobile,
+      sidebars,
+      registerSidebar,
+      setSidebarOpen,
+      setSidebarOpenMobile,
       toggleSidebar,
+      getSidebarState,
+      isMobile,
     }),
-    [state, open, setOpen, isMobile, openMobile, setOpenMobile, toggleSidebar],
+    [
+      sidebars,
+      registerSidebar,
+      setSidebarOpen,
+      setSidebarOpenMobile,
+      toggleSidebar,
+      getSidebarState,
+      isMobile,
+    ],
   )
 
   return (
@@ -142,13 +263,25 @@ function Sidebar({
   collapsible = "offcanvas",
   className,
   children,
+  name,
+  defaultOpen,
   ...props
 }: React.ComponentProps<"div"> & {
   side?: "left" | "right"
   variant?: "sidebar" | "floating" | "inset"
   collapsible?: "offcanvas" | "icon" | "none"
+  name?: SidebarName
+  defaultOpen?: boolean
 }) {
-  const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
+  const { registerSidebar } = React.useContext(SidebarContext) || {}
+  const { isMobile, state, openMobile, setOpenMobile } = useSidebar(name)
+
+  // Register sidebar when it mounts
+  React.useEffect(() => {
+    if (name && registerSidebar) {
+      registerSidebar(name, defaultOpen)
+    }
+  }, [name, registerSidebar, defaultOpen])
 
   if (collapsible === "none") {
     return (
@@ -197,7 +330,7 @@ function Sidebar({
       data-collapsible={state === "collapsed" ? collapsible : ""}
       data-variant={variant}
       data-side={side}
-      data-slot="sidebar"
+      data-slot={`sidebar-${name}`}
     >
       {/* This is what handles the sidebar gap on desktop */}
       <div
@@ -238,38 +371,56 @@ function Sidebar({
   )
 }
 
-function SidebarTrigger({ className, onClick, ...props }: React.ComponentProps<typeof Button>) {
-  const { toggleSidebar } = useSidebar()
+function SidebarTrigger({
+  className,
+  onClick,
+  sidebarName,
+  icon,
+  ...props
+}: React.ComponentProps<typeof Button> & {
+  sidebarName?: SidebarName
+  icon?: LucideIcon
+}) {
+  const { toggleSidebar } = useSidebar(sidebarName)
+  const Icon = icon
 
   return (
     <Button
       data-sidebar="trigger"
       data-slot="sidebar-trigger"
+      data-sidebar-name={sidebarName}
       variant="ghost"
-      size="icon"
-      className={cn("size-7", className)}
+      size="iconMd"
+      className={className}
       onClick={(event) => {
         onClick?.(event)
         toggleSidebar()
       }}
       {...props}
     >
-      <PanelLeftIcon />
+      {Icon ? <Icon className="size-5" /> : <PanelLeftIcon className="size-5" />}
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   )
 }
 
-function SidebarRail({ className, ...props }: React.ComponentProps<"button">) {
-  const { toggleSidebar } = useSidebar()
+function SidebarRail({
+  className,
+  sidebarName,
+  ...props
+}: React.ComponentProps<"button"> & {
+  sidebarName?: SidebarName
+}) {
+  const { toggleSidebar } = useSidebar(sidebarName)
 
   return (
     <button
       data-sidebar="rail"
       data-slot="sidebar-rail"
+      data-sidebar-name={sidebarName}
       aria-label="Toggle Sidebar"
       tabIndex={-1}
-      onClick={toggleSidebar}
+      onClick={() => toggleSidebar()}
       title="Toggle Sidebar"
       className={cn(
         "hover:after:bg-sidebar-border absolute inset-y-0 z-20 hidden w-4 -translate-x-1/2 transition-all ease-linear group-data-[side=left]:-right-4 group-data-[side=right]:left-0 after:absolute after:inset-y-0 after:left-1/2 after:w-[2px] sm:flex",
@@ -658,6 +809,8 @@ function SidebarMenuSubButton({
     />
   )
 }
+
+export type { SidebarName }
 
 export {
   Sidebar,

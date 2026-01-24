@@ -28,30 +28,13 @@ export const Catalog = () => {
     searchPlaceholder,
   } = useCatalog()
 
-  const getResultsCount = () => {
-    if (activeTab === "doctors") {
-      return doctorSearch.data?.length || 0
-    }
-    if (activeTab === "clinics") {
-      return clinicSearch.data?.length || 0
-    }
-    return 0
-  }
-
   return (
     <div className="space-global">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div className="min-w-0">
-          <h2 className="min-w-0 truncate">Каталог</h2>
-          <p className="text-muted-foreground mt-1 text-sm">
-            Найдите подходящего специалиста или клинику
-          </p>
+        <div>
+          <h3 className="text-3xl font-semibold">Каталог</h3>
+          <p className="text-muted-foreground mt-2">Найдите подходящего специалиста или клинику</p>
         </div>
-        {!doctorSearch.isLoading && !clinicSearch.isLoading && currentSearchQuery && (
-          <div className="text-muted-foreground text-sm">
-            Найдено: <span className="font-semibold text-foreground">{getResultsCount()}</span>
-          </div>
-        )}
       </div>
 
       <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as CatalogTab)}>
@@ -60,6 +43,13 @@ export const Catalog = () => {
             value={currentSearchQuery}
             onChange={(value) => setCurrentSearchQuery(value)}
             placeholder={searchPlaceholder}
+            isLoading={
+              activeTab === "doctors"
+                ? doctorSearch.isLoading
+                : activeTab === "clinics"
+                  ? clinicSearch.isLoading
+                  : doctorSearch.isLoading || clinicSearch.isLoading
+            }
           />
           {showDoctors && showClinics && (
             <TabsList className="max-lg:w-full">
@@ -87,12 +77,17 @@ export const Catalog = () => {
                 entities={doctorSearch.data || []}
                 isLoading={doctorSearch.isLoading}
                 error={doctorSearch.error}
-                emptyMessage="Врачи не найдены"
+                emptyMessage={
+                  currentSearchQuery ? "Врачи не найдены" : "В каталоге пока нет врачей"
+                }
                 descriptionMessage={
                   currentSearchQuery
-                    ? "Попробуйте изменить параметры поиска"
-                    : "В каталоге пока нет врачей"
+                    ? "Попробуйте изменить параметры поиска или очистить фильтры"
+                    : "Врачи появятся здесь после регистрации и модерации"
                 }
+                onRetry={() => doctorSearch.refresh()}
+                onClearSearch={() => setCurrentSearchQuery("")}
+                hasSearchQuery={!!currentSearchQuery}
               />
             </TabsContent>
           )}
@@ -102,12 +97,17 @@ export const Catalog = () => {
                 entities={clinicSearch.data || []}
                 isLoading={clinicSearch.isLoading}
                 error={clinicSearch.error}
-                emptyMessage="Клиники не найдены"
+                emptyMessage={
+                  currentSearchQuery ? "Клиники не найдены" : "В каталоге пока нет клиник"
+                }
                 descriptionMessage={
                   currentSearchQuery
-                    ? "Попробуйте изменить параметры поиска"
-                    : "В каталоге пока нет клиник"
+                    ? "Попробуйте изменить параметры поиска или очистить фильтры"
+                    : "Клиники появятся здесь после регистрации и модерации"
                 }
+                onRetry={() => clinicSearch.refresh()}
+                onClearSearch={() => setCurrentSearchQuery("")}
+                hasSearchQuery={!!currentSearchQuery}
               />
             </TabsContent>
           )}

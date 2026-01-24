@@ -30,7 +30,10 @@ interface CatalogState {
 
   // === ДЕЙСТВИЯ (Actions) ===
   toggleFavorite: (favoriteId: string, who: UserRole) => Promise<void>
-  syncFavoritesFromProfile: (favorites: { favoriteDoctors: string[]; favoriteClinics: string[] }) => void
+  syncFavoritesFromProfile: (favorites: {
+    favoriteDoctors: string[]
+    favoriteClinics: string[]
+  }) => void
 
   clearFilters: () => void
   reset: () => void
@@ -128,8 +131,14 @@ export const useCatalogStore = create<CatalogState>()((set, get) => ({
       if (currentProfile && currentProfile.role === USER_ROLES.PATIENT) {
         const updatedProfile = {
           ...currentProfile,
-          favoriteDoctors: who === "doctor" ? serverFavorites : (currentProfile as PatientProfile).favoriteDoctors || [],
-          favoriteClinics: who === "clinic" ? serverFavorites : (currentProfile as PatientProfile).favoriteClinics || [],
+          favoriteDoctors:
+            who === "doctor"
+              ? serverFavorites
+              : (currentProfile as PatientProfile).favoriteDoctors || [],
+          favoriteClinics:
+            who === "clinic"
+              ? serverFavorites
+              : (currentProfile as PatientProfile).favoriteClinics || [],
         } as PatientProfile
         useUserStore.getState().setProfile(updatedProfile)
       }
@@ -184,25 +193,27 @@ let previousFavorites: { favoriteDoctors: string[]; favoriteClinics: string[] } 
 
 useUserStore.subscribe((state) => {
   const profile = state.profile
-  
+
   // Проверяем, изменился ли профиль
   if (profile === previousProfile) return
-  
+
   previousProfile = profile
-  
+
   if (profile && profile.role === USER_ROLES.PATIENT) {
     const patientProfile = profile as PatientProfile
     const newFavorites = {
       favoriteDoctors: patientProfile.favoriteDoctors || [],
       favoriteClinics: patientProfile.favoriteClinics || [],
     }
-    
+
     // Проверяем, действительно ли изменилось избранное
     const favoritesChanged =
       !previousFavorites ||
-      JSON.stringify(newFavorites.favoriteDoctors) !== JSON.stringify(previousFavorites.favoriteDoctors) ||
-      JSON.stringify(newFavorites.favoriteClinics) !== JSON.stringify(previousFavorites.favoriteClinics)
-    
+      JSON.stringify(newFavorites.favoriteDoctors) !==
+        JSON.stringify(previousFavorites.favoriteDoctors) ||
+      JSON.stringify(newFavorites.favoriteClinics) !==
+        JSON.stringify(previousFavorites.favoriteClinics)
+
     if (favoritesChanged) {
       previousFavorites = newFavorites
       useCatalogStore.getState().syncFavoritesFromProfile(newFavorites)

@@ -1,5 +1,4 @@
 import { cn } from "@/shared/lib/utils"
-import { Alert, AlertDescription } from "@/shared/ui/alert"
 import { Button } from "@/shared/ui/button"
 import {
   Card,
@@ -10,7 +9,7 @@ import {
   CardContent,
 } from "@/shared/ui/card"
 import { Skeleton } from "@/shared/ui/skeleton"
-import { RefreshCw, MessageSquare } from "lucide-react"
+import { RefreshCw, MessageSquare, AlertCircle } from "lucide-react"
 import { TicketCard } from "./TicketCard"
 import { useSupport } from "../hooks/useSupport"
 
@@ -28,8 +27,7 @@ export const SupportReplies = () => {
           <CardAction>
             <Button
               variant="ghost"
-              size="icon"
-              className="h-8 w-8"
+              size="iconSm"
               onClick={() => refreshReplies()}
               disabled={isLoadingReplies || isLoadingTickets}
               aria-label="Обновить список обращений"
@@ -48,9 +46,37 @@ export const SupportReplies = () => {
             <Skeleton className="h-32 w-full rounded-lg" />
           </div>
         ) : ticketsError ? (
-          <Alert variant="destructive">
-            <AlertDescription>{ticketsError}</AlertDescription>
-          </Alert>
+          <div className="flex min-h-[200px] flex-col items-center justify-center px-4 py-8">
+            <div className="max-w-md text-center">
+              <div className="mb-4 flex justify-center">
+                <div className="bg-destructive/10 rounded-full p-4">
+                  <AlertCircle className="text-destructive h-8 w-8" />
+                </div>
+              </div>
+              <h3 className="text-destructive mb-2 text-lg font-semibold">
+                Не удалось загрузить обращения
+              </h3>
+              <p className="text-muted-foreground mb-1 text-sm">
+                {ticketsError.includes("network") || ticketsError.includes("fetch")
+                  ? "Проблема с подключением к серверу. Проверьте ваше интернет-соединение."
+                  : ticketsError.includes("timeout")
+                    ? "Превышено время ожидания. Попробуйте обновить страницу."
+                    : ticketsError}
+              </p>
+              <p className="text-muted-foreground mb-4 text-xs">
+                Если проблема сохраняется, попробуйте обновить страницу или обратитесь в поддержку.
+              </p>
+              <Button
+                onClick={() => refreshReplies()}
+                variant="secondary"
+                size="sm"
+                className="gap-2"
+              >
+                <RefreshCw className="h-4 w-4" />
+                Попробовать снова
+              </Button>
+            </div>
+          </div>
         ) : tickets && tickets.length > 0 ? (
           <div className="space-y-3">
             {tickets.map((ticket) => (

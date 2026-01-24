@@ -1,7 +1,7 @@
 import { Outlet } from "react-router"
-import { Sidebar } from "@/widgets/sidebar/ui/Sidebar"
-import { SidebarProvider, SidebarInset } from "@/shared/ui/sidebar"
+import { SidebarInset, SidebarProvider } from "@/shared/ui/sidebar"
 import { Header } from "@/widgets/header/ui/Header"
+import { NavigationSidebar } from "@/widgets/sidebars/navigationSidebar/ui/NavigationSidebar"
 
 export const Main = () => {
   return (
@@ -9,7 +9,7 @@ export const Main = () => {
       <SidebarProvider className="flex flex-col">
         <Header />
         <div className="flex flex-1">
-          <Sidebar />
+          <NavigationSidebar />
           <SidebarInset>
             <div>
               <div className="mx-auto max-w-7xl p-4">
@@ -17,6 +17,7 @@ export const Main = () => {
               </div>
             </div>
           </SidebarInset>
+          {/* <ActionSidebar /> TODO: Добавить календарь ( 1) даты записи пациентов) */}
         </div>
       </SidebarProvider>
     </div>

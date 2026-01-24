@@ -1,33 +1,80 @@
-import { Hospital, Mail, Phone, Check, Copy } from "lucide-react"
+import { Hospital, Check, Copy, Camera, Loader } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "../../../shared/ui/avatar"
-import { formatName, formatRole } from "../../../shared/lib/utils"
-import { Separator } from "../../../shared/ui/separator"
-import { Badge } from "../../../shared/ui/badge"
-import type { RoleProfile, UserRole } from "../../../entities/user/types/types"
+import { formatName } from "../../../shared/lib/utils"
+import type { RoleProfile } from "../../../entities/user/types/types"
 import { USER_ROLES } from "@/entities/user/model/constants"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card"
+import { Card, CardContent, CardTitle, CardDescription, CardAction } from "@/shared/ui/card"
 import { useClipboard } from "@/shared/hooks/useClipboard"
+import { AppointmentButton } from "@/features/appointments/ui/AppointmentButton"
+import { useUserStore } from "@/entities/user/model/store"
+import { Button } from "@/shared/ui/button"
+import { cn } from "@/shared/lib/utils"
+import { useAvatarUpload } from "@/features/profile/hooks/useAvatarUpload"
+import { IMAGE_ACCEPT_TYPES_STRING } from "@/shared/model/constants"
 
 interface Props {
   profile: RoleProfile | null
+  isEditing?: boolean
+  onProfileUpdate?: () => void
 }
 
-export const UserProfileCard = ({ profile }: Props) => {
-  const roleLabel = profile?.role ? formatRole(profile.role as UserRole) : "—"
+export const UserProfileCard = ({ profile, isEditing = false, onProfileUpdate }: Props) => {
   const fullName = profile?.fullName?.trim() || "—"
-  const email = profile?.email?.trim() || "—"
-  const phone = profile?.phone?.trim() || "—"
+  const userId = profile?.id.substring(0, 20)
+  const { profile: currentUserProfile } = useUserStore()
+  const isOwnProfile = currentUserProfile?.id === profile?.id
+
+  const { isUploading, previewAvatarUrl, fileInputRef, handleAvatarUpload, handleAvatarClick } =
+    useAvatarUpload(profile, onProfileUpdate)
+
+  const displayProfile = previewAvatarUrl
+    ? ({
+      ...profile,
+      avatarUrl: previewAvatarUrl,
+      updatedAt: new Date().toISOString(),
+    } as RoleProfile)
+    : profile
+
   const { copy: copyId, copied } = useClipboard(profile?.id, {
     successMessage: "ID скопирован в буфер обмена",
     errorMessage: "Не удалось скопировать ID",
   })
 
+  const canBookAppointment =
+    currentUserProfile?.role === USER_ROLES.PATIENT &&
+    profile &&
+    (profile.role === USER_ROLES.DOCTOR || profile.role === USER_ROLES.CLINIC)
+
+  const handleAvatarClickWithCheck = () => {
+    if (isOwnProfile && isEditing) {
+      handleAvatarClick()
+      }
+    }
+
   return (
-    <Card>
-      <CardHeader className="text-center">
-        <div className="mx-auto">
-          <Avatar className="mx-auto size-24">
-            <AvatarImage />
+    <div className="max-md:space-child flex max-md:flex-col max-md:items-center max-md:text-center">
+        <div className="relative">
+          <Avatar
+            className={cn(
+              "size-24 max-md:mb-4",
+            isOwnProfile && isEditing && "cursor-pointer transition-opacity hover:opacity-80",
+            )}
+          onClick={handleAvatarClickWithCheck}
+          >
+            <AvatarImage
+              src={
+                displayProfile?.avatarUrl
+                  ? displayProfile.avatarUrl.includes("blob:")
+                    ? displayProfile.avatarUrl
+                    : `${displayProfile.avatarUrl}${displayProfile.avatarUrl.includes("?") ? "&" : "?"}t=${displayProfile.updatedAt ? new Date(displayProfile.updatedAt).getTime() : Date.now()}`
+                  : undefined
+              }
+            key={
+              displayProfile?.avatarUrl
+                ? `${displayProfile.avatarUrl}-${displayProfile.updatedAt || Date.now()}`
+                : undefined
+            }
+            />
             <AvatarFallback className="text-3xl">
               {profile && profile.role === USER_ROLES.CLINIC ? (
                 <Hospital className="size-10" />
@@ -36,31 +83,51 @@ export const UserProfileCard = ({ profile }: Props) => {
               )}
             </AvatarFallback>
           </Avatar>
+          {isOwnProfile && isEditing && (
+            <>
+              <input
+                ref={fileInputRef}
+                type="file"
+              accept={IMAGE_ACCEPT_TYPES_STRING}
+                onChange={handleAvatarUpload}
+                className="hidden"
+                disabled={isUploading}
+              />
+              <Button
+                type="button"
+                size="iconSm"
+                variant="secondary"
+              className="absolute right-0 bottom-0 size-8 rounded-full shadow-md"
+              onClick={handleAvatarClickWithCheck}
+                disabled={isUploading}
+              >
+                {isUploading ? (
+                  <Loader className="size-4 animate-spin" />
+                ) : (
+                  <Camera className="size-4" />
+                )}
+              </Button>
+            </>
+          )}
         </div>
-        <div className="mt-3 flex flex-col items-center gap-2">
-          <Badge variant="outline">{roleLabel}</Badge>
-          <CardTitle className="text-base">{fullName}</CardTitle>
+      <div className="max-md:mb-4 lg:ml-4">
+          <CardTitle>{fullName}</CardTitle>
           <CardDescription>
             <span className="inline-flex cursor-pointer items-center gap-2" onClick={copyId}>
-              {profile?.id ?? "—"}{" "}
+              {userId ? `${userId}...` : "—"}
               {copied ? <Check className="size-4 text-green-600" /> : <Copy className="size-4" />}
             </span>
           </CardDescription>
         </div>
-      </CardHeader>
-      <CardContent className="space-y-3">
-        <Separator />
-        <div className="space-y-2 text-sm">
-          <div className="text-muted-foreground flex items-center gap-3">
-            <Mail className="h-4 w-4" />
-            <span className="min-w-0 truncate">{email}</span>
-          </div>
-          <div className="text-muted-foreground flex items-center gap-3">
-            <Phone className="h-4 w-4" />
-            <span className="min-w-0 truncate">{phone}</span>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+        {canBookAppointment && (
+        <CardAction className="max-md:w-full lg:ml-auto">
+            <AppointmentButton
+              doctorId={profile.role === USER_ROLES.DOCTOR ? profile.id : null}
+              clinicId={profile.role === USER_ROLES.CLINIC ? profile.id : null}
+              className="max-md:w-full"
+            />
+          </CardAction>
+        )}
+    </div>
   )
 }

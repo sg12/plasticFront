@@ -46,7 +46,7 @@
   --space-child: 1rem;
   --space-text: 0.5rem;
   --radius: 0.625rem;
-  --background: oklch(98% 0 0);
+  --background: oklch(100% 0 0);
   --foreground: oklch(26.862% 0.00003 271.152);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -61,7 +61,7 @@
   --accent: oklch(0.95 0 156.743);
   --accent-foreground: oklch(0.527 0.154 150.069);
   --destructive: oklch(0.7 0.245 27.325);
-  --border: oklch(87.2% 0.01 258.338);
+  --border: oklch(90% 0.01 258.338);
   --input: oklch(0.922 0 0);
   --ring: oklch(62.7% 0.265 303.9);
   --chart-1: oklch(0.646 0.222 41.116);
@@ -118,16 +118,25 @@
 } */
 
 @layer utilities {
-  .space-global>:not(:last-child) {
+  .space-global > :not(:last-of-type) {
     margin-bottom: var(--space-global);
   }
 
-  .space-child>:not(:last-child) {
+  .space-child > :not(:last-of-type) {
     margin-bottom: var(--space-child);
   }
 
-  .space-text>:not(:last-child) {
+  .space-text > :not(:last-child):not([data-slot]) {
     margin-bottom: var(--space-text);
+  }
+
+  /* Hide scrollbar but keep scrolling */
+  .no-scrollbar {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge legacy */
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none; /* Chrome/Safari/Opera */
   }
 
   @keyframes collapsible-down {
@@ -135,6 +144,7 @@
       height: 0;
       opacity: 0;
     }
+
     to {
       height: var(--radix-collapsible-content-height);
       opacity: 1;
@@ -146,6 +156,7 @@
       height: var(--radix-collapsible-content-height);
       opacity: 1;
     }
+
     to {
       height: 0;
       opacity: 0;
@@ -231,10 +242,9 @@
   }
 }
 
-
 html {
   font-size: var(--font-size);
-  font-family: "Inter", sans-serif;
+  font-family: "Onest", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
 }

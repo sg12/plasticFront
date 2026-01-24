@@ -1,5 +1,5 @@
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert"
-import { ConsentStatus } from "@/features/consentManagement/ui/ConsentStatus"
+import { ConsentStatus } from "@/features/consent/ui/ConsentStatus"
 import { FileText, Shield, Mail, Phone, Clock } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card"
 
@@ -8,8 +8,8 @@ export const PersonalData = () => {
     <div className="space-global">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
-          <h2 className="min-w-0 truncate">Персональные данные</h2>
-          <p className="text-muted-foreground mt-1 text-sm">
+          <h3 className="text-3xl font-semibold">Персональные данные</h3>
+          <p className="text-muted-foreground mt-2">
             В соответствии с 152-ФЗ "О персональных данных"
           </p>
         </div>

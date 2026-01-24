@@ -35,7 +35,7 @@ export const ActiveSessions = () => {
 
       <div className="space-y-2">
         <Button
-          variant="destructive"
+          variant="danger"
           size="sm"
           onClick={() => signOut("global")}
           disabled={isLoading}
@@ -45,8 +45,7 @@ export const ActiveSessions = () => {
           {isLoading ? "Выход..." : "Выйти со всех устройств"}
         </Button>
         <p className="text-muted-foreground text-xs">
-          При выходе со всех устройств вам потребуется заново войти в аккаунт на каждом
-          устройстве.
+          При выходе со всех устройств вам потребуется заново войти в аккаунт на каждом устройстве.
         </p>
       </div>
     </div>

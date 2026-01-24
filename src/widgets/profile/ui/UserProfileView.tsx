@@ -50,7 +50,11 @@ export const UserProfileView = ({ profile }: UserProfileViewProps) => {
               Пол
             </label>
             <p className="text-sm">
-              {profile.gender === "male" ? "Мужской" : profile.gender === "female" ? "Женский" : "—"}
+              {profile.gender === "male"
+                ? "Мужской"
+                : profile.gender === "female"
+                  ? "Женский"
+                  : "—"}
             </p>
           </div>
         </div>
@@ -77,7 +81,11 @@ export const UserProfileView = ({ profile }: UserProfileViewProps) => {
               Пол
             </label>
             <p className="text-sm">
-              {profile.gender === "male" ? "Мужской" : profile.gender === "female" ? "Женский" : "—"}
+              {profile.gender === "male"
+                ? "Мужской"
+                : profile.gender === "female"
+                  ? "Женский"
+                  : "—"}
             </p>
           </div>
           <div>

@@ -28,12 +28,6 @@ export const useCreateProfileForm = () => {
 
   const navigate = useNavigate()
 
-  useEffect(() => {
-    if (profile) {
-      navigate(ROUTES.MAIN)
-    }
-  }, [profile])
-
   const role = user?.user_metadata.role?.toLowerCase() as UserRole
 
   const form = useForm<UserCreateFormData>({
@@ -60,13 +54,15 @@ export const useCreateProfileForm = () => {
       clinicLicense: "",
       directorName: "",
       directorPosition: "",
-      doctors: [],
       documents: {},
     },
     mode: "all",
   })
 
   useEffect(() => {
+    if (profile) {
+      navigate(ROUTES.MAIN)
+    }
     if (initialized && !session) {
       navigate(ROUTES.SIGNUP)
       toast.info("Пожалуйста, войдите в систему, чтобы продолжить.")
@@ -74,7 +70,7 @@ export const useCreateProfileForm = () => {
     if (role) {
       form.setValue("role", role)
     }
-  }, [session, initialized, navigate, role, form])
+  }, [session, initialized, navigate, role, form, profile])
 
   const doctorFileSlots: FileSlot<DoctorUploadedFiles>[] = [
     { id: "diploma", label: "Диплом о медицинском образовании" },

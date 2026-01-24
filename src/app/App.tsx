@@ -4,10 +4,13 @@ import { useAuthStore } from "@/entities/auth/model/store"
 
 export const App = () => {
   const initialize = useAuthStore((state) => state.initialize)
+  const initialized = useAuthStore((state) => state.initialized)
 
   useEffect(() => {
-    initialize()
-  }, [initialize])
+    if (!initialized) {
+      initialize()
+    }
+  }, [initialize, initialized])
 
   return <Outlet />
 }

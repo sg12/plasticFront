@@ -2,20 +2,23 @@
  * @fileoverview Компонент поиска в каталоге
  */
 
-import { Search, X } from "lucide-react"
+import { Search, X, LoaderIcon } from "lucide-react"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/shared/ui/inputGroup"
 import { Button } from "@/shared/ui/button"
+import { cn } from "@/shared/lib/utils"
 
 interface CatalogSearchProps {
   value: string
   onChange: (value: string) => void
   placeholder?: string
+  isLoading?: boolean
 }
 
 export const CatalogSearch = ({
   value,
   onChange,
   placeholder = "Поиск...",
+  isLoading = false,
 }: CatalogSearchProps) => {
   const handleClear = () => {
     onChange("")
@@ -24,22 +27,26 @@ export const CatalogSearch = ({
   return (
     <InputGroup>
       <InputGroupAddon>
-        <Search className="h-4 w-4" />
+        {isLoading ? (
+          <LoaderIcon className="text-muted-foreground h-4 w-4 animate-spin" />
+        ) : (
+          <Search className="h-4 w-4" />
+        )}
       </InputGroupAddon>
       <InputGroupInput
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="pr-10"
+        className={cn("pr-10", isLoading && "opacity-70")}
+        disabled={isLoading}
       />
-      {value && (
+      {value && !isLoading && (
         <InputGroupAddon align="inline-end">
           <Button
             type="button"
             variant="ghost"
-            size="icon"
-            className="h-6 w-6"
+            size="iconSm"
             onClick={handleClear}
             aria-label="Очистить поиск"
           >

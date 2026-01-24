@@ -2,10 +2,10 @@ export const USER_ROLES = {
   PATIENT: "patient",
   DOCTOR: "doctor",
   CLINIC: "clinic",
-} as const;
+} as const
 
 export const MODERATION_STATUS = {
   PENDING: "pending",
   APPROVED: "approved",
-  REJECTED: "rejected"
+  REJECTED: "rejected",
 } as const

@@ -2,13 +2,10 @@ import { Skeleton } from "@/shared/ui/skeleton"
 import { UserProfileCard } from "./UserProfileCard"
 import { UserProfileView } from "./UserProfileView"
 import { UserProfileHistory } from "./UserProfileHistory"
-import { useViewProfile } from "../hooks/useViewProfile"
+import { useViewProfile } from "@/features/profile/hooks/useViewProfile"
 import { AlertCircle } from "lucide-react"
 import { Alert, AlertDescription } from "@/shared/ui/alert"
 import { USER_ROLES } from "@/entities/user/model/constants"
-import { formatRole } from "@/shared/lib/utils"
-import { Badge } from "@/shared/ui/badge"
-import type { UserRole } from "@/entities/user/types/types"
 
 interface ViewProfileProps {
   userId: string
@@ -72,14 +69,10 @@ export const ViewProfile = ({ userId }: ViewProfileProps) => {
         </div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-1">
-          <UserProfileCard profile={profile} />
-        </div>
-        <div className="space-global lg:col-span-2">
-          <UserProfileView profile={profile} />
-          <UserProfileHistory profile={profile} />
-        </div>
+      <div className="space-child grid">
+        <UserProfileCard profile={profile} />
+        <UserProfileHistory profile={profile} />
+        <UserProfileView profile={profile} />
       </div>
     </div>
   )

@@ -1,36 +1,40 @@
 import { Mail, Eye, EyeOff, ArrowLeft, User, Phone, Lock } from "lucide-react"
 import { useSignUpForm } from "@/features/auth/ui/signUp/hooks/useSignUpForm"
-import { ConsentModal } from "@/features/consentManagement/ui/ConsentModal"
-import { PrivacyModal } from "@/widgets/privacyModal/ui/PrivacyModal"
 import { RoleSelector } from "@/widgets/roleSelector/ui/RoleSelector"
-import { ConsentSection } from "@/features/consentManagement/ui/ConsentSection"
-import { NavLink } from "react-router"
+import { ConsentSection } from "@/features/consent/ui/ConsentSection"
 import { Button } from "@/shared/ui/button"
-import { Separator } from "@/shared/ui/separator"
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/form"
 import { useState } from "react"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/shared/ui/inputGroup"
 import { USER_ROLES } from "@/entities/user/model/constants"
 import { ROUTES } from "@/shared/model/routes"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/shared/ui/card"
+import { useNavigate } from "react-router"
+import { useIsMobile } from "@/shared/hooks/useMobile"
+import { formatPhoneNumber } from "@/shared/lib/utils"
 
 export function SignUpForm() {
   const {
     form,
     role,
-    showConsentModal,
-    showPrivacyModal,
     currentStep,
     setCurrentStep,
     hasConsent,
     loading,
-    openConsentModal,
-    closeConsentModal,
-    openPrivacyModal,
-    closePrivacyModal,
     acceptConsent,
+    openPrivacyModal,
     onSubmit,
     FormProvider,
   } = useSignUpForm()
+  const navigate = useNavigate()
+  const isMobile = useIsMobile()
 
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -57,27 +61,19 @@ export function SignUpForm() {
 
   return (
     <FormProvider {...form}>
-      <div className="flex min-h-screen items-center justify-center">
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-global w-full max-w-2xl">
-          <div className="space-global w-full rounded-2xl border border-gray-200 bg-white p-8 shadow-xl">
-            <div className="mb-6">
-              <h2 className="mb-2 text-gray-900">Регистрация</h2>
-              <p className="text-gray-600">
-                {currentStep === 0 ? "Выберите тип аккаунта" : "Создайте новый аккаунт"}
-              </p>
-            </div>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex min-h-screen items-center justify-center"
+      >
+        <Card className="max-md:h-full max-md:w-full max-md:border-0">
+          <CardHeader>
+            <CardTitle>Регистрация</CardTitle>
+            <CardDescription>
+              {currentStep === 0 ? "Выберите тип аккаунта" : "Создайте новый аккаунт"}
+            </CardDescription>
+          </CardHeader>
 
-            {showConsentModal && (
-              <ConsentModal
-                userRole={role}
-                onAccept={acceptConsent}
-                onDecline={closeConsentModal}
-                onShowPrivacyModal={openPrivacyModal}
-              />
-            )}
-
-            {showPrivacyModal && <PrivacyModal onClose={closePrivacyModal} />}
-
+          <CardContent className="space-child">
             {currentStep == 0 && (
               <FormField
                 control={form.control}
@@ -124,7 +120,7 @@ export function SignUpForm() {
                   )}
                 />
 
-                <div className="grid grid-cols-1 items-start gap-5 md:grid-cols-2">
+                <div className="grid grid-cols-1 items-start gap-4 md:grid-cols-2">
                   <FormField
                     control={form.control}
                     name="basic.email"
@@ -156,8 +152,9 @@ export function SignUpForm() {
                             </InputGroupAddon>
                             <InputGroupInput
                               id="phone"
-                              placeholder="+7 (999) 999-99-99"
                               {...field}
+                              value={formatPhoneNumber(field.value)}
+                              placeholder="+7 (999) 999-99-99"
                             />
                           </InputGroup>
                         </FormControl>
@@ -167,7 +164,7 @@ export function SignUpForm() {
                   />
                 </div>
 
-                <div className="grid grid-cols-1 items-start gap-5 md:grid-cols-2">
+                <div className="grid grid-cols-1 items-start gap-4 md:grid-cols-2">
                   <FormField
                     control={form.control}
                     name="basic.password"
@@ -237,48 +234,46 @@ export function SignUpForm() {
                     )}
                   />
                 </div>
-
-                <ConsentSection
-                  hasConsent={hasConsent}
-                  onShowConsentModal={openConsentModal}
-                  userRole={role}
-                />
-
-                <div className="grid gap-5 lg:grid-cols-2">
-                  <Button
-                    disabled={loading}
-                    variant="secondary"
-                    onClick={() => setCurrentStep((s) => s - 1)}
-                  >
-                    <ArrowLeft />
-                    Выбрать роль
-                  </Button>
-                  <Button type="submit" className="w-full" disabled={loading}>
-                    {loading ? "Регистрация..." : "Зарегистрироваться"}
-                  </Button>
-                </div>
               </>
             )}
+          </CardContent>
 
-            <Separator className="relative inset-0 flex items-center justify-center">
-              <span className="bg-white px-4 text-gray-500">или</span>
-            </Separator>
-
-            <div className="text-center">
-              <p className="text-sm text-gray-600">
-                Уже есть аккаунт?{" "}
-                <NavLink to={ROUTES.SIGNIN} className="text-purple-600 hover:text-purple-700">
-                  Войти
-                </NavLink>
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-8 text-center text-sm text-gray-500">
-            <p>© 2025 Агрегатор пластических услуг</p>
-          </div>
-        </form>
-      </div>
+          <CardFooter className="space-child grid">
+            {currentStep === 1 && (
+              <>
+                <ConsentSection
+                  hasConsent={hasConsent}
+                  userRole={role}
+                  onAccept={acceptConsent}
+                  onShowPrivacyModal={openPrivacyModal}
+                />
+                <Button
+                  disabled={loading}
+                  variant="secondary"
+                  size={isMobile ? "lg" : "md"}
+                  onClick={() => setCurrentStep((s) => s - 1)}
+                >
+                  <ArrowLeft />
+                  Выбрать роль
+                </Button>
+                <Button type="submit" size={isMobile ? "lg" : "md"} disabled={loading}>
+                  {loading ? "Регистрация..." : "Зарегистрироваться"}
+                </Button>
+              </>
+            )}
+            {currentStep === 0 && (
+              <Button
+                className="w-full"
+                size={isMobile ? "lg" : "md"}
+                onClick={() => navigate(ROUTES.SIGNIN)}
+                variant="secondary"
+              >
+                Войти
+              </Button>
+            )}
+          </CardFooter>
+        </Card>
+      </form>
     </FormProvider>
   )
 }

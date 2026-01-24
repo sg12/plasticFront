@@ -2,7 +2,7 @@
  * @fileoverview Страница управления врачами клиники
  */
 
-import { ClinicDoctorsList } from "@/widgets/clinicDoctorsList/ui/ClinicDoctorsList"
+import { ClinicDoctorsList } from "@/widgets/clinic/clinicDoctorsList/ui/ClinicDoctorsList"
 import { useUserStore } from "@/entities/user/model/store"
 
 export const ClinicDoctors = () => {

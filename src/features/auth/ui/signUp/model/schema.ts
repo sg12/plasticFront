@@ -9,7 +9,7 @@ import z from "zod"
 
 export const signUpSchema = z
   .object({
-    role: z.nativeEnum(USER_ROLES),
+    role: z.enum(USER_ROLES),
     basic: basicInfoSchema,
     patient: patientInfoSchema.optional(),
     doctor: doctorInfoSchema.optional(),

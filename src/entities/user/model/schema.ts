@@ -27,6 +27,7 @@ export const basicInfoSchema = z.object({
 export const patientInfoSchema = z.object({
   birthDate: birthDateSchema.optional(),
   gender: genderSchema.optional(),
+  avatarUrl: z.url("Неверный формат URL").nullable().optional(),
 })
 
 export const doctorInfoSchema = z.object({
@@ -53,6 +54,7 @@ export const doctorInfoSchema = z.object({
   birthDate: birthDateSchema.optional(),
   gender: genderSchema.optional(),
   documents: documentsSchema,
+  avatarUrl: z.url("Неверный формат URL").nullable().optional(),
 })
 
 export const clinicInfoSchema = z.object({
@@ -86,6 +88,7 @@ export const clinicInfoSchema = z.object({
     .min(1, "Укажите должность директора")
     .min(2, "Должность директора должна содержать минимум 2 символа"),
   documents: documentsSchema,
+  avatarUrl: z.url("Неверный формат URL").nullable().optional(),
 })
 
 export const userCreateSchema = z.discriminatedUnion("role", [
@@ -167,7 +170,7 @@ export const userCreateSchema = z.discriminatedUnion("role", [
       .min(1, "Укажите должность директора")
       .min(2, "Должность директора должна содержать минимум 2 символа"),
     documents: documentsSchema,
-    doctors: z.array(z.uuid("Неверный формат UUID врача")).default([]),
+    // doctors: z.array(z.uuid("Неверный формат UUID врача")).default([]),
   }),
 ])
 
@@ -177,6 +180,7 @@ export const userUpdateSchema = z.object({
   email: z.email("Неверный формат email").optional(),
   phone: z.string().min(10, "Неверный номер телефона").optional(),
   aiTokenUsed: z.number().optional(),
+  avatarUrl: z.url("Неверный формат URL").nullable().optional(),
   // Ролевые поля (все опциональны при обновлении)
   role: z.enum(["patient", "doctor", "clinic"]).optional(),
   // Patient

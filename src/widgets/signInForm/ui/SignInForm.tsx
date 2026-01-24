@@ -1,34 +1,37 @@
 import { Mail, Lock, Eye, EyeOff } from "lucide-react"
-import { NavLink } from "react-router"
-import { FormControl, FormField, FormItem, FormMessage } from "@/shared/ui/form"
+import { useNavigate } from "react-router"
+import { FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/form"
 import { FormProvider } from "react-hook-form"
 import { useSignInForm } from "@/features/auth/ui/signIn/hooks/useSignInForm"
 import { Button } from "@/shared/ui/button"
-import { Separator } from "@/shared/ui/separator"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/shared/ui/inputGroup"
-import { Label } from "@/shared/ui/label"
-import { ROUTES } from '@/shared/model/routes'
+import { ROUTES } from "@/shared/model/routes"
+import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from "@/shared/ui/card"
+import { useIsMobile } from "@/shared/hooks/useMobile"
 
 export function SignInForm() {
   const { form, showPassword, isLoading, setShowPassword, onSubmit } = useSignInForm()
+  const navigate = useNavigate()
+  const isMobile = useIsMobile()
 
   return (
     <FormProvider {...form}>
-      <div className="flex min-h-screen items-center justify-center">
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="w-full max-w-2xl space-global"
-        >
-          <div className="w-full space-global rounded-2xl border border-gray-200 bg-white p-8 shadow-xl">
-            <h2>Вход</h2>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex min-h-screen items-center justify-center"
+      >
+        <Card className="max-md:h-full max-md:w-full max-md:border-0">
+          <CardHeader>
+            <CardTitle>Вход</CardTitle>
+          </CardHeader>
+
+          <CardContent className="space-child">
             <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <Label htmlFor="email" className="mb-2 text-gray-700">
-                    Email
-                  </Label>
+                  <FormLabel htmlFor="email">Email</FormLabel>
                   <InputGroup>
                     <InputGroupAddon>
                       <Mail />
@@ -53,9 +56,7 @@ export function SignInForm() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <Label htmlFor="password" className="mb-2 text-gray-700">
-                    Пароль
-                  </Label>
+                  <FormLabel htmlFor="password">Пароль</FormLabel>
                   <InputGroup>
                     <InputGroupAddon>
                       <Lock />
@@ -87,30 +88,31 @@ export function SignInForm() {
                 </FormItem>
               )}
             />
+          </CardContent>
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Вход..." : "Войти"}
-            </Button>
-
-            <Separator className="relative inset-0 flex items-center justify-center">
-              <span className="bg-white px-4 text-gray-500">или</span>
-            </Separator>
-
-            <div className="text-center">
-              <p className="text-gray-600">
-                Нет аккаунта?{" "}
-                <NavLink to={ROUTES.SIGNUP} className="text-purple-600 hover:text-purple-700">
-                  Зарегистрироваться
-                </NavLink>
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-8 text-center text-sm text-gray-500">
-            <p>© 2025 Агрегатор пластических услуг</p>
-          </div>
-        </form>
-      </div>
+          <CardFooter>
+            <CardAction className="space-child w-full">
+              <Button
+                type="submit"
+                className="w-full"
+                size={isMobile ? "lg" : "md"}
+                disabled={isLoading}
+              >
+                {isLoading ? "Вход..." : "Войти"}
+              </Button>
+              <Button
+                className="w-full"
+                size={isMobile ? "lg" : "md"}
+                onClick={() => navigate(ROUTES.SIGNUP)}
+                variant="secondary"
+                disabled={isLoading}
+              >
+                Зарегистрироваться
+              </Button>
+            </CardAction>
+          </CardFooter>
+        </Card>
+      </form>
     </FormProvider>
   )
 }

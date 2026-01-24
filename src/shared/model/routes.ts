@@ -9,6 +9,8 @@ export const ROUTES = {
   CATALOG: "/main/catalog",
   AIVISUALIZER: "/main/ai",
   SUPPORT: "/main/support",
+  APPOINTMENTS: "/main/appointments",
+  DOCTOR_SCHEDULE: "/main/doctor/schedule",
   SETTINGS: "/main/settings",
   GENERAL: "/main/settings/general",
   PERSONAL_DATA: "/main/settings/personalData",

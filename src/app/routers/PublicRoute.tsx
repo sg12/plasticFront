@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router"
 import { useAuthStore } from "@/entities/auth/model/store"
-import { ROUTES } from '@/shared/model/routes'
+import { ROUTES } from "@/shared/model/routes"
 
 export const PublicRoute = () => {
   const { session } = useAuthStore()

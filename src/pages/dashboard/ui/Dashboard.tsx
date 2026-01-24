@@ -8,57 +8,36 @@ import {
   Settings,
   User,
   Search,
-  Calendar,
   Users,
   Sparkles,
-  Bell,
   CheckCircle2,
   Clock,
   Building2,
-  Heart,
 } from "lucide-react"
 import { NavLink } from "react-router"
 import { USER_ROLES } from "@/entities/user/model/constants"
 import { Badge } from "@/shared/ui/badge"
+import { useAppointmentsStore } from "@/entities/appointments/model/store"
+import { useEffect } from "react"
 
 export const Dashboard = () => {
   const { profile } = useUserStore()
   const userRole = profile?.role
+  const { loadAppointments } = useAppointmentsStore()
 
-  const stats = [
-    {
-      title: "Активных записей",
-      value: "0",
-      icon: Calendar,
-      color: "text-blue-600",
-      bgColor: "bg-blue-50",
-      description: "Ближайшая запись",
-    },
-    {
-      title: "Избранных",
-      value: "0",
-      icon: Heart,
-      color: "text-pink-600",
-      bgColor: "bg-pink-50",
-      description: "Специалистов и клиник",
-    },
-    {
-      title: "AI Визуализаций",
-      value: profile?.aiTokensUsed ? String(Math.floor(profile.aiTokensUsed / 1000)) : "0",
-      icon: Sparkles,
-      color: "text-purple-600",
-      bgColor: "bg-purple-50",
-      description: "Использовано токенов",
-    },
-    {
-      title: "Уведомлений",
-      value: "0",
-      icon: Bell,
-      color: "text-orange-600",
-      bgColor: "bg-orange-50",
-      description: "Непрочитанных",
-    },
-  ]
+  useEffect(() => {
+    if (profile?.id) {
+      const filters: { patientId?: string; doctorId?: string; clinicId?: string } = {}
+      if (userRole === USER_ROLES.PATIENT) {
+        filters.patientId = profile.id
+      } else if (userRole === USER_ROLES.DOCTOR) {
+        filters.doctorId = profile.id
+      } else if (userRole === USER_ROLES.CLINIC) {
+        filters.clinicId = profile.id
+      }
+      loadAppointments(filters, { page: 1, limit: 10 })
+    }
+  }, [profile?.id, userRole, loadAppointments])
 
   const getMainActions = () => {
     const baseActions = [
@@ -191,28 +170,6 @@ export const Dashboard = () => {
             )}
           </div>
         </div>
-      </div>
-
-      <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat, index) => {
-          const Icon = stat.icon
-          return (
-            <Card key={index} className="transition-all hover:shadow-md">
-              <CardContent className="p-6">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <p className="text-muted-foreground text-sm font-medium">{stat.title}</p>
-                    <p className="mt-2 text-3xl font-bold opacity-25">{stat.value}</p>
-                    <p className="text-muted-foreground mt-1 text-xs">{stat.description}</p>
-                  </div>
-                  <div className={`rounded-lg ${stat.bgColor} p-3`}>
-                    <Icon className={`h-6 w-6 ${stat.color}`} />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )
-        })}
       </div>
 
       <div className="mb-8">
