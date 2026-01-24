@@ -125,13 +125,14 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
         set({ session, user: session?.user ?? null })
       }
 
+      if (!useUserStore.getState().profile) {
+        await useUserStore.getState().loadProfile(currentSession?.user.id || "")
+      }
+
       if (event === "SIGNED_IN" && session?.user.id) {
         logger.info("Пользователь вошел в систему", {
           userId: session.user.id,
         })
-        if (!useUserStore.getState().profile) {
-          await useUserStore.getState().loadProfile(session.user.id)
-        }
 
         // Инициализация уведомлений при входе
         const notificationStore = useNotificationStore.getState()

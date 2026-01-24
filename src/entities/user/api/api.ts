@@ -130,7 +130,6 @@ export const createUser = async (
       directorName: data.directorName,
       directorPosition: data.directorPosition,
       documents: filePaths,
-      doctors: data.doctors || [],
       avatarUrl: null,
     })
     roleError = error

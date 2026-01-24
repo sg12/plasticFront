@@ -42,8 +42,4 @@ export interface SupportTicketReply {
   createdBy?: string
 }
 
-export type SupportFileRecord = FileRecord & {
-  attachments?: File | File[]
-}
-
 export type CreateSupportTicketFormData = z.infer<typeof createSupportTicketSchema>
