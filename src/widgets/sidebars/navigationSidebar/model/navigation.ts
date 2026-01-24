@@ -1,20 +1,15 @@
 import { ROUTES } from "@/shared/model/routes"
 import {
   User,
-  HelpCircle,
-  Briefcase,
   LayoutDashboard,
   Users,
-  Star,
   SettingsIcon,
   Building2,
   Calendar,
   MessageCircle,
-  Heart,
   Database,
   Settings2,
   Search,
-  Stethoscope,
 } from "lucide-react"
 
 export const sectionLabels: Record<string, string> = {

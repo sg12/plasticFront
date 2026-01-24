@@ -11,7 +11,7 @@ import { useClinicAppointments } from "@/features/appointments/hooks/useClinicAp
 
 export const ClinicAppointments = () => {
   const { profile } = useUserStore()
-  const { handleComplete } = useClinicAppointments()
+  const { handleComplete, handleCancel, handleConfirm } = useClinicAppointments()
 
   if (!profile?.id) {
     return null
@@ -25,6 +25,8 @@ export const ClinicAppointments = () => {
       description="Управляйте записями всех врачей клиники"
       showDoctorFilter={true}
       limit={100}
+      onConfirm={handleConfirm}
+      onCancel={handleCancel}
       onComplete={handleComplete}
     />
   )

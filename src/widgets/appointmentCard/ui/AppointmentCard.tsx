@@ -3,8 +3,8 @@
  *
  * Компонент отображает информацию о записи на приём для всех ролей:
  * - Пациент: показывает врача/клинику
- * - Врач: показывает пациента
- * - Клиника: показывает врача и пациента
+ * - Врач: показывает пациента, может подтверждать и завершать записи
+ * - Клиника: показывает врача и пациента, может подтверждать и завершать записи
  *
  * @module widgets/appointmentCard/ui/AppointmentCard
  */
@@ -24,6 +24,8 @@ import { ru } from "date-fns/locale"
 import { Calendar, Clock, X, User, Stethoscope, Hospital, Check, CheckCircle2 } from "lucide-react"
 import { useIsMobile } from "@/shared/hooks/useMobile"
 import { cn } from "@/shared/lib/utils"
+import { Link } from "react-router"
+import { ROUTES } from "@/shared/model/routes"
 
 interface AppointmentCardProps {
   /** Запись на приём */
@@ -32,7 +34,7 @@ interface AppointmentCardProps {
   userRole: UserRole
   /** Обработчик отмены записи */
   onCancel?: (appointmentId: string) => void
-  /** Обработчик подтверждения записи (только для врача) */
+  /** Обработчик подтверждения записи (для врача и клиники) */
   onConfirm?: (appointmentId: string) => void
   /** Обработчик завершения записи (для врача и клиники) */
   onComplete?: (appointmentId: string) => void
@@ -56,7 +58,7 @@ export const AppointmentCard = ({
     appointmentDate > new Date() &&
     onCancel
 
-  const canConfirm = userRole === USER_ROLES.DOCTOR && appointment.status === "pending" && onConfirm
+  const canConfirm = (userRole === USER_ROLES.DOCTOR || userRole === USER_ROLES.CLINIC) && appointment.status === "pending" && onConfirm
 
   const canComplete =
     (userRole === USER_ROLES.DOCTOR || userRole === USER_ROLES.CLINIC) &&
@@ -93,10 +95,10 @@ export const AppointmentCard = ({
         value: `#${appointment.patientId.slice(0, 8)}`,
         secondary: appointment.doctorId
           ? {
-              icon: Stethoscope,
-              label: "Врач",
-              value: `#${appointment.doctorId.slice(0, 8)}`,
-            }
+            icon: Stethoscope,
+            label: "Врач",
+            value: `#${appointment.doctorId.slice(0, 8)}`,
+          }
           : null,
       }
     }
@@ -131,17 +133,22 @@ export const AppointmentCard = ({
       )}
       {canCancel && (
         <Button
-          variant="ghost"
+          variant={isMobile ? "danger" : "ghost"}
           size={isMobile ? "sm" : "iconMd"}
           onClick={() => onCancel(appointment.id)}
           className={cn(isMobile && "w-full")}
         >
-          <X className="h-4 w-4" />
+          {!isMobile && <X className="h-4 w-4" />}
           {isMobile && "Отменить"}
         </Button>
       )}
     </>
   )
+
+  const hasOutDate = (appointmentDate: Date) => {
+    const time = (appointmentDate.getTime() - new Date().getTime())
+    if (time < 0) { return <Badge variant="destructive">Дата истекла</Badge> }
+  }
 
   return (
     <Card>
@@ -151,8 +158,14 @@ export const AppointmentCard = ({
             <CardTitle className="mb-2 flex items-center gap-2">
               <headerInfo.icon className="h-5 w-5 shrink-0" />
               <span className="truncate">
-                {headerInfo.label} {headerInfo.value}
+                {headerInfo.label} {" "}
+                <Link to={ROUTES.PROFILE_SOME_USER.replace(":userId", appointment.doctorId || "")}>
+                  <Button variant="link">
+                    {headerInfo.value}
+                  </Button>
+                </Link>
               </span>
+              {hasOutDate(appointmentDate)}
             </CardTitle>
           )}
           {headerInfo?.secondary && (
@@ -196,8 +209,8 @@ export const AppointmentCard = ({
       {(appointment.reason || appointment.notes) && (
         <CardFooter
           className={cn(
-            "flex-col",
-            isMobile && (canConfirm || canComplete || canCancel) && "border-t",
+            "flex-col items-start",
+            (canConfirm || canComplete || canCancel) && "border-t",
           )}
         >
           {appointment.reason && (

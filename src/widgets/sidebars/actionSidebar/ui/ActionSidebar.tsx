@@ -2,17 +2,6 @@ import React from "react"
 import {
   Sidebar,
   SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarFooter,
-  SidebarMenuSubButton,
-  SidebarMenuSub,
-  SidebarMenuSubItem,
-  useSidebar,
 } from "@/shared/ui/sidebar"
 
 export const ActionSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {

@@ -132,7 +132,7 @@ export function SignUpForm() {
                             <InputGroupAddon>
                               <Mail />
                             </InputGroupAddon>
-                            <InputGroupInput id="email" placeholder="example@mail.ru" {...field} />
+                            <InputGroupInput id="email" placeholder="example@mail.ru" {...field} className="capitalize" />
                           </InputGroup>
                         </FormControl>
                         <FormMessage />

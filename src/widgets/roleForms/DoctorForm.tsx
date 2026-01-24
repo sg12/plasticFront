@@ -17,7 +17,7 @@ import { FileText, Building2, VenusAndMars, Copy, Check } from "lucide-react"
 import type { Props } from "./types/types"
 import { Switch } from "@/shared/ui/switch"
 import { doctorFields } from "@/widgets/roleForms/model/constants"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { useAuthStore } from "@/entities/auth/model/store"
 import { Button } from "@/shared/ui/button"
 import { useClipboard } from "@/shared/hooks/useClipboard"
@@ -36,7 +36,6 @@ import { SelectBirthDate } from "@/features/selectBirthDate/ui/SelectBirthDate"
 
 export const DoctorForm = ({ mode = "edit", form, isSaving }: Props) => {
   const isViewMode = mode === "view" || !!isSaving
-  const [worksInClinic, setWorksInClinic] = useState(false)
   const { user } = useAuthStore()
   const { copy: copyId, copied } = useClipboard(user?.id, {
     successMessage: "ID скопирован в буфер обмена",
@@ -45,14 +44,15 @@ export const DoctorForm = ({ mode = "edit", form, isSaving }: Props) => {
 
   const location = useLocation()
   const clinicValue = form.watch("clinic")
-  useEffect(() => {
-    setWorksInClinic(!!clinicValue)
-  }, [clinicValue])
+  // Инициализируем состояние из значения формы, но не синхронизируем обратно через useEffect
+  const [worksInClinic, setWorksInClinic] = useState(() => !!clinicValue)
 
   const handleWorksInClinicChange = (checked: boolean) => {
     setWorksInClinic(checked)
     if (checked) {
       form.setValue("workplace", "")
+    } else {
+      form.setValue("clinic", null)
     }
   }
 

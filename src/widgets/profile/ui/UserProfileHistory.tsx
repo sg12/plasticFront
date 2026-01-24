@@ -1,6 +1,6 @@
 import type { RoleProfile } from "@/entities/user/types/types"
 import { pluralRu } from "@/shared/lib/utils"
-import { CardContent, CardHeader, CardTitle } from "@/shared/ui/card"
+import { CardTitle } from "@/shared/ui/card"
 import { Badge } from "@/shared/ui/badge"
 import {
   differenceInYears,
@@ -50,23 +50,15 @@ export const UserProfileHistory = ({ profile }: Props) => {
         <Badge variant="secondary">Скоро</Badge>
       </div>
       <>
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-          <div className="rounded-lg bg-red-50 p-4 text-center opacity-70">
-            <p className="text-lg font-semibold text-red-700">0</p>
-            <p className="text-muted-foreground mt-1 text-xs">Процедур</p>
-          </div>
-          <div className="rounded-lg bg-blue-50 p-4 text-center opacity-70">
-            <p className="text-lg font-semibold text-blue-700">0</p>
-            <p className="text-muted-foreground mt-1 text-xs">Клиник</p>
-          </div>
-          <div className="rounded-lg bg-green-50 p-4 text-center opacity-70">
-            <p className="text-lg font-semibold text-green-700">0</p>
-            <p className="text-muted-foreground mt-1 text-xs">Врачей</p>
-          </div>
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-6">
           <div className="rounded-lg bg-orange-50 p-4 text-center">
             <p className="text-lg font-semibold text-orange-700">{withUsLabel}</p>
             <p className="text-muted-foreground mt-1 text-xs">С нами</p>
           </div>
+          {Array.from({ length: 5 })
+            .map((_, index) => (
+              <div key={index} className="rounded-lg bg-gray-50 p-4 text-center" />
+            ))}
         </div>
       </>
     </>

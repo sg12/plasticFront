@@ -6,7 +6,6 @@ import { DoctorForm } from "@/widgets/roleForms/DoctorForm"
 import { ClinicForm } from "@/widgets/roleForms/ClinicForm"
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
 import { FileUpload } from "@/features/fileUpload/ui/FileUpload"
-import type { ClinicUploadedFiles, DoctorUploadedFiles } from "@/entities/document/types/types"
 import {
   Card,
   CardTitle,
@@ -26,11 +25,10 @@ export const CreateProfileForm = () => {
     setCurrentStep,
     handleFileChange,
     uploadedFiles,
-    doctorFileSlots,
-    clinicFileSlots,
     FormProvider,
     handleSaveClick,
   } = useCreateProfileForm()
+
   const isMobile = useIsMobile()
 
   return (
@@ -53,20 +51,28 @@ export const CreateProfileForm = () => {
               (currentStep === 0 ? (
                 <DoctorForm form={form} />
               ) : (
-                <FileUpload<DoctorUploadedFiles>
-                  fileSlots={doctorFileSlots}
-                  uploadedFiles={uploadedFiles.doctor || {}}
-                  onFileChange={(e, key) => handleFileChange(USER_ROLES.DOCTOR, e, key)}
+                <FileUpload
+                  fileSlot={{
+                    id: "doctorDocuments",
+                    label: "Документы врача",
+                    multiple: true,
+                  }}
+                  uploadedFiles={(uploadedFiles[USER_ROLES.DOCTOR]) || {}}
+                  onFileChange={(e, key) => handleFileChange(USER_ROLES.DOCTOR, e, key as string)}
                 />
               ))}
             {role === USER_ROLES.CLINIC &&
               (currentStep === 0 ? (
                 <ClinicForm form={form} />
               ) : (
-                <FileUpload<ClinicUploadedFiles>
-                  fileSlots={clinicFileSlots}
-                  uploadedFiles={uploadedFiles.clinic || {}}
-                  onFileChange={(e, key) => handleFileChange(USER_ROLES.CLINIC, e, key)}
+                <FileUpload
+                  fileSlot={{
+                    id: "clinicDocuments",
+                    label: "Документы клиники",
+                    multiple: true,
+                  }}
+                  uploadedFiles={(uploadedFiles[USER_ROLES.CLINIC]) || {}}
+                  onFileChange={(e, key) => handleFileChange(USER_ROLES.CLINIC, e, key as string)}
                 />
               ))}
           </CardContent>
@@ -94,7 +100,7 @@ export const CreateProfileForm = () => {
                     Назад
                   </Button>
                   <Button
-                    onClick={() => handleSaveClick()}
+                    onClick={(event) => handleSaveClick(event)}
                     disabled={isLoading}
                     className="w-full"
                     size={isMobile ? "lg" : "md"}
@@ -105,7 +111,7 @@ export const CreateProfileForm = () => {
               )
             ) : (
               <Button
-                onClick={() => handleSaveClick()}
+                onClick={(event) => handleSaveClick(event)}
                 disabled={isLoading}
                 size={isMobile ? "lg" : "md"}
                 className="w-full"

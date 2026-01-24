@@ -38,8 +38,8 @@ export const DoctorScheduleCard = ({ dayIndex, dayLabel }: DoctorScheduleCardPro
   return (
     <Card>
       <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle>{dayLabel}</CardTitle>
+        <div className="flex gap-2 sm:flex-row sm:items-center justify-between">
+          <CardTitle className="text-lg sm:text-xl">{dayLabel}</CardTitle>
           <CardAction>
             <FormField
               control={form.control}
@@ -64,42 +64,47 @@ export const DoctorScheduleCard = ({ dayIndex, dayLabel }: DoctorScheduleCardPro
           <div className="space-y-2">
             {fields.map((_, rangeIndex) => {
               return (
-                <div key={fields[rangeIndex].id} className="flex items-start gap-2">
-                  <FormField
-                    control={form.control}
-                    name={`schedule.${dayIndex}.timeRanges.${rangeIndex}.startTime`}
-                    render={({ field }) => (
-                      <FormItem className="flex-1">
-                        <FormControl>
-                          <InputGroup>
-                            <InputGroupAddon>C</InputGroupAddon>
-                            <InputGroupInput type="time" disabled={!isAvailable} {...field} />
-                          </InputGroup>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name={`schedule.${dayIndex}.timeRanges.${rangeIndex}.endTime`}
-                    render={({ field }) => (
-                      <FormItem className="flex-1">
-                        <FormControl>
-                          <InputGroup>
-                            <InputGroupAddon>по</InputGroupAddon>
-                            <InputGroupInput
-                              id="time-picker"
-                              type="time"
-                              disabled={!isAvailable}
-                              {...field}
-                            />
-                          </InputGroup>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                <div
+                  key={fields[rangeIndex].id}
+                  className="flex gap-2 sm:items-start"
+                >
+                  <div className="flex flex-1 gap-2">
+                    <FormField
+                      control={form.control}
+                      name={`schedule.${dayIndex}.timeRanges.${rangeIndex}.startTime`}
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormControl>
+                            <InputGroup>
+                              <InputGroupAddon>C</InputGroupAddon>
+                              <InputGroupInput type="time" disabled={!isAvailable} {...field} />
+                            </InputGroup>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name={`schedule.${dayIndex}.timeRanges.${rangeIndex}.endTime`}
+                      render={({ field }) => (
+                        <FormItem className="flex-1">
+                          <FormControl>
+                            <InputGroup>
+                              <InputGroupAddon>по</InputGroupAddon>
+                              <InputGroupInput
+                                id="time-picker"
+                                type="time"
+                                disabled={!isAvailable}
+                                {...field}
+                              />
+                            </InputGroup>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                   {fields.length > 1 && (
                     <Button
                       type="button"
