@@ -13,7 +13,7 @@ const buttonVariants = cva(
           "bg-[#0070ff] text-[#FFFFFF] hover:bg-[#2b7fff] active:bg-[#0070ff] disabled:bg-[#DCE3EB]",
         secondary:
           "bg-[#EDF6FF] text-[#0070ff] hover:bg-[#E6F2FF] active:bg-[#EDF6FF] disabled:bg-[#F4F6FB] disabled:text-[#8293A2]",
-        link: "bg-transparent text-[#468FFD] hover:text-[#0358D8] active:text-[#0358D8] visited:text-[#0358D8] disabled:text-[#8293A2]",
+        link: "bg-transparent text-[#468FFD] hover:text-[#0358D8] active:text-[#0358D8] visited:text-[#0358D8] disabled:text-[#8293A2] underline p-0!",
         ghost: "bg-transparent hover:bg-[#F1F4F9] disabled:bg-[#F1F4F9] disabled:text-[#8293A2]",
         success: "bg-[#55a630] text-[#FFFFFF] hover:bg-[#80b918] active:bg-[#55a630]",
         danger: "bg-[#FF4D3A] text-[#FFFFFF] hover:bg-[#E55934] active:bg-[#FF4D3A]",

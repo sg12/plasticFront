@@ -47,7 +47,7 @@ function SelectTrigger({
 }
 
 const selectGroupAddonVariants = cva(
-  "text-foreground flex h-auto items-center justify-center gap-2 text-base font-medium select-none [&>svg:not([class*='size-'])]:size-5 [&>kbd]:rounded-[calc(var(--radius)-5px)] pointer-events-none",
+  "data-[placeholder]:text-muted-foreground text-foreground flex h-auto items-center justify-center gap-2 select-none [&>svg:not([class*='size-'])]:size-5 [&>kbd]:rounded-[calc(var(--radius)-5px)] pointer-events-none",
   {
     variants: {
       align: {
