@@ -347,7 +347,7 @@ export function getFileInfo(file: File): {
   lastModified: Date
 } {
   return {
-    name: file.name,
+    name: file.name.split(".")[0],
     size: formatFileSize(file.size),
     type: file.type || "Неизвестный тип",
     mime: file.name.split(".")[1],
