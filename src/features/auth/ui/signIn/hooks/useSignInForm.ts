@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router"
 import { useState } from "react"
-import { signInSchema, type SignInFormData } from "../model/types"
+import { signInSchema, type SignInFormData } from "../types/types"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "sonner"
@@ -65,7 +65,6 @@ export const useSignInForm = () => {
         email: data.email,
       })
       toast.error("Произошла ошибка при входе")
-    } finally {
     }
   }
 

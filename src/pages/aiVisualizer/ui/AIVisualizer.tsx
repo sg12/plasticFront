@@ -88,17 +88,7 @@ export const AIVisualizer = () => {
         goBack()
       }
     }
-  }, [
-    state.step,
-    state.selectedZone,
-    state.uploadedPhoto,
-    state.intensity,
-    state.operationType,
-    setStep,
-    startProcessing,
-    completeProcessing,
-    goBack,
-  ])
+  }, [])
 
   return (
     <div className="min-h-full px-4 py-8">

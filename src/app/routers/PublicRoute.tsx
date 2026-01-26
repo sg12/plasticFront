@@ -3,11 +3,11 @@ import { useAuthStore } from "@/entities/auth/model/store"
 import { ROUTES } from "@/shared/model/routes"
 
 export const PublicRoute = () => {
-  const { session } = useAuthStore()
+    const { session } = useAuthStore()
 
-  if (session) {
-    return <Navigate to={ROUTES.MAIN} replace />
-  }
+    if (session) {
+        return <Navigate to={ROUTES.MAIN} replace />
+    }
 
-  return <Outlet />
-}
+    return <Outlet />;
+};

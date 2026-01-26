@@ -44,11 +44,11 @@ export const Fallback = ({ error, resetErrorBoundary }: FallbackProps) => {
         )}
 
         <div className="flex gap-2">
-          <Button onClick={handleRetry} variant="default" className="flex-1">
+          <Button onClick={handleRetry} variant="primary" className="flex-1">
             <RefreshCw className="mr-2 h-4 w-4" />
             Попробовать снова
           </Button>
-          <Button onClick={handleGoHome} variant="outline" className="flex-1">
+          <Button onClick={handleGoHome} variant="secondary" className="flex-1">
             <Home className="mr-2 h-4 w-4" />
             На главную
           </Button>

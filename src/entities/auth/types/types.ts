@@ -1,4 +1,4 @@
-import type { SignInFormData } from "@/features/auth/ui/signIn/model/types"
+import type { SignInFormData } from "@/features/auth/ui/signIn/types/types"
 import type { SignUpFormData } from "@/features/auth/ui/signUp/types/types"
 import type { Session, SignOut, User as SupabaseUser } from "@supabase/supabase-js"
 import {
