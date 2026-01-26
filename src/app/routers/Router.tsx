@@ -6,7 +6,7 @@ import { USER_ROLES } from "@/entities/user/model/constants"
 
 export const router = createBrowserRouter([
   {
-    path: "/",
+    // loader: () => redirect(ROUTES.SIGNIN),
     HydrateFallback: () => <Loader message="Загрузка приложения..." />,
     ...lazyRoute(() => import("@/app/App"), "App"),
     children: [
