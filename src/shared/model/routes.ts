@@ -1,9 +1,8 @@
 export const ROUTES = {
-  LANDING: "/",
   SIGNIN: "/signin",
   SIGNUP: "/signup",
   CREATE_PROFILE: "/createProfile",
-  MAIN: "/main",
+  MAIN: "/",
   PROFILE: "/main/profile",
   PROFILE_SOME_USER: "/main/profile/:userId",
   CATALOG: "/main/catalog",
