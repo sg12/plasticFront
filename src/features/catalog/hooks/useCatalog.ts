@@ -10,7 +10,7 @@
 import { useEffect, useState } from "react"
 import { useSearch } from "../../search/hooks/useSearch"
 import { useCatalogStore } from "@/entities/catalog/model/store"
-import { USER_ROLES } from "@/entities/user/model/constants"
+import { USER_ROLES } from "@/entities/user/model/user.constants"
 import {
   DEFAULT_CLINIC_SEARCH_PARAMS,
   DEFAULT_DOCTOR_SEARCH_PARAMS,
@@ -22,7 +22,7 @@ import type {
   ClinicSearchParams,
   DoctorSearchParams,
 } from "@/entities/catalog/types/types"
-import { useUserStore } from "@/entities/user/model/store"
+import { useUserStore } from "@/entities/user/model/user.store"
 import type { UseCatalogReturn } from "../types/types"
 import { useDoctors } from "./useDoctors"
 import { useClinics } from "./useClinics"

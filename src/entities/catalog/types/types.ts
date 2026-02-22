@@ -10,7 +10,7 @@
  * @module features/catalog/model/types
  */
 
-import type { DoctorProfile, ClinicProfile } from "@/entities/user/types/types"
+import type { DoctorProfile, ClinicProfile } from "@/entities/user/types/user.types"
 
 /**
  * Параметры поиска врачей

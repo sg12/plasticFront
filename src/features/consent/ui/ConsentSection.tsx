@@ -5,7 +5,7 @@ import { cn } from "@/shared/lib/utils"
 import { useIsMobile } from "@/shared/hooks/useMobile"
 import { ConsentModal } from "./ConsentModal"
 import { PrivacyModal } from "@/widgets/privacyModal/ui/PrivacyModal"
-import type { UserRole } from "@/entities/user/types/types"
+import type { UserRole } from "@/entities/user/types/user.types"
 
 interface Props {
   hasConsent: boolean

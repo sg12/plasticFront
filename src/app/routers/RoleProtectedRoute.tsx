@@ -5,8 +5,8 @@
  */
 
 import { Navigate, Outlet, useMatches } from "react-router"
-import { useUserStore } from "@/entities/user/model/store"
-import type { UserRole } from "@/entities/user/types/types"
+import { useUserStore } from "@/entities/user/model/user.store"
+import type { UserRole } from "@/entities/user/types/user.types"
 import { ROUTES } from "@/shared/model/routes"
 import { Loader } from "@/shared/ui/loader"
 

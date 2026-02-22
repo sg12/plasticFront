@@ -1,4 +1,4 @@
-import type { RoleProfile } from "@/entities/user/types/types"
+import type { RoleProfile } from "@/entities/user/types/user.types"
 import { pluralRu } from "@/shared/lib/utils"
 import { CardTitle } from "@/shared/ui/card"
 import { Badge } from "@/shared/ui/badge"

@@ -12,12 +12,12 @@ import { create } from "zustand"
 import type { DoctorSearchParams, ClinicSearchParams } from "../types/types"
 import { DEFAULT_DOCTOR_SEARCH_PARAMS, DEFAULT_CLINIC_SEARCH_PARAMS } from "./constants"
 import { logger } from "@/shared/lib/logger"
-import { addFavorite, removeFavorite } from "@/entities/user/api/api"
+import { addFavorite, removeFavorite } from "@/entities/user/api/user.api"
 import { useAuthStore } from "@/entities/auth/model/store"
 import { toast } from "sonner"
-import type { PatientProfile, RoleProfile, UserRole } from "@/entities/user/types/types"
-import { USER_ROLES } from "@/entities/user/model/constants"
-import { useUserStore } from "@/entities/user/model/store"
+import type { PatientProfile, RoleProfile, UserRole } from "@/entities/user/types/user.types"
+import { USER_ROLES } from "@/entities/user/model/user.constants"
+import { useUserStore } from "@/entities/user/model/user.store"
 
 interface CatalogState {
   // === ФИЛЬТРЫ ===

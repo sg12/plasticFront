@@ -1,10 +1,10 @@
 import { Navigate, Outlet, useLocation } from "react-router"
 import { useAuthStore } from "@/entities/auth/model/store"
-import { MODERATION_STATUS, USER_ROLES } from "@/entities/user/model/constants"
+import { MODERATION_STATUS, USER_ROLES } from "@/entities/user/model/user.constants"
 import { Loader } from "@/shared/ui/loader"
 import { ModerationStatusScreen } from "@/features/auth/ui/ModerationStatusScreen"
 import { ROUTES } from "@/shared/model/routes"
-import { useUserStore } from "@/entities/user/model/store"
+import { useUserStore } from "@/entities/user/model/user.store"
 
 export const ProtectedRoute = () => {
   const { session, initialized, loading } = useAuthStore()

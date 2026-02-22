@@ -21,7 +21,7 @@ import { useForm, FormProvider } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { createSupportTicketSchema } from "@/entities/support/model/schema"
 import type { UploadedFilesByRole } from "@/entities/document/types/types"
-import { USER_ROLES } from "@/entities/user/model/constants"
+import { USER_ROLES } from "@/entities/user/model/user.constants"
 
 export const useSupport = (ticketId?: string | null) => {
   const { user } = useAuthStore()

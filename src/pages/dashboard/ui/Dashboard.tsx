@@ -1,4 +1,4 @@
-import { useUserStore } from "@/entities/user/model/store"
+import { useUserStore } from "@/entities/user/model/user.store"
 import { formatName } from "@/shared/lib/utils"
 import { ROUTES } from "@/shared/model/routes"
 import { Card, CardContent } from "@/shared/ui/card"
@@ -15,7 +15,7 @@ import {
   Building2,
 } from "lucide-react"
 import { NavLink } from "react-router"
-import { USER_ROLES } from "@/entities/user/model/constants"
+import { USER_ROLES } from "@/entities/user/model/user.constants"
 import { Badge } from "@/shared/ui/badge"
 import { useAppointmentsStore } from "@/entities/appointments/model/store"
 import { useEffect } from "react"

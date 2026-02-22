@@ -1,10 +1,10 @@
-import { USER_ROLES } from "@/entities/user/model/constants"
+import { USER_ROLES } from "@/entities/user/model/user.constants"
 import {
   basicInfoSchema,
   clinicInfoSchema,
   doctorInfoSchema,
   patientInfoSchema,
-} from "@/entities/user/model/schema"
+} from "@/entities/user/model/user.schema"
 import z from "zod"
 
 export const signUpSchema = z

@@ -12,7 +12,7 @@
  */
 
 import { supabase } from "@/shared/api/supabase/client"
-import { USER_ROLES, MODERATION_STATUS } from "@/entities/user/model/constants"
+import { USER_ROLES, MODERATION_STATUS } from "@/entities/user/model/user.constants"
 import type {
   DoctorSearchParams,
   ClinicSearchParams,

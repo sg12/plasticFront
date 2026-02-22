@@ -29,7 +29,7 @@ import {
 import { toast } from "sonner"
 import { useAuthStore } from "@/entities/auth/model/store"
 import { logger } from "@/shared/lib/logger"
-import { useUserStore } from "@/entities/user/model/store"
+import { useUserStore } from "@/entities/user/model/user.store"
 
 interface AppointmentsState {
   appointments: Appointment[]

@@ -1,6 +1,6 @@
 import type z from "zod"
 
-import { basicInfoSchema } from "@/entities/user/model/schema"
+import { basicInfoSchema } from "@/entities/user/model/user.schema"
 
 export const signInSchema = basicInfoSchema.pick({
   email: true,

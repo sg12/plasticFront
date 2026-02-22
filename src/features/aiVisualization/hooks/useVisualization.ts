@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react"
 import type { VisualizationState, BodyZone, VisualizationStep, OperationType } from "../types/types"
-import type { RoleProfile } from "@/entities/user/types/types"
+import type { RoleProfile } from "@/entities/user/types/user.types"
 
 const initialState: VisualizationState = {
   step: "select-zone",

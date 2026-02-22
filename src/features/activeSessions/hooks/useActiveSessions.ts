@@ -1,7 +1,7 @@
 import useSWR from "swr"
 import type { Session } from "@supabase/supabase-js"
 import { parseBrowser } from "@/shared/lib/userAgent"
-import { getSession } from "@/entities/auth/api/api"
+import { getSession } from "@/entities/auth/api/auth.api"
 import { logger } from "@/shared/lib/logger"
 
 export interface SessionInfo {

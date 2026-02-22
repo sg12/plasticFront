@@ -7,10 +7,10 @@
  */
 
 import { useState, useRef, useEffect } from "react"
-import { uploadAvatar, updateUser } from "@/entities/user/api/api"
-import { useUserStore } from "@/entities/user/model/store"
+import { uploadAvatar, updateUser } from "@/entities/user/api/user.api"
+import { useUserStore } from "@/entities/user/model/user.store"
 import { toast } from "sonner"
-import type { RoleProfile } from "@/entities/user/types/types"
+import type { RoleProfile } from "@/entities/user/types/user.types"
 
 interface UseAvatarUploadReturn {
   isUploading: boolean

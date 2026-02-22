@@ -1,5 +1,5 @@
-import { USER_ROLES } from "@/entities/user/model/constants"
-import type { UserRole } from "@/entities/user/types/types"
+import { USER_ROLES } from "@/entities/user/model/user.constants"
+import type { UserRole } from "@/entities/user/types/user.types"
 import { defineSteps, stepsToLabelMap, type StepDefinition } from "@/shared/lib/steps"
 
 export const SIGNUP_STEPS_BY_ROLE = {

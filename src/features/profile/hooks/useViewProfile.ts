@@ -7,8 +7,8 @@
  */
 
 import { useEffect, useState } from "react"
-import { getUserById } from "@/entities/user/api/api"
-import type { RoleProfile } from "@/entities/user/types/types"
+import { getUserById } from "@/entities/user/api/user.api"
+import type { RoleProfile } from "@/entities/user/types/user.types"
 import { logger } from "@/shared/lib/logger"
 import { toast } from "sonner"
 

@@ -10,12 +10,12 @@
  */
 
 import { create } from "zustand"
-import { getUser } from "../api/api"
-import type { RoleProfile, TypedProfile, UserRole } from "../types/types"
-import { USER_ROLES } from "./constants"
+import { getUser } from "../api/user.api"
+import type { RoleProfile, TypedProfile, UserRole } from "../types/user.types"
+import { USER_ROLES } from "./user.constants"
 import { requestModeration } from "@/shared/api/supabase/moderation"
 import { getFileUrls } from "@/entities/document/api/api"
-import type { DoctorProfile, ClinicProfile } from "../types/types"
+import type { DoctorProfile, ClinicProfile } from "../types/user.types"
 import { logger } from "@/shared/lib/logger"
 import { toast } from "sonner"
 

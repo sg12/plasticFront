@@ -14,8 +14,8 @@ import {
   APPOINTMENT_TYPE_LABELS,
 } from "@/entities/appointments/model/constants"
 import type { Appointment } from "@/entities/appointments/types/types"
-import { USER_ROLES } from "@/entities/user/model/constants"
-import type { UserRole } from "@/entities/user/types/types"
+import { USER_ROLES } from "@/entities/user/model/user.constants"
+import type { UserRole } from "@/entities/user/types/user.types"
 import { Badge } from "@/shared/ui/badge"
 import { Button } from "@/shared/ui/button"
 import { Card, CardTitle, CardContent, CardFooter, CardAction } from "@/shared/ui/card"

@@ -42,7 +42,7 @@ import { AppointmentCalendarWithTime } from "@/features/appointments/ui/Appointm
 import { format } from "date-fns"
 import { ru } from "date-fns/locale"
 import { cn } from "@/shared/lib/utils"
-import { useUserStore } from "@/entities/user/model/store"
+import { useUserStore } from "@/entities/user/model/user.store"
 import { Item, ItemTitle } from "@/shared/ui/item"
 import { useIsMobile } from "@/shared/hooks/useMobile"
 

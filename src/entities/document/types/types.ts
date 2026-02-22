@@ -1,4 +1,4 @@
-import type { USER_ROLES } from "@/entities/user/model/constants"
+import type { USER_ROLES } from "@/entities/user/model/user.constants"
 
 /**
  * Тип для загруженных файлов по ролям.

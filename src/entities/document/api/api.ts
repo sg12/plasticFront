@@ -6,7 +6,7 @@ import {
   type FileValidationConfig,
 } from "@/shared/lib/fileValidation"
 import { logger } from "@/shared/lib/logger"
-import type { USER_ROLES } from "@/entities/user/model/constants"
+import type { USER_ROLES } from "@/entities/user/model/user.constants"
 
 const STORAGE_BUCKET = "documents"
 

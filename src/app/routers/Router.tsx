@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router"
 import { ROUTES } from "@/shared/model/routes"
 import { Loader } from "@/shared/ui/loader"
 import { lazyRoute } from "./lazyRoute"
-import { USER_ROLES } from "@/entities/user/model/constants"
+import { USER_ROLES } from "@/entities/user/model/user.constants"
 
 export const router = createBrowserRouter([
   {

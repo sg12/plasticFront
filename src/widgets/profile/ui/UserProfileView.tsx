@@ -1,5 +1,5 @@
-import type { RoleProfile } from "@/entities/user/types/types"
-import { USER_ROLES } from "@/entities/user/model/constants"
+import type { RoleProfile } from "@/entities/user/types/user.types"
+import { USER_ROLES } from "@/entities/user/model/user.constants"
 import { CardTitle } from "@/shared/ui/card"
 import { Separator } from "@/shared/ui/separator"
 import { format } from "date-fns"

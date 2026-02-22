@@ -5,9 +5,9 @@ import {
   signOut,
   signInWithPassword as apiSignInWithPassword,
   signUp as apiSignUp,
-} from "../api/api"
-import type { AuthState, AuthStore } from "../types/types"
-import { useUserStore } from "@/entities/user/model/store"
+} from "../api/auth.api"
+import type { AuthState, AuthStore } from "../types/auth.types"
+import { useUserStore } from "@/entities/user/model/user.store"
 import { useNotificationStore } from "@/entities/notification/model/store"
 import { recordLogin } from "@/features/loginHistory/api/api"
 import { logger } from "@/shared/lib/logger"

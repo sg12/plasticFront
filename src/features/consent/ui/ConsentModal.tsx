@@ -8,8 +8,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/shared/ui/dialog"
-import type { UserRole } from "@/entities/user/types/types"
-import { USER_ROLES } from "@/entities/user/model/constants"
+import type { UserRole } from "@/entities/user/types/user.types"
+import { USER_ROLES } from "@/entities/user/model/user.constants"
 
 interface Props {
   userRole: UserRole

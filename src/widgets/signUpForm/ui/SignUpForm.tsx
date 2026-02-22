@@ -6,7 +6,7 @@ import { Button } from "@/shared/ui/button"
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/form"
 import { useState } from "react"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/shared/ui/inputGroup"
-import { USER_ROLES } from "@/entities/user/model/constants"
+import { USER_ROLES } from "@/entities/user/model/user.constants"
 import { ROUTES } from "@/shared/model/routes"
 import {
   Card,

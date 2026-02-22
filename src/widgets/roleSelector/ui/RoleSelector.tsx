@@ -1,4 +1,4 @@
-import { USER_ROLES } from "@/entities/user/model/constants"
+import { USER_ROLES } from "@/entities/user/model/user.constants"
 import { User, Stethoscope, Hospital } from "lucide-react"
 import type { RoleSelectorProps } from "../types/types"
 import { cn } from "@/shared/lib/utils"

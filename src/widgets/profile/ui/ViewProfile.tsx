@@ -5,11 +5,11 @@ import { UserProfileHistory } from "./UserProfileHistory"
 import { useViewProfile } from "@/features/profile/hooks/useViewProfile"
 import { AlertCircle } from "lucide-react"
 import { Alert, AlertDescription } from "@/shared/ui/alert"
-import { USER_ROLES } from "@/entities/user/model/constants"
+import { USER_ROLES } from "@/entities/user/model/user.constants"
 import { Card, CardContent } from "@/shared/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs"
 import { AppointmentButton } from "@/features/appointments/ui/AppointmentButton"
-import { useUserStore } from "@/entities/user/model/store"
+import { useUserStore } from "@/entities/user/model/user.store"
 
 interface ViewProfileProps {
   userId: string

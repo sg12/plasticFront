@@ -6,8 +6,8 @@
  * @module pages/appointments/ui/Appointments
  */
 
-import { useUserStore } from "@/entities/user/model/store"
-import { USER_ROLES } from "@/entities/user/model/constants"
+import { useUserStore } from "@/entities/user/model/user.store"
+import { USER_ROLES } from "@/entities/user/model/user.constants"
 import { PatientAppointments } from "@/widgets/patient/patientAppointments/ui/PatientAppointments"
 import { DoctorAppointments } from "@/widgets/doctor/doctorAppointments/ui/DoctorAppointments"
 import { ClinicAppointments } from "@/widgets/clinic/clinicAppointments/ui/ClinicAppointments"

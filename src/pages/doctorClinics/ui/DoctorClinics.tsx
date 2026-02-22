@@ -3,7 +3,7 @@
  */
 
 import { DoctorClinicsList } from "@/widgets/doctor/doctorClinicsList/ui/DoctorClinicsList"
-import { useUserStore } from "@/entities/user/model/store"
+import { useUserStore } from "@/entities/user/model/user.store"
 
 export const DoctorClinics = () => {
   const { profile } = useUserStore()

@@ -1,5 +1,5 @@
 import { useCreateProfileForm } from "@/features/createProfile/hooks/useCreateProfileForm"
-import { USER_ROLES } from "@/entities/user/model/constants"
+import { USER_ROLES } from "@/entities/user/model/user.constants"
 import { Button } from "@/shared/ui/button"
 import { PatientForm } from "@/widgets/roleForms/PatientForm"
 import { DoctorForm } from "@/widgets/roleForms/DoctorForm"

@@ -10,10 +10,10 @@ import { ArrowLeft, ArrowRight, Gem, Sparkles } from "lucide-react"
 import { processFaceImageV2 } from "@/features/aiVisualization/api/apiV2"
 import { useAuthStore } from "@/entities/auth/model/store"
 import { Badge } from "@/shared/ui/badge"
-import { updateUser } from "@/entities/user/api/api"
+import { updateUser } from "@/entities/user/api/user.api"
 import { cn } from "@/shared/lib/utils"
 import { logger } from "@/shared/lib/logger"
-import { useUserStore } from "@/entities/user/model/store"
+import { useUserStore } from "@/entities/user/model/user.store"
 
 export const AIVisualizer = () => {
   const { user } = useAuthStore()
@@ -131,8 +131,8 @@ export const AIVisualizer = () => {
           <CardContent
             className={cn(
               profile?.aiTokensUsed === 0 &&
-                state.step !== "result" &&
-                "pointer-events-none select-none",
+              state.step !== "result" &&
+              "pointer-events-none select-none",
             )}
           >
             <div className="relative">

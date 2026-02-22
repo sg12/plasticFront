@@ -4,9 +4,9 @@
  * @module widgets/clinicAppointments/ui/ClinicAppointments
  */
 
-import { useUserStore } from "@/entities/user/model/store"
+import { useUserStore } from "@/entities/user/model/user.store"
 import { AppointmentsList } from "@/features/appointments/ui/AppointmentsList"
-import { USER_ROLES } from "@/entities/user/model/constants"
+import { USER_ROLES } from "@/entities/user/model/user.constants"
 import { useClinicAppointments } from "@/features/appointments/hooks/useClinicAppointments"
 
 export const ClinicAppointments = () => {

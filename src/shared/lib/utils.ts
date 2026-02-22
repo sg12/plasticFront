@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
-import type { Gender, UserRole } from "../../entities/user/types/types"
-import { USER_ROLES } from "../../entities/user/model/constants"
+import type { Gender, UserRole } from "../../entities/user/types/user.types"
+import { USER_ROLES } from "../../entities/user/model/user.constants"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))

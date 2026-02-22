@@ -13,8 +13,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { APPOINTMENT_STATUS_LABELS } from "@/entities/appointments/model/constants"
 import type { AppointmentStatus } from "@/entities/appointments/types/types"
 import { useIsMobile } from "@/shared/hooks/useMobile"
-import type { UserRole } from "@/entities/user/types/types"
-import { USER_ROLES } from "@/entities/user/model/constants"
+import type { UserRole } from "@/entities/user/types/user.types"
+import { USER_ROLES } from "@/entities/user/model/user.constants"
 
 interface AppointmentStatusFilterProps {
     /** Выбранный статус */

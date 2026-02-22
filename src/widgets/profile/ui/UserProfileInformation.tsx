@@ -1,5 +1,5 @@
-import type { RoleProfile } from "../../../entities/user/types/types"
-import { USER_ROLES } from "../../../entities/user/model/constants"
+import type { RoleProfile } from "../../../entities/user/types/user.types"
+import { USER_ROLES } from "../../../entities/user/model/user.constants"
 import { type UseFormReturn } from "react-hook-form"
 import { Lock, CheckCircle, Mail, User, Phone } from "lucide-react"
 import { useAuthStore } from "@/entities/auth/model/store"

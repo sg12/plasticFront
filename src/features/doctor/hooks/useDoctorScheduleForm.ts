@@ -17,7 +17,7 @@ import {
   MIN_HOURS_BEFORE_APPOINTMENT,
   DEFAULT_TIME_SLOT_DURATION,
 } from "@/entities/appointments/model/constants"
-import { useUserStore } from "@/entities/user/model/store"
+import { useUserStore } from "@/entities/user/model/user.store"
 
 type DoctorScheduleFormData = z.infer<typeof fullDoctorScheduleSchema>
 
