@@ -33,7 +33,7 @@
     "react": "^19.2.4",
     "react-day-picker": "^9.13.2",
     "react-dom": "^19.2.4",
-    "react-dropzone": "^14.4.0",
+    "react-dropzone": "^15.0.0",
     "react-error-boundary": "^6.1.1",
     "react-hook-form": "^7.68.0",
     "react-router": "^7.13.0",
