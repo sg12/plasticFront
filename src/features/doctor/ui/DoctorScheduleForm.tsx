@@ -19,7 +19,7 @@ import { Separator } from "@/shared/ui/separator"
 import {
   MIN_APPOINTMENT_DURATION,
   MAX_APPOINTMENT_DURATION,
-} from "@/entities/appointments/model/constants"
+} from "@/entities/appointment/model/constants"
 import { DoctorScheduleCard } from "@/widgets/doctor/doctorScheduleCard/ui/DoctorScheduleCard"
 import { DAYS_OF_WEEK } from "@/shared/model/constants"
 import { useDoctorScheduleForm } from "../hooks/useDoctorScheduleForm"

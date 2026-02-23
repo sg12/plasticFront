@@ -10,12 +10,12 @@
  */
 
 import { useEffect, useMemo, useState } from "react"
-import { useAppointmentsStore } from "@/entities/appointments/model/store"
+import { useAppointmentsStore } from "@/entities/appointment/model/store"
 import { Card } from "@/shared/ui/card"
 import { Skeleton } from "@/shared/ui/skeleton"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select"
 import { Calendar } from "lucide-react"
-import type { AppointmentStatus } from "@/entities/appointments/types/types"
+import type { AppointmentStatus } from "@/entities/appointment/types/appointment.types"
 import { AppointmentCard } from "@/widgets/appointmentCard/ui/AppointmentCard"
 import type { UserRole } from "@/entities/user/types/user.types"
 import { USER_ROLES } from "@/entities/user/model/user.constants"

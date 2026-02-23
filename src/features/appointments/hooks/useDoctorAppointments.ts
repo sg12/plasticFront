@@ -6,7 +6,7 @@
  * @module features/appointments/hooks/useDoctorAppointments
  */
 
-import { useAppointmentsStore } from "@/entities/appointments/model/store"
+import { useAppointmentsStore } from "@/entities/appointment/model/store"
 
 export const useDoctorAppointments = () => {
   const { updateExistingAppointment } = useAppointmentsStore()

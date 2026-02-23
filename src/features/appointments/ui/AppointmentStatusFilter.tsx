@@ -10,8 +10,8 @@
 
 import { Button } from "@/shared/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select"
-import { APPOINTMENT_STATUS_LABELS } from "@/entities/appointments/model/constants"
-import type { AppointmentStatus } from "@/entities/appointments/types/types"
+import { APPOINTMENT_STATUS_LABELS } from "@/entities/appointment/model/constants"
+import type { AppointmentStatus } from "@/entities/appointment/types/appointment.types"
 import { useIsMobile } from "@/shared/hooks/useMobile"
 import type { UserRole } from "@/entities/user/types/user.types"
 import { USER_ROLES } from "@/entities/user/model/user.constants"

@@ -16,7 +16,7 @@ import type {
   TimeSlot,
   DoctorSchedule,
   DoctorScheduleDay,
-} from "../types/types"
+} from "../types/appointment.types"
 import { logger } from "@/shared/lib/logger"
 import type { User } from "@supabase/supabase-js"
 import {

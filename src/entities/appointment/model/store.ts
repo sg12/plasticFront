@@ -15,7 +15,7 @@ import type {
   PaginationParams,
   TimeSlot,
   DoctorSchedule,
-} from "../types/types"
+} from "../types/appointment.types"
 import {
   createAppointment,
   getAppointments,
@@ -25,7 +25,7 @@ import {
   getAvailableTimeSlots,
   getDoctorSchedule,
   updateDoctorSchedule,
-} from "../api/api"
+} from "../api/appointment.api"
 import { toast } from "sonner"
 import { useAuthStore } from "@/entities/auth/model/store"
 import { logger } from "@/shared/lib/logger"

@@ -8,7 +8,7 @@ import { Button } from "@/shared/ui/button"
 import { Skeleton } from "@/shared/ui/skeleton"
 import { Clock, Check } from "lucide-react"
 import { format } from "date-fns"
-import type { TimeSlot } from "@/entities/appointments/types/types"
+import type { TimeSlot } from "@/entities/appointment/types/appointment.types"
 import { useIsMobile } from "@/shared/hooks/useMobile"
 
 interface TimeSlotPickerProps {

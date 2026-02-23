@@ -12,8 +12,8 @@
 import {
   APPOINTMENT_STATUS_LABELS,
   APPOINTMENT_TYPE_LABELS,
-} from "@/entities/appointments/model/constants"
-import type { Appointment } from "@/entities/appointments/types/types"
+} from "@/entities/appointment/model/constants"
+import type { Appointment } from "@/entities/appointment/types/appointment.types"
 import { USER_ROLES } from "@/entities/user/model/user.constants"
 import type { UserRole } from "@/entities/user/types/user.types"
 import { Badge } from "@/shared/ui/badge"

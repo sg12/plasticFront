@@ -4,7 +4,11 @@
  * @module entities/appointments/model/constants
  */
 
-import type { AppointmentStatus, AppointmentType, DoctorScheduleDay } from "../types/types"
+import type {
+  AppointmentStatus,
+  AppointmentType,
+  DoctorScheduleDay,
+} from "../types/appointment.types"
 
 /**
  * Статусы записи на приём
