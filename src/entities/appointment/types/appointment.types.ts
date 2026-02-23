@@ -1,46 +1,18 @@
-/**
- * @fileoverview Типы и интерфейсы для работы с записями на приём
- *
- * Этот файл определяет все TypeScript типы и интерфейсы,
- * которые используются для работы с записями на приём.
- *
- * @module entities/appointments/types/types
- */
-
-import type { createAppointmentSchema, updateAppointmentSchema } from "../model/schema"
+import type { createAppointmentSchema, updateAppointmentSchema } from "../model/appointment.schema"
 import type z from "zod"
 
-/**
- * Статусы записи на приём
- */
 export type AppointmentStatus = "pending" | "confirmed" | "cancelled" | "completed"
-
-/**
- * Типы приёма
- */
 export type AppointmentType = "consultation" // "procedure" | "surgery"
 
-/**
- * Временной слот для записи
- */
 export interface TimeSlot {
-  /** Начало временного слота (ISO строка) */
   startTime: string
-  /** Конец временного слота (ISO строка) */
   endTime: string
-  /** Доступен ли слот для записи */
   isAvailable: boolean
-  /** ID существующей записи (если слот занят) */
   appointmentId?: string | null
 }
 
-/**
- * Временной диапазон для расписания
- */
 export interface TimeRange {
-  /** Время начала (формат HH:mm) */
   startTime: string
-  /** Время окончания (формат HH:mm) */
   endTime: string
 }
 

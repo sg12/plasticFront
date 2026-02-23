@@ -9,14 +9,14 @@
 import { useEffect } from "react"
 import { useForm, useFieldArray } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useAppointmentsStore } from "@/entities/appointment/model/store"
-import { fullDoctorScheduleSchema } from "@/entities/appointment/model/schema"
+import { useAppointmentsStore } from "@/entities/appointment/model/appointment.store"
+import { fullDoctorScheduleSchema } from "@/entities/appointment/model/appointment.schema"
 import type { DoctorSchedule } from "@/entities/appointment/types/appointment.types"
 import type z from "zod"
 import {
   MIN_HOURS_BEFORE_APPOINTMENT,
   DEFAULT_TIME_SLOT_DURATION,
-} from "@/entities/appointment/model/constants"
+} from "@/entities/appointment/model/appointment.constants"
 import { useUserStore } from "@/entities/user/model/user.store"
 
 type DoctorScheduleFormData = z.infer<typeof fullDoctorScheduleSchema>

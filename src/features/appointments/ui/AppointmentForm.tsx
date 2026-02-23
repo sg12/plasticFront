@@ -29,15 +29,15 @@ import {
 } from "@/shared/ui/form"
 import { Textarea } from "@/shared/ui/textarea"
 import { RadioGroup, RadioGroupItem } from "@/shared/ui/radioGroup"
-import { useAppointmentsStore } from "@/entities/appointment/model/store"
-import { createAppointmentSchema } from "@/entities/appointment/model/schema"
+import { useAppointmentsStore } from "@/entities/appointment/model/appointment.store"
+import { createAppointmentSchema } from "@/entities/appointment/model/appointment.schema"
 import type { AppointmentCreateData } from "@/entities/appointment/types/appointment.types"
 import {
     APPOINTMENT_TYPE,
     APPOINTMENT_TYPE_LABELS,
     DEFAULT_APPOINTMENT_DURATION,
     MIN_HOURS_BEFORE_APPOINTMENT,
-} from "@/entities/appointment/model/constants"
+} from "@/entities/appointment/model/appointment.constants"
 import { AppointmentCalendarWithTime } from "@/features/appointments/ui/AppointmentCalendarWithTime"
 import { format } from "date-fns"
 import { ru } from "date-fns/locale"

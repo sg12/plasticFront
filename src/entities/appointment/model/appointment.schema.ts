@@ -11,7 +11,7 @@ import {
   MIN_APPOINTMENT_DURATION,
   MAX_APPOINTMENT_DURATION,
   MIN_HOURS_BEFORE_APPOINTMENT,
-} from "./constants"
+} from "./appointment.constants"
 
 /**
  * Схема для создания записи на приём

@@ -12,7 +12,7 @@
 import {
   APPOINTMENT_STATUS_LABELS,
   APPOINTMENT_TYPE_LABELS,
-} from "@/entities/appointment/model/constants"
+} from "@/entities/appointment/model/appointment.constants"
 import type { Appointment } from "@/entities/appointment/types/appointment.types"
 import { USER_ROLES } from "@/entities/user/model/user.constants"
 import type { UserRole } from "@/entities/user/types/user.types"

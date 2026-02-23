@@ -10,7 +10,7 @@
  */
 
 import { useEffect, useMemo, useState } from "react"
-import { useAppointmentsStore } from "@/entities/appointment/model/store"
+import { useAppointmentsStore } from "@/entities/appointment/model/appointment.store"
 import { Card } from "@/shared/ui/card"
 import { Skeleton } from "@/shared/ui/skeleton"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select"

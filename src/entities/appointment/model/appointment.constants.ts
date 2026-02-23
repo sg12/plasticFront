@@ -1,0 +1,27 @@
+export const APPOINTMENT_STATUS = {
+  PENDING: "PENDING",
+  CONFIRMED: "CONFIRMED",
+  CANCELED: "CANCELED",
+  COMPLETED: "COMPLETED",
+  NO_SHOW: "NO_SHOW",
+} as const
+
+export const APPOINTMENT_TYPE = {
+  OFFLINE: "OFFLINE",
+  ONLINE: "ONLINE",
+  HOME_VISIT: "HOME_VISIT",
+} as const
+
+export const APPOINTMENT_STATUS_LABELS = {
+  [APPOINTMENT_STATUS.PENDING]: "Ожидает подтверждения",
+  [APPOINTMENT_STATUS.CONFIRMED]: "Подтверждена",
+  [APPOINTMENT_STATUS.CANCELED]: "Отменена",
+  [APPOINTMENT_STATUS.COMPLETED]: "Завершена",
+  [APPOINTMENT_STATUS.NO_SHOW]: "Пациент не пришёл",
+} as const
+
+export const APPOINTMENT_TYPE_LABELS = {
+  [APPOINTMENT_TYPE.ONLINE]: "Онлайн",
+  [APPOINTMENT_TYPE.OFFLINE]: "Оффлайн",
+  [APPOINTMENT_TYPE.HOME_VISIT]: "Дома",
+} as const

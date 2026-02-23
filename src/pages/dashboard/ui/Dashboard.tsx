@@ -17,7 +17,7 @@ import {
 import { NavLink } from "react-router"
 import { USER_ROLES } from "@/entities/user/model/user.constants"
 import { Badge } from "@/shared/ui/badge"
-import { useAppointmentsStore } from "@/entities/appointment/model/store"
+import { useAppointmentsStore } from "@/entities/appointment/model/appointment.store"
 import { useEffect } from "react"
 
 export const Dashboard = () => {
