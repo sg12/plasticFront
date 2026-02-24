@@ -18,7 +18,7 @@ import type { Props } from "./types/types"
 import { Switch } from "@/shared/ui/switch"
 import { doctorFields } from "@/widgets/roleForms/model/constants"
 import { useState } from "react"
-import { useAuthStore } from "@/entities/auth/model/store"
+import { useAuthStore } from "@/entities/auth/model/auth.store"
 import { Button } from "@/shared/ui/button"
 import { useClipboard } from "@/shared/hooks/useClipboard"
 import {

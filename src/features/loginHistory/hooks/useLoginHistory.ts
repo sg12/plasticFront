@@ -1,5 +1,5 @@
 import useSWR from "swr"
-import { useAuthStore } from "@/entities/auth/model/store"
+import { useAuthStore } from "@/entities/auth/model/auth.store"
 import { getLoginHistory } from "@/features/loginHistory/api/api"
 import { logger } from "@/shared/lib/logger"
 export type { LoginRecord } from "@/features/loginHistory/types/types"

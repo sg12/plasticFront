@@ -1,4 +1,4 @@
-import { useAuthStore } from "@/entities/auth/model/store"
+import { useAuthStore } from "@/entities/auth/model/auth.store"
 import { useUserStore } from "@/entities/user/model/user.store"
 import { Button } from "@/shared/ui/button"
 import { AlertCircle, Clock } from "lucide-react"

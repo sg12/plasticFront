@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { signUpSchema } from "../model/schema"
 import { toast } from "sonner"
-import { useAuthStore } from "@/entities/auth/model/store"
+import { useAuthStore } from "@/entities/auth/model/auth.store"
 import { FormProvider } from "react-hook-form"
 import { logger } from "@/shared/lib/logger"
 

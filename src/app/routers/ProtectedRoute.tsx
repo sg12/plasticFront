@@ -1,5 +1,5 @@
 import { Navigate, Outlet, useLocation } from "react-router"
-import { useAuthStore } from "@/entities/auth/model/store"
+import { useAuthStore } from "@/entities/auth/model/auth.store"
 import { MODERATION_STATUS, USER_ROLES } from "@/entities/user/model/user.constants"
 import { Loader } from "@/shared/ui/loader"
 import { ModerationStatusScreen } from "@/features/auth/ui/ModerationStatusScreen"

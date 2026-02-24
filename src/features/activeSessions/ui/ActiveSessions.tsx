@@ -2,7 +2,7 @@ import { Button } from "@/shared/ui/button"
 import { Skeleton } from "@/shared/ui/skeleton"
 import { Monitor, LogOut } from "lucide-react"
 import { useActiveSessions } from "@/features/activeSessions/hooks/useActiveSessions"
-import { useAuthStore } from "@/entities/auth/model/store"
+import { useAuthStore } from "@/entities/auth/model/auth.store"
 
 export const ActiveSessions = () => {
   const { session, isLoading } = useActiveSessions()

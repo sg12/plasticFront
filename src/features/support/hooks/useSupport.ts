@@ -3,23 +3,23 @@ import type { FileRecord } from "@/features/fileUpload/types/types"
 import useSWR from "swr"
 import { useSWRConfig } from "swr"
 import { toast } from "sonner"
-import { useAuthStore } from "@/entities/auth/model/store"
+import { useAuthStore } from "@/entities/auth/model/auth.store"
 import {
   getUserTickets,
   createSupportTicket,
   getTicketReplies,
   deleteSupportTicket,
-} from "@/entities/support/api/api"
+} from "@/entities/support/api/support.api"
 import type {
   SupportTicket,
   SupportTicketReply,
   CreateSupportTicketData,
   CreateSupportTicketFormData,
-} from "@/entities/support/types/types"
+} from "@/entities/support/types/support.types"
 import { logger } from "@/shared/lib/logger"
 import { useForm, FormProvider } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { createSupportTicketSchema } from "@/entities/support/model/schema"
+import { createSupportTicketSchema } from "@/entities/support/model/support.schema"
 import type { UploadedFilesByRole } from "@/entities/file/types/file.types"
 import { USER_ROLES } from "@/entities/user/model/user.constants"
 

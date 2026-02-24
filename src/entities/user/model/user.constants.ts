@@ -15,3 +15,39 @@ export const MODERATION_STATUS = {
   REJECTED: "REJECTED",
   BANNED: "BANNED",
 } as const
+
+export const ROLE_LOCALES = {
+  [ROLE.PATIENT]: {
+    ru: "Пациент",
+  },
+  [ROLE.DOCTOR]: {
+    ru: "Доктор",
+  },
+  [ROLE.CLINIC]: {
+    ru: "Клиника",
+  },
+} as const
+
+export const GENDER_LOCALES = {
+  [GENDER.MALE]: {
+    ru: "Мужчина",
+  },
+  [GENDER.FEMALE]: {
+    ru: "Женщина",
+  },
+} as const
+
+export const MODERATION_STATUS_LOCALES = {
+  [MODERATION_STATUS.APPROVED]: {
+    ru: "Подтвержден",
+  },
+  [MODERATION_STATUS.PENDING]: {
+    ru: "Ожидает",
+  },
+  [MODERATION_STATUS.REJECTED]: {
+    ru: "Отклонено",
+  },
+  [MODERATION_STATUS.BANNED]: {
+    ru: "Забанен",
+  },
+} as const

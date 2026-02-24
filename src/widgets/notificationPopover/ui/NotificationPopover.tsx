@@ -5,9 +5,9 @@ import { Bell, CheckCircle2, Clock, X } from "lucide-react"
 import { cn } from "@/shared/lib/utils"
 import { ScrollArea } from "@/shared/ui/scrollArea"
 import { Badge } from "@/shared/ui/badge"
-import { useNotificationStore } from "@/entities/notification/model/store"
-import { useAuthStore } from "@/entities/auth/model/store"
-import type { NotificationType } from "@/entities/notification/types/types"
+import { useNotificationStore } from "@/entities/notification/model/notification.store"
+import { useAuthStore } from "@/entities/auth/model/auth.store"
+import type { NotificationType } from "@/entities/notification/types/notification.types"
 
 export const NotificationPopover = () => {
   const { user } = useAuthStore()

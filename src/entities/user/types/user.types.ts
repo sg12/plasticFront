@@ -2,6 +2,13 @@ import type { Appointment } from "@/entities/appointment/types/appointment.types
 import type { GENDER, MODERATION_STATUS, ROLE } from "../model/user.constants"
 import type { File } from "@/entities/file/types/file.types"
 import type { Break, Schedule, TimeSlot, WorkRule } from "@/entities/schedule/types/schedule.types"
+import type { Notification } from "@/entities/notification/types/notification.types"
+import type { Review } from "@/entities/review/types/review.types"
+import type { Relationship } from "@/entities/relationship/types/relationship.types"
+import type { Service } from "@/entities/service/types/service.types"
+import type { UserConsents } from "@/entities/consent/types/consent.types"
+import type { SPECIALIZATION } from "@/entities/doctor/types/doctor.types"
+import type { Ticket } from "@/entities/support/types/support.types"
 
 export interface User {
   readonly id: string
@@ -18,9 +25,9 @@ export interface User {
   aiToken: number
   createdAt: string
   updatedAt: string
-  // notifications: Notification[]
-  // userConsents: UserConsent[]
-  // tickets: Ticket[]
+  notifications: Notification[]
+  userConsents: UserConsents[]
+  tickets: Ticket[]
 }
 
 export interface Patient extends User {
@@ -33,8 +40,8 @@ export interface Patient extends User {
   createdAt: string
   updatedAt: string
   appointments: Appointment[]
-  // favorites:       Favorite[]
-  // reviews:         Review[]
+  favorites: Favorite[]
+  reviews: Review[]
   documents: File[]
 }
 
@@ -42,7 +49,7 @@ export interface Doctor extends User {
   gender: GENDER | null
   birthdate: string | null
   experience: number
-  specializations: string[]
+  specializations: SPECIALIZATION[]
   education: string
   workplace: string | null
   bio: string | null
@@ -55,14 +62,14 @@ export interface Doctor extends User {
   updatedAt: string
   appointments: Appointment[]
   documents: File[]
-  // relationships:      Relationship[]
-  // favoriteByPatients: Favorite[]
+  relationships: Relationship[]
+  favoriteByPatients: Favorite[]
   schedules: Schedule[]
   timeSlots: TimeSlot[]
   workRules: WorkRule[]
-  // services:           Service[]
+  services: Service[]
+  reviews: Review[]
   breaks: Break[]
-  // reviews:            Review[]
 }
 
 export interface Clinic extends User {
@@ -82,14 +89,22 @@ export interface Clinic extends User {
   rating: number
   createdAt: string
   updatedAt: string
-  // relationships:      Relationship[]
+  relationships: Relationship[]
   appointments: Appointment[]
-  // favoriteByPatients: Favorite[]
+  favoriteByPatients: Favorite[]
   documents: File[]
   schedules: Schedule[]
   timeSlots: TimeSlot[]
-  // services:           Service[]
-  // reviews:            Review[]
+  services: Service[]
+  reviews: Review[]
+}
+
+export interface Favorite {
+  id: string
+  userId: string
+  doctorId: string | null
+  clinicId: string | null
+  addedAt: string
 }
 
 export type ROLE = keyof typeof ROLE

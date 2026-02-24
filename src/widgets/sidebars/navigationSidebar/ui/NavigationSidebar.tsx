@@ -16,7 +16,7 @@ import {
 } from "@/shared/ui/sidebar"
 import { Item, ItemActions, ItemDescription, ItemTitle, ItemContent } from "@/shared/ui/item"
 import { Button } from "@/shared/ui/button"
-import { useAuthStore } from "@/entities/auth/model/store"
+import { useAuthStore } from "@/entities/auth/model/auth.store"
 import { formatName, formatRole } from "@/shared/lib/utils"
 import { ChevronRight, Hospital, LogOut, Sparkles, Stethoscope, User } from "lucide-react"
 import type { UserRole } from "@/entities/user/types/user.types"

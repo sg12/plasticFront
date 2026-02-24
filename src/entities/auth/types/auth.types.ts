@@ -1,7 +1,7 @@
-import type { AUTH_TYPE } from "../model/constants"
+import type { AUTH_TYPE } from "../model/auth.constants"
 
 export interface Auth {
-  readonly id: string
+  id: string
   type: AUTH_TYPE
   email: string
   phone: string
@@ -23,7 +23,3 @@ export interface RefreshResponse {
   accessToken: string
 }
 
-export interface LoginDto {
-  readonly email: string
-  readonly password: string
-}

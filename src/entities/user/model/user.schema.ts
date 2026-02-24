@@ -1,5 +1,6 @@
 import z from "zod"
 import { GENDER, MODERATION_STATUS, ROLE } from "./user.constants"
+import { SPECIALIZATION } from "@/entities/doctor/model/doctor.constants"
 
 export const RoleSchema = z.enum(ROLE)
 export const GenderSchema = z.enum(GENDER)
@@ -33,7 +34,7 @@ export const DoctorProfileSchema = z.object({
   gender: GenderSchema.nullable(),
   birthdate: z.iso.datetime().nullable(),
   experience: z.number().min(0).max(60),
-  specializations: z.array(z.string()),
+  specializations: z.array(z.enum(SPECIALIZATION)),
   education: z.string().min(2),
   workplace: z.string().nullable(),
   bio: z.string().nullable(),

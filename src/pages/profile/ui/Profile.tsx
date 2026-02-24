@@ -1,5 +1,5 @@
 import { useParams } from "react-router"
-import { useAuthStore } from "@/entities/auth/model/store"
+import { useAuthStore } from "@/entities/auth/model/auth.store"
 import { ProfileForm } from "@/widgets/profile/ui/ProfileForm"
 import { ViewProfile } from "@/widgets/profile/ui/ViewProfile"
 

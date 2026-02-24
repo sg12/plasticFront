@@ -1,4 +1,4 @@
-import { SUPPORT_TICKET_STATUSES } from "@/entities/support/model/constants"
+import { SUPPORT_TICKET_STATUSES } from "@/entities/support/model/support.constants"
 import { useSupport } from "../hooks/useSupport"
 import { format } from "date-fns"
 import { ru } from "date-fns/locale"
@@ -17,7 +17,7 @@ import {
   AlertDialogTrigger,
 } from "@/shared/ui/alertDialog"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/shared/ui/collapsible"
-import type { SupportTicket } from "@/entities/support/types/types"
+import type { SupportTicket } from "@/entities/support/types/support.types"
 import { Badge } from "@/shared/ui/badge"
 
 export const TicketCard = ({

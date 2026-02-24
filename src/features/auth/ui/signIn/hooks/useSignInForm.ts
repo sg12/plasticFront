@@ -4,7 +4,7 @@ import { signInSchema, type SignInFormData } from "../model/types"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { toast } from "sonner"
-import { useAuthStore } from "@/entities/auth/model/store"
+import { useAuthStore } from "@/entities/auth/model/auth.store"
 import { logger } from "@/shared/lib/logger"
 
 export const useSignInForm = () => {
