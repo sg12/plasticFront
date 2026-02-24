@@ -12,16 +12,32 @@ export const APPOINTMENT_TYPE = {
   HOME_VISIT: "HOME_VISIT",
 } as const
 
-export const APPOINTMENT_STATUS_LABELS = {
-  [APPOINTMENT_STATUS.PENDING]: "Ожидает подтверждения",
-  [APPOINTMENT_STATUS.CONFIRMED]: "Подтверждена",
-  [APPOINTMENT_STATUS.CANCELED]: "Отменена",
-  [APPOINTMENT_STATUS.COMPLETED]: "Завершена",
-  [APPOINTMENT_STATUS.NO_SHOW]: "Пациент не пришёл",
+export const APPOINTMENT_STATUS_LOCALES = {
+  [APPOINTMENT_STATUS.PENDING]: {
+    ru: "Ожидает подтверждения",
+  },
+  [APPOINTMENT_STATUS.CONFIRMED]: {
+    ru: "Подтверждена",
+  },
+  [APPOINTMENT_STATUS.CANCELED]: {
+    ru: "Отменена",
+  },
+  [APPOINTMENT_STATUS.COMPLETED]: {
+    ru: "Завершена",
+  },
+  [APPOINTMENT_STATUS.NO_SHOW]: {
+    ru: "Пациент не пришёл",
+  },
 } as const
 
-export const APPOINTMENT_TYPE_LABELS = {
-  [APPOINTMENT_TYPE.ONLINE]: "Онлайн",
-  [APPOINTMENT_TYPE.OFFLINE]: "Оффлайн",
-  [APPOINTMENT_TYPE.HOME_VISIT]: "Дома",
+export const APPOINTMENT_TYPE_LOCALES = {
+  [APPOINTMENT_TYPE.ONLINE]: {
+    ru: "Онлайн",
+  },
+  [APPOINTMENT_TYPE.OFFLINE]: {
+    ru: "Оффлайн",
+  },
+  [APPOINTMENT_TYPE.HOME_VISIT]: {
+    ru: "Дома",
+  },
 } as const

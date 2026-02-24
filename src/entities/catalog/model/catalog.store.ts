@@ -9,8 +9,8 @@
  */
 
 import { create } from "zustand"
-import type { DoctorSearchParams, ClinicSearchParams } from "../types/types"
-import { DEFAULT_DOCTOR_SEARCH_PARAMS, DEFAULT_CLINIC_SEARCH_PARAMS } from "./constants"
+import type { DoctorSearchParams, ClinicSearchParams } from "../types/catalog.types"
+import { DEFAULT_DOCTOR_SEARCH_PARAMS, DEFAULT_CLINIC_SEARCH_PARAMS } from "./catalog.constants"
 import { logger } from "@/shared/lib/logger"
 import { addFavorite, removeFavorite } from "@/entities/user/api/user.api"
 import { useAuthStore } from "@/entities/auth/model/store"

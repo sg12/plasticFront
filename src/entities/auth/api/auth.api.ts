@@ -4,6 +4,7 @@ import type { CreateUserDto } from "@/entities/user/model/user.schema"
 
 export const login = async (email: string, password: string): Promise<LoginResponse> => {
   const { data } = await api.post<LoginResponse>("/auth/login", { email, password })
+  localStorage.setItem("token", data.accessToken)
   return data
 }
 

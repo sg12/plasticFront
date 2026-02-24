@@ -10,7 +10,7 @@
  * @module features/catalog/ui/EntityList
  */
 
-import type { CatalogClinic, CatalogDoctor } from "@/entities/catalog/types/types"
+import type { CatalogClinic, CatalogDoctor } from "@/entities/catalog/types/catalog.types"
 import { Skeleton } from "@/shared/ui/skeleton"
 import { UserCard } from "@/widgets/userCard/ui/UserCard"
 import { Search, AlertCircle, RefreshCw, SearchX } from "lucide-react"

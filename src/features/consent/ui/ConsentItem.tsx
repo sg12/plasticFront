@@ -1,10 +1,10 @@
 import { Button } from "@/shared/ui/button"
 import { Badge } from "@/shared/ui/badge"
 import { ShieldCheck, ShieldX } from "lucide-react"
-import type { Consent } from "@/entities/consent/types/types"
+import type { Consent } from "@/entities/consent/types/consent.types"
 import { format } from "date-fns"
 import { ru } from "date-fns/locale"
-import { CONSENT_TYPES } from "@/entities/consent/model/constants"
+import { CONSENT_TYPES } from "@/entities/consent/model/consent.constants"
 
 export interface ConsentItemProps {
   consent: Consent
@@ -18,11 +18,10 @@ export const ConsentItem = ({ consent, onRevoke, onGrant }: ConsentItemProps) =>
 
   return (
     <div
-      className={`flex items-start justify-between rounded-lg border p-4 transition-colors ${
-        isNecessary
-          ? "border-purple-200 bg-purple-50/50 hover:bg-purple-50"
-          : "bg-muted/30 hover:bg-muted/50"
-      }`}
+      className={`flex items-start justify-between rounded-lg border p-4 transition-colors ${isNecessary
+        ? "border-purple-200 bg-purple-50/50 hover:bg-purple-50"
+        : "bg-muted/30 hover:bg-muted/50"
+        }`}
     >
       <div className="flex min-w-0 gap-3">
         <div className="mt-0.5 shrink-0">

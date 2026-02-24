@@ -11,9 +11,9 @@ import {
 import { AlertTriangle } from "lucide-react"
 import { useState } from "react"
 import { useConsentManagement } from "../hooks/useConsentManagement"
-import type { Consent } from "@/entities/consent/types/types"
+import type { Consent } from "@/entities/consent/types/consent.types"
 import { ConsentItem } from "./ConsentItem"
-import { CONSENT_TYPES } from "@/entities/consent/model/constants"
+import { CONSENT_TYPES } from "@/entities/consent/model/consent.constants"
 
 export const ConsentStatus = () => {
   const { data: consents, isLoading, revokeConsent, grantConsent } = useConsentManagement()

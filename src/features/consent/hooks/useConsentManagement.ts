@@ -2,8 +2,8 @@ import { useCallback } from "react"
 import { toast } from "sonner"
 import useSWR from "swr"
 import { useAuthStore } from "@/entities/auth/model/store"
-import { type Consent, type ConsentType } from "@/entities/consent/types/types"
-import { updateUserConsent, getUserConsents } from "@/entities/consent/api/api"
+import { type Consent, type ConsentType } from "@/entities/consent/types/consent.types"
+import { updateUserConsent, getUserConsents } from "@/entities/consent/api/consent.api"
 import { logger } from "@/shared/lib/logger"
 
 export const useConsentManagement = () => {

@@ -9,7 +9,7 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs"
 import { CatalogSearch } from "./CatalogSearch"
-import type { CatalogTab } from "@/entities/catalog/types/types"
+import type { CatalogTab } from "@/entities/catalog/types/catalog.types"
 import { FavoritesList } from "@/features/catalog/ui/FavoritesList"
 import { useCatalog } from "../hooks/useCatalog"
 import { Building2, Heart, Stethoscope } from "lucide-react"

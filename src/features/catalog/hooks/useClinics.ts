@@ -6,9 +6,12 @@
  * @module features/catalog/hooks/useClinics
  */
 
-import { getClinics } from "../../../entities/catalog/api/api"
-import type { ClinicSearchParams, CatalogClinic } from "../../../entities/catalog/types/types"
-import { DEFAULT_CLINIC_SEARCH_PARAMS } from "../../../entities/catalog/model/constants"
+import { getClinics } from "../../../entities/catalog/api/catalog.api"
+import type {
+  ClinicSearchParams,
+  CatalogClinic,
+} from "../../../entities/catalog/types/catalog.types"
+import { DEFAULT_CLINIC_SEARCH_PARAMS } from "../../../entities/catalog/model/catalog.constants"
 import { usePaginatedData } from "../../pagination/hooks/usePaginatedData"
 
 /**

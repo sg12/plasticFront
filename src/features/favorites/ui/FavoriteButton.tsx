@@ -8,7 +8,7 @@
 
 import { Button } from "@/shared/ui/button"
 import { cn } from "@/shared/lib/utils"
-import { useCatalogStore } from "@/entities/catalog/model/store"
+import { useCatalogStore } from "@/entities/catalog/model/catalog.store"
 import { USER_ROLES } from "@/entities/user/model/user.constants"
 import type { UserRole } from "@/entities/user/types/user.types"
 import { Heart } from "lucide-react"

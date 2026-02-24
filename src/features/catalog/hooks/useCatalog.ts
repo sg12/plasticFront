@@ -9,19 +9,19 @@
 
 import { useEffect, useState } from "react"
 import { useSearch } from "../../search/hooks/useSearch"
-import { useCatalogStore } from "@/entities/catalog/model/store"
+import { useCatalogStore } from "@/entities/catalog/model/catalog.store"
 import { USER_ROLES } from "@/entities/user/model/user.constants"
 import {
   DEFAULT_CLINIC_SEARCH_PARAMS,
   DEFAULT_DOCTOR_SEARCH_PARAMS,
-} from "@/entities/catalog/model/constants"
+} from "@/entities/catalog/model/catalog.constants"
 import type {
   CatalogClinic,
   CatalogDoctor,
   CatalogTab,
   ClinicSearchParams,
   DoctorSearchParams,
-} from "@/entities/catalog/types/types"
+} from "@/entities/catalog/types/catalog.types"
 import { useUserStore } from "@/entities/user/model/user.store"
 import type { UseCatalogReturn } from "../types/types"
 import { useDoctors } from "./useDoctors"

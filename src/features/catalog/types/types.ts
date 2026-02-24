@@ -4,7 +4,7 @@ import type {
   CatalogTab,
   ClinicSearchParams,
   DoctorSearchParams,
-} from "@/entities/catalog/types/types"
+} from "@/entities/catalog/types/catalog.types"
 import type { UseSearchReturn } from "@/features/search/hooks/useSearch"
 
 export interface UseCatalogReturn {

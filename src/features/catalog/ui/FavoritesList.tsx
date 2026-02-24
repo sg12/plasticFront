@@ -7,8 +7,8 @@
  * @module features/catalog/ui/FavoritesList
  */
 
-import type { CatalogClinic, CatalogDoctor } from "@/entities/catalog/types/types"
-import { useCatalogStore } from "@/entities/catalog/model/store"
+import type { CatalogClinic, CatalogDoctor } from "@/entities/catalog/types/catalog.types"
+import { useCatalogStore } from "@/entities/catalog/model/catalog.store"
 import { EntityList } from "./EntityList"
 
 interface FavoritesListProps {
