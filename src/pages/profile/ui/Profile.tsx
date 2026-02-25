@@ -1,7 +1,7 @@
 import { useParams } from "react-router"
-import { useAuthStore } from "@/entities/auth/model/auth.store"
 import { ProfileForm } from "@/widgets/profile/ui/ProfileForm"
 import { ViewProfile } from "@/widgets/profile/ui/ViewProfile"
+import { useMe } from "@/entities/user/api/user.queries"
 
 /**
  * Компонент профиля (Может показать свой и чужой профиль)
@@ -10,7 +10,7 @@ import { ViewProfile } from "@/widgets/profile/ui/ViewProfile"
  */
 export const Profile = () => {
   const { userId } = useParams<{ userId?: string }>()
-  const { user } = useAuthStore()
+  const { data: user } = useMe()
 
   const isOwnProfile = !userId || userId === user?.id
 

@@ -1,3 +1,4 @@
+import { USER_ROLE } from "@/entities/user/model/user.constants"
 import { ROUTES } from "@/shared/model/routes"
 import {
   User,
@@ -18,7 +19,7 @@ export const sectionLabels: Record<string, string> = {
 }
 
 export const navigationConfig = {
-  clinic: [
+  [USER_ROLE.CLINIC]: [
     {
       id: "dashboard",
       name: "Главная",
@@ -97,7 +98,7 @@ export const navigationConfig = {
       section: "other",
     },
   ],
-  doctor: [
+  [USER_ROLE.DOCTOR]: [
     {
       id: "dashboard",
       name: "Главная",
@@ -183,7 +184,7 @@ export const navigationConfig = {
       section: "other",
     },
   ],
-  patient: [
+  [USER_ROLE.PATIENT]: [
     {
       id: "dashboard",
       name: "Главная",

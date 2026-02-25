@@ -6,55 +6,33 @@
  * @module features/profile/hooks/useViewProfile
  */
 
-import { useEffect, useState } from "react"
-import { getUserById } from "@/entities/user/api/user.api"
-import type { RoleProfile } from "@/entities/user/types/user.types"
 import { logger } from "@/shared/lib/logger"
 import { toast } from "sonner"
+import { useQuery } from "@tanstack/react-query"
+import { getUserById } from "@/entities/user/api/user.api"
 
 /**
  * Хук для загрузки и отображения чужого профиля по userId
  */
 export const useViewProfile = (userId: string | undefined) => {
-  const [profile, setProfile] = useState<RoleProfile | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  return useQuery({
+    queryKey: ["user-profile", userId],
 
-  useEffect(() => {
-    const loadProfile = async () => {
-      if (!userId) {
-        setIsLoading(false)
-        setError("ID пользователя не указан")
-        return
-      }
-
-      setIsLoading(true)
-      setError(null)
+    queryFn: async () => {
+      if (!userId) throw new Error("ID пользователя не указан")
 
       try {
-        const loadedProfile = await getUserById(userId)
-        if (!loadedProfile) {
-          setError("Профиль не найден")
-          toast.error("Профиль не найден")
-        } else {
-          setProfile(loadedProfile)
-        }
+        const profile = await getUserById(userId)
+        if (!profile) throw new Error("Профиль не найден")
+        return profile
       } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : "Не удалось загрузить профиль"
-        logger.error("Ошибка загрузки профиля пользователя", err as Error, { userId })
-        setError(errorMessage)
+        const errorMessage = err instanceof Error ? err.message : "Ошибка загрузки"
+        logger.error("Ошибка загрузки профиля", err as Error, { userId })
         toast.error(errorMessage)
-      } finally {
-        setIsLoading(false)
+        throw err
       }
-    }
-
-    loadProfile()
-  }, [userId])
-
-  return {
-    profile,
-    isLoading,
-    error,
-  }
+    },
+    enabled: !!userId,
+    staleTime: 5 * 60 * 1000,
+  })
 }

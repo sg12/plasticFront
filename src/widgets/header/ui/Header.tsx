@@ -53,7 +53,7 @@ export const Header = () => {
       {isMobile && <Separator orientation="vertical" className="mx-2" />}
 
       <div className={cn("relative", !isMobile ? "ml-auto" : "")}>
-        <NotificationPopover />
+        {/* <NotificationPopover /> */}
       </div>
     </header>
   )

@@ -10,23 +10,22 @@
  */
 
 import { useEffect, useMemo, useState } from "react"
-import { useAppointmentsStore } from "@/entities/appointment/model/appointment.store"
 import { Card } from "@/shared/ui/card"
 import { Skeleton } from "@/shared/ui/skeleton"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select"
 import { Calendar } from "lucide-react"
-import type { AppointmentStatus } from "@/entities/appointment/types/appointment.types"
 import { AppointmentCard } from "@/widgets/appointmentCard/ui/AppointmentCard"
-import type { UserRole } from "@/entities/user/types/user.types"
-import { USER_ROLES } from "@/entities/user/model/user.constants"
 import { EmptyState } from "@/shared/ui/emptyState"
 import { ErrorState } from "@/shared/ui/errorState"
 import { useIsMobile } from "@/shared/hooks/useMobile"
 import { AppointmentStatusFilter } from "./AppointmentStatusFilter"
+import type { APPOINTMENT_STATUS } from "@/entities/appointment/types/appointment.types"
+import type { ROLE } from "@/entities/user/types/user.types"
+import { USER_ROLE } from "@/entities/user/model/user.constants"
 
 interface AppointmentsListProps {
   /** Роль пользователя */
-  userRole: UserRole
+  userRole: ROLE
   /** ID пользователя для фильтрации */
   userId: string
   /** Заголовок страницы */
@@ -63,7 +62,7 @@ export const AppointmentsList = ({
   onComplete,
 }: AppointmentsListProps) => {
   const { appointments, isLoading, error, loadAppointments, clearError } = useAppointmentsStore()
-  const [selectedStatus, setSelectedStatus] = useState<AppointmentStatus | "all">("all")
+  const [selectedStatus, setSelectedStatus] = useState<APPOINTMENT_STATUS | "all">("all")
   const [selectedDoctor, setSelectedDoctor] = useState<string>("all")
   const isMobile = useIsMobile()
 
@@ -72,14 +71,14 @@ export const AppointmentsList = ({
       patientId?: string
       doctorId?: string
       clinicId?: string
-      status?: AppointmentStatus | AppointmentStatus[]
+      status?: APPOINTMENT_STATUS | APPOINTMENT_STATUS[]
     } = {}
 
-    if (userRole === USER_ROLES.PATIENT) {
+    if (userRole === USER_ROLE.PATIENT) {
       baseFilters.patientId = userId
-    } else if (userRole === USER_ROLES.DOCTOR) {
+    } else if (userRole === USER_ROLE.DOCTOR) {
       baseFilters.doctorId = userId
-    } else if (userRole === USER_ROLES.CLINIC) {
+    } else if (userRole === USER_ROLE.CLINIC) {
       baseFilters.clinicId = userId
     }
 

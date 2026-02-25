@@ -1,11 +1,16 @@
 import { Navigate, Outlet } from "react-router"
-import { useAuthStore } from "@/entities/auth/model/auth.store"
 import { ROUTES } from "@/shared/model/routes"
+import { useAuth } from "@/entities/auth/api/auth.queries";
+import { Loader } from "@/shared/ui/loader";
 
 export const PublicRoute = () => {
-  const { session } = useAuthStore()
+  const { isAuth, isLoading } = useAuth();
 
-  if (session) {
+  if (isLoading) {
+    return <Loader message="Загрузка..." />
+  }
+
+  if (isAuth) {
     return <Navigate to={ROUTES.MAIN} replace />
   }
 

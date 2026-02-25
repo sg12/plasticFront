@@ -1,21 +1,15 @@
 import { api } from "@/shared/api/axiosInstance"
-import type { LoginResponse, RefreshResponse } from "../types/auth.types"
+import type { LoginResponse } from "../types/auth.types"
 import type { CreateUserDto } from "@/entities/user/model/user.schema"
 import type { LoginDto } from "../model/auth.schema"
 
 export const login = async (loginDto: LoginDto): Promise<LoginResponse> => {
   const { data } = await api.post<LoginResponse>("/auth/login", loginDto)
-  localStorage.setItem("token", data.accessToken)
   return data
 }
 
 export const register = async (dto: CreateUserDto) => {
   const { data } = await api.post("auth/register", dto)
-  return data
-}
-
-export const refresh = async (): Promise<RefreshResponse> => {
-  const { data } = await api.post<RefreshResponse>("/auth/refresh")
   return data
 }
 

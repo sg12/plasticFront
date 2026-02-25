@@ -1,4 +1,3 @@
-import { useUserStore } from "@/entities/user/model/user.store"
 import { formatName } from "@/shared/lib/utils"
 import { ROUTES } from "@/shared/model/routes"
 import { Card, CardContent } from "@/shared/ui/card"
@@ -10,34 +9,15 @@ import {
   Search,
   Users,
   Sparkles,
-  CheckCircle2,
-  Clock,
   Building2,
 } from "lucide-react"
 import { NavLink } from "react-router"
-import { USER_ROLES } from "@/entities/user/model/user.constants"
-import { Badge } from "@/shared/ui/badge"
-import { useAppointmentsStore } from "@/entities/appointment/model/appointment.store"
-import { useEffect } from "react"
+import { USER_ROLE } from "@/entities/user/model/user.constants"
+import { useMe } from "@/entities/user/api/user.queries"
 
 export const Dashboard = () => {
-  const { profile } = useUserStore()
-  const userRole = profile?.role
-  const { loadAppointments } = useAppointmentsStore()
-
-  useEffect(() => {
-    if (profile?.id) {
-      const filters: { patientId?: string; doctorId?: string; clinicId?: string } = {}
-      if (userRole === USER_ROLES.PATIENT) {
-        filters.patientId = profile.id
-      } else if (userRole === USER_ROLES.DOCTOR) {
-        filters.doctorId = profile.id
-      } else if (userRole === USER_ROLES.CLINIC) {
-        filters.clinicId = profile.id
-      }
-      loadAppointments(filters, { page: 1, limit: 10 })
-    }
-  }, [profile?.id, userRole, loadAppointments])
+  const { data: user } = useMe()
+  const userRole = user?.role
 
   const getMainActions = () => {
     const baseActions = [
@@ -61,7 +41,7 @@ export const Dashboard = () => {
       },
     ]
 
-    if (userRole === USER_ROLES.PATIENT) {
+    if (userRole === USER_ROLE.PATIENT) {
       return [
         ...baseActions,
         {
@@ -76,7 +56,7 @@ export const Dashboard = () => {
       ]
     }
 
-    if (userRole === USER_ROLES.DOCTOR) {
+    if (userRole === USER_ROLE.DOCTOR) {
       return [
         ...baseActions,
         {
@@ -91,7 +71,7 @@ export const Dashboard = () => {
       ]
     }
 
-    if (userRole === USER_ROLES.CLINIC) {
+    if (userRole === USER_ROLE.CLINIC) {
       return [
         ...baseActions,
         {
@@ -140,34 +120,15 @@ export const Dashboard = () => {
           <div className="flex items-start justify-between">
             <div>
               <h1 className="text-3xl font-bold text-white">
-                Добро пожаловать, {formatName(profile?.fullName ?? "", false, "firstName")}!
+                Добро пожаловать, {formatName(user?.fullName ?? "", false, "firstName")}!
               </h1>
               <p className="mt-2 text-lg text-purple-100">
-                {userRole === USER_ROLES.PATIENT && "Управляйте своими записями и процедурами"}
-                {userRole === USER_ROLES.DOCTOR && "Управляйте расписанием и пациентами"}
-                {userRole === USER_ROLES.CLINIC && "Управляйте клиникой и специалистами"}
+                {userRole === USER_ROLE.PATIENT && "Управляйте своими записями и процедурами"}
+                {userRole === USER_ROLE.DOCTOR && "Управляйте расписанием и пациентами"}
+                {userRole === USER_ROLE.CLINIC && "Управляйте клиникой и специалистами"}
                 {!userRole && "Добро пожаловать в систему"}
               </p>
             </div>
-            {profile?.moderationStatus && (
-              <Badge
-                variant={profile.moderationStatus === "approved" ? "accent" : "secondary"}
-                className="bg-white/20 text-white backdrop-blur-sm"
-              >
-                {profile.moderationStatus === "approved" && (
-                  <>
-                    <CheckCircle2 className="mr-1 h-3 w-3" />
-                    Одобрено
-                  </>
-                )}
-                {profile.moderationStatus === "pending" && (
-                  <>
-                    <Clock className="mr-1 h-3 w-3" />
-                    На модерации
-                  </>
-                )}
-              </Badge>
-            )}
           </div>
         </div>
       </div>

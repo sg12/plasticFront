@@ -16,25 +16,27 @@ import {
 } from "@/shared/ui/sidebar"
 import { Item, ItemActions, ItemDescription, ItemTitle, ItemContent } from "@/shared/ui/item"
 import { Button } from "@/shared/ui/button"
-import { useAuthStore } from "@/entities/auth/model/auth.store"
-import { formatName, formatRole } from "@/shared/lib/utils"
+import { formatName } from "@/shared/lib/utils"
 import { ChevronRight, Hospital, LogOut, Sparkles, Stethoscope, User } from "lucide-react"
-import type { UserRole } from "@/entities/user/types/user.types"
-import { navigationConfig, sectionLabels } from "../model/navigation"
+import { navigationConfig, sectionLabels } from "../model/navigation.config"
 import React from "react"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/shared/ui/collapsible"
-import { USER_ROLES } from "@/entities/user/model/user.constants"
-import { useUserStore } from "@/entities/user/model/user.store"
 import { cn } from "@/shared/lib/utils"
 import { Badge } from "@/shared/ui/badge"
+import { USER_ROLE, ROLE_LOCALES } from "@/entities/user/model/user.constants"
+import type { ROLE } from "@/entities/user/types/user.types"
+import { useLogout } from "@/entities/auth/api/auth.queries"
+import { useMe } from "@/entities/user/api/user.queries"
 
 export const NavigationSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
-  const { signOut } = useAuthStore()
-  const { profile } = useUserStore()
+  const { data: user } = useMe()
+  const { mutateAsync: logout } = useLogout()
   const { pathname } = useLocation()
   const { setOpenMobile } = useSidebar("navigation")
 
-  const navigation = navigationConfig[profile?.role as UserRole] ?? []
+  console.log(user)
+
+  const navigation = navigationConfig[user?.role as ROLE]
 
   const activeId = (() => {
     for (const item of navigation) {
@@ -206,23 +208,23 @@ export const NavigationSidebar = ({ ...props }: React.ComponentProps<typeof Side
           variant="muted"
           className="border-border/50 bg-card/50 hover:border-border hover:bg-card/80 relative overflow-hidden border backdrop-blur-sm transition-all duration-200"
         >
-          {profile?.role === USER_ROLES.DOCTOR && (
+          {user?.role === USER_ROLE.DOCTOR && (
             <Stethoscope className="text-muted-foreground/5 pointer-events-none absolute top-1/2 right-2 size-16 -translate-y-1/2" />
           )}
-          {profile?.role === USER_ROLES.CLINIC && (
+          {user?.role === USER_ROLE.CLINIC && (
             <Hospital className="text-muted-foreground/5 pointer-events-none absolute top-1/2 right-2 size-16 -translate-y-1/2" />
           )}
-          {profile?.role === USER_ROLES.PATIENT && (
+          {user?.role === USER_ROLE.PATIENT && (
             <User className="text-muted-foreground/5 pointer-events-none absolute top-1/2 right-2 size-16 -translate-y-1/2" />
           )}
           <ItemContent className="relative z-10">
             <ItemTitle className="text-foreground font-medium">
-              {profile && profile.role === USER_ROLES.CLINIC
-                ? profile.fullName
-                : formatName(profile?.fullName || "-")}
+              {user && user.role === USER_ROLE.CLINIC
+                ? user.fullName
+                : formatName(user?.fullName || "-")}
             </ItemTitle>
             <ItemDescription className="text-muted-foreground text-xs">
-              {formatRole(profile?.role as UserRole)}
+              {[ROLE_LOCALES[user?.role as ROLE].ru]}
             </ItemDescription>
           </ItemContent>
           <ItemActions>
@@ -230,7 +232,7 @@ export const NavigationSidebar = ({ ...props }: React.ComponentProps<typeof Side
               type="button"
               variant="ghost"
               size="iconSm"
-              onClick={() => signOut("local")}
+              onClick={() => logout()}
               className="text-muted-foreground hover:bg-destructive/10 hover:text-destructive h-8 w-8 transition-colors"
             >
               <LogOut className="size-4" />

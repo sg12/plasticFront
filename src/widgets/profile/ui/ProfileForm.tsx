@@ -4,10 +4,9 @@ import { useProfile } from "@/features/profile/hooks/useProfile"
 import { UserProfileCard } from "@/widgets/profile/ui/UserProfileCard"
 import { UserProfileInformation } from "@/widgets/profile/ui/UserProfileInformation"
 import { UserProfileHistory } from "@/widgets/profile/ui/UserProfileHistory"
-import { USER_ROLES } from "@/entities/user/model/user.constants"
-import { useUserStore } from "@/entities/user/model/user.store"
 import { Card, CardContent } from "@/shared/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs"
+import { USER_ROLE } from "@/entities/user/model/user.constants"
 
 /**
  * Компонент для просмотра своего профиля
@@ -15,21 +14,19 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs"
 
 export const ProfileForm = () => {
   const {
-    profile,
+    user,
     isEditing,
-    editableProfile,
     form,
     isSaving,
     startEdit,
     cancelEdit,
     onSubmit,
-    handleSaveClick,
     FormProvider,
   } = useProfile()
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-global pb-10 sm:pb-0">
+      <form onSubmit={onSubmit} className="space-global pb-10 sm:pb-0">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <h3 className="text-3xl font-semibold">Профиль</h3>
@@ -43,16 +40,10 @@ export const ProfileForm = () => {
           <CardContent className="space-child">
             <div className="flex justify-between items-start">
               <UserProfileCard
-                profile={isEditing ? editableProfile : profile}
+                user={user!}
                 isEditing={isEditing}
-                onProfileUpdate={async () => {
-                  if (profile) {
-                    const { loadProfile } = useUserStore.getState()
-                    await loadProfile(profile.id)
-                  }
-                }}
               />
-              {profile?.role != USER_ROLES.CLINIC && (
+              {user?.role != USER_ROLE.CLINIC && (
                 <div className="hidden flex-wrap items-center justify-end gap-2 sm:flex">
                   {!isEditing ? (
                     <Button onClick={startEdit} variant="secondary">
@@ -60,7 +51,7 @@ export const ProfileForm = () => {
                     </Button>
                   ) : (
                     <>
-                      <Button onClick={handleSaveClick} variant="primary" disabled={isSaving}>
+                      <Button onClick={onSubmit} variant="primary" disabled={isSaving}>
                         Сохранить
                       </Button>
                       <Button variant="secondary" disabled={isSaving} onClick={cancelEdit}>
@@ -79,19 +70,19 @@ export const ProfileForm = () => {
               <TabsContent value="information">
                 <UserProfileInformation
                   form={form}
-                  profile={isEditing ? editableProfile : profile}
+                  user={user!}
                   isEditing={isEditing}
                   isSaving={isSaving}
                 />
               </TabsContent>
               <TabsContent value="history">
-                <UserProfileHistory profile={profile} />
+                <UserProfileHistory user={user!} />
               </TabsContent>
             </Tabs>
           </CardContent>
         </Card>
 
-        {profile?.role != USER_ROLES.CLINIC && (
+        {user?.role != USER_ROLE.CLINIC && (
           <div className="bg-background/90 h-[calc(100svh-var(--header-height))]!] fixed inset-x-0 bottom-(--header-height) bottom-0 z-10 border-t p-3 backdrop-blur sm:hidden">
             <div className="mx-auto flex max-w-7xl items-center justify-end gap-2 px-1">
               {!isEditing ? (
@@ -102,7 +93,7 @@ export const ProfileForm = () => {
               ) : (
                 <>
                   <Button
-                    onClick={handleSaveClick}
+                    onClick={onSubmit}
                     size="sm"
                     disabled={isSaving}
                     className="flex-1"

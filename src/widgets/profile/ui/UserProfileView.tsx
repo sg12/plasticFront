@@ -1,15 +1,10 @@
-import type { RoleProfile } from "@/entities/user/types/user.types"
-import { USER_ROLES } from "@/entities/user/model/user.constants"
 import { CardTitle } from "@/shared/ui/card"
 import { Separator } from "@/shared/ui/separator"
-import { format } from "date-fns"
-import { ru } from "date-fns/locale"
-import { pluralRu } from "@/shared/lib/utils"
 import {
   CheckCircle,
   Mail,
   Phone,
-  User,
+  UserIcon,
   FileText,
   Building2,
   GraduationCap,
@@ -17,220 +12,89 @@ import {
   Calendar,
   MapPin,
 } from "lucide-react"
+import type { User } from "@/entities/user/types/user.types"
+import { USER_ROLE } from "@/entities/user/model/user.constants"
+import { useMemo } from "react"
 
 interface UserProfileViewProps {
-  profile: RoleProfile
+  user: User
 }
 
 /**
  * Компонент для отображения профиля в режиме только чтения
  * Используется для просмотра чужих профилей
  */
-export const UserProfileView = ({ profile }: UserProfileViewProps) => {
-  const renderRoleSpecificInfo = () => {
-    if (profile.role === USER_ROLES.PATIENT) {
-      return (
-        <div className="grid gap-4 lg:grid-cols-2">
-          <div>
-            <label className="text-muted-foreground mb-1.5 flex items-center gap-2 text-sm font-medium">
-              <Calendar className="h-4 w-4" />
-              Дата рождения
-            </label>
-            <p className="text-sm">
-              {profile.birthDate
-                ? format(new Date(profile.birthDate), "dd MMMM yyyy", { locale: ru })
-                : "—"}
-            </p>
+export const UserProfileView = ({ user }: UserProfileViewProps) => {
+  const roleContent = useMemo(() => {
+    switch (user.role) {
+      case USER_ROLE.PATIENT:
+        return (
+          <div className="grid gap-4 lg:grid-cols-2">
+            <InfoItem icon={<Calendar />} label="Дата рождения" value={user.patient.birthdate} />
+            <InfoItem icon={<UserIcon />} label="Пол" value={user.patient.gender} />
           </div>
-          <div>
-            <label className="text-muted-foreground mb-1.5 flex items-center gap-2 text-sm font-medium">
-              <User className="h-4 w-4" />
-              Пол
-            </label>
-            <p className="text-sm">
-              {profile.gender === "male"
-                ? "Мужской"
-                : profile.gender === "female"
-                  ? "Женский"
-                  : "—"}
-            </p>
-          </div>
-        </div>
-      )
-    }
+        );
 
-    if (profile.role === USER_ROLES.DOCTOR) {
-      return (
-        <div className="grid gap-4 lg:grid-cols-2">
-          <div>
-            <label className="text-muted-foreground mb-1.5 flex items-center gap-2 text-sm font-medium">
-              <Calendar className="h-4 w-4" />
-              Дата рождения
-            </label>
-            <p className="text-sm">
-              {profile.birthDate
-                ? format(new Date(profile.birthDate), "dd MMMM yyyy", { locale: ru })
-                : "—"}
-            </p>
+      case USER_ROLE.DOCTOR:
+        return (
+          <div className="grid gap-4 lg:grid-cols-2">
+            <InfoItem icon={<Calendar />} label="Дата рождения" value={user.doctor.birthdate} />
+            <InfoItem icon={<FileText />} label="Лицензия" value={user.doctor.license} />
+            <InfoItem icon={<Briefcase />} label="Специализация" value={user.doctor.specializations.join(", ")} />
+            <InfoItem icon={<Briefcase />} label="Опыт" value={`${user.doctor.experience} лет`} />
+            <InfoItem icon={<GraduationCap />} label="Образование" value={user.doctor.education} />
+            <InfoItem label="ИНН" value={user.doctor.inn} />
           </div>
-          <div>
-            <label className="text-muted-foreground mb-1.5 flex items-center gap-2 text-sm font-medium">
-              <User className="h-4 w-4" />
-              Пол
-            </label>
-            <p className="text-sm">
-              {profile.gender === "male"
-                ? "Мужской"
-                : profile.gender === "female"
-                  ? "Женский"
-                  : "—"}
-            </p>
-          </div>
-          <div>
-            <label className="text-muted-foreground mb-1.5 flex items-center gap-2 text-sm font-medium">
-              <FileText className="h-4 w-4" />
-              Номер лицензии
-            </label>
-            <p className="text-sm">{profile.licenseNumber?.trim() || "—"}</p>
-          </div>
-          <div>
-            <label className="text-muted-foreground mb-1.5 flex items-center gap-2 text-sm font-medium">
-              <Briefcase className="h-4 w-4" />
-              Специализация
-            </label>
-            <p className="text-sm">{profile.specialization?.trim() || "—"}</p>
-          </div>
-          <div>
-            <label className="text-muted-foreground mb-1.5 flex items-center gap-2 text-sm font-medium">
-              <Briefcase className="h-4 w-4" />
-              Опыт работы
-            </label>
-            <p className="text-sm">
-              {profile.experience ? pluralRu(profile.experience, "год", "года", "лет") : "—"}
-            </p>
-          </div>
-          <div>
-            <label className="text-muted-foreground mb-1.5 flex items-center gap-2 text-sm font-medium">
-              <GraduationCap className="h-4 w-4" />
-              Образование
-            </label>
-            <p className="text-sm">{profile.education?.trim() || "—"}</p>
-          </div>
-          <div>
-            <label className="text-muted-foreground mb-1.5 flex items-center gap-2 text-sm font-medium">
-              <Building2 className="h-4 w-4" />
-              Место работы
-            </label>
-            <p className="text-sm">{profile.workplace?.trim() || "—"}</p>
-          </div>
-          <div>
-            <label className="text-muted-foreground mb-1.5 text-sm font-medium">ИНН</label>
-            <p className="text-sm">{profile.inn?.trim() || "—"}</p>
-          </div>
-        </div>
-      )
-    }
+        );
 
-    if (profile.role === USER_ROLES.CLINIC) {
-      return (
-        <div className="grid gap-4 lg:grid-cols-2">
-          <div>
-            <label className="text-muted-foreground mb-1.5 flex items-center gap-2 text-sm font-medium">
-              <Building2 className="h-4 w-4" />
-              Юридическое название
-            </label>
-            <p className="text-sm">{profile.legalName?.trim() || "—"}</p>
+      case USER_ROLE.CLINIC:
+        return (
+          <div className="grid gap-4 lg:grid-cols-2">
+            <InfoItem icon={<Building2 />} label="Юр. название" value={user.clinic.legalName} />
+            <InfoItem label="ИНН" value={user.clinic.inn} />
+            <InfoItem label="ОГРН" value={user.clinic.ogrn} />
+            <InfoItem icon={<MapPin />} label="Адрес" value={user.clinic.actualAddress} />
+            <InfoItem icon={<UserIcon />} label="Директор" value={user.clinic.directorName} />
           </div>
-          <div>
-            <label className="text-muted-foreground mb-1.5 text-sm font-medium">ИНН</label>
-            <p className="text-sm">{profile.clinicInn?.trim() || "—"}</p>
-          </div>
-          <div>
-            <label className="text-muted-foreground mb-1.5 text-sm font-medium">ОГРН</label>
-            <p className="text-sm">{profile.ogrn?.trim() || "—"}</p>
-          </div>
-          <div>
-            <label className="text-muted-foreground mb-1.5 flex items-center gap-2 text-sm font-medium">
-              <FileText className="h-4 w-4" />
-              Номер лицензии
-            </label>
-            <p className="text-sm">{profile.clinicLicense?.trim() || "—"}</p>
-          </div>
-          <div>
-            <label className="text-muted-foreground mb-1.5 flex items-center gap-2 text-sm font-medium">
-              <MapPin className="h-4 w-4" />
-              Юридический адрес
-            </label>
-            <p className="text-sm">{profile.legalAddress?.trim() || "—"}</p>
-          </div>
-          <div>
-            <label className="text-muted-foreground mb-1.5 flex items-center gap-2 text-sm font-medium">
-              <MapPin className="h-4 w-4" />
-              Фактический адрес
-            </label>
-            <p className="text-sm">{profile.actualAddress?.trim() || "—"}</p>
-          </div>
-          <div>
-            <label className="text-muted-foreground mb-1.5 flex items-center gap-2 text-sm font-medium">
-              <User className="h-4 w-4" />
-              ФИО директора
-            </label>
-            <p className="text-sm">{profile.directorName?.trim() || "—"}</p>
-          </div>
-          <div>
-            <label className="text-muted-foreground mb-1.5 flex items-center gap-2 text-sm font-medium">
-              <Briefcase className="h-4 w-4" />
-              Должность директора
-            </label>
-            <p className="text-sm">{profile.directorPosition?.trim() || "—"}</p>
-          </div>
-        </div>
-      )
+        );
     }
-
-    return null
-  }
+  }, [user]);
 
   return (
-    <>
-      <CardTitle className="mb-4">Личная информация</CardTitle>
+    <div className="space-y-6">
+      <CardTitle className="text-xl">Личная информация</CardTitle>
 
-      <div className="space-child">
-        {/* Основная информация */}
-        <div className="grid gap-4 lg:grid-cols-2">
-          <div>
-            <label className="text-muted-foreground mb-1.5 flex items-center gap-2 text-sm font-medium">
-              <User className="h-4 w-4" />
-              {profile.role === USER_ROLES.CLINIC ? "Название клиники" : "Полное имя"}
-            </label>
-            <p className="text-sm">{profile.fullName?.trim() || "—"}</p>
-          </div>
-
-          <div>
-            <label className="text-muted-foreground mb-1.5 flex items-center gap-2 text-sm font-medium">
-              <Mail className="h-4 w-4" />
-              Email
-            </label>
-            <p className="flex items-center gap-2 text-sm">
-              <span className="min-w-0 truncate">{profile.email?.trim() || "—"}</span>
-              {profile.email && <CheckCircle className="h-3.5 w-3.5 shrink-0 text-green-600" />}
-            </p>
-          </div>
-
-          <div>
-            <label className="text-muted-foreground mb-1.5 flex items-center gap-2 text-sm font-medium">
-              <Phone className="h-4 w-4" />
-              Телефон
-            </label>
-            <p className="min-w-0 truncate text-sm">{profile.phone?.trim() || "—"}</p>
-          </div>
-        </div>
-
-        <Separator />
-
-        {/* Ролевая информация */}
-        {renderRoleSpecificInfo()}
+      <div className="grid gap-4 lg:grid-cols-2">
+        <InfoItem
+          icon={<UserIcon />}
+          label={user.role === USER_ROLE.CLINIC ? "Название клиники" : "Полное имя"}
+          value={user.fullName}
+        />
+        <InfoItem icon={<Mail />} label="Email" value={user.email} isVerified />
+        <InfoItem icon={<Phone />} label="Телефон" value={user.phone} />
       </div>
-    </>
-  )
-}
+
+      <Separator />
+
+      {roleContent}
+    </div>
+  );
+};
+
+const InfoItem = ({ icon, label, value, isVerified }: {
+  icon?: React.ReactNode,
+  label: string,
+  value?: string | null,
+  isVerified?: boolean
+}) => (
+  <div>
+    <label className="text-muted-foreground mb-1 flex items-center gap-2 text-sm font-medium">
+      {icon && <span className="size-4 opacity-70">{icon}</span>}
+      {label}
+    </label>
+    <div className="flex items-center gap-2 text-sm">
+      <span className="truncate">{value?.trim() || "—"}</span>
+      {isVerified && value && <CheckCircle className="size-3.5 text-green-600 shrink-0" />}
+    </div>
+  </div>
+)

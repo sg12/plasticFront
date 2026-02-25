@@ -3,12 +3,17 @@ import type { User } from "@/entities/user/types/user.types"
 import type { UpdateUserDto } from "../model/user.schema"
 
 export const getMe = async (): Promise<User> => {
-  const { data } = await api.get<User>("/users/me")
+  const { data } = await api.get<User>("users/me")
+  return data
+}
+
+export const getUserById = async (id: string): Promise<User> => {
+  const { data } = await api.get<User>(`users/${id}`, { params: { id } })
   return data
 }
 
 export const updateMe = async (dto: UpdateUserDto): Promise<User> => {
-  const { data } = await api.patch<User>("/users/me", dto)
+  const { data } = await api.patch<User>("users/me", dto)
   return data
 }
 

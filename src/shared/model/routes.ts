@@ -6,7 +6,7 @@ export const ROUTES = {
   PROFILE: "/main/profile",
   PROFILE_SOME_USER: "/main/profile/:userId",
   CATALOG: "/main/catalog",
-  AIVISUALIZER: "/main/ai",
+  AIVISUALIZER: "/ai",
   SUPPORT: "/main/support",
   APPOINTMENTS: "/main/appointments",
   DOCTOR_SCHEDULE: "/main/doctor/schedule",

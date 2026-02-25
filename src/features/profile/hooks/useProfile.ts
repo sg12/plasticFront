@@ -6,128 +6,50 @@
  * @module features/profile/hooks/useProfile
  */
 
-import { useEffect, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 import { FormProvider, useForm } from "react-hook-form"
-import { updateUser } from "@/entities/user/api/user.api"
-import type { RoleProfile, UserUpdateFormData } from "@/entities/user/types/user.types"
-import { toast } from "sonner"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { userUpdateSchema } from "@/entities/user/model/user.schema"
-import { logger } from "@/shared/lib/logger"
-import { useUserStore } from "@/entities/user/model/user.store"
+import { UpdateUserSchema, type UpdateUserDto } from "@/entities/user/model/user.schema"
+import { useMe, useUpdateMe } from "@/entities/user/api/user.queries"
 
 export const useProfile = () => {
-  const { profile } = useUserStore()
-
+  const { data: user } = useMe()
+  const { mutateAsync, isPending } = useUpdateMe()
   const [isEditing, setIsEditing] = useState(false)
-  const [editableProfile, setEditableProfile] = useState<RoleProfile | null>(profile as RoleProfile)
 
-  const defaultValues = useMemo<UserUpdateFormData | undefined>(() => {
-    if (!profile) return undefined
-    return profile as UserUpdateFormData
-  }, [profile])
-
-  const form = useForm<UserUpdateFormData>({
-    resolver: zodResolver(userUpdateSchema),
-    defaultValues: defaultValues,
-    mode: "onBlur",
+  const form = useForm<UpdateUserDto>({
+    resolver: zodResolver(UpdateUserSchema),
+    values: useMemo(
+      () => ({
+        fullName: user?.fullName || "",
+        email: user?.email || "",
+        phone: user?.phone || "",
+        patient: user?.patient || undefined,
+        doctor: user?.doctor || undefined,
+        clinic: user?.clinic || undefined,
+      }),
+      [user],
+    ),
   })
 
-  const [isSaving, setIsSaving] = useState(false)
-
-  useEffect(() => {
-    if (profile && defaultValues) {
-      form.reset(defaultValues)
-    }
-  }, [defaultValues, form])
-
-  useEffect(() => {
-    if (!isEditing) {
-      setEditableProfile(profile)
-    } else if (profile) {
-      setEditableProfile((prev) => {
-        if (prev && profile && prev.id === profile.id) {
-          return { ...prev, ...profile } as RoleProfile
-        }
-        return profile
-      })
-    }
-  }, [profile, isEditing])
-
-  useEffect(() => {
-    if (!isEditing || !profile) return
-
-    const subscription = form.watch((values) => {
-      setEditableProfile({
-        ...profile,
-        ...(values as Partial<RoleProfile>),
-      })
-    })
-    return () => subscription.unsubscribe()
-  }, [form, isEditing, profile])
-
-  const startEdit = () => {
-    if (!profile) return
-    setIsEditing(true)
-  }
-
-  const cancelEdit = () => {
+  const onSubmit = async (data: UpdateUserDto) => {
+    await mutateAsync(data)
+    form.reset(data)
     setIsEditing(false)
-    setEditableProfile(profile)
-  }
-
-  const onSubmit = async (data: UserUpdateFormData) => {
-    if (!profile) {
-      toast.error("Профиль не загружен")
-      return
-    }
-    setIsSaving(true)
-
-    try {
-      const updatedProfile = { ...profile, ...data }
-      logger.debug("Обновление профиля", {
-        userId: profile.id,
-        role: profile.role,
-        changedFields: Object.keys(data),
-      })
-
-      await updateUser(updatedProfile.id, updatedProfile)
-      logger.info("Профиль успешно обновлен через хук", {
-        userId: profile.id,
-        role: profile.role,
-      })
-      toast.success("Профиль успешно обновлён")
-      setIsEditing(false)
-      setIsSaving(false)
-    } catch (error) {
-      logger.error("Ошибка сохранения профиля через хук", error as Error, {
-        userId: profile.id,
-      })
-      toast.error("Не удалось сохранить изменения")
-    }
-  }
-
-  const handleSaveClick = async () => {
-    onSubmit(form.getValues())
-  }
-
-  const isFormChanged = () => {
-    const currentValues = form.getValues()
-
-    return JSON.stringify(currentValues) !== JSON.stringify(defaultValues)
   }
 
   return {
-    profile,
+    user,
     isEditing,
-    editableProfile,
     form,
-    isSaving,
-    startEdit,
-    cancelEdit,
-    onSubmit,
-    handleSaveClick,
-    isFormChanged,
+    isSaving: isPending,
+    startEdit: () => setIsEditing(true),
+    cancelEdit: () => {
+      setIsEditing(false)
+      form.reset()
+    },
+    onSubmit: form.handleSubmit(onSubmit),
+    isFormChanged: form.formState.isDirty,
     FormProvider,
   }
 }

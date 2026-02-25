@@ -1,13 +1,14 @@
-import { useAuthStore } from "@/entities/auth/model/auth.store"
-import { useUserStore } from "@/entities/user/model/user.store"
+import { useLogout } from "@/entities/auth/api/auth.queries"
+import { useMe } from "@/entities/user/api/user.queries"
+import { MODERATION_STATUS, MODERATION_STATUS_LOCALES } from "@/entities/user/model/user.constants"
 import { Button } from "@/shared/ui/button"
 import { AlertCircle, Clock } from "lucide-react"
 
 export const ModerationStatusScreen = () => {
-  const { signOut } = useAuthStore()
-  const { profile } = useUserStore()
-  const isRejected = profile?.moderationStatus === "rejected"
-  const rejectionReason = profile?.moderationComment
+  const { data: user } = useMe()
+  const { mutateAsync: logout } = useLogout()
+  const isRejected = user?.status === MODERATION_STATUS.REJECTED
+  const rejectionReason = user?.moderationComment
 
   return (
     <div className="flex h-screen w-screen items-center justify-center bg-gray-50 p-4">
@@ -24,7 +25,7 @@ export const ModerationStatusScreen = () => {
           )}
 
           <h2 className="text-xl font-semibold">
-            {isRejected ? "Заявка отклонена" : "Заявка на модерации"}
+            {isRejected ? MODERATION_STATUS_LOCALES["REJECTED"].ru : MODERATION_STATUS_LOCALES["PENDING"].ru}
           </h2>
 
           <p className="text-muted-foreground text-sm">
@@ -41,7 +42,7 @@ export const ModerationStatusScreen = () => {
                 Связаться с поддержкой / Исправить
               </Button>
             )}
-            <Button className="w-full" variant="secondary" onClick={() => signOut("local")}>
+            <Button className="w-full" variant="secondary" onClick={() => logout()}>
               Выйти из аккаунта
             </Button>
           </div>

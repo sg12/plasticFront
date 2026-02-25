@@ -1,9 +1,9 @@
 import z from "zod"
-import { GENDER, MODERATION_STATUS, ROLE } from "./user.constants"
+import { USER_GENDER, MODERATION_STATUS, USER_ROLE } from "./user.constants"
 import { SPECIALIZATION } from "@/entities/doctor/model/doctor.constants"
 
-export const RoleSchema = z.enum(ROLE)
-export const GenderSchema = z.enum(GENDER)
+export const RoleSchema = z.enum(USER_ROLE)
+export const GenderSchema = z.enum(USER_GENDER)
 export const ModerationStatusSchema = z.enum(MODERATION_STATUS)
 
 export const UserSchema = z.object({

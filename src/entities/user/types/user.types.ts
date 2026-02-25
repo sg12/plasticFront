@@ -1,5 +1,5 @@
 import type { Appointment } from "@/entities/appointment/types/appointment.types"
-import type { GENDER, MODERATION_STATUS, ROLE } from "../model/user.constants"
+import type { MODERATION_STATUS, USER_GENDER, USER_ROLE } from "../model/user.constants"
 import type { File } from "@/entities/file/types/file.types"
 import type { Break, Schedule, TimeSlot, WorkRule } from "@/entities/schedule/types/schedule.types"
 import type { Notification } from "@/entities/notification/types/notification.types"
@@ -9,6 +9,7 @@ import type { Service } from "@/entities/service/types/service.types"
 import type { UserConsents } from "@/entities/consent/types/consent.types"
 import type { SPECIALIZATION } from "@/entities/doctor/types/doctor.types"
 import type { Ticket } from "@/entities/support/types/support.types"
+import type { Auth } from "@/entities/auth/types/auth.types"
 
 export interface User {
   readonly id: string
@@ -28,9 +29,13 @@ export interface User {
   notifications: Notification[]
   userConsents: UserConsents[]
   tickets: Ticket[]
+  auth: Auth
+  patient: Patient
+  doctor: Doctor
+  clinic: Clinic
 }
 
-export interface Patient extends User {
+export interface Patient {
   birthdate: string | null
   gender: GENDER | null
   medicalNotes: string | null
@@ -45,7 +50,7 @@ export interface Patient extends User {
   documents: File[]
 }
 
-export interface Doctor extends User {
+export interface Doctor {
   gender: GENDER | null
   birthdate: string | null
   experience: number
@@ -72,7 +77,7 @@ export interface Doctor extends User {
   breaks: Break[]
 }
 
-export interface Clinic extends User {
+export interface Clinic {
   legalName: string
   brandName: string | null
   inn: string
@@ -107,6 +112,6 @@ export interface Favorite {
   addedAt: string
 }
 
-export type ROLE = keyof typeof ROLE
-export type GENDER = keyof typeof GENDER
+export type ROLE = keyof typeof USER_ROLE
+export type GENDER = keyof typeof USER_GENDER
 export type MODERATION_STATUS = keyof typeof MODERATION_STATUS

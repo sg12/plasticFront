@@ -6,12 +6,12 @@
 
 import { Navigate, Outlet, useMatches } from "react-router"
 import { useUserStore } from "@/entities/user/model/user.store"
-import type { UserRole } from "@/entities/user/types/user.types"
 import { ROUTES } from "@/shared/model/routes"
 import { Loader } from "@/shared/ui/loader"
+import type { ROLE } from "@/entities/user/types/user.types"
 
 interface RouteHandle {
-  allowedRoles?: UserRole[]
+  allowedRoles?: ROLE[]
   redirectTo?: string
 }
 
@@ -19,7 +19,7 @@ interface RouteHandle {
  * Компонент для защиты роутов по ролям пользователя
  *
  * Роли для проверки берутся из `handle` текущего роута.
- * В Router.tsx нужно указать `handle: { allowedRoles: [USER_ROLES.DOCTOR] }`
+ * В Router.tsx нужно указать `handle: { allowedRoles: [ROLE.DOCTOR] }`
  *
  * @example
  * ```tsx
@@ -27,7 +27,7 @@ interface RouteHandle {
  * {
  *   ...lazyRoute(() => import("@/app/routers/RoleProtectedRoute"), "RoleProtectedRoute"),
  *   handle: {
- *     allowedRoles: [USER_ROLES.DOCTOR],
+ *     allowedRoles: [ROLE.DOCTOR],
  *   },
  *   children: [
  *     {

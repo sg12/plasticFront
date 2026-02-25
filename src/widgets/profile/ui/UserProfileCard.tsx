@@ -1,114 +1,73 @@
-import { Hospital, Check, Copy, Camera, Loader } from "lucide-react"
+import { Hospital, Check, Copy } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "../../../shared/ui/avatar"
 import { formatName } from "../../../shared/lib/utils"
-import type { RoleProfile } from "../../../entities/user/types/user.types"
-import { USER_ROLES } from "@/entities/user/model/user.constants"
 import { CardTitle, CardDescription } from "@/shared/ui/card"
 import { useClipboard } from "@/shared/hooks/useClipboard"
-import { useUserStore } from "@/entities/user/model/user.store"
-import { Button } from "@/shared/ui/button"
 import { cn } from "@/shared/lib/utils"
 import { useAvatarUpload } from "@/features/profile/hooks/useAvatarUpload"
 import { IMAGE_ACCEPT_TYPES_STRING } from "@/shared/model/constants"
+import type { User } from "@/entities/user/types/user.types"
+import { USER_ROLE } from "@/entities/user/model/user.constants"
+import { useMe } from "@/entities/user/api/user.queries"
 
 interface Props {
-  profile: RoleProfile | null
+  user: User
   isEditing?: boolean
   onProfileUpdate?: () => void
 }
 
-export const UserProfileCard = ({ profile, isEditing = false, onProfileUpdate }: Props) => {
-  const fullName = profile?.fullName?.trim() || "—"
-  const userId = profile?.id.substring(0, 20)
-  const { profile: currentUserProfile } = useUserStore()
-  const isOwnProfile = currentUserProfile?.id === profile?.id
+export const UserProfileCard = ({ user, isEditing = false, onProfileUpdate }: Props) => {
+  const { data: authUser } = useMe()
+  const isOwnProfile = authUser?.id === user?.id
 
-  const { isUploading, previewAvatarUrl, fileInputRef, handleAvatarUpload, handleAvatarClick } =
-    useAvatarUpload(profile, onProfileUpdate)
+  const { isSavingAvatar, previewAvatarUrl, fileInputRef, handleAvatarUpload, handleAvatarClick } =
+    useAvatarUpload(onProfileUpdate)
 
-  const displayProfile = previewAvatarUrl
-    ? ({
-      ...profile,
-      avatarUrl: previewAvatarUrl,
-      updatedAt: new Date().toISOString(),
-    } as RoleProfile)
-    : profile
-
-  const { copy: copyId, copied } = useClipboard(profile?.id, {
+  const { copy: copyId, copied } = useClipboard(user?.id, {
     successMessage: "ID скопирован в буфер обмена",
-    errorMessage: "Не удалось скопировать ID",
   })
-
-  const handleAvatarClickWithCheck = () => {
-    if (isOwnProfile && isEditing) {
-      handleAvatarClick()
-    }
-  }
 
   return (
     <div className="max-md:space-child flex max-md:flex-col max-md:items-center max-md:text-center">
       <div className="relative">
         <Avatar
           className={cn(
-            "size-24 max-md:mb-4",
+            "size-24 max-md:mb-4 border-1",
             isOwnProfile && isEditing && "cursor-pointer transition-opacity hover:opacity-80",
+            isSavingAvatar && "opacity-50"
           )}
-          onClick={handleAvatarClickWithCheck}
+          onClick={() => isOwnProfile && isEditing && handleAvatarClick()}
         >
           <AvatarImage
-            src={
-              displayProfile?.avatarUrl
-                ? displayProfile.avatarUrl.includes("blob:")
-                  ? displayProfile.avatarUrl
-                  : `${displayProfile.avatarUrl}${displayProfile.avatarUrl.includes("?") ? "&" : "?"}t=${displayProfile.updatedAt ? new Date(displayProfile.updatedAt).getTime() : ""}`
-                : undefined
-            }
-            key={
-              displayProfile?.avatarUrl
-                ? `${displayProfile.avatarUrl}-${displayProfile.updatedAt}`
-                : undefined
-            }
+            src={`${user.avatar}?t=${new Date(user.updatedAt).getTime()}`}
+            key={previewAvatarUrl ? 'preview' : `${user?.avatar}-${user?.updatedAt}`}
           />
           <AvatarFallback className="text-3xl">
-            {profile && profile.role === USER_ROLES.CLINIC ? (
+            {user?.role === USER_ROLE.CLINIC ? (
               <Hospital className="size-10" />
             ) : (
-              formatName(profile?.fullName ?? "", true) || "—"
+              formatName(user?.fullName ?? "", true)
             )}
           </AvatarFallback>
         </Avatar>
         {isOwnProfile && isEditing && (
-          <>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept={IMAGE_ACCEPT_TYPES_STRING}
-              onChange={handleAvatarUpload}
-              className="hidden"
-              disabled={isUploading}
-            />
-            <Button
-              type="button"
-              size="iconSm"
-              variant="secondary"
-              className="absolute right-0 bottom-0 size-8 rounded-full shadow-md"
-              onClick={handleAvatarClickWithCheck}
-              disabled={isUploading}
-            >
-              {isUploading ? (
-                <Loader className="size-4 animate-spin" />
-              ) : (
-                <Camera className="size-4" />
-              )}
-            </Button>
-          </>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept={IMAGE_ACCEPT_TYPES_STRING}
+            onChange={handleAvatarUpload}
+            className="hidden"
+          />
         )}
       </div>
       <div className="max-md:mb-4 lg:ml-4">
-        <CardTitle>{fullName}</CardTitle>
+        <CardTitle>{user?.fullName || "—"}</CardTitle>
         <CardDescription>
-          <span className="inline-flex cursor-pointer items-center gap-2" onClick={copyId}>
-            {userId ? `${userId}...` : "—"}
+          <span
+            className="inline-flex cursor-pointer items-center gap-2 hover:text-foreground transition-colors"
+            onClick={copyId}
+          >
+            {user?.id ? `${user.id.substring(0, 20)}...` : "—"}
             {copied ? <Check className="size-4 text-green-600" /> : <Copy className="size-4" />}
           </span>
         </CardDescription>

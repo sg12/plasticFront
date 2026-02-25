@@ -7,7 +7,6 @@
 import { Calendar } from "@/shared/ui/calendar"
 import { ru } from "date-fns/locale"
 import { TimeSlotPicker } from "./TimeSlotPicker"
-import { useAppointmentsStore } from "@/entities/appointment/model/appointment.store"
 import { Separator } from "@/shared/ui/separator"
 import { Calendar1 } from "lucide-react"
 import { useIsMobile } from "@/shared/hooks/useMobile"

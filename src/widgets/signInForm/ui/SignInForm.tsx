@@ -17,7 +17,7 @@ export function SignInForm() {
   return (
     <FormProvider {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={onSubmit}
         className="flex min-h-screen items-center justify-center"
       >
         <Card className="max-md:h-full max-md:w-full max-md:border-0">

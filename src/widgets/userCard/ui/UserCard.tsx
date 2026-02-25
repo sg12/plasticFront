@@ -13,20 +13,18 @@ import { Card, CardContent, CardDescription, CardFooter, CardTitle } from "@/sha
 import { Badge } from "@/shared/ui/badge"
 import { cn, formatName, pluralRu } from "@/shared/lib/utils"
 import { ROUTES } from "@/shared/model/routes"
-import { USER_ROLES } from "@/entities/user/model/user.constants"
-import type { RoleProfile } from "@/entities/user/types/user.types"
-import type { CatalogDoctor, CatalogClinic } from "@/entities/catalog/types/catalog.types"
 import { differenceInDays } from "date-fns"
 import { useUserStore } from "@/entities/user/model/user.store"
 import { AppointmentButton } from "@/features/appointments/ui/AppointmentButton"
 import { FavoriteButton } from "@/features/favorites/ui/FavoriteButton"
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/avatar"
 import { Hospital } from "lucide-react"
+import type { User } from "@/entities/user/types/user.types"
+import { ROLE } from "@/entities/user/model/user.constants"
 
-type UserCardProfile = CatalogDoctor | CatalogClinic | RoleProfile
 
 interface UserCardProps {
-  user: UserCardProfile
+  user: User
   className?: string
   showFavorite?: boolean
 }
@@ -36,8 +34,8 @@ export const UserCard = ({ user, className, showFavorite = true }: UserCardProps
 
   // Получаем название для отображения
   const getDisplayName = () => {
-    if (user.role === USER_ROLES.CLINIC) {
-      const clinic = user as CatalogClinic
+    if (user.role === ROLE.CLINIC) {
+      const clinic = user
       return clinic.fullName || "Название не указано"
     }
     return user.fullName || "Имя не указано"
@@ -47,12 +45,12 @@ export const UserCard = ({ user, className, showFavorite = true }: UserCardProps
   const isNewProfile = user.createdAt && differenceInDays(new Date(), new Date(user.createdAt)) < 5
 
   const displayName = getDisplayName()
-  const specialization =
-    user.role === USER_ROLES.DOCTOR ? (user as CatalogDoctor).specialization?.trim() : null
-  const experience =
-    user.role === USER_ROLES.DOCTOR && (user as CatalogDoctor).experience
-      ? pluralRu((user as CatalogDoctor).experience, "год", "года", "лет")
-      : null
+  // const specialization =
+  //   user.role === ROLE.DOCTOR ? (user).specialization?.trim() : null
+  // const experience =
+  //   user.role === ROLE.DOCTOR && (user).experience
+  //     ? pluralRu((user).experience, "год", "года", "лет")
+  //     : null
 
   return (
     <Link
@@ -63,9 +61,9 @@ export const UserCard = ({ user, className, showFavorite = true }: UserCardProps
         <CardContent className="relative">
           <div className="flex items-start gap-4">
             <Avatar className="size-32 shrink-0">
-              <AvatarImage src={user.avatarUrl || undefined} />
+              <AvatarImage src={user.avatar || undefined} />
               <AvatarFallback className="text-3xl">
-                {user.role === USER_ROLES.CLINIC ? (
+                {user.role === ROLE.CLINIC ? (
                   <Hospital className="size-10" />
                 ) : (
                   formatName(user.fullName ?? "", true) || "—"
@@ -74,26 +72,26 @@ export const UserCard = ({ user, className, showFavorite = true }: UserCardProps
             </Avatar>
             <div className="min-w-0 flex-1">
               <CardTitle className="mb-1">{displayName}</CardTitle>
-              {specialization && <CardDescription>{specialization}</CardDescription>}
-              <div className="mt-2 flex flex-wrap items-center gap-2">
+              {/* {specialization && <CardDescription>{specialization}</CardDescription>} */}
+              {/* <div className="mt-2 flex flex-wrap items-center gap-2">
                 {isNewProfile && <Badge variant="primary">Новый</Badge>}
                 {experience && <Badge variant="primary">Опыт: {experience}</Badge>}
-              </div>
+              </div> */}
             </div>
             {showFavorite &&
-              profile?.role === USER_ROLES.PATIENT &&
-              (user.role === USER_ROLES.DOCTOR || user.role === USER_ROLES.CLINIC) && (
+              profile?.role === ROLE.PATIENT &&
+              (user.role === ROLE.DOCTOR || user.role === ROLE.CLINIC) && (
                 <FavoriteButton favoriteId={user.id} type={user.role} />
               )}
           </div>
         </CardContent>
 
         <CardFooter className="space-child grid">
-          {profile?.role === USER_ROLES.PATIENT &&
-            (user.role === USER_ROLES.DOCTOR || user.role === USER_ROLES.CLINIC) && (
+          {profile?.role === ROLE.PATIENT &&
+            (user.role === ROLE.DOCTOR || user.role === ROLE.CLINIC) && (
               <AppointmentButton
-                doctorId={user.role === USER_ROLES.DOCTOR ? user.id : null}
-                clinicId={user.role === USER_ROLES.CLINIC ? user.id : null}
+                doctorId={user.role === ROLE.DOCTOR ? user.id : null}
+                clinicId={user.role === ROLE.CLINIC ? user.id : null}
               />
             )}
           <Button variant="secondary" className="flex-1">

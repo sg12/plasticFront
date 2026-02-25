@@ -1,10 +1,10 @@
-export const ROLE = {
+export const USER_ROLE = {
   PATIENT: "PATIENT",
   DOCTOR: "DOCTOR",
   CLINIC: "CLINIC",
 } as const
 
-export const GENDER = {
+export const USER_GENDER = {
   MALE: "MALE",
   FEMALE: "FEMALE",
 } as const
@@ -17,22 +17,22 @@ export const MODERATION_STATUS = {
 } as const
 
 export const ROLE_LOCALES = {
-  [ROLE.PATIENT]: {
+  [USER_ROLE.PATIENT]: {
     ru: "Пациент",
   },
-  [ROLE.DOCTOR]: {
+  [USER_ROLE.DOCTOR]: {
     ru: "Доктор",
   },
-  [ROLE.CLINIC]: {
+  [USER_ROLE.CLINIC]: {
     ru: "Клиника",
   },
 } as const
 
 export const GENDER_LOCALES = {
-  [GENDER.MALE]: {
+  [USER_GENDER.MALE]: {
     ru: "Мужчина",
   },
-  [GENDER.FEMALE]: {
+  [USER_GENDER.FEMALE]: {
     ru: "Женщина",
   },
 } as const

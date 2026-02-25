@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router"
 import { ROUTES } from "@/shared/model/routes"
 import { Loader } from "@/shared/ui/loader"
 import { lazyRoute } from "./lazyRoute"
-import { USER_ROLES } from "@/entities/user/model/user.constants"
+import { USER_ROLE } from "@/entities/user/model/user.constants"
 
 export const router = createBrowserRouter([
   {
@@ -55,7 +55,7 @@ export const router = createBrowserRouter([
                   "RoleProtectedRoute",
                 ),
                 handle: {
-                  allowedRoles: [USER_ROLES.PATIENT, USER_ROLES.DOCTOR],
+                  allowedRoles: [USER_ROLE.PATIENT, USER_ROLE.DOCTOR],
                 },
                 children: [
                   {
@@ -71,7 +71,7 @@ export const router = createBrowserRouter([
                   "RoleProtectedRoute",
                 ),
                 handle: {
-                  allowedRoles: [USER_ROLES.CLINIC],
+                  allowedRoles: [USER_ROLE.CLINIC],
                 },
                 children: [
                   {
@@ -90,7 +90,7 @@ export const router = createBrowserRouter([
                   "RoleProtectedRoute",
                 ),
                 handle: {
-                  allowedRoles: [USER_ROLES.DOCTOR],
+                  allowedRoles: [USER_ROLE.DOCTOR],
                 },
                 children: [
                   {
@@ -124,7 +124,7 @@ export const router = createBrowserRouter([
                   "RoleProtectedRoute",
                 ),
                 handle: {
-                  allowedRoles: [USER_ROLES.DOCTOR],
+                  allowedRoles: [USER_ROLE.DOCTOR],
                 },
                 children: [
                   {

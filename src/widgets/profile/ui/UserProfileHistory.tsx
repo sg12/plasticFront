@@ -1,4 +1,3 @@
-import type { RoleProfile } from "@/entities/user/types/user.types"
 import { pluralRu } from "@/shared/lib/utils"
 import { CardTitle } from "@/shared/ui/card"
 import { Badge } from "@/shared/ui/badge"
@@ -10,16 +9,17 @@ import {
   isValid,
   parseISO,
 } from "date-fns"
+import type { User } from "@/entities/user/types/user.types"
 
 interface Props {
-  profile: RoleProfile | null
+  user: User | null
 }
 
-export const UserProfileHistory = ({ profile }: Props) => {
+export const UserProfileHistory = ({ user }: Props) => {
   const formatWithUs = () => {
-    if (!profile?.createdAt) return "—"
+    if (!user?.createdAt) return "—"
 
-    const created = parseISO(profile.createdAt)
+    const created = parseISO(user.createdAt)
     if (!isValid(created)) return "—"
 
     const now = new Date()
