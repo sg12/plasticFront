@@ -8,7 +8,7 @@ export const login = async (loginDto: LoginDto): Promise<LoginResponse> => {
   return data
 }
 
-export const register = async (dto: CreateUserDto) => {
+export const register = async (dto: Omit<CreateUserDto, "rePassword">) => {
   const { data } = await api.post("auth/register", dto)
   return data
 }

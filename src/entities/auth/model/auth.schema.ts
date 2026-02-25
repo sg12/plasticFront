@@ -1,5 +1,6 @@
 import { z } from "zod"
 import { AUTH_TYPE } from "./auth.constants"
+import type { CreateUserSchema } from "@/entities/user/model/user.schema"
 
 export const AuthShape = z.object({
   id: z.uuid(),
@@ -20,4 +21,5 @@ export const LoginSchema = z.object({
   // .regex(/[0-9]/, "Пароль должен содержать хотя бы одну цифру"),
 })
 
+export type RegisterDto = z.infer<typeof CreateUserSchema>
 export type LoginDto = z.infer<typeof LoginSchema>

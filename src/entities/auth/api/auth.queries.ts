@@ -83,7 +83,7 @@ export const useConfirmEmail = (email: string | null, token: string | null) => {
   return useQuery({
     queryKey: [...authKeys.all, "confirm", email, token],
     queryFn: () => authApi.confirmEmail(email!, token!),
-    enabled: !!email && !!token, // Запрос не уйдет без параметров
+    enabled: !!email && !!token,
     retry: false,
   })
 }

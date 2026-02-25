@@ -22,7 +22,7 @@ export const UserSchema = z.object({
 })
 
 export const PatientProfileSchema = z.object({
-  birthdate: z.iso.datetime().nullable(),
+  birthdate: z.union([z.iso.datetime(), z.date()]).nullable(),
   gender: GenderSchema.nullable(),
   medicalNotes: z.string().nullable(),
   bloodType: z.string().nullable(),
@@ -32,7 +32,7 @@ export const PatientProfileSchema = z.object({
 
 export const DoctorProfileSchema = z.object({
   gender: GenderSchema.nullable(),
-  birthdate: z.iso.datetime().nullable(),
+  birthdate: z.union([z.iso.datetime(), z.date()]).nullable(),
   experience: z.number().min(0).max(60),
   specializations: z.array(z.enum(SPECIALIZATION)),
   education: z.string().min(2),
@@ -62,14 +62,23 @@ export const ClinicProfileSchema = z.object({
   rating: z.number().default(0),
 })
 
-export const CreateUserSchema = z.object({
-  role: RoleSchema,
-  fullName: z.string().min(2, "ФИО обязательно"),
-  email: z.email("Введите корректный email"),
-  phone: z.string().min(10, "Минимум 10 цифр").optional(),
-  password: z.string().min(6, "Пароль от 6 символов"),
-  acceptedConsentIds: z.array(z.string()).min(1, "Нужно принять соглашения"),
-})
+export const CreateUserSchema = z
+  .object({
+    role: RoleSchema,
+    fullName: z.string().min(2, "ФИО обязательно"),
+    email: z.email("Введите корректный email"),
+    phone: z.string().min(10, "Минимум 10 цифр").optional(),
+    password: z.string().min(6, "Пароль от 6 символов"),
+    rePassword: z.string().min(6, "Пароль от 6 символов"),
+    acceptedConsentIds: z.array(z.string()).min(1, "Нужно принять соглашения"),
+    patient: PatientProfileSchema.partial().optional(),
+    doctor: DoctorProfileSchema.partial().optional(),
+    clinic: ClinicProfileSchema.partial().optional(),
+  })
+  .refine((data) => data.password === data.rePassword, {
+    message: "Пароли не совпадают",
+    path: ["rePassword"],
+  })
 
 export const UpdateUserSchema = z.object({
   fullName: z.string().min(2).optional(),

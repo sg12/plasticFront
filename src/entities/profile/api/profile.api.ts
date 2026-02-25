@@ -10,10 +10,14 @@ export const createProfile = async (
 
   Object.entries(dto).forEach(([key, value]) => {
     if (value !== undefined && value !== null) {
-      if (typeof value === "object") {
-        formData.append(key, JSON.stringify(value))
+      const formKey = `patient[${key}]`
+
+      if (Array.isArray(value)) {
+        value.forEach((val) => formData.append(`${formKey}[]`, val))
+      } else if (value instanceof Date) {
+        formData.append(formKey, value.toISOString())
       } else {
-        formData.append(key, String(value))
+        formData.append(formKey, String(value))
       }
     }
   })
@@ -24,6 +28,10 @@ export const createProfile = async (
     })
   }
 
-  const { data } = await api.post<ProfileResponse>("/profiles", formData)
+  const { data } = await api.post<ProfileResponse>("/profiles", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  })
   return data
 }

@@ -3,71 +3,85 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useNavigate } from "react-router"
 import { toast } from "sonner"
-import { useAuthStore } from "@/entities/auth/model/auth.store"
-import { createUser } from "@/entities/user/api/user.api"
-import { logger } from "@/shared/lib/logger"
-import { getSession } from "@/entities/auth/api/auth.api"
-import type { UserCreateFormData, UserRole } from "@/entities/user/types/user.types"
-import type { UploadedFilesByRole } from "@/entities/file/types/file.types"
-import { userCreateSchema } from "@/entities/user/model/user.schema"
 import { FormProvider } from "react-hook-form"
 import { ROUTES } from "@/shared/model/routes"
-import { useUserStore } from "@/entities/user/model/user.store"
+import { useMe } from "@/entities/user/api/user.queries"
+import type { ROLE } from "@/entities/user/types/user.types"
+import { useAuthStore } from "@/entities/auth/model/auth.store"
+import { useCreateProfile } from "@/entities/profile/api/profile.queries"
+import { CreateProfileSchema, type CreateProfileDto } from "@/entities/profile/model/profile.schema"
+
+type UploadedFilesState = {
+  [key in ROLE]?: {
+    [fileKey: string]: File | File[]
+  }
+}
+
+const STORAGE_KEY = "profile_form_draft"
 
 export const useCreateProfileForm = () => {
-  const [isLoading, setIsLoading] = useState(false)
-  const [uploadedFiles, setUploadedFiles] = useState<UploadedFilesByRole>({})
-  const { user, session, initialized } = useAuthStore()
-  const { profile } = useUserStore()
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFilesState>({})
+  const { data: user } = useMe()
+  const isAuth = useAuthStore((state) => !!state.token)
+  const setToken = useAuthStore((state) => state.setToken)
   const [currentStep, setCurrentStep] = useState(0)
 
   const navigate = useNavigate()
 
-  const role = user?.user_metadata.role?.toLowerCase() as UserRole
+  const role = user?.role as ROLE
 
-  const form = useForm<UserCreateFormData>({
-    resolver: zodResolver(userCreateSchema),
-    defaultValues: {
-      role: role,
-      // Patient fields
-      birthDate: undefined,
-      gender: undefined,
-      // Doctor fields
-      licenseNumber: "",
-      specialization: "",
-      experience: undefined,
-      education: "",
-      workplace: "",
-      clinic: null,
-      inn: "",
-      // Clinic fields
-      legalName: "",
-      clinicInn: "",
-      ogrn: "",
-      legalAddress: "",
-      actualAddress: "",
-      clinicLicense: "",
-      directorName: "",
-      directorPosition: "",
-      documents: {},
+  const getSavedData = () => {
+    if (typeof window === "undefined") return undefined
+    const saved = localStorage.getItem(STORAGE_KEY)
+    if (!saved) return undefined
+    try {
+      return JSON.parse(saved)
+    } catch {
+      return undefined
+    }
+  }
+
+  const form = useForm<CreateProfileDto>({
+    resolver: zodResolver(CreateProfileSchema),
+    defaultValues: getSavedData() || {
+      role: user?.role as ROLE,
+      patient: user?.patient || undefined,
+      doctor: user?.doctor || undefined,
+      clinic: user?.clinic || undefined,
     },
     mode: "all",
   })
 
   useEffect(() => {
-    if (profile) {
-      navigate(ROUTES.MAIN)
+    const subscription = form.watch((value) => {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(value))
+    })
+    return () => subscription.unsubscribe()
+  }, [form.watch])
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const tokenFromUrl = params.get("accessToken")
+
+    if (tokenFromUrl && !isAuth) {
+      setToken(tokenFromUrl)
+
+      window.history.replaceState({}, document.title, window.location.pathname)
+
+      toast.success("Почта подтверждена! Заполните профиль.")
     }
-    if (initialized && !session) {
+  }, [isAuth, setToken])
+
+  useEffect(() => {
+    const hasTokenInUrl = new URLSearchParams(window.location.search).has("accessToken")
+
+    if (!isAuth && !hasTokenInUrl) {
       navigate(ROUTES.SIGNUP)
       toast.info("Пожалуйста, войдите в систему, чтобы продолжить.")
     }
-    if (role) {
-      form.setValue("role", role)
-    }
-  }, [session, initialized, navigate, role, form, profile])
+  }, [navigate, role, form, user, isAuth])
 
-  const handleFileChange = <R extends keyof UploadedFilesByRole, K extends string>(
+  const handleFileChange = <R extends keyof UploadedFilesState, K extends string>(
     role: R,
     e: React.ChangeEvent<HTMLInputElement>,
     key: K,
@@ -89,74 +103,34 @@ export const useCreateProfileForm = () => {
     })
   }
 
-  const onSubmit = async (data: UserCreateFormData) => {
-    if (!user) {
-      toast.error("Пользователь не аутентифицирован.")
-      return
-    }
+  const { mutateAsync: createProfile, isPending } = useCreateProfile()
 
-    setIsLoading(true)
+  const onSubmit = async (data: CreateProfileDto) => {
+    if (!user) return
 
-    try {
-      // Используем существующую сессию из store, если она есть
-      let sessionData = { session }
+    const roleKey = role
+    const profileKey = role.toLowerCase()
 
-      // Если сессии нет в store, получаем её
-      if (!sessionData.session) {
-        const result = await Promise.race([
-          getSession(),
-          new Promise<{ data: { session: null } }>((_, reject) =>
-            setTimeout(() => reject(new Error("Timeout: сессия не получена")), 10000),
-          ),
-        ])
-        sessionData = result.data || { session: null }
-      }
+    const payload = {
+      role: roleKey,
+      [profileKey]: data,
+    } as unknown as CreateProfileDto
 
-      if (!sessionData.session) {
-        toast.error("Сессия не найдена, пожалуйста, войдите снова.")
-        navigate(ROUTES.SIGNIN)
-        return
-      }
+    const allFiles = Object.values(uploadedFiles)
+      .flatMap((roleFiles) => Object.values(roleFiles))
+      .filter((file): file is File => file instanceof File)
 
-      const fullData = {
-        ...data,
-        email: sessionData.session.user.email!,
-        fullName: sessionData.session.user.user_metadata.fullName,
-        phone: sessionData.session.user.user_metadata.phone,
-      }
-
-      await createUser(user.id, fullData, uploadedFiles)
-      toast.success("Профиль успешно создан!")
-      navigate(0)
-    } catch (error: any) {
-      logger.error("Ошибка создания профиля", error as Error, {
-        userId: user.id,
-        role: data.role,
-      })
-
-      if (error?.message?.includes("Timeout")) {
-        toast.error("Превышено время ожидания. Пожалуйста, попробуйте снова.")
-      } else if (error?.message === "USER_ALREADY_EXISTS" || error?.code === "23505") {
-        toast.info("Профиль для этого пользователя уже существует.")
-        navigate(ROUTES.MAIN)
-      } else {
-        toast.error(error.message || "Ошибка при создании профиля.")
-      }
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const handleSaveClick = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.preventDefault()
-    const isValid = await form.trigger()
-
-    if (!isValid) {
-      toast.error("Пожалуйста, заполните все обязательные поля корректно.")
-      return setCurrentStep(0)
-    }
-
-    onSubmit(form.getValues())
+    await createProfile(
+      {
+        dto: payload,
+        files: allFiles,
+      },
+      {
+        onSuccess: () => {
+          localStorage.removeItem(STORAGE_KEY)
+        },
+      },
+    )
   }
 
   return {
@@ -164,11 +138,13 @@ export const useCreateProfileForm = () => {
     role,
     currentStep,
     setCurrentStep,
-    isLoading,
+    isLoading: isPending,
     uploadedFiles,
     handleFileChange,
-    onSubmit,
-    handleSaveClick,
+    onSubmit: form.handleSubmit(onSubmit, (errors) => {
+      console.log(errors)
+      // toast.error(Object.values(errors).message)
+    }),
     FormProvider,
   }
 }

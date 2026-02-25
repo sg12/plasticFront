@@ -1,4 +1,4 @@
-import { FileText, Check, ShieldCheck, User, Building2, X } from "lucide-react"
+import { ExternalLink, Loader2, ShieldCheck } from "lucide-react"
 import { Button } from "@/shared/ui/button"
 import {
   Dialog,
@@ -8,150 +8,111 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/shared/ui/dialog"
-import type { UserRole } from "@/entities/user/types/user.types"
-import { USER_ROLES } from "@/entities/user/model/user.constants"
+import { useConsents } from "@/entities/consent/api/consent.queries"
+import { Item, ItemContent } from "@/shared/ui/item"
+import { Switch } from "@/shared/ui/switch"
+import { useNavigate } from "react-router"
+import { useState } from "react"
+import { cn } from "@/shared/lib/utils"
+import { ROUTES } from "@/shared/model/routes"
 
 interface Props {
-  userRole: UserRole
-  onAccept: () => void
+  onAccept: (ids: string[]) => void
   onDecline: () => void
-  onShowPrivacyModal: () => void
 }
 
-export function ConsentModal({ userRole, onAccept, onDecline, onShowPrivacyModal }: Props) {
+export function ConsentModal({ onAccept, onDecline }: Props) {
+  const { data: consents, isLoading } = useConsents()
+  const navigate = useNavigate()
+
+  const [selectedOptionalIds, setSelectedOptionalIds] = useState<string[]>([])
+
+  const toggleConsent = (id: string) => {
+    setSelectedOptionalIds(prev =>
+      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+    )
+  }
+
+  const handleAcceptAll = () => {
+    const requiredIds = consents?.filter(consent => consent.isRequired).map(consent => consent.id) || []
+    onAccept([...requiredIds, ...selectedOptionalIds])
+  }
+
   return (
     <Dialog open onOpenChange={(open) => !open && onDecline()}>
-      <DialogContent className="max-w-2xl gap-0 p-0">
-        <DialogHeader className="border-b p-6 pb-4">
+      <DialogContent>
+        <DialogHeader className="p-6">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-100">
-              <ShieldCheck className="h-5 w-5 text-purple-600" />
+            <div className="flex size-10 items-center justify-center rounded-full bg-purple-50 text-purple-600">
+              <ShieldCheck className="size-6" />
             </div>
             <div>
-              <DialogTitle className="text-xl">Согласие на обработку данных</DialogTitle>
-              <DialogDescription>В соответствии с 152-ФЗ</DialogDescription>
+              <DialogTitle className="text-xl font-bold">Юридические документы</DialogTitle>
+              <DialogDescription>
+                Для продолжения необходимо принять обязательные политики
+              </DialogDescription>
             </div>
           </div>
         </DialogHeader>
 
-        <div className="max-h-[60vh] overflow-y-auto">
-          <div className="space-global p-6">
-            <div className="rounded-xl border border-purple-200 bg-gradient-to-br from-purple-50 to-purple-100/50 p-4">
-              <div className="flex gap-3">
-                <FileText className="mt-0.5 h-5 w-5 shrink-0 text-purple-600" />
-                <div>
-                  <p className="mb-1 font-medium text-purple-900">Обработка персональных данных</p>
-                  <p className="text-sm text-purple-800">
-                    Я даю согласие на обработку моих персональных данных для целей регистрации в
-                    системе и предоставления услуг платформы.
-                  </p>
-                </div>
-              </div>
+        <div className="px-6 pb-6 space-y-4">
+          {isLoading ? (
+            <div className="flex h-40 items-center justify-center text-muted-foreground">
+              <Loader2 className="size-6 animate-spin mr-2" />
+              <span>Загрузка...</span>
             </div>
+          ) : (
+            <div className="grid gap-3">
+              {consents?.map((consent) => {
+                const isRequired = consent.isRequired
+                const isSelected = isRequired || selectedOptionalIds.includes(consent.id)
 
-            <div className="space-child">
-              <h4 className="flex items-center gap-2 font-semibold text-gray-900">
-                <User className="h-4 w-4 text-gray-500" />
-                Какие данные обрабатываются
-              </h4>
-              <div className="space-child rounded-lg bg-gray-100 p-4">
-                <div className="flex items-start gap-2">
-                  <div className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-gray-400" />
-                  <span className="text-sm text-gray-700">
-                    ФИО, контактные данные (email, телефон)
-                  </span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <div className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-gray-400" />
-                  <span className="text-sm text-gray-700">Пароль в зашифрованном виде</span>
-                </div>
-                {userRole === USER_ROLES.DOCTOR && (
-                  <>
-                    <div className="flex items-start gap-2">
-                      <div className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-purple-400" />
-                      <span className="text-sm text-gray-700">
-                        Профессиональные данные (специализация, опыт, образование)
-                      </span>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <div className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-purple-400" />
-                      <span className="text-sm text-gray-700">
-                        Документы (диплом, лицензия, сертификаты)
-                      </span>
-                    </div>
-                  </>
-                )}
-                {userRole === USER_ROLES.CLINIC && (
-                  <>
-                    <div className="flex items-start gap-2">
-                      <div className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-purple-400" />
-                      <span className="text-sm text-gray-700">
-                        Данные организации (ИНН, ОГРН, адрес)
-                      </span>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <div className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-purple-400" />
-                      <span className="text-sm text-gray-700">
-                        Документы клиники (лицензии, уставные документы)
-                      </span>
-                    </div>
-                  </>
-                )}
-              </div>
-            </div>
-
-            <div className="space-child">
-              <h4 className="flex items-center gap-2 font-semibold text-gray-900">
-                <Building2 className="h-4 w-4 text-gray-500" />
-                Цели обработки
-              </h4>
-              <div className="grid grid-cols-2 gap-2">
-                {[
-                  "Регистрация и аутентификация",
-                  "Доступ к сервису",
-                  "Безопасность данных",
-                  "Модерация аккаунтов",
-                ].map((item) => (
-                  <div
-                    key={item}
-                    className="flex items-center gap-2 rounded-lg bg-gray-100 px-3 py-2"
+                return (
+                  <Item
+                    key={consent.id}
+                    variant="outline"
+                    className={cn(
+                      "transition-all duration-200 group",
+                      isSelected ? "border-purple-200 bg-purple-50/30" : "opacity-80"
+                    )}
                   >
-                    <Check className="h-4 w-4 shrink-0 text-green-500" />
-                    <span className="text-sm text-gray-700">{item}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+                    <ItemContent>
+                      <div
+                        className="flex-1 cursor-pointer pr-4"
+                        onClick={() => navigate(ROUTES.POLICIES.replace(':id', consent.id))}
+                      >
+                        <div className="flex items-center gap-2">
+                          <h4 className="font-semibold text-sm sm:text-base group-hover:text-purple-600 transition-colors">
+                            {consent.title}
+                          </h4>
+                          <ExternalLink className="size-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {isRequired ? "Обязательно для регистрации" : "По желанию"}
+                        </p>
+                      </div>
 
-            {/* Информация о защите */}
-            <div className="rounded-xl border border-blue-200 bg-blue-50 p-4">
-              <p className="text-sm text-blue-900">
-                <strong>Защита данных:</strong> Ваши данные защищены в соответствии с
-                законодательством РФ. Мы не передаём данные третьим лицам без вашего согласия.
-              </p>
+                    </ItemContent>
+
+                    {!isRequired && (
+                      <Switch
+                        checked={isSelected}
+                        onCheckedChange={() => toggleConsent(consent.id)}
+                      />
+                    )}
+                  </Item>
+                )
+              })}
             </div>
-          </div>
+          )}
         </div>
 
-        <DialogFooter className="flex-col gap-3 border-t bg-gray-50/50 p-6 pt-4 sm:flex-col">
-          <div className="flex w-full gap-3">
-            <Button variant="secondary" className="flex-1" onClick={onDecline}>
-              <X className="h-4 w-4" />
-              Отказаться
-            </Button>
-            <Button className="flex-1" onClick={onAccept}>
-              <Check className="h-4 w-4" />
-              Принять согласие
-            </Button>
-          </div>
-          <button
-            onClick={onShowPrivacyModal}
-            className="text-sm text-purple-600 transition-colors hover:text-purple-700 hover:underline"
-          >
-            Подробная политика конфиденциальности →
-          </button>
+        <DialogFooter>
+          <Button onClick={handleAcceptAll}>
+            Принять и продолжить
+          </Button>
         </DialogFooter>
       </DialogContent>
-    </Dialog>
+    </Dialog >
   )
 }

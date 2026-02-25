@@ -38,7 +38,7 @@ export const useUpdateMe = () => {
       toast.success("Профиль успешно обновлен")
     },
     onError: (error) => {
-      logger.error("Update profile error", error)
+      logger.error("Ошибка при сохранении изменений", error)
       toast.error("Ошибка при сохранении изменений")
     },
   })
@@ -52,7 +52,7 @@ export const useChangePassword = () => {
       toast.success("Пароль успешно изменен")
     },
     onError: (error) => {
-      logger.error("Change password error", error)
+      logger.error("Не удалось изменить пароль", error)
       toast.error("Не удалось изменить пароль")
     },
   })
@@ -68,7 +68,7 @@ export const useDeleteMe = () => {
       toast.success("Ваш профиль был удален")
     },
     onError: (error) => {
-      logger.error("Delete profile error", error)
+      logger.error("Ошибка при удалении профиля", error)
       toast.error("Ошибка при удалении профиля")
     },
   })

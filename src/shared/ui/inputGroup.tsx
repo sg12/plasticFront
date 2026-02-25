@@ -128,7 +128,7 @@ function InputGroupInput({ className, type, ...props }: React.ComponentProps<"in
       data-slot="input-group-control"
       type={type}
       className={cn(
-        "disabled:bg-muted",
+        "disabled:bg-muted disabled:rounded-xl",
         "flex-1 rounded-none border-0 bg-transparent shadow-none focus-visible:ring-0 dark:bg-transparent",
         type === "time" &&
           "appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none",

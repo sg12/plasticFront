@@ -1,21 +1,22 @@
 export const ROUTES = {
-  SIGNIN: "/signin",
-  SIGNUP: "/signup",
-  CREATE_PROFILE: "/createProfile",
+  SIGNIN: "/sign-in",
+  SIGNUP: "/sign-up",
+  CREATE_PROFILE: "/create-profile",
+  POLICIES: "/policies/:id",
   MAIN: "/",
-  PROFILE: "/main/profile",
-  PROFILE_SOME_USER: "/main/profile/:userId",
-  CATALOG: "/main/catalog",
+  PROFILE: "/profile",
+  PROFILE_SOME_USER: "/profile/:userId",
+  CATALOG: "/catalog",
   AIVISUALIZER: "/ai",
-  SUPPORT: "/main/support",
-  APPOINTMENTS: "/main/appointments",
-  DOCTOR_SCHEDULE: "/main/doctor/schedule",
-  SETTINGS: "/main/settings",
-  GENERAL: "/main/settings/general",
-  PERSONAL_DATA: "/main/settings/personalData",
-  CLINIC_DOCTORS: "/main/clinic/doctors",
-  DOCTOR_CLINICS: "/main/doctor/clinics",
-}
+  SUPPORT: "/support",
+  APPOINTMENTS: "/appointments",
+  DOCTOR_SCHEDULE: "/doctor/schedule",
+  SETTINGS: "/settings",
+  GENERAL: "/settings/general",
+  PERSONAL_DATA: "/settings/personal-data",
+  CLINIC_DOCTORS: "/clinic/doctors",
+  DOCTOR_CLINICS: "/doctor/clinics",
+} as const
 
 export type PathParams = {
   [ROUTES.PROFILE_SOME_USER]: {

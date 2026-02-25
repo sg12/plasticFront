@@ -5,16 +5,13 @@ import { cn } from "@/shared/lib/utils"
 import { useIsMobile } from "@/shared/hooks/useMobile"
 import { ConsentModal } from "./ConsentModal"
 import { PrivacyModal } from "@/widgets/privacyModal/ui/PrivacyModal"
-import type { UserRole } from "@/entities/user/types/user.types"
 
 interface Props {
   hasConsent: boolean
-  userRole: UserRole
-  onAccept: () => void
-  onShowPrivacyModal?: () => void
+  onAccept: (ids: string[]) => void
 }
 
-export const ConsentSection = ({ hasConsent, userRole, onAccept, onShowPrivacyModal }: Props) => {
+export const ConsentSection = ({ hasConsent, onAccept }: Props) => {
   const isMobile = useIsMobile()
   const [showConsentModal, setShowConsentModal] = useState(false)
   const [showPrivacyModal, setShowPrivacyModal] = useState(false)
@@ -27,15 +24,9 @@ export const ConsentSection = ({ hasConsent, userRole, onAccept, onShowPrivacyMo
     setShowConsentModal(false)
   }
 
-  const handleAccept = () => {
-    onAccept()
+  const handleAccept = (ids: string[]) => {
+    onAccept(ids)
     setShowConsentModal(false)
-  }
-
-  const handleOpenPrivacyModal = () => {
-    setShowPrivacyModal(true)
-    setShowConsentModal(false)
-    onShowPrivacyModal?.()
   }
 
   const handleClosePrivacyModal = () => {
@@ -73,10 +64,8 @@ export const ConsentSection = ({ hasConsent, userRole, onAccept, onShowPrivacyMo
 
         {showConsentModal && (
           <ConsentModal
-            userRole={userRole}
             onAccept={handleAccept}
             onDecline={handleCloseConsentModal}
-            onShowPrivacyModal={handleOpenPrivacyModal}
           />
         )}
 

@@ -1,102 +1,83 @@
 import { useState } from "react"
-import type { SignUpFormData } from "../types/types"
-import type { UserRole } from "@/entities/user/types/user.types"
-import { USER_ROLES } from "@/entities/user/model/user.constants"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { signUpSchema } from "../model/schema"
 import { toast } from "sonner"
-import { useAuthStore } from "@/entities/auth/model/auth.store"
 import { FormProvider } from "react-hook-form"
 import { logger } from "@/shared/lib/logger"
+import type { ROLE } from "@/entities/user/types/user.types"
+import type { RegisterDto } from "@/entities/auth/model/auth.schema"
+import { CreateUserSchema } from "@/entities/user/model/user.schema"
+import { useRegister } from "@/entities/auth/api/auth.queries"
 
 export const useSignUpForm = () => {
   const [currentStep, setCurrentStep] = useState(0)
   const [showConsentModal, setShowConsentModal] = useState(false)
   const [showPrivacyModal, setShowPrivacyModal] = useState(false)
   const [hasConsent, setHasConsent] = useState(false)
-  const { signUp } = useAuthStore()
 
-  const form = useForm<SignUpFormData>({
-    resolver: zodResolver(signUpSchema),
+  const form = useForm<RegisterDto>({
+    resolver: zodResolver(CreateUserSchema),
     defaultValues: {
-      role: USER_ROLES.PATIENT,
-      basic: {
-        fullName: "",
-        email: "",
-        phone: "",
-        password: "",
-        confirmPassword: "",
-      },
+      role: undefined,
+      fullName: "",
+      email: "",
+      password: "",
+      rePassword: "",
+      phone: "",
+      acceptedConsentIds: [],
     },
-    mode: "onSubmit",
   })
 
-  const role = form.watch("role") as UserRole
+  const { mutate: register, isPending } = useRegister()
 
-  const openConsentModal = () => setShowConsentModal(true)
-  const closeConsentModal = () => setShowConsentModal(false)
+  const role = form.watch("role") as ROLE
 
-  const openPrivacyModal = () => {
-    setShowConsentModal(false)
-    setShowPrivacyModal(true)
-  }
-
-  const closePrivacyModal = () => setShowPrivacyModal(false)
-
-  const acceptConsent = () => {
+  const handleAcceptConsent = (acceptedIds: string[]) => {
+    form.setValue("acceptedConsentIds", acceptedIds, { shouldValidate: true })
     setHasConsent(true)
     setShowConsentModal(false)
   }
 
-  const onSubmit = async (data: SignUpFormData) => {
+  const onSubmit = async (data: RegisterDto) => {
     if (!hasConsent) {
-      openConsentModal()
+      setShowConsentModal(true)
       return
     }
 
-    try {
-      const { data: authData, error } = await signUp(data)
-
-      if (error && error.message.includes("User already registered")) {
-        toast.warning("Пользователь с таким email уже существует. Войдите в систему.")
-        return
-      }
-
-      if (authData && !authData.user?.identities?.length) {
-        toast.warning("Пользователь с таким email уже существует. Войдите в систему.")
-        return
-      }
-
-      logger.info("Регистрация прошла успешно через форму", {
-        email: data.basic.email,
-        role: data.role,
-      })
-      toast.success("Регистрация прошла успешно. Пожалуйста, подтвердите свой email.")
-    } catch (error) {
-      logger.error("Ошибка регистрации через форму", error as Error, {
-        email: data.basic.email,
-        role: data.role,
-      })
-      toast.error("Произошла неизвестная ошибка при регистрации.")
-    }
+    register(data, {
+      onSuccess: () => {
+        logger.info("Регистрация инициирована", { email: data.email, role: data.role })
+        setCurrentStep(2)
+      },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      onError: (error: any) => {
+        if (error.response?.status === 409 || error.message?.includes("already registered")) {
+          toast.warning("Этот email уже занят. Попробуйте войти.")
+        }
+      },
+    })
   }
 
   return {
     form,
     role,
-    loading: form.formState.isSubmitting,
+    isLoading: isPending,
     currentStep,
     setCurrentStep,
     showConsentModal,
     showPrivacyModal,
     hasConsent,
-    openConsentModal,
-    closeConsentModal,
-    openPrivacyModal,
-    closePrivacyModal,
-    acceptConsent,
-    onSubmit,
+    openConsentModal: () => setShowConsentModal(true),
+    closeConsentModal: () => setShowConsentModal(false),
+    openPrivacyModal: () => {
+      setShowConsentModal(false)
+      setShowPrivacyModal(true)
+    },
+    closePrivacyModal: () => setShowPrivacyModal(false),
+    acceptConsent: handleAcceptConsent,
+    onSubmit: form.handleSubmit(onSubmit, (errors) => {
+      toast.error(Object.values(errors)[0].message)
+    }),
     FormProvider,
   }
 }

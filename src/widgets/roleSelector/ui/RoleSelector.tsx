@@ -1,11 +1,11 @@
-import { USER_ROLES } from "@/entities/user/model/user.constants"
+import { USER_ROLE } from "@/entities/user/model/user.constants"
 import { User, Stethoscope, Hospital } from "lucide-react"
 import type { RoleSelectorProps } from "../types/types"
 import { cn } from "@/shared/lib/utils"
 
 const roles = [
   {
-    type: USER_ROLES.PATIENT,
+    type: USER_ROLE.PATIENT,
     title: "Пациент",
     description: "Поиск клиник и врачей, запись на консультации, отзывы",
     icon: User,
@@ -13,7 +13,7 @@ const roles = [
     iconBg: "bg-purple-100",
   },
   {
-    type: USER_ROLES.DOCTOR,
+    type: USER_ROLE.DOCTOR,
     title: "Врач",
     description: "Управление расписанием, пациентами и услугами",
     icon: Stethoscope,
@@ -21,7 +21,7 @@ const roles = [
     iconBg: "bg-orange-100",
   },
   {
-    type: USER_ROLES.CLINIC,
+    type: USER_ROLE.CLINIC,
     title: "Клиника",
     description: "Управление клиникой, специалистами и услугами",
     icon: Hospital,
