@@ -1,8 +1,8 @@
 import { api } from "@/shared/api/axiosInstance"
 import type { File as FileType, FILE_TYPE } from "../types/file.types"
 
-export const getFiles = async (): Promise<File[]> => {
-  const { data } = await api.get<File[]>("files")
+export const getFiles = async (): Promise<FileType[]> => {
+  const { data } = await api.get<FileType[]>("files")
   return data
 }
 

@@ -41,7 +41,7 @@ export const UserProfileInformation = ({ form, user, isEditing, isSaving }: Prop
                     <InputGroupAddon>
                       <UserIcon />
                     </InputGroupAddon>
-                    <InputGroupInput id="full_name" placeholder="Фамилия Имя Отчество" {...field} />
+                    <InputGroupInput id="fullName" placeholder="Фамилия Имя Отчество" {...field} />
                   </InputGroup>
                 </FormControl>
                 <FormMessage />
@@ -57,12 +57,6 @@ export const UserProfileInformation = ({ form, user, isEditing, isSaving }: Prop
               <FormItem>
                 <FormLabel>
                   Email
-                  {user?.auth.confirmed && (
-                    <Badge variant="accent">
-                      <CheckCircle className="h-3 w-3" />
-                      Подтверждён
-                    </Badge>
-                  )}
                 </FormLabel>
                 <FormControl>
                   <InputGroup>
@@ -72,7 +66,12 @@ export const UserProfileInformation = ({ form, user, isEditing, isSaving }: Prop
                     <InputGroupInput id="email" placeholder="Email" {...field} />
                     {user?.auth.confirmed && (
                       <InputGroupAddon align="inline-end">
-                        <Lock className="opacity-50" />
+                        <Badge variant="outline">
+                          <CheckCircle />
+                          <span className="max-md:hidden">
+                            Подтверждён
+                          </span>
+                        </Badge>
                       </InputGroupAddon>
                     )}
                   </InputGroup>

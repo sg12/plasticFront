@@ -1,53 +1,62 @@
 import { useLogout } from "@/entities/auth/api/auth.queries"
-import { useMe } from "@/entities/user/api/user.queries"
 import { MODERATION_STATUS, MODERATION_STATUS_LOCALES } from "@/entities/user/model/user.constants"
 import { Button } from "@/shared/ui/button"
-import { AlertCircle, Clock } from "lucide-react"
+import { Card, CardTitle, CardHeader, CardDescription, CardContent } from "@/shared/ui/card"
 
-export const ModerationStatusScreen = () => {
-  const { data: user } = useMe()
-  const { mutateAsync: logout } = useLogout()
-  const isRejected = user?.status === MODERATION_STATUS.REJECTED
-  const rejectionReason = user?.moderationComment
+export const ModerationStatusScreen = ({ status, comment }: { status: keyof typeof MODERATION_STATUS, comment: string }) => {
+  const { mutate: logout, isPending: isLoggingOut } = useLogout()
+
+  const config = {
+    [MODERATION_STATUS.REJECTED]: {
+      title: MODERATION_STATUS_LOCALES["REJECTED"].ru,
+      description: "К сожалению, ваш профиль не прошел модерацию. Проверьте причину ниже или обратитесь в поддержку.",
+    },
+    [MODERATION_STATUS.PENDING]: {
+      title: MODERATION_STATUS_LOCALES["PENDING"].ru,
+      description: "Ваша заявка находится в очереди на проверку. Обычно это занимает не более 24 часов.",
+    },
+    [MODERATION_STATUS.BANNED]: {
+      title: MODERATION_STATUS_LOCALES["BANNED"]?.ru || "Аккаунт заблокирован",
+      description: "Ваш доступ к платформе ограничен администрацией из-за нарушения правил сообщества.",
+    }
+  }
+
+  const current = config[status as keyof typeof config]
 
   return (
-    <div className="flex h-screen w-screen items-center justify-center bg-gray-50 p-4">
-      <div className="bg-background space-global w-full max-w-md rounded-xl border p-6 shadow-sm">
-        <div className="flex flex-col items-center gap-3 text-center">
-          {isRejected ? (
-            <div className="rounded-full bg-red-100 p-3">
-              <AlertCircle className="size-8 text-red-600" />
-            </div>
-          ) : (
-            <div className="rounded-full bg-yellow-100 p-3">
-              <Clock className="size-8 text-yellow-600" />
+    <div className="flex min-h-screen items-center justify-center w-full">
+      <Card className="w-full max-w-xl max-md:h-full max-md:w-full max-md:border-0">
+        <CardHeader>
+          <CardTitle>
+            {current.title}</CardTitle>
+          <CardDescription>
+            {current.description}
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-child">
+          {comment && (
+            <div className="mb-8 w-full rounded-lg border border-red-100 bg-red-50/50 p-4 text-left">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-red-500">
+                Комментарий администратора:
+              </span>
+              <p className="mt-1 text-sm text-red-700 italic">
+                «{comment}»
+              </p>
             </div>
           )}
 
-          <h2 className="text-xl font-semibold">
-            {isRejected ? MODERATION_STATUS_LOCALES["REJECTED"].ru : MODERATION_STATUS_LOCALES["PENDING"].ru}
-          </h2>
-
-          <p className="text-muted-foreground text-sm">
-            {isRejected
-              ? "К сожалению, ваши документы не прошли проверку. Пожалуйста, свяжитесь с поддержкой для уточнения деталей или повторной подачи."
-              : "Мы проверяем ваши данные и документы. Обычно это занимает до 24 часов. Доступ к кабинету откроется автоматически после подтверждения."}
-          </p>
-
-          {isRejected && rejectionReason && <p>{rejectionReason}</p>}
-
-          <div className="space-child w-full">
-            {isRejected && (
-              <Button className="w-full" variant="primary">
-                Связаться с поддержкой / Исправить
-              </Button>
-            )}
-            <Button className="w-full" variant="secondary" onClick={() => logout()}>
-              Выйти из аккаунта
+          <div className="flex w-full flex-col gap-3">
+            <Button
+              variant="secondary"
+              className="w-full"
+              onClick={() => logout()}
+              disabled={isLoggingOut}
+            >
+              {isLoggingOut ? "Выходим..." : "Выйти из системы"}
             </Button>
           </div>
-        </div>
-      </div>
-    </div>
+        </CardContent >
+      </Card>
+    </div >
   )
 }

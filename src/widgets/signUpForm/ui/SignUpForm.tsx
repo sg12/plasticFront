@@ -104,7 +104,7 @@ export function SignUpForm() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        {role === USER_ROLE.CLINIC ? "Название клиники" : "Фамилия Имя Отчество"}
+                        {role === USER_ROLE.CLINIC ? "ФИО Директора" : "Фамилия Имя Отчество"}
                       </FormLabel>
                       <FormControl>
                         <InputGroup>
@@ -113,11 +113,7 @@ export function SignUpForm() {
                           </InputGroupAddon>
                           <InputGroupInput
                             id="fullName"
-                            placeholder={
-                              role === USER_ROLE.CLINIC
-                                ? "Клиника 'Эстетика'"
-                                : "Иванов Иван Иванович"
-                            }
+                            placeholder="Иванов Иван Иванович"
                             {...field}
                           />
                         </InputGroup>

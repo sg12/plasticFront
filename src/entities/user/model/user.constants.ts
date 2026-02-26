@@ -42,7 +42,7 @@ export const MODERATION_STATUS_LOCALES = {
     ru: "Подтвержден",
   },
   [MODERATION_STATUS.PENDING]: {
-    ru: "Ожидает",
+    ru: "Ожидайте",
   },
   [MODERATION_STATUS.REJECTED]: {
     ru: "Отклонено",

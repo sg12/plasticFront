@@ -7,6 +7,7 @@ import { UserProfileHistory } from "@/widgets/profile/ui/UserProfileHistory"
 import { Card, CardContent } from "@/shared/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs"
 import { USER_ROLE } from "@/entities/user/model/user.constants"
+import { UserProfileFiles } from "./UserProfileFiles"
 
 /**
  * Компонент для просмотра своего профиля
@@ -43,28 +44,27 @@ export const ProfileForm = () => {
                 user={user!}
                 isEditing={isEditing}
               />
-              {user?.role != USER_ROLE.CLINIC && (
-                <div className="hidden flex-wrap items-center justify-end gap-2 sm:flex">
-                  {!isEditing ? (
-                    <Button onClick={startEdit} variant="secondary">
-                      Редактировать
+              <div className="hidden flex-wrap items-center justify-end gap-2 sm:flex">
+                {!isEditing ? (
+                  <Button onClick={startEdit} variant="secondary">
+                    Редактировать
+                  </Button>
+                ) : (
+                  <>
+                    <Button onClick={onSubmit} variant="primary" disabled={isSaving}>
+                      Сохранить
                     </Button>
-                  ) : (
-                    <>
-                      <Button onClick={onSubmit} variant="primary" disabled={isSaving}>
-                        Сохранить
-                      </Button>
-                      <Button variant="secondary" disabled={isSaving} onClick={cancelEdit}>
-                        Отмена
-                      </Button>
-                    </>
-                  )}
-                </div>
-              )}
+                    <Button variant="secondary" disabled={isSaving} onClick={cancelEdit}>
+                      Отмена
+                    </Button>
+                  </>
+                )}
+              </div>
             </div>
             <Tabs defaultValue="information">
               <TabsList className="w-full mb-4">
                 <TabsTrigger value="information">Данные</TabsTrigger>
+                <TabsTrigger value="files">Файлы</TabsTrigger>
                 <TabsTrigger value="history">История</TabsTrigger>
               </TabsList>
               <TabsContent value="information">
@@ -74,6 +74,9 @@ export const ProfileForm = () => {
                   isEditing={isEditing}
                   isSaving={isSaving}
                 />
+              </TabsContent>
+              <TabsContent value="files">
+                <UserProfileFiles />
               </TabsContent>
               <TabsContent value="history">
                 <UserProfileHistory user={user!} />

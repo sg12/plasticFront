@@ -44,7 +44,6 @@ export const useCreateProfileForm = () => {
   const form = useForm<CreateProfileDto>({
     resolver: zodResolver(CreateProfileSchema),
     defaultValues: getSavedData() || {
-      role: user?.role as ROLE,
       patient: user?.patient || undefined,
       doctor: user?.doctor || undefined,
       clinic: user?.clinic || undefined,
@@ -79,7 +78,7 @@ export const useCreateProfileForm = () => {
       navigate(ROUTES.SIGNUP)
       toast.info("Пожалуйста, войдите в систему, чтобы продолжить.")
     }
-  }, [navigate, role, form, user, isAuth])
+  }, [navigate, form, isAuth])
 
   const handleFileChange = <R extends keyof UploadedFilesState, K extends string>(
     role: R,
@@ -108,21 +107,14 @@ export const useCreateProfileForm = () => {
   const onSubmit = async (data: CreateProfileDto) => {
     if (!user) return
 
-    const roleKey = role
-    const profileKey = role.toLowerCase()
-
-    const payload = {
-      role: roleKey,
-      [profileKey]: data,
-    } as unknown as CreateProfileDto
-
     const allFiles = Object.values(uploadedFiles)
       .flatMap((roleFiles) => Object.values(roleFiles))
-      .filter((file): file is File => file instanceof File)
+      .flatMap((item) => (Array.isArray(item) ? item : [item]))
+      .filter((file) => file instanceof File)
 
     await createProfile(
       {
-        dto: payload,
+        dto: data,
         files: allFiles,
       },
       {
@@ -142,8 +134,7 @@ export const useCreateProfileForm = () => {
     uploadedFiles,
     handleFileChange,
     onSubmit: form.handleSubmit(onSubmit, (errors) => {
-      console.log(errors)
-      // toast.error(Object.values(errors).message)
+      toast.error(Object.values(errors)[0].message)
     }),
     FormProvider,
   }

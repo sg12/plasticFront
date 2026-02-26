@@ -11,7 +11,7 @@ import {
 import { useConsents } from "@/entities/consent/api/consent.queries"
 import { Item, ItemContent } from "@/shared/ui/item"
 import { Switch } from "@/shared/ui/switch"
-import { useNavigate } from "react-router"
+import { Link, useNavigate } from "react-router"
 import { useState } from "react"
 import { cn } from "@/shared/lib/utils"
 import { ROUTES } from "@/shared/model/routes"
@@ -77,9 +77,11 @@ export function ConsentModal({ onAccept, onDecline }: Props) {
                     )}
                   >
                     <ItemContent>
-                      <div
+                      <Link
+                        to={ROUTES.POLICIES.replace(':id', consent.id)}
+                        target="_blank"
+                        rel="noreferrer"
                         className="flex-1 cursor-pointer pr-4"
-                        onClick={() => navigate(ROUTES.POLICIES.replace(':id', consent.id))}
                       >
                         <div className="flex items-center gap-2">
                           <h4 className="font-semibold text-sm sm:text-base group-hover:text-purple-600 transition-colors">
@@ -90,7 +92,7 @@ export function ConsentModal({ onAccept, onDecline }: Props) {
                         <p className="text-xs text-muted-foreground mt-1">
                           {isRequired ? "Обязательно для регистрации" : "По желанию"}
                         </p>
-                      </div>
+                      </Link>
 
                     </ItemContent>
 

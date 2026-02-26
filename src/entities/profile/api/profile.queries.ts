@@ -20,10 +20,8 @@ export const useCreateProfile = () => {
 
     onSuccess: () => {
       toast.success("Профиль успешно создан!", { id: "create-profile" })
-
       queryClient.invalidateQueries({ queryKey: userKeys.me() })
-
-      navigate(ROUTES.MAIN)
+      // navigate(ROUTES.MAIN)
     },
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

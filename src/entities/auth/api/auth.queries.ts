@@ -28,13 +28,16 @@ export const useLogin = () => {
 export const useRegister = () => {
   return useMutation({
     mutationFn: authApi.register,
+    onMutate: () => {
+      toast.loading("Регистрируем...", { id: "register" })
+    },
     onSuccess: () => {
-      toast.success("Регистрация успешна! Проверьте почту для подтверждения.")
+      toast.success("Регистрация успешна! Проверьте почту для подтверждения.", { id: "register" })
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError: (error: any) => {
       const message = error.response?.data?.message || "Ошибка при регистрации"
-      toast.error(message)
+      toast.error(message, { id: "register" })
     },
   })
 }

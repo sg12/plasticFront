@@ -33,10 +33,10 @@ export const UserProfileCard = ({ user, isEditing = false, onProfileUpdate }: Pr
         <Avatar
           className={cn(
             "size-24 max-md:mb-4 border-1",
-            isOwnProfile && isEditing && "cursor-pointer transition-opacity hover:opacity-80",
-            isSavingAvatar && "opacity-50"
+            isOwnProfile && "cursor-pointer transition-opacity hover:opacity-70",
+            isSavingAvatar && "opacity-30"
           )}
-          onClick={() => isOwnProfile && isEditing && handleAvatarClick()}
+          onClick={() => isOwnProfile && handleAvatarClick()}
         >
           <AvatarImage
             src={`${user.avatar}?t=${new Date(user.updatedAt).getTime()}`}
@@ -50,7 +50,7 @@ export const UserProfileCard = ({ user, isEditing = false, onProfileUpdate }: Pr
             )}
           </AvatarFallback>
         </Avatar>
-        {isOwnProfile && isEditing && (
+        {isOwnProfile && (
           <input
             ref={fileInputRef}
             type="file"

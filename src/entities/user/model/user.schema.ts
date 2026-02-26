@@ -31,8 +31,8 @@ export const PatientProfileSchema = z.object({
 })
 
 export const DoctorProfileSchema = z.object({
-  gender: GenderSchema.nullable(),
-  birthdate: z.union([z.iso.datetime(), z.date()]).nullable(),
+  gender: GenderSchema,
+  birthdate: z.union([z.iso.datetime(), z.date()]),
   experience: z.number().min(0).max(60),
   specializations: z.array(z.enum(SPECIALIZATION)),
   education: z.string().min(2),

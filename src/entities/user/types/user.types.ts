@@ -12,6 +12,7 @@ import type { Ticket } from "@/entities/support/types/support.types"
 import type { Auth } from "@/entities/auth/types/auth.types"
 
 export interface User {
+  user: any
   readonly id: string
   email: string
   phone: string | null
@@ -51,8 +52,8 @@ export interface Patient {
 }
 
 export interface Doctor {
-  gender: GENDER | null
-  birthdate: string | null
+  gender: GENDER
+  birthdate: string
   experience: number
   specializations: SPECIALIZATION[]
   education: string

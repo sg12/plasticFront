@@ -7,8 +7,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/shared/ui/select"
-import { Input } from "@/shared/ui/input"
-import { Textarea } from "@/shared/ui/textarea"
 import { Mars, Venus, VenusAndMars, X } from "lucide-react"
 import type { Props } from "./types/types"
 import { patientFields } from "@/widgets/roleForms/model/constants"
@@ -16,8 +14,7 @@ import { SelectBirthDate } from "@/features/selectBirthDate/ui/SelectBirthDate"
 import { USER_GENDER } from "@/entities/user/model/user.constants"
 import { useState } from "react"
 import { Badge } from "@/shared/ui/badge"
-import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupText } from "@/shared/ui/inputGroup"
-import { cn } from "@/shared/lib/utils"
+import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupText, InputGroupTextarea } from "@/shared/ui/inputGroup"
 
 export const PatientForm = ({ mode = "edit", form, isSaving }: Props) => {
   const isViewMode = mode === "view" || !!isSaving
@@ -87,13 +84,14 @@ export const PatientForm = ({ mode = "edit", form, isSaving }: Props) => {
 
                     case "textarea":
                       return (
-                        <Textarea
-                          {...formField}
-                          value={formField.value ?? ""}
-                          placeholder={field.placeholder}
-                          disabled={isViewMode}
-                          className="min-h-[80px] resize-none"
-                        />
+                        <InputGroup>
+                          <InputGroupTextarea
+                            {...formField}
+                            value={formField.value ?? ""}
+                            placeholder={field.placeholder}
+                            disabled={isViewMode}
+                          />
+                        </InputGroup>
                       )
 
                     case "tags": {
@@ -114,9 +112,9 @@ export const PatientForm = ({ mode = "edit", form, isSaving }: Props) => {
                       };
 
                       return (
-                        <InputGroup className="flex-wrap">
+                        <InputGroup className={isViewMode ? "flex-wrap" : "grid"}>
                           {tags.length > 0 && (
-                            <InputGroupAddon align="inline-start" className="flex-wrap">
+                            <InputGroupAddon className="flex-wrap justify-start">
                               {tags.map((tag, index) => (
                                 <Badge
                                   key={`${tag}-${index}`}
@@ -142,10 +140,12 @@ export const PatientForm = ({ mode = "edit", form, isSaving }: Props) => {
                             </InputGroupAddon>
                           )}
 
+
                           <InputGroupInput
                             id={`input-${field.id}`}
                             readOnly={isViewMode}
                             placeholder={isViewMode ? "" : (tags.length === 0 ? field.placeholder : "Добавить...")}
+                            className={!isViewMode ? "border-t-1" : ""}
                             value={tagInput}
                             disabled={isViewMode}
                             onChange={(e) => setTagInput(e.target.value)}
@@ -185,9 +185,10 @@ export const PatientForm = ({ mode = "edit", form, isSaving }: Props) => {
               </FormControl>
               <FormMessage />
             </FormItem>
-          )}
+  )
+}
         />
       ))}
-    </div>
+    </div >
   )
 }

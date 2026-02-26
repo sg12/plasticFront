@@ -1,4 +1,4 @@
-import { SPECIALIZATION } from "@/entities/doctor/model/doctor.constants"
+import { SPECIALIZATION_LOCALES } from "@/entities/doctor/model/doctor.constants"
 import { GENDER_LOCALES, USER_GENDER } from "@/entities/user/model/user.constants"
 
 export const clinicFields = [
@@ -148,22 +148,22 @@ export const doctorFields = [
     optional: true,
   },
   {
+    name: "doctor.specializations",
+    label: "Специализации",
+    id: "specializations",
+    type: "multi-select" as const,
+    options: Object.entries(SPECIALIZATION_LOCALES).map(([key, locale]) => ({
+      label: locale.ru,
+      value: key,
+    })),
+  },
+  {
     name: "doctor.bio",
     label: "О себе / Биография",
     placeholder: "Краткая информация о ваших достижениях...",
     id: "bio",
     type: "textarea" as const,
     optional: true,
-  },
-  {
-    name: "doctor.specializations",
-    label: "Специализации",
-    id: "specializations",
-    type: "multi-select" as const,
-    options: Object.values(SPECIALIZATION).map((spec) => ({
-      label: spec, // Или используйте локализованное название, если есть маппинг
-      value: spec,
-    })),
   },
 ]
 
