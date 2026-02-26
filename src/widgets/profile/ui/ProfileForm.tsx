@@ -40,10 +40,7 @@ export const ProfileForm = () => {
         <Card>
           <CardContent className="space-child">
             <div className="flex justify-between items-start">
-              <UserProfileCard
-                user={user!}
-                isEditing={isEditing}
-              />
+              <UserProfileCard user={user!} />
               <div className="hidden flex-wrap items-center justify-end gap-2 sm:flex">
                 {!isEditing ? (
                   <Button onClick={startEdit} variant="secondary">

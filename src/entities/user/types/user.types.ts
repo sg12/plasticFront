@@ -12,7 +12,6 @@ import type { Ticket } from "@/entities/support/types/support.types"
 import type { Auth } from "@/entities/auth/types/auth.types"
 
 export interface User {
-  user: any
   readonly id: string
   email: string
   phone: string | null
@@ -36,7 +35,7 @@ export interface User {
   clinic: Clinic
 }
 
-export interface Patient {
+export interface Patient extends User {
   birthdate: string | null
   gender: GENDER | null
   medicalNotes: string | null
@@ -51,7 +50,7 @@ export interface Patient {
   documents: File[]
 }
 
-export interface Doctor {
+export interface Doctor extends User {
   gender: GENDER
   birthdate: string
   experience: number
@@ -76,6 +75,7 @@ export interface Doctor {
   services: Service[]
   reviews: Review[]
   breaks: Break[]
+  user: User
 }
 
 export interface Clinic {
@@ -103,6 +103,7 @@ export interface Clinic {
   timeSlots: TimeSlot[]
   services: Service[]
   reviews: Review[]
+  user: User
 }
 
 export interface Favorite {

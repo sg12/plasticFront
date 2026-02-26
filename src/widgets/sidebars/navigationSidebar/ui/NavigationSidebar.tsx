@@ -33,9 +33,6 @@ export const NavigationSidebar = ({ ...props }: React.ComponentProps<typeof Side
   const { mutateAsync: logout } = useLogout()
   const { pathname } = useLocation()
   const { setOpenMobile } = useSidebar("navigation")
-
-  console.log(user)
-
   const navigation = navigationConfig[user?.role as ROLE]
 
   const activeId = (() => {
@@ -219,9 +216,11 @@ export const NavigationSidebar = ({ ...props }: React.ComponentProps<typeof Side
           )}
           <ItemContent className="relative z-10">
             <ItemTitle className="text-foreground font-medium">
-              {user && user.role === USER_ROLE.CLINIC
-                ? user.fullName
-                : formatName(user?.fullName || "-")}
+              {user?.role === USER_ROLE.CLINIC ? (
+                user?.clinic.brandName
+              ) : (
+                user?.fullName
+              )}
             </ItemTitle>
             <ItemDescription className="text-muted-foreground text-xs">
               {[ROLE_LOCALES[user?.role as ROLE].ru]}

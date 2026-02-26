@@ -1,20 +1,31 @@
-/**
- * @fileoverview Виджет для управления клиниками врача
- *
- * Позволяет врачу:
- * - Просматривать список приглашений от клиник
- * - Принимать приглашения
- * - Отклонять приглашения
- * - Просматривать историю приглашений
- */
+import { Link } from "react-router"
+import { format } from "date-fns"
+import { ru } from "date-fns/locale"
+import {
+  MapPin,
+  CheckCircle,
+  XCircle,
+  Clock,
+  Building2,
+  Check,
+  X,
+  ExternalLink,
+  Users,
+} from "lucide-react"
 
-import { useDoctorClinics } from "@/features/doctor/hooks/useDoctorClinics"
-import { useAcceptInvitation } from "@/features/doctor/hooks/useAcceptInvitation"
-import { useRejectInvitation } from "@/features/doctor/hooks/useRejectInvitation"
-import { Card, CardContent } from "@/shared/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card"
 import { Button } from "@/shared/ui/button"
 import { Badge } from "@/shared/ui/badge"
-import { MembershipList } from "@/widgets/membershipList/ui/MembershipList"
+import { Skeleton } from "@/shared/ui/skeleton"
+import { ErrorState } from "@/shared/ui/errorState"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/shared/ui/table"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -26,328 +37,219 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/shared/ui/alertDialog"
-import {
-  Mail,
-  MapPin,
-  CheckCircle,
-  XCircle,
-  Clock,
-  Building2,
-  Loader,
-  Check,
-  X,
-  ExternalLink,
-  Calendar,
-  Users,
-} from "lucide-react"
-import { format } from "date-fns"
-import { ru } from "date-fns/locale"
+
 import { ROUTES } from "@/shared/model/routes"
-import { Link } from "react-router"
-import type { ClinicMembership } from "@/entities/user/types/invitations"
+import type { Relationship } from "@/entities/relationship/types/relationship.types"
+import { useChangeRelationshipStatus, useRelationships } from "@/entities/relationship/api/relationship.queries"
+import { RELATIONSHIP_STATUS } from "@/entities/relationship/model/relationship.constants"
 
-interface DoctorClinicsListProps {
-  doctorId: string | undefined
-}
+export const DoctorClinicsList = () => {
+  // 1. Получаем данные через твой Query
+  const { data: clinics = [], isLoading, error, refetch } = useRelationships();
 
-const getStatusBadge = (status: string) => {
-  switch (status) {
-    case "pending":
-      return (
-        <Badge variant="outline" className="flex items-center gap-1">
-          <Clock className="h-3 w-3" />
-          Ожидает ответа
-        </Badge>
-      )
-    case "accepted":
-      return (
-        <Badge variant="default" className="flex items-center gap-1 bg-green-500">
-          <CheckCircle className="h-3 w-3" />
-          Принято
-        </Badge>
-      )
-    case "rejected":
-      return (
-        <Badge variant="destructive" className="flex items-center gap-1">
-          <XCircle className="h-3 w-3" />
-          Отклонено
-        </Badge>
-      )
-    case "left":
-      return (
-        <Badge variant="secondary" className="flex items-center gap-1">
-          Покинул
-        </Badge>
-      )
-    default:
-      return null
-  }
-}
+  // 2. Получаем мутацию для смены статуса
+  const { mutateAsync: updateStatus, isPending: isUpdating } = useChangeRelationshipStatus();
 
-export const DoctorClinicsList = ({ doctorId }: DoctorClinicsListProps) => {
-  const { clinics, isLoading, error, refresh } = useDoctorClinics(doctorId)
-  const { acceptInvitationById, isAccepting } = useAcceptInvitation(doctorId, refresh)
-  const { rejectInvitationById, isRejecting } = useRejectInvitation(doctorId, refresh)
+  // Обработчики действий
+  const handleAccept = async (id: string) => {
+    await updateStatus({ id, status: RELATIONSHIP_STATUS.APPROVED });
+  };
 
-  // Разделяем клиники на принятые, ожидающие и историю
-  const acceptedClinics = clinics.filter((clinic) => clinic.status === "accepted")
-  const pendingClinics = clinics.filter((clinic) => clinic.status === "pending")
-  const historyClinics = clinics.filter(
-    (clinic) => clinic.status !== "pending" && clinic.status !== "accepted",
-  )
+  const handleReject = async (id: string) => {
+    await updateStatus({ id, status: RELATIONSHIP_STATUS.REJECTED });
+  };
 
-  const handleAccept = async (membershipId: string) => {
-    await acceptInvitationById(membershipId)
-  }
-
-  const handleReject = async (membershipId: string) => {
-    await rejectInvitationById(membershipId)
-  }
-
-  const renderAcceptedClinic = (membership: ClinicMembership) => {
-    const clinic = membership.clinic
-    if (!clinic) return null
-
+  if (isLoading) {
     return (
-      <Card
-        key={membership.id}
-        className="relative overflow-hidden border-2 border-green-200 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20"
-      >
-        <CardContent className="p-6">
-          <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
-            <div className="flex-1 space-y-4">
-              <div className="flex items-start gap-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-green-100 dark:bg-green-900/30">
-                  <Building2 className="h-6 w-6 text-green-600 dark:text-green-400" />
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-3">
-                    <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
-                      {clinic.legalName}
-                    </h3>
-                    <Badge className="bg-green-500 hover:bg-green-600">
-                      <CheckCircle className="mr-1 h-3 w-3" />
-                      Активная клиника
-                    </Badge>
-                  </div>
-                  {clinic.actualAddress && (
-                    <div className="mt-2 flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                      <MapPin className="h-4 w-4 text-gray-500" />
-                      <span>{clinic.actualAddress}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="grid gap-3 sm:grid-cols-2">
-                {membership.acceptedAt && (
-                  <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                    <Calendar className="h-4 w-4 text-gray-500" />
-                    <span>
-                      Принято:{" "}
-                      {format(new Date(membership.acceptedAt), "dd MMMM yyyy", { locale: ru })}
-                    </span>
-                  </div>
-                )}
-                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                  <Users className="h-4 w-4 text-gray-500" />
-                  <span>Вы являетесь сотрудником этой клиники</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap gap-2 sm:flex-col">
-              <Button variant="primary" asChild className="w-full sm:w-auto">
-                <Link to={ROUTES.PROFILE_SOME_USER.replace(":userId", clinic.id)}>
-                  <ExternalLink className="mr-2 h-4 w-4" />
-                  Профиль клиники
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </CardContent>
+      <Card>
+        <CardHeader><Skeleton className="h-8 w-48" /></CardHeader>
+        <CardContent><Skeleton className="h-64 w-full" /></CardContent>
       </Card>
     )
   }
 
-  const renderClinicCard = (membership: ClinicMembership, isPending: boolean) => {
-    const clinic = membership.clinic
-    if (!clinic) return null
+  if (error) {
+    return <ErrorState error={error} title="Не удалось загрузить данные" onRetry={refetch} />
+  }
 
-    return (
-      <div
-        key={membership.id}
-        className="hover:bg-accent/50 flex flex-col gap-4 rounded-lg border p-4 transition-colors sm:flex-row sm:items-start sm:justify-between"
-      >
-        <div className="flex-1 space-y-3">
-          <div className="flex items-start justify-between gap-2">
-            <div className="flex items-center gap-2">
-              <Building2 className="h-5 w-5 text-purple-600" />
-              <div>
-                <h4 className="font-medium">{clinic.legalName}</h4>
-                {clinic.actualAddress && (
-                  <div className="text-muted-foreground mt-1 flex items-center gap-1 text-sm">
-                    <MapPin className="h-3 w-3" />
-                    <span>{clinic.actualAddress}</span>
-                  </div>
-                )}
-              </div>
-            </div>
-            {getStatusBadge(membership.status)}
-          </div>
+  // Фильтрация по статусам для группировки в таблице
+  const pending = clinics.filter((c) => c.status === RELATIONSHIP_STATUS.PENDING)
+  const accepted = clinics.filter((c) => c.status === RELATIONSHIP_STATUS.APPROVED)
+  const others = clinics.filter((c) => c.status !== RELATIONSHIP_STATUS.PENDING && c.status !== RELATIONSHIP_STATUS.APPROVED)
 
-          <div className="text-muted-foreground flex flex-wrap gap-4 text-sm">
-            <div>
-              Приглашение отправлено:{" "}
-              {format(new Date(membership.invitedAt), "dd MMMM yyyy 'в' HH:mm", { locale: ru })}
-            </div>
-            {membership.acceptedAt && (
-              <div>
-                Принято:{" "}
-                {format(new Date(membership.acceptedAt), "dd MMMM yyyy 'в' HH:mm", { locale: ru })}
-              </div>
-            )}
-          </div>
+  return (
+    <Card>
+      <CardHeader className="pb-3">
+        <CardTitle className="flex items-center gap-2 text-xl font-semibold">
+          <Building2 className="h-5 w-5 text-purple-600" />
+          Мои клиники и приглашения
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="rounded-md border">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-muted/50 hover:bg-muted/50">
+                <TableHead className="w-[300px]">Клиника</TableHead>
+                <TableHead>Статус</TableHead>
+                <TableHead className="hidden md:table-cell">Дата события</TableHead>
+                <TableHead className="text-right">Действия</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {/* Приглашения */}
+              {pending.map((m) => (
+                <ClinicRow
+                  key={m.id}
+                  relationship={m}
+                  isPending
+                  onAccept={handleAccept}
+                  onReject={handleReject}
+                  isProcessing={isUpdating}
+                />
+              ))}
 
-          {isPending && (
-            <div className="flex flex-wrap gap-2">
+              {/* Активные */}
+              {accepted.map((m) => (
+                <ClinicRow key={m.id} relationship={m} />
+              ))}
+
+              {/* История */}
+              {others.map((m) => (
+                <ClinicRow key={m.id} relationship={m} isHistory />
+              ))}
+
+              {clinics.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={4} className="h-32 text-center text-muted-foreground">
+                    Список пуст
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
+interface ClinicRowProps {
+  relationship: Relationship;
+  isPending?: boolean;
+  isHistory?: boolean;
+  onAccept?: (id: string) => void;
+  onReject?: (id: string) => void;
+  isProcessing?: boolean;
+}
+
+const ClinicRow = ({
+  relationship,
+  isPending,
+  onAccept,
+  onReject,
+  isProcessing
+}: ClinicRowProps) => {
+  if (!relationship) return null
+
+  return (
+    <TableRow className={isPending ? "bg-amber-50/30 dark:bg-amber-950/10" : ""}>
+      <TableCell>
+        <div className="flex flex-col gap-0.5">
+          <span className="font-medium">{relationship.clinic.legalName}</span>
+          <span className="text-xs text-muted-foreground flex items-center gap-1">
+            <MapPin className="h-3 w-3" /> {relationship.clinic.actualAddress || "Адрес не указан"}
+          </span>
+        </div>
+      </TableCell>
+
+      <TableCell>
+        <StatusBadge status={relationship.status} />
+      </TableCell>
+
+      <TableCell className="hidden md:table-cell text-sm text-muted-foreground">
+        {isPending ? (
+          <span>Отправлено: {format(new Date(relationship.updatedAt), "d MMM yyyy", { locale: ru })}</span>
+        ) : (
+          <span>{relationship.createdAt ? format(new Date(relationship.createdAt), "d MMM yyyy", { locale: ru }) : "—"}</span>
+        )}
+      </TableCell>
+
+      <TableCell className="text-right">
+        <div className="flex justify-end gap-2">
+          {isPending && onAccept && onReject ? (
+            <>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <Button size="sm" variant="primary" disabled={isAccepting || isRejecting}>
-                    <Check className="mr-2 h-4 w-4" />
-                    Принять
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="h-8 w-8 p-0 text-green-600 hover:text-green-700 hover:bg-green-50"
+                    disabled={isProcessing}
+                  >
+                    <Check className="h-4 w-4" />
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
                     <AlertDialogTitle>Принять приглашение?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      Вы уверены, что хотите принять приглашение от клиники "{clinic.legalName}"?
-                      После принятия вы станете сотрудником этой клиники.
-                    </AlertDialogDescription>
+                    <AlertDialogDescription>Вы станете сотрудником клиники "{relationship.clinic.legalName}".</AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Отмена</AlertDialogCancel>
-                    <AlertDialogAction
-                      onClick={() => handleAccept(membership.id)}
-                      disabled={isAccepting}
-                      className="bg-green-500 hover:bg-green-600"
-                    >
-                      {isAccepting ? (
-                        <>
-                          <Loader className="mr-2 h-4 w-4 animate-spin" />
-                          Принятие...
-                        </>
-                      ) : (
-                        "Принять"
-                      )}
-                    </AlertDialogAction>
+                    <AlertDialogAction onClick={() => onAccept(relationship.id)} className="bg-green-600">Принять</AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
 
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <Button size="sm" variant="secondary" disabled={isAccepting || isRejecting}>
-                    <X className="mr-2 h-4 w-4" />
-                    Отклонить
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="h-8 w-8 p-0 text-destructive hover:bg-destructive/10"
+                    disabled={isProcessing}
+                  >
+                    <X className="h-4 w-4" />
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
                     <AlertDialogTitle>Отклонить приглашение?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      Вы уверены, что хотите отклонить приглашение от клиники "{clinic.legalName}"?
-                      Это действие нельзя отменить.
-                    </AlertDialogDescription>
+                    <AlertDialogDescription>Это действие нельзя отменить.</AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel>Отмена</AlertDialogCancel>
-                    <AlertDialogAction
-                      onClick={() => handleReject(membership.id)}
-                      disabled={isRejecting}
-                      className="bg-destructive hover:bg-destructive/90"
-                    >
-                      {isRejecting ? (
-                        <>
-                          <Loader className="mr-2 h-4 w-4 animate-spin" />
-                          Отклонение...
-                        </>
-                      ) : (
-                        "Отклонить"
-                      )}
-                    </AlertDialogAction>
+                    <AlertDialogCancel>Назад</AlertDialogCancel>
+                    <AlertDialogAction onClick={() => onReject(relationship.id)} className="bg-destructive">Отклонить</AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
-
-              <Button size="sm" variant="ghost" asChild>
-                <Link to={ROUTES.PROFILE_SOME_USER.replace(":userId", clinic.id)}>
-                  Посмотреть профиль
-                </Link>
-              </Button>
-            </div>
+            </>
+          ) : (
+            <Button variant="ghost" size="sm" asChild className="h-8">
+              <Link to={ROUTES.PROFILE_SOME_USER.replace(":userId", relationship.clinic.user.id)}>
+                <ExternalLink className="h-4 w-4" />
+              </Link>
+            </Button>
           )}
         </div>
-      </div>
-    )
-  }
+      </TableCell>
+    </TableRow>
+  )
+}
 
-  // Объединяем pending и history для отображения
-  const invitationsList = [...pendingClinics, ...historyClinics]
+const StatusBadge = ({ status }: { status: string }) => {
+  const config = {
+    [RELATIONSHIP_STATUS.PENDING]: { label: "Ожидает", icon: Clock, className: "bg-amber-100 text-amber-700 border-amber-200" },
+    [RELATIONSHIP_STATUS.APPROVED]: { label: "В штате", icon: CheckCircle, className: "bg-green-100 text-green-700 border-green-200" },
+    [RELATIONSHIP_STATUS.REJECTED]: { label: "Отклонено", icon: XCircle, className: "bg-red-100 text-red-700 border-red-200" },
+    [RELATIONSHIP_STATUS.ARCHIVED]: { label: "Покинул", icon: Users, className: "bg-slate-100 text-slate-700 border-slate-200" },
+  }[status] || { label: status, icon: Clock, className: "" }
 
-  // Кастомный контент для группировки приглашений
-  const renderGroupedInvitations = () => {
-    if (pendingClinics.length === 0 && historyClinics.length === 0) {
-      return null
-    }
-
-    return (
-      <div className="space-y-6">
-        {pendingClinics.length > 0 && (
-          <div>
-            <h3 className="mb-4 text-lg font-semibold">Новые приглашения</h3>
-            <div className="space-y-4">
-              {pendingClinics.map((clinic) => renderClinicCard(clinic, true))}
-            </div>
-          </div>
-        )}
-
-        {historyClinics.length > 0 && (
-          <div>
-            <h3 className="mb-4 text-lg font-semibold">История приглашений</h3>
-            <div className="space-y-4">
-              {historyClinics.map((clinic) => renderClinicCard(clinic, false))}
-            </div>
-          </div>
-        )}
-      </div>
-    )
-  }
-
-  const acceptedClinicsContent =
-    acceptedClinics.length > 0 ? (
-      <div className="space-y-4">
-        {acceptedClinics.map((clinic) => renderAcceptedClinic(clinic))}
-      </div>
-    ) : null
-
+  const Icon = config.icon
   return (
-    <MembershipList
-      memberships={invitationsList}
-      isLoading={isLoading}
-      error={error}
-      title="Приглашения от клиник"
-      titleIcon={Mail}
-      renderContent={renderGroupedInvitations}
-      emptyState={{
-        icon: Mail,
-        title: "У вас пока нет приглашений от клиник",
-        description: "Когда клиника отправит вам приглашение, оно появится здесь",
-      }}
-      onRetry={refresh}
-      skeletonCount={2}
-      beforeList={acceptedClinicsContent}
-    />
+    <Badge variant="outline" className={`font-normal whitespace-nowrap ${config.className}`}>
+      <Icon className="mr-1 h-3 w-3" /> {config.label}
+    </Badge>
   )
 }

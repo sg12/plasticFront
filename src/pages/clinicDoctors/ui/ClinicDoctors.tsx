@@ -3,12 +3,8 @@
  */
 
 import { ClinicDoctorsList } from "@/widgets/clinic/clinicDoctorsList/ui/ClinicDoctorsList"
-import { useUserStore } from "@/entities/user/model/user.store"
 
 export const ClinicDoctors = () => {
-  const { profile } = useUserStore()
-  const clinicId = profile?.id
-
   return (
     <div className="space-global">
       <div>
@@ -17,7 +13,7 @@ export const ClinicDoctors = () => {
           Управляйте списком врачей вашей клиники
         </p>
       </div>
-      <ClinicDoctorsList clinicId={clinicId} />
+      <ClinicDoctorsList />
     </div>
   )
 }

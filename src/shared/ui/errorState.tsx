@@ -2,7 +2,7 @@ import { Button } from "@/shared/ui/button"
 import { AlertCircle, RefreshCw } from "lucide-react"
 
 interface ErrorStateProps {
-  error: string
+  error: string | Error | null
   title?: string
   onRetry?: () => void
   retryLabel?: string
@@ -16,14 +16,22 @@ export const ErrorState = ({
   retryLabel = "Попробовать снова",
   description,
 }: ErrorStateProps) => {
-  const getErrorMessage = () => {
-    if (error.includes("network") || error.includes("fetch")) {
-      return "Проблема с подключением к серверу. Проверьте ваше интернет-соединение."
+  const getErrorMessage = (): string => {
+    const message = error instanceof Error
+      ? error.message
+      : typeof error === 'string'
+        ? error
+        : "";
+
+    if (message.toLowerCase().includes("network") || message.toLowerCase().includes("fetch")) {
+      return "Проблема с подключением к серверу. Проверьте ваше интернет-соединение.";
     }
-    if (error.includes("timeout")) {
-      return "Превышено время ожидания. Попробуйте обновить страницу."
+
+    if (message.toLowerCase().includes("timeout")) {
+      return "Превышено время ожидания. Попробуйте обновить страницу.";
     }
-    return error
+
+    return message
   }
 
   return (

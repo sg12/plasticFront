@@ -1,27 +1,25 @@
-/**
- * @fileoverview Виджет для управления врачами клиники
- *
- * Позволяет клинике:
- * - Просматривать список своих врачей
- * - Добавлять врачей по ID
- * - Удалять врачей из клиники
- */
+import { Users, MoreHorizontal, Mail, GraduationCap, Loader2 } from "lucide-react"
+import { format } from "date-fns"
+import { ru } from "date-fns/locale"
 
-import { useState } from "react"
-import { useClinicDoctors } from "@/features/clinic/hooks/useClinicDoctors"
-import { useInviteDoctor } from "@/features/clinic/hooks/useInviteDoctor"
-import { useRemoveDoctor } from "@/features/clinic/hooks/useRemoveDoctor"
 import { Button } from "@/shared/ui/button"
-import { Input } from "@/shared/ui/input"
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/card"
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/shared/ui/dialog"
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/shared/ui/table"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/shared/ui/dropdown-menu"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -33,199 +31,183 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/shared/ui/alertDialog"
-import { MembershipList } from "@/widgets/membershipList/ui/MembershipList"
-import { Users, UserPlus, Trash2, Loader, Stethoscope, Mail, Phone, Briefcase } from "lucide-react"
+import { EmptyState } from "@/shared/ui/emptyState"
+import { ErrorState } from "@/shared/ui/errorState"
+import { Skeleton } from "@/shared/ui/skeleton"
+
 import { pluralRu } from "@/shared/lib/utils"
-import { format } from "date-fns"
-import { ru } from "date-fns/locale"
-import type { ClinicMembership } from "@/entities/user/types/invitations"
+import { useArchiveRelationship, useRelationships } from "@/entities/relationship/api/relationship.queries"
+import { InviteDoctorButton } from "@/features/inviteDoctorButton/ui/InviteDoctorButton"
+import type { Relationship } from "@/entities/relationship/types/relationship.types"
+import { SPECIALIZATION_LOCALES } from "@/entities/doctor/model/doctor.constants"
+import { Badge } from "@/shared/ui/badge"
 
-interface ClinicDoctorsListProps {
-  clinicId: string | undefined
-}
+export const ClinicDoctorsList = () => {
+  const { data: relationships, isLoading, error, refetch } = useRelationships()
+  const archive = useArchiveRelationship()
 
-export const ClinicDoctorsList = ({ clinicId }: ClinicDoctorsListProps) => {
-  const { doctors, isLoading, error, refresh } = useClinicDoctors(clinicId)
-  const { inviteDoctor, isInviting } = useInviteDoctor(clinicId, refresh)
-  const { removeDoctor, isRemoving } = useRemoveDoctor(clinicId, refresh)
-
-  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false)
-  const [doctorIdInput, setDoctorIdInput] = useState("")
-  const [doctorToRemove, setDoctorToRemove] = useState<string | null>(null)
-
-  const handleInvite = async () => {
-    const success = await inviteDoctor(doctorIdInput)
-    if (success) {
-      setDoctorIdInput("")
-      setIsAddDialogOpen(false)
-    }
-  }
-
-  const handleRemove = async () => {
-    if (doctorToRemove) {
-      await removeDoctor(doctorToRemove)
-      setDoctorToRemove(null)
-    }
-  }
-
-  const renderDoctorCard = (membership: ClinicMembership) => {
-    const doctor = membership.doctor
-    if (!doctor) return null
-
+  if (isLoading) {
     return (
-      <div
-        key={membership.id}
-        className="hover:bg-accent/50 flex items-start justify-between gap-4 rounded-lg border p-4 transition-colors"
-      >
-        <div className="flex-1 space-y-2">
-          <div className="flex items-center gap-2">
-            <Stethoscope className="h-4 w-4 text-purple-600" />
-            <h4 className="font-medium">{doctor.fullName}</h4>
-          </div>
-
-          <div className="text-muted-foreground grid gap-2 text-sm sm:grid-cols-2">
-            {doctor.specialization && (
-              <div className="flex items-center gap-2">
-                <Briefcase className="h-3 w-3" />
-                <span>{doctor.specialization}</span>
-              </div>
-            )}
-            {doctor.experience !== null && doctor.experience !== undefined && (
-              <div>Опыт: {pluralRu(doctor.experience, "год", "года", "лет")}</div>
-            )}
-            {doctor.email && (
-              <div className="flex items-center gap-2">
-                <Mail className="h-3 w-3" />
-                <span>{doctor.email}</span>
-              </div>
-            )}
-            {doctor.phone && (
-              <div className="flex items-center gap-2">
-                <Phone className="h-3 w-3" />
-                <span>{doctor.phone}</span>
-              </div>
-            )}
-            {membership.acceptedAt && (
-              <div className="text-xs">
-                Принят: {format(new Date(membership.acceptedAt), "dd MMMM yyyy", { locale: ru })}
-              </div>
-            )}
-          </div>
-        </div>
-
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-destructive hover:text-destructive"
-              disabled={isRemoving}
-            >
-              <Trash2 className="h-4 w-4" />
-            </Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Удалить врача из клиники?</AlertDialogTitle>
-              <AlertDialogDescription>
-                Вы уверены, что хотите удалить {doctor.fullName} из списка врачей клиники? Это
-                действие нельзя отменить.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Отмена</AlertDialogCancel>
-              <AlertDialogAction
-                onClick={async () => {
-                  setDoctorToRemove(doctor.id)
-                  await handleRemove()
-                }}
-                className="bg-destructive hover:bg-destructive/90"
-                disabled={isRemoving}
-              >
-                {isRemoving ? (
-                  <>
-                    <Loader className="mr-2 h-4 w-4 animate-spin" />
-                    Удаление...
-                  </>
-                ) : (
-                  "Удалить"
-                )}
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-      </div>
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between pb-3">
+          <Skeleton className="h-8 w-[200px]" />
+          <Skeleton className="h-9 w-[140px]" />
+        </CardHeader>
+        <CardContent className="space-y-2">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Skeleton key={i} className="h-16 w-full" />
+          ))}
+        </CardContent>
+      </Card>
     )
   }
 
-  const addDoctorDialog = (
-    <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-      <DialogTrigger asChild>
-        <Button size="sm">
-          <UserPlus className="mr-2 h-4 w-4" />
-          Добавить врача
-        </Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Добавить врача в клинику</DialogTitle>
-          <DialogDescription>
-            Введите ID врача, которого вы хотите пригласить в клинику. Врач получит приглашение и
-            сможет принять или отклонить его.
-          </DialogDescription>
-        </DialogHeader>
-        <div className="space-y-4 py-4">
-          <div className="space-y-2">
-            <label htmlFor="doctorId" className="text-sm font-medium">
-              ID врача
-            </label>
-            <Input
-              id="doctorId"
-              placeholder="Введите ID врача"
-              value={doctorIdInput}
-              onChange={(e) => setDoctorIdInput(e.target.value)}
-              disabled={isInviting}
-            />
-          </div>
-        </div>
-        <DialogFooter>
-          <Button
-            variant="secondary"
-            onClick={() => setIsAddDialogOpen(false)}
-            disabled={isInviting}
-          >
-            Отмена
-          </Button>
-          <Button onClick={handleInvite} disabled={isInviting || !doctorIdInput.trim()}>
-            {isInviting ? (
-              <>
-                <Loader className="mr-2 h-4 w-4 animate-spin" />
-                Отправка...
-              </>
-            ) : (
-              "Отправить приглашение"
-            )}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  )
+  if (error) {
+    return (
+      <ErrorState
+        error={error instanceof Error ? error.message : "Ошибка загрузки"}
+        title="Не удалось загрузить список врачей"
+        onRetry={refetch}
+      />
+    )
+  }
+
+  const hasRelationships = relationships && relationships.length > 0
 
   return (
-    <MembershipList
-      memberships={doctors}
-      isLoading={isLoading}
-      error={error}
-      title="Врачи клиники"
-      titleIcon={Users}
-      headerActions={addDoctorDialog}
-      renderCard={renderDoctorCard}
-      emptyState={{
-        icon: Users,
-        title: "В клинике пока нет врачей",
-        description: "Добавьте врачей, чтобы они могли работать в вашей клинике",
-      }}
-      onRetry={refresh}
-    />
+    <Card>
+      <CardHeader className="pb-3">
+        <div className="flex items-center justify-between gap-4">
+          <CardTitle className="flex items-center gap-2 text-xl font-semibold">
+            <Users className="h-5 w-5 shrink-0 text-purple-600" />
+            Список сотрудников
+          </CardTitle>
+          <InviteDoctorButton />
+        </div>
+      </CardHeader>
+      <CardContent>
+        {!hasRelationships ? (
+          <div className="py-10">
+            <EmptyState
+              icon={Users}
+              title="Врачи не найдены"
+              description="Ваш штат пока пуст. Самое время пригласить первого специалиста."
+            />
+          </div>
+        ) : (
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-muted/50 hover:bg-muted/50">
+                  <TableHead className="w-[250px]">Врач</TableHead>
+                  <TableHead>Специализация</TableHead>
+                  <TableHead>Опыт</TableHead>
+                  <TableHead>Дата добавления</TableHead>
+                  <TableHead className="text-right">Действия</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {relationships.map((relationship: Relationship) => {
+                  const { doctor } = relationship
+
+                  return (
+                    <TableRow key={doctor.id} className="group transition-colors">
+                      <TableCell>
+                        <div className="flex flex-col">
+                          <span className="font-medium">{doctor.fullName}</span>
+                          <span className="text-xs text-muted-foreground flex items-center gap-1">
+                            {doctor.user.fullName || "Нет почты"}
+                          </span>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          {doctor.specializations && doctor.specializations.length > 0 ? (
+                            doctor.specializations.map((specKey) => {
+                              const label = SPECIALIZATION_LOCALES[specKey as keyof typeof SPECIALIZATION_LOCALES]?.ru || specKey;
+
+                              return (
+                                <Badge
+                                  key={specKey}
+                                  variant="primary"
+                                >
+                                  {label}
+                                </Badge>
+                              );
+                            })
+                          ) : (
+                            <span className="text-muted-foreground text-sm">—</span>
+                          )}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <span className="text-sm">
+                          {typeof doctor.experience === 'number'
+                            ? pluralRu(doctor.experience, "год", "года", "лет")
+                            : "—"}
+                        </span>
+                      </TableCell>
+                      <TableCell className="text-sm text-muted-foreground">
+                        {format(new Date(doctor.createdAt), "d MMM yyyy", { locale: ru })}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>Действия</DropdownMenuLabel>
+                            <DropdownMenuItem
+                              onClick={() => window.location.href = `mailto:${doctor.email}`}
+                              disabled={!doctor.email}
+                            >
+                              Написать письмо
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <DropdownMenuItem
+                                  onSelect={(e) => e.preventDefault()}
+                                  className="text-destructive focus:bg-destructive/10 focus:text-destructive"
+                                >
+                                  Исключить из клиники
+                                </DropdownMenuItem>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>Вы уверены?</AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    Доктор <strong>{doctor.user.fullName}</strong> потеряет доступ к системе клиники.
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>Отмена</AlertDialogCancel>
+                                  <AlertDialogAction
+                                    onClick={() => archive.mutate(doctor.id)}
+                                    className="bg-destructive hover:bg-destructive/90"
+                                  >
+                                    {archive.isPending ? (
+                                      <Loader2 className="h-4 w-4 animate-spin" />
+                                    ) : (
+                                      "Подтвердить исключение"
+                                    )}
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  )
+                })}
+              </TableBody>
+            </Table>
+          </div>
+        )}
+      </CardContent>
+    </Card>
   )
 }

@@ -17,7 +17,7 @@ export const useFiles = () => {
   })
 }
 
-export const useUpdateAvatar = (onSuccess?: () => void) => {
+export const useUpdateAvatar = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
@@ -25,7 +25,6 @@ export const useUpdateAvatar = (onSuccess?: () => void) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: userKeys.me() })
       toast.success("Аватар успешно обновлён")
-      onSuccess?.()
     },
     onError: () => {
       toast.error("Не удалось загрузить аватар")

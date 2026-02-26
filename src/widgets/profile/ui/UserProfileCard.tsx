@@ -12,16 +12,14 @@ import { useMe } from "@/entities/user/api/user.queries"
 
 interface Props {
   user: User
-  isEditing?: boolean
-  onProfileUpdate?: () => void
 }
 
-export const UserProfileCard = ({ user, isEditing = false, onProfileUpdate }: Props) => {
+export const UserProfileCard = ({ user }: Props) => {
   const { data: authUser } = useMe()
   const isOwnProfile = authUser?.id === user?.id
 
   const { isSavingAvatar, previewAvatarUrl, fileInputRef, handleAvatarUpload, handleAvatarClick } =
-    useAvatarUpload(onProfileUpdate)
+    useAvatarUpload()
 
   const { copy: copyId, copied } = useClipboard(user?.id, {
     successMessage: "ID скопирован в буфер обмена",
@@ -61,7 +59,13 @@ export const UserProfileCard = ({ user, isEditing = false, onProfileUpdate }: Pr
         )}
       </div>
       <div className="max-md:mb-4 lg:ml-4">
-        <CardTitle>{user?.fullName || "—"}</CardTitle>
+        <CardTitle>
+          {user?.role === USER_ROLE.CLINIC ? (
+            user?.clinic.brandName
+          ) : (
+            user?.fullName
+          )}
+        </CardTitle>
         <CardDescription>
           <span
             className="inline-flex cursor-pointer items-center gap-2 hover:text-foreground transition-colors"
