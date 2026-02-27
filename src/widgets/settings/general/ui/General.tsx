@@ -1,24 +1,17 @@
-import { ActiveSessions } from "@/features/activeSessions/ui/ActiveSessions"
-import { LoginHistory } from "@/features/loginHistory/ui/LoginHistory"
-import { TimezoneSettings } from "@/features/localeSettings/ui/TimezoneSettings"
+import { TimezoneSettings } from "@/features/settings/general/localeSettings/ui/TimezoneSettings"
 import { Monitor, History, Globe, RefreshCw } from "lucide-react"
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/shared/ui/card"
-import { useActiveSessions } from "@/features/activeSessions/hooks/useActiveSessions"
 import { Button } from "@/shared/ui/button"
 import { cn } from "@/shared/lib/utils"
+import { useActiveSessions } from "@/features/settings/security/activeSessions/hooks/useActiveSessions"
+import { LoginHistory } from "@/features/settings/security/loginHistory/ui/LoginHistory"
+import { ActiveSessions } from "@/features/settings/security/activeSessions/ui/ActiveSessions"
 
 export const General = () => {
   const { isLoading, refresh } = useActiveSessions()
 
   return (
     <div className="space-global">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div className="min-w-0">
-          <h3 className="text-3xl font-semibold">Основные настройки</h3>
-          <p className="text-muted-foreground mt-2">Управление параметрами аккаунта и приложения</p>
-        </div>
-      </div>
-
       <div className="grid gap-6 lg:grid-cols-2">
         <Card>
           <CardHeader>

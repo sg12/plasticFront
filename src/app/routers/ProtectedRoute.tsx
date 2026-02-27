@@ -1,11 +1,11 @@
 import { Navigate, Outlet, useLocation } from "react-router"
 import { MODERATION_STATUS } from "@/entities/user/model/user.constants"
 import { Loader } from "@/shared/ui/loader"
-import { ModerationStatusScreen } from "@/features/auth/ui/ModerationStatusScreen"
 import { ROUTES } from "@/shared/model/routes"
 import { useMe } from "@/entities/user/api/user.queries"
 import { useAuthStore } from "@/entities/auth/model/auth.store"
 import type { User } from "@/entities/user/types/user.types"
+import { ModerationStatusScreen } from "@/widgets/auth/ModerationStatusScreen"
 
 export const ProtectedRoute = () => {
   const isAuth = useAuthStore((state) => !!state.token)

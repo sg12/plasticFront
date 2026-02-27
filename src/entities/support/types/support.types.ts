@@ -1,3 +1,4 @@
+import type { AUTH_TYPE } from "@/entities/auth/types/auth.types"
 import type { TICKET_STATUS } from "../model/support.constants"
 
 export interface Ticket {
@@ -15,6 +16,7 @@ export interface TicketMessages {
   id: string
   ticketId: string
   senderId: string
+  type: AUTH_TYPE
   text: string
   createdAt: string
 }

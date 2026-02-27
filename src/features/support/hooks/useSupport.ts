@@ -1,244 +1,82 @@
-import { useState, useMemo } from "react"
-import type { FileRecord } from "@/features/fileUpload/types/types"
-import useSWR from "swr"
-import { useSWRConfig } from "swr"
-import { toast } from "sonner"
-import { useAuthStore } from "@/entities/auth/model/auth.store"
-import {
-  getUserTickets,
-  createSupportTicket,
-  getTicketReplies,
-  deleteSupportTicket,
-} from "@/entities/support/api/support.api"
-import type {
-  SupportTicket,
-  SupportTicketReply,
-  CreateSupportTicketData,
-  CreateSupportTicketFormData,
-} from "@/entities/support/types/support.types"
-import { logger } from "@/shared/lib/logger"
-import { useForm, FormProvider } from "react-hook-form"
+import { FormProvider, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { createSupportTicketSchema } from "@/entities/support/model/support.schema"
-import type { UploadedFilesByRole } from "@/entities/file/types/file.types"
-import { USER_ROLES } from "@/entities/user/model/user.constants"
+import { toast } from "sonner"
 
-export const useSupport = (ticketId?: string | null) => {
-  const { user } = useAuthStore()
-  const { mutate: globalMutate } = useSWRConfig()
-  const [uploadedFiles, setUploadedFiles] = useState<UploadedFilesByRole>({})
-  const [isCreating, setIsCreating] = useState(false)
-  const [isDeleting, setIsDeleting] = useState(false)
+import { CreateTicketSchema, type CreateTicketDto } from "@/entities/support/model/support.schema"
+import {
+  useTickets,
+  useCreateTicket,
+  useCloseTicket,
+  useTicket,
+} from "@/entities/support/api/support.queries" // Ваши новые хуки
+import { useMe } from "@/entities/user/api/user.queries"
+import { logger } from "@/shared/lib/logger"
 
-  // Получение списка тикетов
-  const {
-    data: tickets,
-    error: ticketsError,
-    isValidating: isLoadingTickets,
-    mutate: refreshTickets,
-  } = useSWR<SupportTicket[]>(user?.id ? ["supportTickets", user.id] : null, () => {
-    if (!user?.id) {
-      throw new Error("Пользователь не авторизован")
-    }
-    return getUserTickets(user.id)
-  })
+export const useSupport = (ticketId?: string) => {
+  const { data: user } = useMe()
 
   const {
-    data: replies,
-    error: repliesError,
-    isValidating: isLoadingReplies,
-    mutate: refreshReplies,
-  } = useSWR<SupportTicketReply[]>(
-    ticketId && user?.id ? ["supportTicketReplies", ticketId, user.id] : null,
-    () => {
-      if (!ticketId) {
-        throw new Error("ID билета обязательно")
-      }
-      return getTicketReplies(ticketId)
-    },
-    {
-      refreshInterval: 5000,
-    },
-  )
+    data: tickets = [],
+    isLoading: isLoadingTickets,
+    isFetching: isFetchingTickets,
+    refetch: refreshTickets,
+    error: errorTickets,
+  } = useTickets()
+  const { data: currentTicket, isLoading: isLoadingDetail } = useTicket(ticketId ?? "")
 
-  // Форма для создания тикета
-  const form = useForm<CreateSupportTicketFormData>({
-    resolver: zodResolver(createSupportTicketSchema),
+  const { mutateAsync: createMutation, isPending: createPending } = useCreateTicket()
+  const { mutateAsync: closeMutation, isPending: closePending } = useCloseTicket()
+
+  const form = useForm<CreateTicketDto>({
+    resolver: zodResolver(CreateTicketSchema),
     defaultValues: {
-      subject: "",
-      message: "",
-      attachments: [],
+      title: "",
+      text: "",
     },
   })
 
-  // Создание тикета
-  const createTicket = async (data: CreateSupportTicketData) => {
-    if (!user?.id) {
-      toast.error("Вы не авторизованы")
-      throw new Error("User not authenticated")
-    }
-
-    setIsCreating(true)
-    try {
-      logger.info("Создание обращения через хук", {
-        userId: user.id,
-        subject: data.subject,
-      })
-      const newTicket = await createSupportTicket(user.id, data)
-
-      await globalMutate(["supportTickets", user.id])
-      refreshTickets()
-
-      logger.info("Обращение успешно создано через хук", {
-        userId: user.id,
-        ticketId: newTicket.id,
-      })
-      toast.success("Обращение успешно отправлено")
-      return newTicket
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "Ошибка при отправке обращения"
-      logger.error("Ошибка создания обращения через хук", error as Error, {
-        userId: user.id,
-      })
-      toast.error(errorMessage)
-      throw error
-    } finally {
-      setIsCreating(false)
-    }
-  }
-
-  // Обработка отправки формы
-  const onSubmit = async (data: CreateSupportTicketFormData) => {
-    console.log(uploadedFiles)
-
-    // Преобразуем UploadedFilesByRole в File[]
-    const filesArray: File[] = []
-    Object.values(uploadedFiles).forEach((roleFiles) => {
-      if (roleFiles) {
-        Object.values(roleFiles).forEach((fileOrArray) => {
-          if (Array.isArray(fileOrArray)) {
-            filesArray.push(...fileOrArray)
-          } else {
-            filesArray.push(fileOrArray)
-          }
-        })
-      }
-    })
+  const onSubmit = async (data: CreateTicketDto) => {
+    if (!user) return toast.error("Вы не авторизованы")
 
     try {
-      await createTicket({
-        subject: data.subject,
-        message: data.message,
-        attachments: filesArray.length > 0 ? filesArray : undefined,
+      logger.info("Начало создания тикета", { title: data.title })
+
+      await createMutation({
+        ...data,
       })
 
+      toast.success("Обращение успешно создано")
       form.reset()
-      setUploadedFiles({})
     } catch (error) {
-      // Ошибка уже обработана в createTicket
+      logger.error("Ошибка при создании тикета", error as Error)
     }
   }
 
-  const handleFileChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    fileType: string | number | symbol,
-  ) => {
-    const files = e.target.files
-    if (!files?.length) {
-      return
-    }
-
-    const key = String(fileType)
-    // Для поддержки используем PATIENT как дефолтную роль
-    const defaultRole = USER_ROLES.PATIENT as keyof UploadedFilesByRole
-
-    setUploadedFiles((prev) => {
-      return {
-        ...prev,
-        [defaultRole]: {
-          ...(prev[defaultRole] ?? {}),
-          [key]: files.length > 1 ? Array.from(files) : files[0],
-        },
-      }
-    })
-  }
-
-  // Преобразуем UploadedFilesByRole в FileRecord для FileUpload компонента
-  const uploadedFilesForForm: FileRecord = useMemo(() => {
-    const result: FileRecord = {}
-    Object.values(uploadedFiles).forEach((roleFiles) => {
-      if (roleFiles) {
-        Object.entries(roleFiles).forEach(([key, value]) => {
-          result[key] = value
-        })
-      }
-    })
-    return result
-  }, [uploadedFiles])
-
-  // Удаление тикета
-  const deleteTicket = async (ticketId: string) => {
-    if (!user?.id) {
-      toast.error("Вы не авторизованы")
-      throw new Error("User not authenticated")
-    }
-
-    setIsDeleting(true)
+  const handleClose = async (id: string) => {
     try {
-      logger.info("Удаление обращения через хук", {
-        userId: user.id,
-        ticketId,
-      })
-
-      await deleteSupportTicket(ticketId, user.id)
-
-      // Обновляем список тикетов
-      await globalMutate(["supportTickets", user.id])
-      refreshTickets()
-
-      logger.info("Обращение успешно удалено через хук", {
-        userId: user.id,
-        ticketId,
-      })
-      toast.success("Обращение успешно удалено")
+      await closeMutation(id)
+      toast.success("Тикет закрыт")
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "Ошибка при удалении обращения"
-      logger.error("Ошибка удаления обращения через хук", error as Error, {
-        userId: user.id,
-        ticketId,
-      })
-      toast.error(errorMessage)
-      throw error
-    } finally {
-      setIsDeleting(false)
+      logger.error("Ошибка при закрытии тикета", error as Error)
+      toast.error("не удалось закрыть тикет")
     }
   }
 
   return {
-    // Тикеты
-    tickets: tickets ?? [],
-    isLoadingTickets,
-    ticketsError: ticketsError?.message ?? null,
-    refreshTickets,
+    tickets,
+    currentTicket,
+    isLoading: isLoadingTickets || isLoadingDetail,
+    isFetching: isFetchingTickets,
+    error: errorTickets,
 
-    // Ответы на тикет
-    replies: replies ?? [],
-    isLoadingReplies,
-    repliesError: repliesError?.message ?? null,
-    refreshReplies,
-
-    // Создание тикета
     form,
     FormProvider,
-    onSubmit,
-    handleFileChange,
-    createTicket,
-    isCreating,
-    uploadedFiles: uploadedFilesForForm,
-    setUploadedFiles,
+    onSubmit: form.handleSubmit(onSubmit),
 
-    // Удаление тикета
-    deleteTicket,
-    isDeleting,
+    isCreating: createPending,
+    isClosing: closePending,
+
+    refreshTickets,
+    closeTicket: handleClose,
   }
 }
