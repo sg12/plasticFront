@@ -8,23 +8,22 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/shared/ui/dialog"
-import { useConsents } from "@/entities/consent/api/consent.queries"
 import { Item, ItemContent } from "@/shared/ui/item"
 import { Switch } from "@/shared/ui/switch"
-import { Link, useNavigate } from "react-router"
+import { Link } from "react-router"
 import { useState } from "react"
 import { cn } from "@/shared/lib/utils"
 import { ROUTES } from "@/shared/model/routes"
+import type { Consent } from "@/entities/consent/types/consent.types"
 
 interface Props {
-  onAccept: (ids: string[]) => void
+  onAccept: (ids: string[]) => Promise<void>
   onDecline: () => void
+  consents: Consent[]
+  isLoading?: boolean
 }
 
-export function ConsentModal({ onAccept, onDecline }: Props) {
-  const { data: consents, isLoading } = useConsents()
-  const navigate = useNavigate()
-
+export function ConsentModal({ onAccept, onDecline, consents, isLoading }: Props) {
   const [selectedOptionalIds, setSelectedOptionalIds] = useState<string[]>([])
 
   const toggleConsent = (id: string) => {
@@ -35,13 +34,13 @@ export function ConsentModal({ onAccept, onDecline }: Props) {
 
   const handleAcceptAll = () => {
     const requiredIds = consents?.filter(consent => consent.isRequired).map(consent => consent.id) || []
-    onAccept([...requiredIds, ...selectedOptionalIds])
+    onAccept([...new Set([...requiredIds, ...selectedOptionalIds])])
   }
 
   return (
     <Dialog open onOpenChange={(open) => !open && onDecline()}>
       <DialogContent>
-        <DialogHeader className="p-6">
+        <DialogHeader>
           <div className="flex items-center gap-3">
             <div className="flex size-10 items-center justify-center rounded-full bg-purple-50 text-purple-600">
               <ShieldCheck className="size-6" />
@@ -55,7 +54,7 @@ export function ConsentModal({ onAccept, onDecline }: Props) {
           </div>
         </DialogHeader>
 
-        <div className="px-6 pb-6 space-y-4">
+        <div className="space-child">
           {isLoading ? (
             <div className="flex h-40 items-center justify-center text-muted-foreground">
               <Loader2 className="size-6 animate-spin mr-2" />
@@ -90,7 +89,7 @@ export function ConsentModal({ onAccept, onDecline }: Props) {
                           <ExternalLink className="size-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
                         <p className="text-xs text-muted-foreground mt-1">
-                          {isRequired ? "Обязательно для регистрации" : "По желанию"}
+                          {isRequired ? "Обязательно для продолжения" : "По желанию"}
                         </p>
                       </Link>
 

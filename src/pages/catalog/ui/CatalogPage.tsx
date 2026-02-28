@@ -1,4 +1,4 @@
-import { CatalogForm } from "@/features/user-management/catalog/ui/CatalogForm"
+import { CatalogForm } from "@/widgets/catalog/CatalogForm"
 
 export const CatalogPage = () => {
   return (

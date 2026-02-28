@@ -1,4 +1,4 @@
-import { General } from "@/widgets/settings/general/ui/General"
+import { General } from "@/widgets/settings/General"
 
 export const GeneralPage = () => {
   return (

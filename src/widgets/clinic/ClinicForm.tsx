@@ -1,10 +1,10 @@
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/form"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/shared/ui/inputGroup"
 import { FileText } from "lucide-react"
-import type { ProfileProps } from "@/entities/profile/types/profile.types"
+import type { FormInputProps } from "@/entities/profile/types/profile.types"
 import { clinicFields } from "@/entities/profile/model/profile.constants"
 
-export const ClinicForm = ({ form, mode = "edit", isSaving }: ProfileProps) => {
+export const ClinicForm = ({ form, mode = "edit", isSaving }: FormInputProps) => {
   const isViewMode = mode === "view" || isSaving
 
   return (

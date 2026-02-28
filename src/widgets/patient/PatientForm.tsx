@@ -12,11 +12,11 @@ import { USER_GENDER } from "@/entities/user/model/user.constants"
 import { useState } from "react"
 import { Badge } from "@/shared/ui/badge"
 import { InputGroup, InputGroupAddon, InputGroupInput, InputGroupText, InputGroupTextarea } from "@/shared/ui/inputGroup"
-import type { ProfileProps } from "@/entities/profile/types/profile.types"
+import type { FormInputProps } from "@/entities/profile/types/profile.types"
 import { patientFields } from "@/entities/profile/model/profile.constants"
 import { SelectBirthDate } from "@/features/user-management/profile/create/ui/selectBirthDate/ui/SelectBirthDate"
 
-export const PatientForm = ({ mode = "edit", form, isSaving }: ProfileProps) => {
+export const PatientForm = ({ mode = "edit", form, isSaving }: FormInputProps) => {
   const isViewMode = mode === "view" || !!isSaving
   const [tagInput, setTagInput] = useState("")
 
@@ -140,12 +140,17 @@ export const PatientForm = ({ mode = "edit", form, isSaving }: ProfileProps) => 
                             </InputGroupAddon>
                           )}
 
+                          {isViewMode && tags.length === 0 && (
+                            <InputGroupText className="pl-3 opacity-70">
+                              Не указано
+                            </InputGroupText>
+                          )}
 
                           <InputGroupInput
                             id={`input-${field.id}`}
                             readOnly={isViewMode}
                             placeholder={isViewMode ? "" : (tags.length === 0 ? field.placeholder : "Добавить...")}
-                            className={!isViewMode ? "border-t-1" : ""}
+                            className={!isViewMode && tags.length !== 0 ? "border-t-1" : ""}
                             value={tagInput}
                             disabled={isViewMode}
                             onChange={(e) => setTagInput(e.target.value)}
@@ -160,12 +165,6 @@ export const PatientForm = ({ mode = "edit", form, isSaving }: ProfileProps) => 
                             }}
                             onBlur={() => addTag(tagInput)}
                           />
-
-                          {isViewMode && tags.length === 0 && (
-                            <InputGroupText className="pl-3 italic opacity-70">
-                              Не указано
-                            </InputGroupText>
-                          )}
                         </InputGroup>
                       );
                     }

@@ -32,10 +32,10 @@ import { useLocation } from "react-router"
 import { ROUTES } from "@/shared/model/routes"
 import { SelectBirthDate } from "@/features/user-management/profile/create/ui/selectBirthDate/ui/SelectBirthDate"
 import { useMe } from "@/entities/user/api/user.queries"
-import type { ProfileProps } from "@/entities/profile/types/profile.types"
+import type { FormInputProps } from "@/entities/profile/types/profile.types"
 import { doctorFields } from "@/entities/profile/model/profile.constants"
 
-export const DoctorForm = ({ mode = "edit", form, isSaving }: ProfileProps) => {
+export const DoctorForm = ({ mode = "edit", form, isSaving }: FormInputProps) => {
   const isViewMode = mode === "view" || !!isSaving
   const { data: user } = useMe()
   const { copy: copyId, copied } = useClipboard(user?.id, {

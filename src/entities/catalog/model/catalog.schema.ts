@@ -1,9 +1,9 @@
 import z from "zod"
-import { ROLE } from "@/entities/user/model/user.constants"
 import { SPECIALIZATION } from "@/entities/doctor/model/doctor.constants"
+import { USER_ROLE } from "@/entities/user/model/user.constants"
 
 export const CatalogQuerySchema = z.object({
-  role: z.enum([ROLE.DOCTOR, ROLE.CLINIC]).optional(),
+  role: z.enum([USER_ROLE.DOCTOR, USER_ROLE.CLINIC]).optional(),
   search: z.string().optional(),
   specializations: z.preprocess(
     (val) => (typeof val === "string" ? [val] : val),

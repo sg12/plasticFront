@@ -1,7 +1,7 @@
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert"
-import { ConsentStatus } from "@/features/consent/ui/ConsentStatus"
 import { FileText, Shield, Mail, Phone, Clock } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/shared/ui/card"
+import { ConsentStatus } from "../consent/ConsentStatus"
 
 export const PersonalData = () => {
   return (

@@ -9,16 +9,17 @@ export interface Consent {
   isRequired: boolean
   isPublished: boolean
   createdAt: string
-  userConsents: UserConsents[]
+  userConsents: UserConsent[]
 }
 
-export interface UserConsents {
+export interface UserConsent {
   id: string
   userId: string
   consentId: string
   ipAddress: string | null
   userAgent: string | null
   signedAt: string
+  revokedAt: string | null
 }
 
 export type CONSENT_TYPE = keyof typeof CONSENT_TYPE

@@ -3,18 +3,19 @@ import { FileText, Check } from "lucide-react"
 import { Button } from "@/shared/ui/button"
 import { cn } from "@/shared/lib/utils"
 import { useIsMobile } from "@/shared/hooks/useMobile"
-import { PrivacyModal } from "@/widgets/consent/PrivacyModal"
 import { ConsentModal } from "@/widgets/consent/ConsentModal"
+import type { Consent } from "@/entities/consent/types/consent.types"
 
 interface Props {
   hasConsent: boolean
+  consents: Consent[]
+  isLoading: boolean
   onAccept: (ids: string[]) => void
 }
 
-export const ConsentButton = ({ hasConsent, onAccept }: Props) => {
+export const ConsentButton = ({ onAccept, hasConsent, consents, isLoading }: Props) => {
   const isMobile = useIsMobile()
   const [showConsentModal, setShowConsentModal] = useState(false)
-  const [showPrivacyModal, setShowPrivacyModal] = useState(false)
 
   const handleOpenConsentModal = () => {
     setShowConsentModal(true)
@@ -24,16 +25,9 @@ export const ConsentButton = ({ hasConsent, onAccept }: Props) => {
     setShowConsentModal(false)
   }
 
-  const handleAccept = (ids: string[]) => {
+  const handleAccept = async (ids: string[]) => {
     onAccept(ids)
     setShowConsentModal(false)
-  }
-
-  const handleClosePrivacyModal = () => {
-    setShowPrivacyModal(false)
-    if (!hasConsent) {
-      setShowConsentModal(true)
-    }
   }
 
   if (!hasConsent) {
@@ -64,12 +58,12 @@ export const ConsentButton = ({ hasConsent, onAccept }: Props) => {
 
         {showConsentModal && (
           <ConsentModal
+            consents={consents}
+            isLoading={isLoading}
             onAccept={handleAccept}
             onDecline={handleCloseConsentModal}
           />
         )}
-
-        {showPrivacyModal && <PrivacyModal onClose={handleClosePrivacyModal} />}
       </>
     )
   }

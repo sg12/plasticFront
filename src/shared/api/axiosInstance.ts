@@ -2,6 +2,7 @@ import axios from "axios"
 import { ROUTES } from "../model/routes"
 import type { RefreshResponse } from "@/entities/auth/types/auth.types"
 import { useAuthStore } from "@/entities/auth/model/auth.store"
+import { useConsentStore } from "@/entities/consent/model/consent.store"
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -51,6 +52,18 @@ api.interceptors.response.use(
       }
     }
 
+    return Promise.reject(error)
+  },
+)
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.data?.error === "CONSENTS_REQUIRED") {
+      const { missingConsentIds } = error.response.data
+
+      useConsentStore.getState().openModal(missingConsentIds)
+    }
     return Promise.reject(error)
   },
 )

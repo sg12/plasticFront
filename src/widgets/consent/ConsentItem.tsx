@@ -1,71 +1,102 @@
-import { Button } from "@/shared/ui/button"
-import { Badge } from "@/shared/ui/badge"
-import { ShieldCheck, ShieldX } from "lucide-react"
-import type { Consent } from "@/entities/consent/types/consent.types"
-import { format } from "date-fns"
+import { format, isValid } from "date-fns"
 import { ru } from "date-fns/locale"
-import { CONSENT_TYPES } from "@/entities/consent/model/consent.constants"
+import { ExternalLink } from "lucide-react"
+import { Link } from "react-router"
 
-export interface ConsentItemProps {
-  consent: Consent
-  onRevoke: () => void
-  onGrant: () => void
-}
+import type { Consent, UserConsent } from "@/entities/consent/types/consent.types"
+import { Item, ItemContent, ItemDescription, ItemHeader, ItemTitle } from "@/shared/ui/item"
+import { Badge } from "@/shared/ui/badge"
+import { Switch } from "@/shared/ui/switch"
+import { useRevokeConsent, useSignConsents } from "@/entities/consent/api/consent.queries"
+import { ROUTES } from "@/shared/model/routes"
 
-export const ConsentItem = ({ consent, onRevoke, onGrant }: ConsentItemProps) => {
-  const isNecessary = ["medicalData", "personalData"].includes(consent.type)
-  const consentType = CONSENT_TYPES[consent.type]
+export const ConsentItem = ({
+  consent,
+  userConsents
+}: {
+  consent: Consent,
+  userConsents: UserConsent[]
+}) => {
+  const userConsent = userConsents
+    .filter((uc) => uc.consentId === consent.id)
+    .sort((a, b) => new Date(b.signedAt).getTime() - new Date(a.signedAt).getTime())[0]
+
+  const { mutateAsync: sign, isPending: isSigning } = useSignConsents()
+  const { mutateAsync: revoke, isPending: isRevoking } = useRevokeConsent()
+
+  const isSigned = !!userConsent?.signedAt && !userConsent?.revokedAt
+  const isRevoked = !!userConsent?.revokedAt
+  const isLoading = isSigning || isRevoking
+
+  const handleToggle = (checked: boolean) => {
+    if (checked) {
+      sign([consent.id])
+    } else {
+      revoke(consent.id)
+    }
+  }
+
+  const formatDate = (dateStr: string | null | undefined) => {
+    if (!dateStr) return ""
+    const date = new Date(dateStr)
+    return isValid(date) ? format(date, "dd.MM.yyyy", { locale: ru }) : ""
+  }
 
   return (
-    <div
-      className={`flex items-start justify-between rounded-lg border p-4 transition-colors ${isNecessary
-        ? "border-purple-200 bg-purple-50/50 hover:bg-purple-50"
-        : "bg-muted/30 hover:bg-muted/50"
-        }`}
-    >
-      <div className="flex min-w-0 gap-3">
-        <div className="mt-0.5 shrink-0">
-          {consent.isActive ? (
-            <ShieldCheck className="h-5 w-5 text-green-600" />
-          ) : (
-            <ShieldX className="h-5 w-5 text-red-600" />
-          )}
-        </div>
-        <div className="min-w-0 flex-1">
-          <div className="mb-2 flex flex-wrap items-center gap-2">
-            <p className="font-semibold">{consentType.title}</p>
-            <Badge variant={consent.isActive ? "accent" : "destructive"} className="text-xs">
-              {consent.isActive ? "Активно" : "Отозвано"}
+    <Item variant="outline">
+      <ItemContent className="flex flex-row items-center gap-4">
+        <ItemHeader className="flex-col items-start">
+          <ItemTitle className="flex items-center gap-2">
+            <Link
+              to={ROUTES.POLICIES.replace(':id', consent.id)}
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-1.5 hover:underline"
+            >
+              {consent.title}
+              <ExternalLink className="size-3.5 text-muted-foreground" />
+            </Link>
+            <Badge variant="outline" className="font-normal">
+              v.{consent.version}
             </Badge>
-            {consentType.isRequired && (
-              <Badge variant="secondary" className="text-xs">
-                Обязательное
+          </ItemTitle>
+
+          <ItemDescription className="flex flex-wrap items-center gap-3">
+            {consent.isRequired && (
+              <Badge variant="destructive" className="text-[9px] h-4 leading-none uppercase">
+                Обязательно
               </Badge>
             )}
-          </div>
-          <p className="text-muted-foreground text-sm">{consentType.description}</p>
-          {consent.grantedAt && (
-            <p className="text-muted-foreground mt-2 text-xs">
-              {consent.isActive ? "Дата согласия: " : "Отозвано: "}
-              {format(consent.revokedAt || consent.grantedAt, "dd MMMM yyyy г.", { locale: ru })}
-            </p>
-          )}
-        </div>
-      </div>
 
-      <div className="ml-4 shrink-0">
-        {consent.isActive ? (
-          !consent.isRequired && (
-            <Button variant="ghost" size="sm" onClick={onRevoke}>
-              Отозвать
-            </Button>
-          )
-        ) : (
-          <Button variant="ghost" size="sm" onClick={onGrant}>
-            Восстановить
-          </Button>
+            {isSigned && (
+              <span className="text-primary text-xs font-medium">
+                Активно с {formatDate(userConsent.signedAt)}
+              </span>
+            )}
+
+            {isRevoked && (
+              <span className="text-muted-foreground text-xs italic">
+                Отозвано {formatDate(userConsent.revokedAt)}
+              </span>
+            )}
+
+            {!isSigned && !isRevoked && (
+              <span className="text-muted-foreground text-xs">Не подписано</span>
+            )}
+          </ItemDescription>
+        </ItemHeader>
+
+
+
+        {!consent.isRequired && (
+          <Switch
+            id={`consent-${consent.id}`}
+            checked={isSigned}
+            disabled={isLoading || (consent.isRequired && isSigned)}
+            onCheckedChange={handleToggle}
+          />
         )}
-      </div>
-    </div>
+      </ItemContent>
+    </Item>
   )
 }

@@ -8,12 +8,14 @@ import type { ROLE } from "@/entities/user/types/user.types"
 import type { RegisterDto } from "@/entities/auth/model/auth.schema"
 import { CreateUserSchema } from "@/entities/user/model/user.schema"
 import { useRegister } from "@/entities/auth/api/auth.queries"
+import { useConsents } from "@/entities/consent/api/consent.queries"
 
 export const useSignUpForm = () => {
   const [currentStep, setCurrentStep] = useState(0)
   const [showConsentModal, setShowConsentModal] = useState(false)
   const [showPrivacyModal, setShowPrivacyModal] = useState(false)
   const [hasConsent, setHasConsent] = useState(false)
+  const { data: consents, isLoading } = useConsents()
 
   const form = useForm<RegisterDto>({
     resolver: zodResolver(CreateUserSchema),
@@ -67,6 +69,8 @@ export const useSignUpForm = () => {
     showConsentModal,
     showPrivacyModal,
     hasConsent,
+    consents,
+    consentLoading: isLoading,
     openConsentModal: () => setShowConsentModal(true),
     closeConsentModal: () => setShowConsentModal(false),
     openPrivacyModal: () => {

@@ -6,10 +6,10 @@ import type { Notification } from "@/entities/notification/types/notification.ty
 import type { Review } from "@/entities/review/types/review.types"
 import type { Relationship } from "@/entities/relationship/types/relationship.types"
 import type { Service } from "@/entities/service/types/service.types"
-import type { UserConsents } from "@/entities/consent/types/consent.types"
 import type { SPECIALIZATION } from "@/entities/doctor/types/doctor.types"
 import type { Ticket } from "@/entities/support/types/support.types"
 import type { Auth } from "@/entities/auth/types/auth.types"
+import type { UserConsent } from "@/entities/consent/types/consent.types"
 
 export interface User {
   readonly id: string
@@ -27,7 +27,7 @@ export interface User {
   createdAt: string
   updatedAt: string
   notifications: Notification[]
-  userConsents: UserConsents[]
+  userConsents: UserConsent[]
   tickets: Ticket[]
   auth: Auth
   patient: Patient
@@ -48,9 +48,10 @@ export interface Patient extends User {
   favorites: Favorite[]
   reviews: Review[]
   documents: File[]
+  user: User
 }
 
-export interface Doctor extends User {
+export interface Doctor {
   gender: GENDER
   birthdate: string
   experience: number

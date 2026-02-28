@@ -9,7 +9,7 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-white/20 text-white backdrop-blur-sm border-0",
+        default: "bg-black/20 text-white backdrop-blur-sm border-0",
         secondary:
           "border-transparent bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90",
         accent: "border-transparent bg-green-100 text-accent-foreground [a&]:hover:bg-accent/90",

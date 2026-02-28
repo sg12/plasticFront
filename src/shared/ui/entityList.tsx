@@ -1,16 +1,23 @@
+/**
+ * @fileoverview Универсальный список сущностей с поддержкой состояний
+ * @module shared/ui/entityList
+ */
+
 import type { ReactNode } from "react"
 import { Skeleton } from "@/shared/ui/skeleton"
-import { Search, AlertCircle, RefreshCw, SearchX } from "lucide-react"
+import { Search, SearchX } from "lucide-react"
 import { Button } from "@/shared/ui/button"
 import { useSidebar } from "@/shared/ui/sidebar"
 import { useIsMobile } from "@/shared/hooks/useMobile"
 import { cn } from "@/shared/lib/utils"
+import { ErrorState } from "./errorState"
+import { EmptyState } from "./emptyState"
 
-interface EntityListProps<T extends { id: string | number }> {
+interface EntityListProps<T> {
   entities: T[]
   renderItem: (entity: T) => ReactNode
   isLoading?: boolean
-  error?: string | null
+  error?: string | Error | null
   emptyMessage?: string
   descriptionMessage?: string
   skeletonCount?: number
@@ -20,7 +27,7 @@ interface EntityListProps<T extends { id: string | number }> {
   hasSearchQuery?: boolean
 }
 
-export const EntityList = <T extends { id: string | number }>({
+export const EntityList = <T,>({
   entities,
   renderItem,
   isLoading = false,
@@ -37,7 +44,7 @@ export const EntityList = <T extends { id: string | number }>({
   const isMobile = useIsMobile()
 
   const adaptiveGridClassName = cn(
-    "grid gap-6",
+    "grid gap-6 transition-all duration-300",
     isMobile
       ? "grid-cols-1"
       : isNavigationSidebarOpen
@@ -50,63 +57,47 @@ export const EntityList = <T extends { id: string | number }>({
     return (
       <div className={adaptiveGridClassName}>
         {Array.from({ length: skeletonCount }).map((_, index) => (
-          <Skeleton key={`skeleton-${index}`} className="h-[200px] rounded-xl" />
+          <Skeleton key={`skeleton-${index}`} className="h-[280px] w-full rounded-xl" />
         ))}
       </div>
     )
   }
 
   if (error) {
-    const isNetworkError = /network|fetch/i.test(error)
-    const isTimeoutError = /timeout/i.test(error)
-    const isServerError = /500|server/i.test(error)
-
-    const errorContent = {
-      title: isNetworkError ? "Проблема с подключением" : isTimeoutError ? "Время ожидания истекло" : "Ошибка",
-      desc: isNetworkError ? "Проверьте интернет-соединение." : error,
-      action: onRetry && (
-        <Button onClick={onRetry} variant="secondary" size="sm" className="mt-4 gap-2">
-          <RefreshCw className="h-4 w-4" /> Попробовать снова
-        </Button>
-      )
-    }
-
     return (
-      <div className="flex min-h-[400px] flex-col items-center justify-center p-8 text-center">
-        <div className="bg-destructive/10 mb-4 rounded-full p-4">
-          <AlertCircle className="text-destructive h-8 w-8" />
-        </div>
-        <h3 className="text-lg font-semibold">{errorContent.title}</h3>
-        <p className="text-muted-foreground text-sm">{errorContent.desc}</p>
-        {errorContent.action}
+      <div className="flex min-h-[400px] items-center justify-center animate-in fade-in">
+        <ErrorState
+          error={error}
+          onRetry={onRetry}
+        />
       </div>
     )
   }
 
   if (entities.length === 0) {
     return (
-      <div className="flex min-h-[400px] flex-col items-center justify-center p-8 text-center">
-        <div className="bg-muted mb-4 rounded-full p-4">
-          {hasSearchQuery ? <SearchX className="h-8 w-8" /> : <Search className="h-8 w-8" />}
-        </div>
-        <h3 className="text-lg font-semibold">{emptyMessage}</h3>
-        <p className="text-muted-foreground mb-6 text-sm">{descriptionMessage}</p>
-        {hasSearchQuery && onClearSearch && (
-          <Button onClick={onClearSearch} variant="secondary" size="sm">
-            Очистить поиск
-          </Button>
-        )}
-      </div>
+      <EmptyState
+        icon={hasSearchQuery ? SearchX : Search}
+        title={emptyMessage}
+        description={descriptionMessage}
+        action={
+          hasSearchQuery && onClearSearch ? (
+            <Button onClick={onClearSearch} variant="secondary" size="sm">
+              Очистить поиск
+            </Button>
+          ) : undefined
+        }
+      />
     )
   }
 
   return (
     <div className={adaptiveGridClassName}>
-      {entities.map((entity) => (
-        <div key={entity.id}>
+      {entities.map((entity, index) => (
+        <div key={index} >
           {renderItem(entity)}
         </div>
       ))}
-    </div>
+    </div >
   )
 }

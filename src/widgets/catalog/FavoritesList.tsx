@@ -1,75 +1,100 @@
 /**
  * @fileoverview Компонент списка избранных врачей и клиник
- *
- * Отображает объединенный список избранных врачей и клиник.
- * Фильтрует переданные данные по ID избранного из store.
- *
  * @module features/catalog/ui/FavoritesList
  */
 
-import type { CatalogClinic, CatalogDoctor } from "@/entities/catalog/types/catalog.types"
-import { useCatalogStore } from "@/entities/catalog/model/catalog.store"
-import { EntityList } from "./EntityList"
+import { useMemo } from "react"
+import { EntityList } from "@/shared/ui/entityList"
+import type { Clinic, Doctor } from "@/entities/user/types/user.types"
+import { useMe } from "@/entities/user/api/user.queries"
+import { EmptyState } from "@/shared/ui/emptyState"
+import { HeartCrack } from "lucide-react"
+
+// import { DoctorCard } from "@/entities/doctor/ui/DoctorCard"
+// import { ClinicCard } from "@/entities/clinic/ui/ClinicCard"
 
 interface FavoritesListProps {
-  doctors: CatalogDoctor[]
-  clinics: CatalogClinic[]
+  doctors: Doctor[]
+  clinics: Clinic[]
   isLoading?: boolean
-  error?: string | null
+  error?: Error | null
 }
 
 export const FavoritesList = ({ doctors, clinics, isLoading, error }: FavoritesListProps) => {
-  const { favoriteDoctors, favoriteClinics } = useCatalogStore()
+  const { data: user } = useMe()
 
-  // Фильтруем только те элементы, которые есть в избранном
-  const favoriteDoctorsList = doctors.filter((doctor) => favoriteDoctors.includes(doctor.id))
-  const favoriteClinicsList = clinics.filter((clinic) => favoriteClinics.includes(clinic.id))
+  const { filteredDoctors, filteredClinics, isEmpty } = useMemo(() => {
+    const favoriteIds = user?.patient?.favorites || []
 
-  const totalFavorites = favoriteDoctorsList.length + favoriteClinicsList.length
+    const d = doctors.filter((doc) => favoriteIds.includes(doc.user.id))
+    const c = clinics.filter((cli) => favoriteIds.includes(cli.user.id))
 
-  if (totalFavorites === 0 && !isLoading) {
+    return {
+      filteredDoctors: d,
+      filteredClinics: c,
+      isEmpty: d.length === 0 && c.length === 0,
+    }
+  }, [doctors, clinics, user?.patient?.favorites])
+
+  if (isEmpty && !isLoading) {
     return (
-      <EntityList
-        entities={[]}
-        isLoading={isLoading}
-        error={error}
-        emptyMessage="У вас пока нет избранных"
-        descriptionMessage="Добавьте врачей или клиники в избранное, чтобы быстро находить их здесь"
-        onRetry={error ? () => window.location.reload() : undefined}
+      <EmptyState
+        icon={HeartCrack}
+        title="Список избранного пуст"
+        description="Добавьте врачей или клиники в избранное, чтобы они появились здесь"
       />
     )
   }
 
   return (
-    <div className="space-y-6">
-      {favoriteDoctorsList.length > 0 && (
-        <div>
-          <div className="mb-4 flex items-center gap-2">
-            <h3 className="text-lg font-semibold">Врачи</h3>
-            <span className="text-muted-foreground text-sm">({favoriteDoctorsList.length})</span>
+    <div className="space-y-12 animate-in fade-in duration-700">
+      {(filteredDoctors.length > 0 || isLoading) && (
+        <section>
+          <div className="mb-6 flex items-end gap-2 px-1">
+            <h3 className="text-2xl font-bold tracking-tight">Избранные врачи</h3>
+            {!isLoading && (
+              <span className="text-muted-foreground font-medium mb-1">
+                {filteredDoctors.length}
+              </span>
+            )}
           </div>
           <EntityList
-            entities={favoriteDoctorsList}
+            entities={filteredDoctors}
             isLoading={isLoading}
             error={error}
             emptyMessage="Врачи не найдены"
+            // Передайте сюда реальный компонент карточки
+            renderItem={(doc) => (
+              <div className="p-4 border rounded-xl">Карточка врача: {doc.user.id}</div>
+            )}
           />
-        </div>
+        </section>
       )}
 
-      {favoriteClinicsList.length > 0 && (
-        <div>
-          <div className="mb-4 flex items-center gap-2">
-            <h3 className="text-lg font-semibold">Клиники</h3>
-            <span className="text-muted-foreground text-sm">({favoriteClinicsList.length})</span>
+      {filteredDoctors.length > 0 && filteredClinics.length > 0 && (
+        <hr className="border-border/50 shadow-sm" />
+      )}
+
+      {(filteredClinics.length > 0 || isLoading) && (
+        <section>
+          <div className="mb-6 flex items-end gap-2 px-1">
+            <h3 className="text-2xl font-bold tracking-tight">Избранные клиники</h3>
+            {!isLoading && (
+              <span className="text-muted-foreground font-medium mb-1">
+                {filteredClinics.length}
+              </span>
+            )}
           </div>
           <EntityList
-            entities={favoriteClinicsList}
+            entities={filteredClinics}
             isLoading={isLoading}
             error={error}
             emptyMessage="Клиники не найдены"
+            renderItem={(cli) => (
+              <div className="p-4 border rounded-xl">Карточка клиники: {cli.user.id}</div>
+            )}
           />
-        </div>
+        </section>
       )}
     </div>
   )

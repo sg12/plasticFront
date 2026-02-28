@@ -1,4 +1,4 @@
-import { PersonalData } from "@/widgets/settings/personalData/ui/PersonalData"
+import { PersonalData } from "@/widgets/settings/PersonalData"
 
 export const PersonalDataPage = () => {
   return (

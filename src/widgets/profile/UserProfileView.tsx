@@ -3,6 +3,8 @@ import { Separator } from "@/shared/ui/separator"
 import type { User } from "@/entities/user/types/user.types"
 import { USER_ROLE } from "@/entities/user/model/user.constants"
 import { useMemo } from "react"
+import { SPECIALIZATION_LOCALES } from "@/entities/doctor/model/doctor.constants"
+import { format, parseISO } from "date-fns"
 
 interface UserProfileViewProps {
   user: User
@@ -13,12 +15,15 @@ interface UserProfileViewProps {
  * Используется для просмотра чужих профилей
  */
 export const UserProfileView = ({ user }: UserProfileViewProps) => {
+
   const roleContent = useMemo(() => {
     switch (user.role) {
       case USER_ROLE.PATIENT:
         return (
           <div className="grid gap-4 lg:grid-cols-2">
-            <InfoItem label="Дата рождения" value={user.patient.birthdate} />
+            <InfoItem label="Дата рождения" value={user.patient.birthdate
+              ? format(parseISO(user.patient.birthdate), "dd.MM.yyyy")
+              : "—"} />
             <InfoItem label="Пол" value={user.patient.gender} />
           </div>
         );
@@ -26,9 +31,13 @@ export const UserProfileView = ({ user }: UserProfileViewProps) => {
       case USER_ROLE.DOCTOR:
         return (
           <div className="grid gap-4 lg:grid-cols-2">
-            <InfoItem label="Дата рождения" value={user.doctor.birthdate} />
+            <InfoItem label="Дата рождения" value={user.doctor.birthdate
+              ? format(parseISO(user.doctor.birthdate), "dd.MM.yyyy")
+              : "—"} />
             <InfoItem label="Лицензия" value={user.doctor.license} />
-            <InfoItem label="Специализация" value={user.doctor.specializations.join(", ")} />
+            <InfoItem label="Специализация" value={user.doctor.specializations.map(
+              (spec) => SPECIALIZATION_LOCALES[spec as keyof typeof SPECIALIZATION_LOCALES].ru
+            ).join(", ")} />
             <InfoItem label="Опыт" value={`${user.doctor.experience} лет`} />
             <InfoItem label="Образование" value={user.doctor.education} />
             <InfoItem label="ИНН" value={user.doctor.inn} />

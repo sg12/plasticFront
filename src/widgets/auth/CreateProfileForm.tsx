@@ -2,7 +2,6 @@ import { useCreateProfileForm } from "@/features/user-management/profile/create/
 import { USER_ROLE } from "@/entities/user/model/user.constants"
 import { Button } from "@/shared/ui/button"
 import { PatientForm } from "@/widgets/patient/PatientForm"
-import { DoctorForm } from "@/widgets/roleForms/DoctorForm"
 import { ClinicForm } from "@/widgets/clinic/ClinicForm"
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react"
 import { FileUpload } from "@/features/data-processing/file-upload/ui/FileUpload"
@@ -15,6 +14,7 @@ import {
   CardFooter,
 } from "@/shared/ui/card"
 import { useIsMobile } from "@/shared/hooks/useMobile"
+import { DoctorForm } from "../doctor/DoctorForm"
 
 export const CreateProfileForm = () => {
   const {

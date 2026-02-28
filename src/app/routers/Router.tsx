@@ -20,11 +20,11 @@ export const router = createBrowserRouter([
             path: ROUTES.SIGNUP,
             ...lazyRoute(() => import("@/pages/sign-up/ui/SignUpPage"), "SignUpPage"),
           },
-          {
-            path: ROUTES.POLICIES,
-            ...lazyRoute(() => import("@/pages/policies/ui/PoliciesPage"), "PoliciesPage"),
-          },
         ],
+      },
+      {
+        path: ROUTES.POLICIES,
+        ...lazyRoute(() => import("@/pages/policies/ui/PoliciesPage"), "PoliciesPage"),
       },
       {
         ...lazyRoute(() => import("@/app/routers/ProtectedRoute"), "ProtectedRoute"),

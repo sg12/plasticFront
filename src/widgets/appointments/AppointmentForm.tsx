@@ -27,7 +27,7 @@ export const AppointmentForm = () => {
         userId={user?.id}
         showDateGrouping={true}
         limit={10}
-        onCancel={patientCancel} title={""} description={""}      />
+        onCancel={patientCancel} />
     case USER_ROLE.DOCTOR:
       return <AppointmentsList
         userRole={USER_ROLE.DOCTOR}

@@ -1,40 +1,40 @@
-// /**
-//  * @fileoverview Кнопка для открытия формы записи
-//  *
-//  * @module features/appointments/ui/AppointmentButton
-//  */
+/**
+ * @fileoverview Кнопка для открытия формы записи
+ *
+ * @module features/appointments/ui/AppointmentButton
+ */
 
-// import { useState } from "react"
-// import { Button } from "@/shared/ui/button"
-// import { AppointmentForm } from "@/features/appointments/ui/AppointmentForm"
+import { useState } from "react"
+import { Button } from "@/shared/ui/button"
+import { AppointmentModal } from "@/widgets/appointments/AppointmentModal"
 
-// interface AppointmentButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-//   doctorId?: string | null
-//   clinicId?: string | null
-// }
+interface AppointmentButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+    doctorId?: string | null
+    clinicId?: string | null
+}
 
-// export const AppointmentButton = ({ doctorId, clinicId, className }: AppointmentButtonProps) => {
-//   const [isFormOpen, setIsFormOpen] = useState(false)
+export const AppointmentButton = ({ doctorId, clinicId, className }: AppointmentButtonProps) => {
+    const [isFormOpen, setIsFormOpen] = useState(false)
 
-//   return (
-//     <>
-//       <Button
-//         className={className}
-//         variant="primary"
-//         onClick={(e) => {
-//           e.preventDefault()
-//           e.stopPropagation()
-//           setIsFormOpen(true)
-//         }}
-//       >
-//         Записаться
-//       </Button>
-//       <AppointmentForm
-//         open={isFormOpen}
-//         onOpenChange={setIsFormOpen}
-//         doctorId={doctorId}
-//         clinicId={clinicId}
-//       />
-//     </>
-//   )
-// }
+    return (
+        <>
+            <Button
+                className={className}
+                variant="primary"
+                onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    setIsFormOpen(true)
+                }}
+            >
+                Записаться
+            </Button>
+            <AppointmentModal
+                open={isFormOpen}
+                onOpenChange={setIsFormOpen}
+                doctorId={doctorId}
+                clinicId={clinicId}
+            />
+        </>
+    )
+}

@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { toast } from "sonner"
 import { logger } from "@/shared/lib/logger"
 import * as userApi from "./user.api"
+import { catalogKeys } from "@/entities/catalog/api/catalog.queries"
 
 export const userKeys = {
   all: ["user"] as const,
@@ -44,6 +45,21 @@ export const useUpdateMe = () => {
   })
 }
 
+export const useAddToFavorite = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (id: string) => userApi.addUserToFavorite(id!),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: userKeys.me() })
+      queryClient.invalidateQueries({ queryKey: catalogKeys.all })
+    },
+
+    onError: (error: Error) => {
+      toast.error(error.message || "Не удалось добавить в избранное")
+    },
+  })
+}
 export const useChangePassword = () => {
   return useMutation({
     mutationFn: ({ oldPassword, newPassword }: { oldPassword: string; newPassword: string }) =>

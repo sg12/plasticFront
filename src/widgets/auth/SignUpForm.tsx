@@ -1,7 +1,6 @@
 import { Mail, Eye, EyeOff, ArrowLeft, User, Phone, Lock } from "lucide-react"
 import { useSignUpForm } from "@/features/auth/signUp/hooks/useSignUpForm"
 import { RoleSelector } from "@/widgets/auth/RoleSelector"
-import { ConsentSection } from "@/features/consent/ui/ConsentSection"
 import { Button } from "@/shared/ui/button"
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/form"
 import { useState } from "react"
@@ -19,6 +18,7 @@ import {
 import { useNavigate } from "react-router"
 import { useIsMobile } from "@/shared/hooks/useMobile"
 import { formatPhoneNumber } from "@/shared/lib/utils"
+import { ConsentButton } from "@/features/consent/ui/consent-button/ConsentButton"
 
 export function SignUpForm() {
   const {
@@ -27,6 +27,8 @@ export function SignUpForm() {
     currentStep,
     setCurrentStep,
     hasConsent,
+    consents = [],
+    consentLoading,
     isLoading,
     acceptConsent,
     onSubmit,
@@ -244,7 +246,9 @@ export function SignUpForm() {
           <CardFooter className="space-child grid">
             {currentStep === 1 && (
               <>
-                <ConsentSection
+                <ConsentButton
+                  consents={consents}
+                  isLoading={consentLoading}
                   hasConsent={hasConsent}
                   onAccept={acceptConsent}
                 />

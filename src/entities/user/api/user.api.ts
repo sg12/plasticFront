@@ -8,8 +8,12 @@ export const getMe = async (): Promise<User> => {
 }
 
 export const getUserById = async (id: string): Promise<User> => {
-  const { data } = await api.get<User>(`users/${id}`, { params: { id } })
+  const { data } = await api.get<User>(`users/${id}`)
   return data
+}
+
+export const addUserToFavorite = async (id: string) => {
+  return await api.post(`users/${id}`)
 }
 
 export const updateMe = async (dto: UpdateUserDto): Promise<User> => {

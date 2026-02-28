@@ -8,50 +8,41 @@
 
 import { Button } from "@/shared/ui/button"
 import { cn } from "@/shared/lib/utils"
-import { useCatalogStore } from "@/entities/catalog/model/catalog.store"
-import { USER_ROLES } from "@/entities/user/model/user.constants"
-import type { UserRole } from "@/entities/user/types/user.types"
 import { Heart } from "lucide-react"
+import { useAddToFavorite, useMe } from "@/entities/user/api/user.queries"
 
 interface FavoriteButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   favoriteId: string
-  type: UserRole
-  isFavorite?: boolean
 }
 
 export const FavoriteButton = ({
   favoriteId,
-  type,
-  isFavorite: externalIsFavorite,
   className,
   ...props
 }: FavoriteButtonProps) => {
-  const { toggleFavorite, favoriteDoctors, favoriteClinics } = useCatalogStore()
+  const { data: user } = useMe()
+  const { mutateAsync: addToFavorite, isPending, isSuccess, isIdle } = useAddToFavorite();
 
-  const internalIsFavorite =
-    type === USER_ROLES.DOCTOR
-      ? favoriteDoctors.includes(favoriteId)
-      : favoriteClinics.includes(favoriteId)
+  const isFavorite = user?.patient.favorites?.find((favorite) => favorite.clinicId || favorite.doctorId === favoriteId)
 
-  const isFavorite = externalIsFavorite !== undefined ? externalIsFavorite : internalIsFavorite
-
-  const handleClick = (e: React.MouseEvent) => {
+  const handleFavoriteClick = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    toggleFavorite(favoriteId, type)
+    addToFavorite(favoriteId);
   }
 
   return (
     <Button
       variant="ghost"
-      onClick={handleClick}
+      onClick={handleFavoriteClick}
       size="iconMd"
+      disabled={isPending}
       className={cn("shrink-0", className)}
       {...props}
     >
       <Heart
         className={cn(
-          "transition-all",
+          "transition-all size-4",
           isFavorite ? "fill-red-500 text-red-500" : "text-gray-600 group-hover:text-red-500",
         )}
       />

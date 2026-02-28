@@ -1,5 +1,10 @@
 import { Outlet } from "react-router"
+import { ConsentProvider } from "./providers/ConsentProvider"
 
 export const App = () => {
-  return <Outlet />
+  return (
+    <ConsentProvider>
+      <Outlet />
+    </ConsentProvider>
+  )
 }
