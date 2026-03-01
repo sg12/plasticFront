@@ -9,11 +9,10 @@ import { Button } from "@/shared/ui/button"
 import { AppointmentModal } from "@/widgets/appointments/AppointmentModal"
 
 interface AppointmentButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    doctorId?: string | null
-    clinicId?: string | null
+    targetId?: string
 }
 
-export const AppointmentButton = ({ doctorId, clinicId, className }: AppointmentButtonProps) => {
+export const AppointmentButton = ({ targetId, className }: AppointmentButtonProps) => {
     const [isFormOpen, setIsFormOpen] = useState(false)
 
     return (
@@ -32,8 +31,7 @@ export const AppointmentButton = ({ doctorId, clinicId, className }: Appointment
             <AppointmentModal
                 open={isFormOpen}
                 onOpenChange={setIsFormOpen}
-                doctorId={doctorId}
-                clinicId={clinicId}
+                targetId={targetId!}
             />
         </>
     )

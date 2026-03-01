@@ -9,6 +9,8 @@ import type { Clinic, Doctor } from "@/entities/user/types/user.types"
 import { useMe } from "@/entities/user/api/user.queries"
 import { EmptyState } from "@/shared/ui/emptyState"
 import { HeartCrack } from "lucide-react"
+import { UserCard } from "./UserCard"
+import { USER_ROLE } from "@/entities/user/model/user.constants"
 
 // import { DoctorCard } from "@/entities/doctor/ui/DoctorCard"
 // import { ClinicCard } from "@/entities/clinic/ui/ClinicCard"
@@ -24,10 +26,13 @@ export const FavoritesList = ({ doctors, clinics, isLoading, error }: FavoritesL
   const { data: user } = useMe()
 
   const { filteredDoctors, filteredClinics, isEmpty } = useMemo(() => {
-    const favoriteIds = user?.patient?.favorites || []
+    const favorites = user?.patient?.favorites || []
 
-    const d = doctors.filter((doc) => favoriteIds.includes(doc.user.id))
-    const c = clinics.filter((cli) => favoriteIds.includes(cli.user.id))
+    const favoriteDoctorIds = new Set(favorites.map(f => f.doctorId).filter(Boolean))
+    const favoriteClinicIds = new Set(favorites.map(f => f.clinicId).filter(Boolean))
+
+    const d = doctors.filter((doc) => favoriteDoctorIds.has(doc.user.id))
+    const c = clinics.filter((cli) => favoriteClinicIds.has(cli.user.id))
 
     return {
       filteredDoctors: d,
@@ -47,55 +52,27 @@ export const FavoritesList = ({ doctors, clinics, isLoading, error }: FavoritesL
   }
 
   return (
-    <div className="space-y-12 animate-in fade-in duration-700">
+    <div className="grid space-global">
+      
       {(filteredDoctors.length > 0 || isLoading) && (
-        <section>
-          <div className="mb-6 flex items-end gap-2 px-1">
-            <h3 className="text-2xl font-bold tracking-tight">Избранные врачи</h3>
-            {!isLoading && (
-              <span className="text-muted-foreground font-medium mb-1">
-                {filteredDoctors.length}
-              </span>
-            )}
-          </div>
-          <EntityList
-            entities={filteredDoctors}
-            isLoading={isLoading}
-            error={error}
-            emptyMessage="Врачи не найдены"
-            // Передайте сюда реальный компонент карточки
-            renderItem={(doc) => (
-              <div className="p-4 border rounded-xl">Карточка врача: {doc.user.id}</div>
-            )}
-          />
-        </section>
+        <EntityList
+          entities={filteredDoctors}
+          isLoading={isLoading}
+          error={error}
+          emptyMessage="Врачи не найдены"
+          renderItem={(doctor) => <UserCard user={doctor} role={USER_ROLE.DOCTOR} />}
+        />
       )}
-
-      {filteredDoctors.length > 0 && filteredClinics.length > 0 && (
-        <hr className="border-border/50 shadow-sm" />
-      )}
-
       {(filteredClinics.length > 0 || isLoading) && (
-        <section>
-          <div className="mb-6 flex items-end gap-2 px-1">
-            <h3 className="text-2xl font-bold tracking-tight">Избранные клиники</h3>
-            {!isLoading && (
-              <span className="text-muted-foreground font-medium mb-1">
-                {filteredClinics.length}
-              </span>
-            )}
-          </div>
-          <EntityList
-            entities={filteredClinics}
-            isLoading={isLoading}
-            error={error}
-            emptyMessage="Клиники не найдены"
-            renderItem={(cli) => (
-              <div className="p-4 border rounded-xl">Карточка клиники: {cli.user.id}</div>
-            )}
-          />
-        </section>
+        <EntityList
+          entities={filteredClinics}
+          isLoading={isLoading}
+          error={error}
+          emptyMessage="Клиники не найдены"
+          renderItem={(clinic) => <UserCard user={clinic} role={USER_ROLE.CLINIC} />}
+        />
       )}
+
     </div>
   )
 }

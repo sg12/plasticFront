@@ -21,9 +21,9 @@ export const FavoriteButton = ({
   ...props
 }: FavoriteButtonProps) => {
   const { data: user } = useMe()
-  const { mutateAsync: addToFavorite, isPending, isSuccess, isIdle } = useAddToFavorite();
+  const { mutateAsync: addToFavorite, isPending } = useAddToFavorite();
 
-  const isFavorite = user?.patient.favorites?.find((favorite) => favorite.clinicId || favorite.doctorId === favoriteId)
+  const isFavorite = user?.patient.favorites?.some((favorite) => favorite.clinicId === favoriteId || favorite.doctorId === favoriteId)
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.preventDefault()

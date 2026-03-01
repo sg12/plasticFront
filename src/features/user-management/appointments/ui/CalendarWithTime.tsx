@@ -10,17 +10,20 @@ import { TimeSlotPicker } from "./TimeSlotPicker"
 import { Separator } from "@/shared/ui/separator"
 import { Calendar1 } from "lucide-react"
 import { useIsMobile } from "@/shared/hooks/useMobile"
+import type { TimeSlot } from "@/entities/schedule/types/schedule.types"
 
 interface AppointmentCalendarProps {
-  selectedDate?: Date | null
-  onSelectDate: (date: Date | undefined) => void
-  selectedTime?: string | null
-  onSelectTime: (time: string) => void
-  doctorId?: string | null
-  clinicId?: string | null
+  slots: TimeSlot[]
+  isLoading: boolean
+  selectedDate: Date
+  onSelectDate: (date: Date) => void
+  selectedTime: string | null
+  onSelectTime: (timeSlotId: string) => void
 }
 
 export const AppointmentCalendarWithTime = ({
+  slots,
+  isLoading,
   selectedDate,
   onSelectDate,
   selectedTime,
@@ -29,7 +32,6 @@ export const AppointmentCalendarWithTime = ({
   // Минимальная дата - сегодня + минимальное время до записи
   const minDate = new Date()
   minDate.setHours(minDate.getHours() + 2) // MIN_HOURS_BEFORE_APPOINTMENT
-  const { availableTimeSlots, isLoadingSlots } = useAppointmentsStore()
   const isMobile = useIsMobile()
 
   // Максимальная дата - через 3 месяца
@@ -40,6 +42,7 @@ export const AppointmentCalendarWithTime = ({
     <div className="flex flex-col rounded-xl border md:flex-row">
       <div className="flex-1 place-items-center">
         <Calendar
+          required
           mode="single"
           selected={selectedDate || undefined}
           onSelect={onSelectDate}
@@ -55,8 +58,8 @@ export const AppointmentCalendarWithTime = ({
       {selectedDate ? (
         <div className="flex-1">
           <TimeSlotPicker
-            slots={availableTimeSlots}
-            isLoading={isLoadingSlots}
+            slots={slots}
+            isLoading={isLoading}
             onSelect={onSelectTime}
             selectedTime={selectedTime}
           />

@@ -19,6 +19,7 @@ import type { Clinic, Doctor, Patient, ROLE } from "@/entities/user/types/user.t
 import { USER_ROLE } from "@/entities/user/model/user.constants"
 import { SPECIALIZATION_LOCALES } from "@/entities/doctor/model/doctor.constants"
 import { Badge } from "@/shared/ui/badge"
+import { AppointmentButton } from "@/features/user-management/appointments/ui/AppointmentButton"
 
 
 type BaseUser = Patient | Doctor | Clinic;
@@ -27,15 +28,14 @@ interface UserCardProps<T extends BaseUser> {
   user: T
   role: ROLE
   className?: string
-  showFavorite?: boolean
 }
 
-export const UserCard = <T extends BaseUser>({ user, role, className, showFavorite = true }: UserCardProps<T>) => {
+export const UserCard = <T extends BaseUser>({ user, role, className }: UserCardProps<T>) => {
   const isNewProfile = user.createdAt && differenceInDays(new Date(), new Date(user.createdAt)) < 5
 
-  const patient = role === USER_ROLE.PATIENT ? (user as Patient) : null;
-  const doctor = role === USER_ROLE.DOCTOR ? (user as Doctor) : null;
-  const clinic = role === USER_ROLE.CLINIC ? (user as Clinic) : null;
+  const patient = role === USER_ROLE.PATIENT ? (user as Patient) : null
+  const doctor = role === USER_ROLE.DOCTOR ? (user as Doctor) : null
+  const clinic = role === USER_ROLE.CLINIC ? (user as Clinic) : null
 
   const specialization = doctor?.specializations.map(
     (spec) => SPECIALIZATION_LOCALES[spec as keyof typeof SPECIALIZATION_LOCALES].ru
@@ -60,31 +60,27 @@ export const UserCard = <T extends BaseUser>({ user, role, className, showFavori
               </AvatarFallback>
             </Avatar>
             <div className="min-w-0 flex-1">
-              <CardTitle className="mb-1">{user.user.fullName}</CardTitle>
+              <CardTitle className="mb-1">{doctor ? user.user.fullName : clinic?.brandName}</CardTitle>
               <CardDescription>{specialization ? specialization : doctor ? "Нет специализаций" : ""}</CardDescription>
               <div className="mt-2 flex flex-wrap items-center gap-2">
                 {isNewProfile && <Badge variant="primary">Новый</Badge>}
                 {doctor?.experience && <Badge variant="primary">Опыт: {pluralRu(doctor.experience, "год", "года", "лет")}</Badge>}
               </div>
             </div>
-            {/* {showFavorite &&
-              patient &&
-            } */}
             <FavoriteButton favoriteId={user.user.id} />
           </div>
         </CardContent>
 
-        {/* <CardFooter className="space-child grid">
-          {user?.role === USER_ROLE.PATIENT &&
+        <CardFooter className="space-child grid">
+          {USER_ROLE.PATIENT && !clinic &&
             <AppointmentButton
-              doctorId={user.role === USER_ROLE.DOCTOR ? user.id : null}
-              clinicId={user.role === USER_ROLE.CLINIC ? user.id : null}
+              targetId={doctor?.user.id}
             />
           }
           <Button variant="secondary" className="flex-1">
             Подробнее
           </Button>
-        </CardFooter> */}
+        </CardFooter>
       </Card>
     </Link >
   )
