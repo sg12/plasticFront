@@ -5,9 +5,10 @@ export interface Schedule {
   id: string
   doctorId: string | null
   clinicId: string | null
+  isAvailable: boolean
   dayOfWeek: number
   startAt: string
-  entAt: string
+  endAt: string
   slotDuration: number
 }
 

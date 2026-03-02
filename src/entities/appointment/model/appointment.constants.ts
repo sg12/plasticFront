@@ -1,4 +1,5 @@
 export const APPOINTMENT_STATUS = {
+  ALL: "ALL",
   PENDING: "PENDING",
   CONFIRMED: "CONFIRMED",
   CANCELED: "CANCELED",
@@ -13,6 +14,9 @@ export const APPOINTMENT_TYPE = {
 } as const
 
 export const APPOINTMENT_STATUS_LOCALES = {
+  [APPOINTMENT_STATUS.ALL]: {
+    ru: "Все",
+  },
   [APPOINTMENT_STATUS.PENDING]: {
     ru: "Ожидает подтверждения",
   },

@@ -3,20 +3,18 @@
  *
  */
 
-import { usePatientAppointments } from "@/features/user-management/appointments/hooks/usePatientAppointments"
 import { useMe } from "@/entities/user/api/user.queries"
 import { USER_ROLE } from "@/entities/user/model/user.constants"
-import { useClinicAppointments } from "@/features/user-management/appointments/hooks/useClinicAppointments"
-import { DoctorScheduleButton } from "@/features/user-management/doctor/schedule/ui/DoctorScheduleButton"
-import { useDoctorAppointments } from "@/features/user-management/appointments/hooks/useDoctorAppointments"
 import { AppointmentsList } from "./AppointmentsList"
+import { useUpdateAppointmentStatus } from "@/entities/appointment/api/appointment.queries"
+import { APPOINTMENT_STATUS } from "@/entities/appointment/model/appointment.constants"
 
 export const AppointmentForm = () => {
   const { data: user } = useMe()
-  const { handleCancel: patientCancel } = usePatientAppointments()
-  const { handleComplete: clinicComplete, handleCancel: clinicCancel, handleConfirm: clinicConfirm } = useClinicAppointments()
-  const { handleComplete: doctorComplete, handleCancel: doctorCancel, handleConfirm: doctorConfirm, } = useDoctorAppointments()
 
+  const { mutateAsync: patientAppointment } = useUpdateAppointmentStatus()
+  const { mutateAsync: doctorAppointment } = useUpdateAppointmentStatus()
+  const { mutateAsync: clinicAppointment } = useUpdateAppointmentStatus()
 
   if (!user?.id) return null
 
@@ -27,17 +25,16 @@ export const AppointmentForm = () => {
         userId={user?.id}
         showDateGrouping={true}
         limit={10}
-        onCancel={patientCancel} />
+        onCancel={(appointmentId) => patientAppointment({ id: appointmentId, status: APPOINTMENT_STATUS.CANCELED })} />
     case USER_ROLE.DOCTOR:
       return <AppointmentsList
         userRole={USER_ROLE.DOCTOR}
         userId={user.id}
-        headerActions={<DoctorScheduleButton />}
         showDateGrouping={true}
         limit={10}
-        onConfirm={doctorConfirm}
-        onCancel={doctorCancel}
-        onComplete={doctorComplete}
+        onConfirm={(appointmentId) => doctorAppointment({ id: appointmentId, status: APPOINTMENT_STATUS.CONFIRMED })}
+        onCancel={(appointmentId) => doctorAppointment({ id: appointmentId, status: APPOINTMENT_STATUS.CANCELED })}
+        onComplete={(appointmentId) => doctorAppointment({ id: appointmentId, status: APPOINTMENT_STATUS.COMPLETED })}
       />
     case USER_ROLE.CLINIC:
       return <AppointmentsList
@@ -45,9 +42,9 @@ export const AppointmentForm = () => {
         userId={user.id}
         showDoctorFilter={true}
         limit={100}
-        onConfirm={clinicConfirm}
-        onCancel={clinicCancel}
-        onComplete={clinicComplete}
+        onConfirm={(appointmentId) => clinicAppointment({ id: appointmentId, status: APPOINTMENT_STATUS.CONFIRMED })}
+        onCancel={(appointmentId) => clinicAppointment({ id: appointmentId, status: APPOINTMENT_STATUS.CANCELED })}
+        onComplete={(appointmentId) => clinicAppointment({ id: appointmentId, status: APPOINTMENT_STATUS.COMPLETED })}
       />
     default:
       return (

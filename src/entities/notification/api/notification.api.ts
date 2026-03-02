@@ -11,9 +11,9 @@ export const markAsAllReadNotification = async (): Promise<void> => {
 }
 
 export const markAsReadNotification = async (id: string): Promise<void> => {
-  return await api.post("notification", {}, { params: id })
+  return await api.post(`notifications/${id}`)
 }
 
 export const deleteNotification = async (id: string): Promise<void> => {
-  return await api.delete("notification", { params: id })
+  return await api.delete(`notifications/${id}`)
 }

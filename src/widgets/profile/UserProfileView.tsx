@@ -1,7 +1,7 @@
 import { CardTitle } from "@/shared/ui/card"
 import { Separator } from "@/shared/ui/separator"
 import type { User } from "@/entities/user/types/user.types"
-import { USER_ROLE } from "@/entities/user/model/user.constants"
+import { GENDER_LOCALES, USER_ROLE } from "@/entities/user/model/user.constants"
 import { useMemo } from "react"
 import { SPECIALIZATION_LOCALES } from "@/entities/doctor/model/doctor.constants"
 import { format, parseISO } from "date-fns"
@@ -23,8 +23,8 @@ export const UserProfileView = ({ user }: UserProfileViewProps) => {
           <div className="grid gap-4 lg:grid-cols-2">
             <InfoItem label="Дата рождения" value={user.patient.birthdate
               ? format(parseISO(user.patient.birthdate), "dd.MM.yyyy")
-              : "—"} />
-            <InfoItem label="Пол" value={user.patient.gender} />
+              : "Не указан"} />
+            <InfoItem label="Пол" value={user?.patient?.gender ? GENDER_LOCALES[user.patient.gender].ru : "Не указан"} />
           </div>
         );
 
@@ -33,7 +33,7 @@ export const UserProfileView = ({ user }: UserProfileViewProps) => {
           <div className="grid gap-4 lg:grid-cols-2">
             <InfoItem label="Дата рождения" value={user.doctor.birthdate
               ? format(parseISO(user.doctor.birthdate), "dd.MM.yyyy")
-              : "—"} />
+              : "Не указан"} />
             <InfoItem label="Лицензия" value={user.doctor.license} />
             <InfoItem label="Специализация" value={user.doctor.specializations.map(
               (spec) => SPECIALIZATION_LOCALES[spec as keyof typeof SPECIALIZATION_LOCALES].ru
@@ -86,7 +86,7 @@ const InfoItem = ({ label, value }: {
       {label}
     </label>
     <div className="flex items-center gap-2 text-sm">
-      <span className="truncate">{value?.trim() || "—"}</span>
+      <span className="truncate">{value?.trim() || "Не указан"}</span>
     </div>
   </div>
 )

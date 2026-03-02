@@ -9,34 +9,26 @@
  * @module widgets/appointmentCard/ui/AppointmentCard
  */
 
-import {
-  APPOINTMENT_STATUS_LABELS,
-  APPOINTMENT_TYPE_LABELS,
-} from "@/entities/appointment/model/appointment.constants"
 import type { Appointment } from "@/entities/appointment/types/appointment.types"
-import { USER_ROLES } from "@/entities/user/model/user.constants"
-import type { UserRole } from "@/entities/user/types/user.types"
 import { Badge } from "@/shared/ui/badge"
 import { Button } from "@/shared/ui/button"
 import { Card, CardTitle, CardContent, CardFooter, CardAction } from "@/shared/ui/card"
 import { format } from "date-fns"
 import { ru } from "date-fns/locale"
-import { Calendar, Clock, X, User, Stethoscope, Hospital, Check, CheckCircle2 } from "lucide-react"
+import { Calendar, Clock, X, User, Stethoscope, Hospital, Check, CheckCircle2, ExternalLink } from "lucide-react"
 import { useIsMobile } from "@/shared/hooks/useMobile"
 import { cn } from "@/shared/lib/utils"
 import { Link } from "react-router"
 import { ROUTES } from "@/shared/model/routes"
+import { APPOINTMENT_STATUS, APPOINTMENT_STATUS_LOCALES } from "@/entities/appointment/model/appointment.constants"
+import { USER_ROLE } from "@/entities/user/model/user.constants"
+import type { ROLE } from "@/entities/user/types/user.types"
 
 interface AppointmentCardProps {
-  /** Запись на приём */
   appointment: Appointment
-  /** Роль текущего пользователя */
-  userRole: UserRole
-  /** Обработчик отмены записи */
+  userRole: ROLE
   onCancel?: (appointmentId: string) => void
-  /** Обработчик подтверждения записи (для врача и клиники) */
   onConfirm?: (appointmentId: string) => void
-  /** Обработчик завершения записи (для врача и клиники) */
   onComplete?: (appointmentId: string) => void
 }
 
@@ -48,56 +40,61 @@ export const AppointmentCard = ({
   onComplete,
 }: AppointmentCardProps) => {
   const isMobile = useIsMobile()
-  const appointmentDate = new Date(appointment.dateTime)
+  const appointmentDate = new Date(appointment.timeSlot.startAt)
   const now = new Date()
   const isPastOrToday = appointmentDate <= now
 
   const canCancel =
-    appointment.status !== "cancelled" &&
-    appointment.status !== "completed" &&
+    appointment.status !== APPOINTMENT_STATUS.CANCELED &&
+    appointment.status !== APPOINTMENT_STATUS.COMPLETED &&
     appointmentDate > new Date() &&
     onCancel
 
-  const canConfirm = (userRole === USER_ROLES.DOCTOR || userRole === USER_ROLES.CLINIC) && appointment.status === "pending" && onConfirm
+  const canConfirm = (userRole === USER_ROLE.DOCTOR || userRole === USER_ROLE.CLINIC) && appointment.status === APPOINTMENT_STATUS.PENDING && onConfirm
 
   const canComplete =
-    (userRole === USER_ROLES.DOCTOR || userRole === USER_ROLES.CLINIC) &&
-    appointment.status === "confirmed" &&
+    (userRole === USER_ROLE.DOCTOR || userRole === USER_ROLE.CLINIC) &&
+    appointment.status === APPOINTMENT_STATUS.CONFIRMED &&
     isPastOrToday &&
     onComplete
 
   const getHeaderInfo = () => {
-    if (userRole === USER_ROLES.PATIENT) {
+    if (userRole === USER_ROLE.PATIENT) {
       if (appointment.doctorId) {
         return {
           icon: Stethoscope,
           label: "Врач",
-          value: `#${appointment.doctorId.slice(0, 8)}`,
+          value: appointment.doctor.user.fullName,
+          id: appointment.doctor.user.id
         }
       }
       if (appointment.clinicId) {
         return {
           icon: Hospital,
           label: "Клиника",
-          value: `#${appointment.clinicId.slice(0, 8)}`,
+          value: appointment.clinic.brandName,
+          id: appointment.clinic.user.id
         }
       }
-    } else if (userRole === USER_ROLES.DOCTOR) {
+    } else if (userRole === USER_ROLE.DOCTOR) {
       return {
         icon: User,
         label: "Пациент",
-        value: `#${appointment.patientId.slice(0, 8)}`,
+        value: appointment.patient.user.fullName,
+        id: appointment.patient.user.id
       }
-    } else if (userRole === USER_ROLES.CLINIC) {
+    } else if (userRole === USER_ROLE.CLINIC) {
       return {
         icon: User,
         label: "Пациент",
-        value: `#${appointment.patientId.slice(0, 8)}`,
+        value: appointment.patient.user.fullName,
+        id: appointment.patient.user.id,
         secondary: appointment.doctorId
           ? {
             icon: Stethoscope,
             label: "Врач",
-            value: `#${appointment.doctorId.slice(0, 8)}`,
+            value: appointment.doctor.user.fullName,
+            id: appointment.doctor.user.id,
           }
           : null,
       }
@@ -157,21 +154,17 @@ export const AppointmentCard = ({
           {headerInfo && (
             <CardTitle className="mb-2 flex items-center gap-2">
               <headerInfo.icon className="h-5 w-5 shrink-0" />
-              <span className="truncate">
-                {headerInfo.label} {" "}
-                <Link to={ROUTES.PROFILE_SOME_USER.replace(":userId", appointment.doctorId || "")}>
-                  <Button variant="link">
-                    {headerInfo.value}
-                  </Button>
-                </Link>
-              </span>
+              <Link to={ROUTES.PROFILE_SOME_USER.replace(":userId", headerInfo.id || "")} target="_blank">
+                {headerInfo.value}
+              </Link>
+              <ExternalLink className="size-3.5 text-muted-foreground" />
               {hasOutDate(appointmentDate)}
             </CardTitle>
           )}
           {headerInfo?.secondary && (
             <div className="text-muted-foreground mb-2 flex items-center gap-2">
               <headerInfo.secondary.icon className="h-4 w-4 shrink-0" />
-              <span className="truncate text-sm">
+              <span className="truncate">
                 {headerInfo.secondary.label} {headerInfo.secondary.value}
               </span>
             </div>
@@ -183,21 +176,18 @@ export const AppointmentCard = ({
             </div>
             <div className="flex items-center gap-2">
               <Clock className="h-4 w-4 shrink-0" />
-              {format(appointmentDate, "HH:mm")} ({appointment.duration} мин.)
+              {format(appointment.timeSlot.startAt, "HH:mm")} - {format(appointment.timeSlot.endAt, "HH:mm")}
             </div>
-            <Badge variant="outline">
-              {APPOINTMENT_TYPE_LABELS[appointment.type as keyof typeof APPOINTMENT_TYPE_LABELS]}
-            </Badge>
             <Badge
               variant={
-                appointment.status === "confirmed"
-                  ? "default"
-                  : appointment.status === "cancelled"
+                appointment.status === APPOINTMENT_STATUS.CONFIRMED
+                  ? "accent"
+                  : appointment.status === APPOINTMENT_STATUS.CANCELED
                     ? "destructive"
                     : "secondary"
               }
             >
-              {APPOINTMENT_STATUS_LABELS[appointment.status]}
+              {APPOINTMENT_STATUS_LOCALES[appointment.status].ru}
             </Badge>
           </div>
         </div>

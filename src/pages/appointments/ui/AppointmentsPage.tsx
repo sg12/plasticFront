@@ -3,10 +3,10 @@
  *
  * Обёртка для разных ролей пользователей
  *
- * @module pages/appointments/ui/Appointments
  */
 
-import { AppointmentsForm } from "@/widgets/appointments/AppointmentForm"
+import { DoctorScheduleButton } from "@/features/user-management/doctor/schedule/ui/DoctorScheduleButton"
+import { AppointmentForm } from "@/widgets/appointments/AppointmentForm"
 
 
 export const AppointmentsPage = () => {
@@ -17,8 +17,9 @@ export const AppointmentsPage = () => {
           <h3 className="text-3xl font-semibold">Записи на приём</h3>
           <p className="text-muted-foreground mt-2">Управляйте записями на приём</p>
         </div>
+        <DoctorScheduleButton />
       </div>
-      <AppointmentsForm />
+      <AppointmentForm />
     </div>
   )
 }

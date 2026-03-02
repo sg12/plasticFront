@@ -118,8 +118,8 @@
 } */
 
 @layer utilities {
-  .space-global > :not(:last-of-type) {
-    margin-bottom: var(--space-global);
+  .space-global > * + * {
+    margin-top: var(--space-global);
   }
 
   .space-child > :not(:last-of-type) {

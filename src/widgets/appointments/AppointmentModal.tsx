@@ -38,7 +38,7 @@ import { useCreateAppointment } from "@/entities/appointment/api/appointment.que
 import { AppointmentCalendarWithTime } from "@/features/user-management/appointments/ui/CalendarWithTime"
 import { toast } from "sonner"
 import { formatInTimeZone } from "date-fns-tz"
-import { useTimeSlots } from "@/entities/schedule/api/shedule.queries"
+import { useTimeSlots } from "@/entities/schedule/api/schedule.queries"
 
 interface AppointmentFormProps {
   open: boolean
@@ -65,7 +65,7 @@ export const AppointmentModal = ({
     resolver: zodResolver(CreateAppointmentSchema),
     defaultValues: {
       reason: "",
-      doctorId: targetId,
+      doctorId: "",
       timeSlotId: ""
     }
   })
@@ -76,7 +76,9 @@ export const AppointmentModal = ({
     if (open) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setCurrentStep(0)
-      form.reset()
+      form.reset({
+        doctorId: ""
+      })
     }
   }, [open, form])
 
@@ -144,6 +146,7 @@ export const AppointmentModal = ({
                       <FormControl>
                         <AppointmentCalendarWithTime
                           slots={slots}
+                          targetId={targetId}
                           isLoading={isLoading}
                           selectedDate={selectedDate!}
                           onSelectDate={setSelectedDate}

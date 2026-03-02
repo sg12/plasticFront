@@ -1,85 +1,43 @@
-import React from "react"
+import { useMemo, useState } from "react"
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/popover"
 import { Button } from "@/shared/ui/button"
-import { Bell, CheckCircle2, Clock, X } from "lucide-react"
+import { Bell, CheckCircle2, Info, UserPlus } from "lucide-react"
 import { cn } from "@/shared/lib/utils"
 import { ScrollArea } from "@/shared/ui/scrollArea"
 import { Badge } from "@/shared/ui/badge"
-import { useNotificationStore } from "@/entities/notification/model/notification.store"
-import { useAuthStore } from "@/entities/auth/model/auth.store"
-import type { NotificationType } from "@/entities/notification/types/notification.types"
+import { useMarkAllRead, useMarkAsRead, useNotifications } from "@/entities/notification/api/notification.queries"
+import { formatDistanceToNow } from "date-fns"
+import { ru } from "date-fns/locale"
+import { NOTIFICATION_TYPE } from "@/entities/notification/model/notification.constants"
+import { EmptyState } from "@/shared/ui/emptyState"
 
 export const NotificationPopover = () => {
-  const { user } = useAuthStore()
-  const {
-    notifications,
-    unreadCount,
-    isLoading,
-    loadNotifications,
-    markAsRead,
-    markAllAsRead,
-    deleteNotification,
-    deleteAllNotifications,
-    subscribeToNotifications,
-    unsubscribeFromNotifications,
-  } = useNotificationStore()
+  const [open, setOpen] = useState(false)
 
-  const [open, setOpen] = React.useState(false)
+  const { data: notifications = [], isLoading } = useNotifications()
+  const { mutateAsync: markAllRead } = useMarkAllRead()
+  const { mutateAsync: markAsRead } = useMarkAsRead()
 
-  // Загрузка уведомлений при монтировании
-  React.useEffect(() => {
-    if (user?.id) {
-      loadNotifications()
-      subscribeToNotifications(user.id)
-    }
+  const unreadCount = useMemo(() =>
+    notifications.filter(n => !n.isRead).length,
+    [notifications])
 
-    return () => {
-      unsubscribeFromNotifications()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.id])
-
-  const getNotificationIcon = (type: NotificationType) => {
+  const getNotificationIcon = (type: keyof typeof NOTIFICATION_TYPE) => {
     switch (type) {
-      case "appointment_confirmed":
-      case "appointment_completed":
-        return CheckCircle2
-      case "appointment_cancelled":
-        return Clock
-      default:
-        return Bell
+      case NOTIFICATION_TYPE.APPOINTMENT_MESSAGE: return CheckCircle2
+      case NOTIFICATION_TYPE.RELATIONSHIP_MESSAGE: return UserPlus
+      case NOTIFICATION_TYPE.SYSTEM_MESSAGE: return Info
+      default: return Bell
     }
   }
 
-  const getNotificationColor = (type: NotificationType) => {
+  const getNotificationColor = (type: keyof typeof NOTIFICATION_TYPE) => {
     switch (type) {
-      case "appointment_confirmed":
-      case "appointment_completed":
-        return "text-green-600"
-      case "appointment_cancelled":
-        return "text-yellow-600"
-      case "support_reply":
-      case "support_ticket_created":
-        return "text-blue-600"
-      case "moderation_status_changed":
-        return "text-purple-600"
-      default:
-        return "text-blue-600"
+      case NOTIFICATION_TYPE.APPOINTMENT_MESSAGE: return "text-emerald-500 bg-emerald-50"
+      case NOTIFICATION_TYPE.RELATIONSHIP_MESSAGE: return "text-red-500 bg-red-50"
+      case NOTIFICATION_TYPE.SYSTEM_MESSAGE: return "text-amber-500 bg-amber-50"
+      default: return "text-blue-500 bg-blue-50"
     }
-  }
-
-  const formatTime = (dateString: string) => {
-    const date = new Date(dateString)
-    const now = new Date()
-    const diff = now.getTime() - date.getTime()
-    const minutes = Math.floor(diff / 60000)
-    const hours = Math.floor(diff / 3600000)
-    const days = Math.floor(diff / 86400000)
-
-    if (minutes < 1) return "только что"
-    if (minutes < 60) return `${minutes} мин назад`
-    if (hours < 24) return `${hours} ч назад`
-    return `${days} дн назад`
   }
 
   return (
@@ -103,25 +61,14 @@ export const NotificationPopover = () => {
               <h2 className="text-lg font-semibold">Уведомления</h2>
               {unreadCount > 0 && <Badge variant="destructive">{unreadCount}</Badge>}
             </div>
-            {notifications.length > 0 && (
-              <div className="space-child grid">
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  onClick={markAllAsRead}
-                  disabled={unreadCount === 0 || isLoading}
-                >
-                  Отметить все как прочитанные
-                </Button>
-                <Button
-                  variant="danger"
-                  size="sm"
-                  onClick={deleteAllNotifications}
-                  disabled={isLoading}
-                >
-                  Очистить
-                </Button>
-              </div>
+            {unreadCount > 0 && (
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => markAllRead()}
+              >
+                Прочитать все
+              </Button>
             )}
           </div>
 
@@ -133,10 +80,11 @@ export const NotificationPopover = () => {
                   <p className="text-muted-foreground text-sm">Загрузка уведомлений...</p>
                 </div>
               ) : notifications.length === 0 ? (
-                <div className="flex flex-col items-center justify-center p-8 text-center">
-                  <Bell className="text-muted-foreground/50 mb-4 size-12" />
-                  <p className="text-muted-foreground text-sm">Нет уведомлений</p>
-                </div>
+                // <div className="flex flex-col items-center justify-center p-8 text-center">
+                //   <Bell className="text-muted-foreground/50 mb-4 size-12" />
+                //   <p className="text-muted-foreground text-sm">Нет уведомлений</p>
+                // </div>
+                <EmptyState title="Нет уведомлений" icon={Bell} />
               ) : (
                 <div className="space-y-2">
                   {notifications.map((notification) => {
@@ -148,7 +96,7 @@ export const NotificationPopover = () => {
                         key={notification.id}
                         className={cn(
                           "group relative rounded-lg p-3 transition-colors",
-                          !notification.read && "bg-accent/50",
+                          !notification.isRead && "bg-accent/50",
                           "hover:bg-accent",
                         )}
                       >
@@ -156,7 +104,7 @@ export const NotificationPopover = () => {
                           <div
                             className={cn(
                               "bg-accent mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-full",
-                              colorClass,
+                              colorClass
                             )}
                           >
                             <Icon className="size-4" />
@@ -167,48 +115,33 @@ export const NotificationPopover = () => {
                                 <p
                                   className={cn(
                                     "text-sm font-medium",
-                                    !notification.read && "font-semibold",
+                                    !notification.isRead && "font-semibold",
                                   )}
                                 >
                                   {notification.title}
                                 </p>
                                 <p className="text-muted-foreground mt-1 text-xs">
-                                  {notification.message}
+                                  {notification.description}
                                 </p>
                                 <p className="text-muted-foreground/70 mt-1 text-xs">
-                                  {formatTime(notification.createdAt)}
+                                  {formatDistanceToNow(new Date(notification.createdAt), { addSuffix: true, locale: ru })}
                                 </p>
                               </div>
                               <div className="flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
-                                {!notification.read && (
+                                {!notification.isRead && (
                                   <Button
                                     variant="ghost"
                                     size="iconSm"
-                                    className="h-6 w-6"
                                     onClick={() => markAsRead(notification.id)}
-                                    disabled={isLoading}
                                     title="Отметить как прочитанное"
                                   >
                                     <CheckCircle2 className="size-3.5" />
                                   </Button>
                                 )}
-                                <Button
-                                  variant="ghost"
-                                  size="iconSm"
-                                  className="text-destructive hover:text-destructive h-6 w-6"
-                                  onClick={() => deleteNotification(notification.id)}
-                                  disabled={isLoading}
-                                  title="Удалить"
-                                >
-                                  <X className="size-3.5" />
-                                </Button>
                               </div>
                             </div>
                           </div>
                         </div>
-                        {!notification.read && (
-                          <div className="bg-primary absolute top-1/2 left-0 size-2 -translate-y-1/2 rounded-full" />
-                        )}
                       </div>
                     )
                   })}

@@ -10,68 +10,59 @@
 
 import { Button } from "@/shared/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select"
-import { APPOINTMENT_STATUS_LABELS } from "@/entities/appointment/model/appointment.constants"
-import type { AppointmentStatus } from "@/entities/appointment/types/appointment.types"
 import { useIsMobile } from "@/shared/hooks/useMobile"
-import type { UserRole } from "@/entities/user/types/user.types"
-import { USER_ROLES } from "@/entities/user/model/user.constants"
+import { APPOINTMENT_STATUS, APPOINTMENT_STATUS_LOCALES } from "@/entities/appointment/model/appointment.constants"
+
+type FilterStatus = keyof typeof APPOINTMENT_STATUS
 
 interface AppointmentStatusFilterProps {
-    /** Выбранный статус */
-    selectedStatus: AppointmentStatus | "all"
-    /** Обработчик изменения статуса */
-    onStatusChange: (status: AppointmentStatus | "all") => void
-    /** Роль пользователя (для кастомизации отображения) */
-    userRole?: UserRole
-    /** Дополнительные классы для контейнера */
-    className?: string
+  selectedStatus: FilterStatus
+  onStatusChange: (status: FilterStatus) => void
+  className?: string
 }
 
 export const AppointmentStatusFilter = ({
-    selectedStatus,
-    onStatusChange,
-    userRole,
-    className,
+  selectedStatus,
+  onStatusChange,
+  className,
 }: AppointmentStatusFilterProps) => {
-    const isMobile = useIsMobile()
+  const isMobile = useIsMobile()
 
-    const statuses = ["all", "pending", "confirmed", "cancelled", "completed"] as const
+  const statuses = Object.keys(APPOINTMENT_STATUS) as FilterStatus[]
 
-    if (isMobile) {
-        return (
-            <Select
-                value={selectedStatus}
-                onValueChange={(value) => onStatusChange(value as AppointmentStatus | "all")}
-            >
-                <SelectTrigger className={`w-full ${className || ""}`}>
-                    <SelectValue placeholder="Выберите статус" />
-                </SelectTrigger>
-                <SelectContent>
-                    {statuses.map((status) => (
-                        <SelectItem key={status} value={status}>
-                            {status === "all" ? "Все" : APPOINTMENT_STATUS_LABELS[status]}
-                        </SelectItem>
-                    ))}
-                </SelectContent>
-            </Select>
-        )
-    }
-
+  if (isMobile) {
     return (
-        <div
-            className={`flex gap-2 ${userRole === USER_ROLES.DOCTOR ? "grid md:grid-cols-2 lg:grid-cols-5 w-full" : ""
-                } ${className || ""}`}
-        >
-            {statuses.map((status) => (
-                <Button
-                    key={status}
-                    variant={selectedStatus === status ? "primary" : "secondary"}
-                    size="sm"
-                    onClick={() => onStatusChange(status)}
-                >
-                    {status === "all" ? "Все" : APPOINTMENT_STATUS_LABELS[status]}
-                </Button>
-            ))}
-        </div>
+      <Select
+        value={selectedStatus}
+        onValueChange={(value) => onStatusChange(value as FilterStatus)}
+      >
+        <SelectTrigger className={`w-full ${className || ""}`}>
+          <SelectValue placeholder="Выберите статус" />
+        </SelectTrigger>
+        <SelectContent>
+          {statuses.map((status) => (
+            <SelectItem key={status} value={status}>
+              {APPOINTMENT_STATUS_LOCALES[status].ru}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     )
+  }
+
+  return (
+    <div
+      className={`grid gap-2 md:grid-cols-3 ${className || ""}`}>
+      {statuses.map((status) => (
+        <Button
+          key={status}
+          variant={selectedStatus === status ? "primary" : "secondary"}
+          size="sm"
+          onClick={() => onStatusChange(status)}
+        >
+          {APPOINTMENT_STATUS_LOCALES[status].ru}
+        </Button>
+      ))}
+    </div>
+  )
 }

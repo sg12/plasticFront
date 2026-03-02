@@ -11,9 +11,12 @@ import { Separator } from "@/shared/ui/separator"
 import { Calendar1 } from "lucide-react"
 import { useIsMobile } from "@/shared/hooks/useMobile"
 import type { TimeSlot } from "@/entities/schedule/types/schedule.types"
+import { useMemo } from "react"
+import { useSchedules } from "@/entities/schedule/api/schedule.queries"
 
 interface AppointmentCalendarProps {
   slots: TimeSlot[]
+  targetId: string
   isLoading: boolean
   selectedDate: Date
   onSelectDate: (date: Date) => void
@@ -23,6 +26,7 @@ interface AppointmentCalendarProps {
 
 export const AppointmentCalendarWithTime = ({
   slots,
+  targetId,
   isLoading,
   selectedDate,
   onSelectDate,
@@ -34,9 +38,15 @@ export const AppointmentCalendarWithTime = ({
   minDate.setHours(minDate.getHours() + 2) // MIN_HOURS_BEFORE_APPOINTMENT
   const isMobile = useIsMobile()
 
+  const { data: schedules = [], isLoading: isSchedulesLoading } = useSchedules(targetId, true)
+
   // Максимальная дата - через 3 месяца
   const maxDate = new Date()
   maxDate.setMonth(maxDate.getMonth() + 3)
+
+  const activeDays = useMemo(() =>
+    schedules.map((s) => s.dayOfWeek),
+    [schedules])
 
   return (
     <div className="flex flex-col rounded-xl border md:flex-row">
@@ -47,7 +57,15 @@ export const AppointmentCalendarWithTime = ({
           selected={selectedDate || undefined}
           onSelect={onSelectDate}
           disabled={(date) => {
-            return date < minDate || date > maxDate
+            const dayOfWeek = date.getDay()
+            const isWorkingDay = activeDays.includes(dayOfWeek)
+
+            return (
+              date < minDate ||
+              date > maxDate ||
+              !isWorkingDay ||
+              isSchedulesLoading
+            )
           }}
           locale={ru}
           className="[--cell-size:--spacing(10.5)] md:[--cell-size:--spacing(12)]"

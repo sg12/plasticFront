@@ -114,13 +114,6 @@ export const navigationConfig = {
       section: "main",
     },
     {
-      id: "catalog",
-      name: "Каталог",
-      icon: Search,
-      url: ROUTES.CATALOG,
-      section: "main",
-    },
-    {
       id: "clinic",
       name: "Клиника",
       icon: Building2,

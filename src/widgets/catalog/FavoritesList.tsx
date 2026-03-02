@@ -53,7 +53,6 @@ export const FavoritesList = ({ doctors, clinics, isLoading, error }: FavoritesL
 
   return (
     <div className="grid space-global">
-      
       {(filteredDoctors.length > 0 || isLoading) && (
         <EntityList
           entities={filteredDoctors}

@@ -1,10 +1,10 @@
 /**
  * @fileoverview Страница управления расписанием врача
  *
- * @module pages/doctorSchedule/ui/DoctorSchedule
  */
 
-import { DoctorScheduleForm } from "@/features/user-management/doctor/schedule/ui/DoctorScheduleForm"
+import { DoctorScheduleForm } from "@/widgets/doctor/DoctorScheduleForm"
+
 
 export const DoctorSchedulePage = () => {
   return (
