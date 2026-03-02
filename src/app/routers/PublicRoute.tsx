@@ -1,13 +1,13 @@
 import { Navigate, Outlet } from "react-router"
-import { useAuthStore } from "@/entities/auth/model/store"
 import { ROUTES } from "@/shared/model/routes"
+import { useAuthStore } from "@/entities/auth/model/auth.store";
 
 export const PublicRoute = () => {
-    const { session } = useAuthStore()
+  const isAuth = useAuthStore((state) => !!state.token)
 
-    if (session) {
-        return <Navigate to={ROUTES.MAIN} replace />
-    }
+  if (isAuth) {
+    return <Navigate to={ROUTES.MAIN} replace />
+  }
 
     return <Outlet />;
 };

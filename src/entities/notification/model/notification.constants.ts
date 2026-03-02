@@ -1,0 +1,17 @@
+export const NOTIFICATION_TYPE = {
+  RELATIONSHIP_MESSAGE: "RELATIONSHIP_MESSAGE",
+  APPOINTMENT_MESSAGE: "APPOINTMENT_MESSAGE",
+  SYSTEM_MESSAGE: "SYSTEM_MESSAGE",
+} as const
+
+export const NOTIFICATION_TYPE_LOCALES = {
+  [NOTIFICATION_TYPE.RELATIONSHIP_MESSAGE]: {
+    ru: "Сообщение о связи",
+  },
+  [NOTIFICATION_TYPE.APPOINTMENT_MESSAGE]: {
+    ru: "Сообщение о записи",
+  },
+  [NOTIFICATION_TYPE.SYSTEM_MESSAGE]: {
+    ru: "Системное сообщение",
+  },
+}

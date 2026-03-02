@@ -5,13 +5,13 @@
  */
 
 import { Navigate, Outlet, useMatches } from "react-router"
-import { useUserStore } from "@/entities/user/model/store"
-import type { UserRole } from "@/entities/user/types/types"
 import { ROUTES } from "@/shared/model/routes"
 import { Loader } from "@/shared/ui/loader"
+import type { ROLE } from "@/entities/user/types/user.types"
+import { useMe } from "@/entities/user/api/user.queries"
 
 interface RouteHandle {
-  allowedRoles?: UserRole[]
+  allowedRoles?: ROLE[]
   redirectTo?: string
 }
 
@@ -19,27 +19,11 @@ interface RouteHandle {
  * Компонент для защиты роутов по ролям пользователя
  *
  * Роли для проверки берутся из `handle` текущего роута.
- * В Router.tsx нужно указать `handle: { allowedRoles: [USER_ROLES.DOCTOR] }`
+ * В Router.tsx нужно указать `handle: { allowedRoles: [ROLE.DOCTOR] }`
  *
- * @example
- * ```tsx
- * // В Router.tsx:
- * {
- *   ...lazyRoute(() => import("@/app/routers/RoleProtectedRoute"), "RoleProtectedRoute"),
- *   handle: {
- *     allowedRoles: [USER_ROLES.DOCTOR],
- *   },
- *   children: [
- *     {
- *       path: ROUTES.DOCTOR_SCHEDULE,
- *       ...lazyRoute(() => import("@/pages/doctorSchedule/ui/DoctorSchedule"), "DoctorSchedule"),
- *     },
- *   ],
- * }
- * ```
  */
 export const RoleProtectedRoute = () => {
-  const { profile, isLoading } = useUserStore()
+  const { data: user, isLoading } = useMe()
   const matches = useMatches()
 
   let handle: RouteHandle | undefined
@@ -70,7 +54,7 @@ export const RoleProtectedRoute = () => {
     return <Loader message="Проверка доступа..." />
   }
 
-  if (!profile) {
+  if (!user) {
     return <Navigate to={ROUTES.SIGNIN} replace />
   }
 
@@ -79,7 +63,7 @@ export const RoleProtectedRoute = () => {
     return <Navigate to={redirectTo} replace />
   }
 
-  if (!allowedRoles.includes(profile.role)) {
+  if (!allowedRoles.includes(user.role)) {
     return <Navigate to={redirectTo} replace />
   }
 

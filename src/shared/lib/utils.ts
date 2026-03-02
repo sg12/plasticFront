@@ -1,7 +1,5 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
-import type { Gender, UserRole } from "../../entities/user/types/types"
-import { USER_ROLES } from "../../entities/user/model/constants"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -49,21 +47,6 @@ export const formatName = (
   return `${lastName} ${initials}`
 }
 
-export const formatRole = (role: UserRole): string => {
-  switch (role) {
-    case USER_ROLES.PATIENT:
-      return "Пациент"
-    case USER_ROLES.DOCTOR:
-      return "Доктор"
-    case USER_ROLES.CLINIC:
-      return "Клиника"
-  }
-}
-
-export const formatGender = (value: Gender) => {
-  return value === "male" ? "Мужской" : value === "female" ? "Женский" : ""
-}
-
 export const pluralRu = (n: number, one: string, few: string, many: string): string => {
   const mod10 = n % 10
   const mod100 = n % 100
@@ -99,4 +82,12 @@ export const formatPhoneNumber = (phoneNumber: string): string => {
   }
 
   return phoneNumber
+}
+
+export const formatFileSize = (bytes: number) => {
+  if (bytes === 0) return "0 Bytes"
+  const k = 1024
+  const sizes = ["Bytes", "KB", "MB", "GB"]
+  const i = Math.floor(Math.log(bytes) / Math.log(k))
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i]
 }

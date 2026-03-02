@@ -1,0 +1,92 @@
+import { CardTitle } from "@/shared/ui/card"
+import { Separator } from "@/shared/ui/separator"
+import type { User } from "@/entities/user/types/user.types"
+import { GENDER_LOCALES, USER_ROLE } from "@/entities/user/model/user.constants"
+import { useMemo } from "react"
+import { SPECIALIZATION_LOCALES } from "@/entities/doctor/model/doctor.constants"
+import { format, parseISO } from "date-fns"
+
+interface UserProfileViewProps {
+  user: User
+}
+
+/**
+ * Компонент для отображения профиля в режиме только чтения
+ * Используется для просмотра чужих профилей
+ */
+export const UserProfileView = ({ user }: UserProfileViewProps) => {
+
+  const roleContent = useMemo(() => {
+    switch (user.role) {
+      case USER_ROLE.PATIENT:
+        return (
+          <div className="grid gap-4 lg:grid-cols-2">
+            <InfoItem label="Дата рождения" value={user.patient.birthdate
+              ? format(parseISO(user.patient.birthdate), "dd.MM.yyyy")
+              : "Не указан"} />
+            <InfoItem label="Пол" value={user?.patient?.gender ? GENDER_LOCALES[user.patient.gender].ru : "Не указан"} />
+          </div>
+        );
+
+      case USER_ROLE.DOCTOR:
+        return (
+          <div className="grid gap-4 lg:grid-cols-2">
+            <InfoItem label="Дата рождения" value={user.doctor.birthdate
+              ? format(parseISO(user.doctor.birthdate), "dd.MM.yyyy")
+              : "Не указан"} />
+            <InfoItem label="Лицензия" value={user.doctor.license} />
+            <InfoItem label="Специализация" value={user.doctor.specializations.map(
+              (spec) => SPECIALIZATION_LOCALES[spec as keyof typeof SPECIALIZATION_LOCALES].ru
+            ).join(", ")} />
+            <InfoItem label="Опыт" value={`${user.doctor.experience} лет`} />
+            <InfoItem label="Образование" value={user.doctor.education} />
+            <InfoItem label="ИНН" value={user.doctor.inn} />
+          </div>
+        );
+
+      case USER_ROLE.CLINIC:
+        return (
+          <div className="grid gap-4 lg:grid-cols-2">
+            <InfoItem label="Юр. название" value={user.clinic.legalName} />
+            <InfoItem label="ИНН" value={user.clinic.inn} />
+            <InfoItem label="ОГРН" value={user.clinic.ogrn} />
+            <InfoItem label="Адрес" value={user.clinic.actualAddress} />
+            <InfoItem label="Директор" value={user.clinic.directorName} />
+          </div>
+        );
+    }
+  }, [user]);
+
+  return (
+    <div className="space-y-6">
+      <CardTitle className="text-xl">Личная информация</CardTitle>
+
+      <div className="grid gap-4 lg:grid-cols-2">
+        <InfoItem
+          label={user.role === USER_ROLE.CLINIC ? "Название клиники" : "Полное имя"}
+          value={user.fullName}
+        />
+        <InfoItem label="Email" value={user.email} />
+        <InfoItem label="Телефон" value={user.phone} />
+      </div>
+
+      <Separator />
+
+      {roleContent}
+    </div>
+  );
+};
+
+const InfoItem = ({ label, value }: {
+  label: string,
+  value?: string | null,
+}) => (
+  <div>
+    <label className="text-mwuted-foreground mb-1 flex items-center gap-2 text-sm font-medium">
+      {label}
+    </label>
+    <div className="flex items-center gap-2 text-sm">
+      <span className="truncate">{value?.trim() || "Не указан"}</span>
+    </div>
+  </div>
+)

@@ -2,11 +2,10 @@ import { createBrowserRouter } from "react-router"
 import { ROUTES } from "@/shared/model/routes"
 import { Loader } from "@/shared/ui/loader"
 import { lazyRoute } from "./lazyRoute"
-import { USER_ROLES } from "@/entities/user/model/constants"
+import { USER_ROLE } from "@/entities/user/model/user.constants"
 
 export const router = createBrowserRouter([
   {
-    // loader: () => redirect(ROUTES.SIGNIN),
     HydrateFallback: () => <Loader message="Загрузка приложения..." />,
     ...lazyRoute(() => import("@/app/App"), "App"),
     children: [
@@ -15,38 +14,42 @@ export const router = createBrowserRouter([
         children: [
           {
             path: ROUTES.SIGNIN,
-            ...lazyRoute(() => import("@/pages/signIn/ui/SignIn"), "SignIn"),
+            ...lazyRoute(() => import("@/pages/sign-in/ui/SignInPage"), "SignInPage"),
           },
           {
             path: ROUTES.SIGNUP,
-            ...lazyRoute(() => import("@/pages/signUp/ui/SignUp"), "SignUp"),
+            ...lazyRoute(() => import("@/pages/sign-up/ui/SignUpPage"), "SignUpPage"),
           },
         ],
+      },
+      {
+        path: ROUTES.POLICIES,
+        ...lazyRoute(() => import("@/pages/policies/ui/PoliciesPage"), "PoliciesPage"),
       },
       {
         ...lazyRoute(() => import("@/app/routers/ProtectedRoute"), "ProtectedRoute"),
         children: [
           {
             path: ROUTES.CREATE_PROFILE,
-            ...lazyRoute(() => import("@/pages/createProfile/ui/CreateProfile"), "CreateProfile"),
+            ...lazyRoute(() => import("@/pages/create-profile/ui/CreateProfilePage"), "CreateProfilePage"),
           },
           {
             path: ROUTES.MAIN,
-            ...lazyRoute(() => import("@/pages/main/ui/Main"), "Main"),
+            ...lazyRoute(() => import("@/pages/main/ui/MainPage"), "MainPage"),
             children: [
               {
                 index: true,
-                ...lazyRoute(() => import("@/pages/dashboard/ui/Dashboard"), "Dashboard"),
+                ...lazyRoute(() => import("@/pages/dashboard/ui/DashboardPage"), "DashboardPage"),
                 handle: { title: "Главная" },
               },
               {
                 path: ROUTES.PROFILE_SOME_USER,
-                ...lazyRoute(() => import("@/pages/profile/ui/Profile"), "Profile"),
+                ...lazyRoute(() => import("@/pages/profile/ui/ProfilePage"), "ProfilePage"),
                 handle: { title: "Профиль пользователя" },
               },
               {
                 path: ROUTES.PROFILE,
-                ...lazyRoute(() => import("@/pages/profile/ui/Profile"), "Profile"),
+                ...lazyRoute(() => import("@/pages/profile/ui/ProfilePage"), "ProfilePage"),
                 handle: { title: "Профиль" },
               },
               {
@@ -55,12 +58,12 @@ export const router = createBrowserRouter([
                   "RoleProtectedRoute",
                 ),
                 handle: {
-                  allowedRoles: [USER_ROLES.PATIENT, USER_ROLES.DOCTOR],
+                  allowedRoles: [USER_ROLE.PATIENT, USER_ROLE.DOCTOR],
                 },
                 children: [
                   {
                     path: ROUTES.CATALOG,
-                    ...lazyRoute(() => import("@/pages/catalog/ui/Catalog"), "Catalog"),
+                    ...lazyRoute(() => import("@/pages/catalog/ui/CatalogPage"), "CatalogPage"),
                     handle: { title: "Каталог" },
                   },
                 ],
@@ -71,14 +74,14 @@ export const router = createBrowserRouter([
                   "RoleProtectedRoute",
                 ),
                 handle: {
-                  allowedRoles: [USER_ROLES.CLINIC],
+                  allowedRoles: [USER_ROLE.CLINIC],
                 },
                 children: [
                   {
                     path: ROUTES.CLINIC_DOCTORS,
                     ...lazyRoute(
-                      () => import("@/pages/clinicDoctors/ui/ClinicDoctors"),
-                      "ClinicDoctors",
+                      () => import("@/pages/clinic-doctors/ui/ClinicDoctorsPage"),
+                      "ClinicDoctorsPage",
                     ),
                     handle: { title: "Врачи клиники" },
                   },
@@ -90,14 +93,14 @@ export const router = createBrowserRouter([
                   "RoleProtectedRoute",
                 ),
                 handle: {
-                  allowedRoles: [USER_ROLES.DOCTOR],
+                  allowedRoles: [USER_ROLE.DOCTOR],
                 },
                 children: [
                   {
                     path: ROUTES.DOCTOR_CLINICS,
                     ...lazyRoute(
-                      () => import("@/pages/doctorClinics/ui/DoctorClinics"),
-                      "DoctorClinics",
+                      () => import("@/pages/doctor-clinics/ui/DoctorClinicsPage"),
+                      "DoctorClinicsPage",
                     ),
                     handle: { title: "Клиники" },
                   },
@@ -105,17 +108,17 @@ export const router = createBrowserRouter([
               },
               {
                 path: ROUTES.AIVISUALIZER,
-                ...lazyRoute(() => import("@/pages/aiVisualizer/ui/AIVisualizer"), "AIVisualizer"),
+                ...lazyRoute(() => import("@/pages/ai-visualizer/ui/AIVisualizer"), "AIVisualizer"),
                 handle: { title: "AI Визуализатор" },
               },
               {
                 path: ROUTES.SUPPORT,
-                ...lazyRoute(() => import("@/pages/support/ui/Support"), "Support"),
+                ...lazyRoute(() => import("@/pages/support/ui/SupportPage"), "SupportPage"),
                 handle: { title: "Поддержка" },
               },
               {
                 path: ROUTES.APPOINTMENTS,
-                ...lazyRoute(() => import("@/pages/appointments/ui/Appointments"), "Appointments"),
+                ...lazyRoute(() => import("@/pages/appointments/ui/AppointmentsPage"), "AppointmentsPage"),
                 handle: { title: "Записи на приём" },
               },
               {
@@ -124,14 +127,14 @@ export const router = createBrowserRouter([
                   "RoleProtectedRoute",
                 ),
                 handle: {
-                  allowedRoles: [USER_ROLES.DOCTOR],
+                  allowedRoles: [USER_ROLE.DOCTOR],
                 },
                 children: [
                   {
                     path: ROUTES.DOCTOR_SCHEDULE,
                     ...lazyRoute(
-                      () => import("@/pages/doctorSchedule/ui/DoctorSchedule"),
-                      "DoctorSchedule",
+                      () => import("@/pages/doctor-schedule/ui/DoctorSchedulePage"),
+                      "DoctorSchedulePage",
                     ),
                     handle: { title: "Расписание врача" },
                   },
@@ -143,14 +146,14 @@ export const router = createBrowserRouter([
                 children: [
                   {
                     path: ROUTES.GENERAL,
-                    ...lazyRoute(() => import("@/pages/settings/general/General"), "General"),
+                    ...lazyRoute(() => import("@/pages/settings/general/GeneralPage"), "GeneralPage"),
                     handle: { title: "Основные настройки" },
                   },
                   {
                     path: ROUTES.PERSONAL_DATA,
                     ...lazyRoute(
                       () => import("@/pages/settings/personalData/PersonalData"),
-                      "PersonalData",
+                      "PersonalDataPage",
                     ),
                     handle: { title: "Персональные данные" },
                   },
@@ -162,7 +165,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "*",
-        ...lazyRoute(() => import("@/pages/notFound/ui/NotFound"), "NotFound"),
+        ...lazyRoute(() => import("@/pages/not-found/ui/NotFoundPage"), "NotFoundPage"),
       },
     ],
   },
