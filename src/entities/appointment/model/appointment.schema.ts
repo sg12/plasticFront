@@ -20,7 +20,7 @@ export const AppointmentSchema = z.object({
 })
 
 export const CreateAppointmentSchema = z.object({
-  doctorId: z.uuid(),
+  doctorId: z.uuid({ error: "Некорректный UUID доктора" }),
   timeSlotId: z.uuid({ error: "Пожалуйста, выберите временной слот" }),
   reason: z.string().max(500).optional(),
 })

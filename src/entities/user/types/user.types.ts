@@ -36,6 +36,7 @@ export interface User {
 }
 
 export interface Patient extends User {
+  readonly id: string
   birthdate: string | null
   gender: GENDER | null
   medicalNotes: string | null
@@ -52,6 +53,7 @@ export interface Patient extends User {
 }
 
 export interface Doctor {
+  readonly id: string
   gender: GENDER
   birthdate: string
   experience: number
@@ -80,6 +82,7 @@ export interface Doctor {
 }
 
 export interface Clinic {
+  readonly id: string
   legalName: string
   brandName: string | null
   inn: string

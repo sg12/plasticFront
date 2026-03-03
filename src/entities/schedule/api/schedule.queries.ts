@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { getSchedules, updateSchedule } from "./schedule.api"
 import type { TimeSlot } from "../types/schedule.types"
 import { toast } from "sonner"
+import type { UpdateScheduleDto } from "../model/schedule.schema"
 
 export const scheduleKeys = {
   all: ["schedules"] as const,
@@ -37,8 +38,8 @@ export const useUpdateSchedule = (targetId: string) => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ id, isAvailable }: { id: string; isAvailable: boolean }) =>
-      updateSchedule(id, isAvailable),
+    mutationFn: ({ id, updateScheduleDto }: { id: string; updateScheduleDto: UpdateScheduleDto }) =>
+      updateSchedule(id, updateScheduleDto),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: scheduleKeys.list(targetId),
