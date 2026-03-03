@@ -26,7 +26,7 @@ export const UserProfileCard = ({ user }: Props) => {
   })
 
   return (
-    <div className="max-md:space-child flex max-md:flex-col max-md:items-center max-md:text-center ">
+    <div className="max-md:space-child flex max-md:flex-col max-md:items-center max-md:text-center">
       <div className="relative">
         <Avatar
           className={cn(

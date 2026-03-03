@@ -144,11 +144,11 @@ export const router = createBrowserRouter([
                 path: ROUTES.SETTINGS,
                 handle: { title: "Настройки" },
                 children: [
-                  {
-                    path: ROUTES.GENERAL,
-                    ...lazyRoute(() => import("@/pages/settings/general/GeneralPage"), "GeneralPage"),
-                    handle: { title: "Основные настройки" },
-                  },
+                  // {
+                  //   path: ROUTES.GENERAL,
+                  //   ...lazyRoute(() => import("@/pages/settings/general/GeneralPage"), "GeneralPage"),
+                  //   handle: { title: "Основные настройки" },
+                  // },
                   {
                     path: ROUTES.PERSONAL_DATA,
                     ...lazyRoute(

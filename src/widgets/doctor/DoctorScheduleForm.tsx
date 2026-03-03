@@ -4,7 +4,6 @@
  */
 
 import { DoctorScheduleCard } from "@/widgets/doctor/DoctorScheduleCard"
-import { DAYS_OF_WEEK } from "@/shared/model/constants"
 import { useMe } from "@/entities/user/api/user.queries"
 import { FormProvider, useForm } from "react-hook-form"
 
@@ -12,16 +11,13 @@ export const DoctorScheduleForm = () => {
   const { data: user, isLoading } = useMe()
 
   const form = useForm({
-    defaultValues: {
+    values: {
       schedule: user?.doctor?.schedules || []
-    }
+    },
+    mode: "onBlur"
   })
 
   if (isLoading) return <div>Загрузка...</div>
-
-  const getDayLabel = (dayOfWeek: number) => {
-    return DAYS_OF_WEEK.find((d) => d.value === dayOfWeek)?.label || `День ${dayOfWeek}`
-  }
 
   return (
     <FormProvider {...form}>
@@ -31,8 +27,7 @@ export const DoctorScheduleForm = () => {
             <DoctorScheduleCard
               key={schedule.id}
               schedule={schedule}
-              dayIndex={index}
-              dayLabel={getDayLabel(schedule.dayOfWeek)}
+              index={index}
             />
           ))}
         </div>

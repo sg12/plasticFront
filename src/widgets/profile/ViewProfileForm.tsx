@@ -7,17 +7,16 @@ import { AlertCircle } from "lucide-react"
 import { Alert, AlertDescription } from "@/shared/ui/alert"
 import { Card, CardContent } from "@/shared/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs"
-// import { AppointmentButton } from "@/features/appointments/ui/AppointmentButton"
-
-interface ViewProfileProps {
-  userId: string
-}
+import { USER_ROLE } from "@/entities/user/model/user.constants"
+import { AppointmentButton } from "@/features/user-management/appointments/ui/AppointmentButton"
+import { useMe } from "@/entities/user/api/user.queries"
 
 /**
  * Компонент для просмотра чужого профиля (только чтение)
  * Используется когда пользователь просматривает профиль другого пользователя
  */
-export const ViewProfileForm = ({ userId }: ViewProfileProps) => {
+export const ViewProfileForm = ({ userId }: { userId: string }) => {
+  const { data: user } = useMe()
   const { data: viewProfile, isLoading, isError } = useViewProfile(userId)
 
   if (isLoading) {
@@ -55,19 +54,17 @@ export const ViewProfileForm = ({ userId }: ViewProfileProps) => {
   return (
     <Card>
       <CardContent className="space-child">
-        <div className="flex justify-between items-start">
+        <div className="flex justify-between max-md:justify-center items-start">
           <UserProfileCard
             user={viewProfile}
           />
-          {/* {user?.role === USER_ROLE.PATIENT && (
-              <div className="hidden flex-wrap items-center justify-end gap-2 sm:flex">
-                <AppointmentButton
-                  doctorId={viewProfile.role === USER_ROLE.DOCTOR ? viewProfile.id : null}
-                  clinicId={viewProfile.role === USER_ROLE.CLINIC ? viewProfile.id : null}
-                  className="max-md:w-full"
-                />
-              </div>
-            )} */}
+          <div className="hidden flex-wrap items-center justify-end gap-2 md:flex">
+            {user?.role === USER_ROLE.PATIENT &&
+              <AppointmentButton
+                target={viewProfile}
+              />
+            }
+          </div>
         </div>
         <Tabs defaultValue="information">
           <TabsList className="w-full mb-4">
@@ -83,17 +80,16 @@ export const ViewProfileForm = ({ userId }: ViewProfileProps) => {
         </Tabs>
       </CardContent>
 
-      {/* {user?.role != USER_ROLE.PATIENT && (
+      {user?.role === USER_ROLE.PATIENT && (
         <div className="bg-background/90 h-[calc(100svh-var(--header-height))]!] fixed inset-x-0 bottom-(--header-height) bottom-0 z-10 border-t p-3 backdrop-blur sm:hidden">
-        <div className="mx-auto flex max-w-7xl items-center justify-end gap-2 px-1">
-        <AppointmentButton
-        doctorId={viewProfile.role === USER_ROLE.DOCTOR ? viewProfile.id : null}
-        clinicId={viewProfile.role === USER_ROLE.CLINIC ? viewProfile.id : null}
-        className="max-md:w-full"
+          <div className="mx-auto flex max-w-7xl items-center justify-end gap-2 px-1">
+            <AppointmentButton
+              target={viewProfile}
+              className="max-md:w-full"
             />
-            </div>
-            </div>
-            )} */}
+          </div>
+        </div>
+      )}
     </Card >
   )
 }

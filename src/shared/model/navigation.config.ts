@@ -69,12 +69,12 @@ export const navigationConfig = {
       url: ROUTES.SETTINGS,
       section: "other",
       items: [
-        {
-          id: "general_settings",
-          name: "Основные настройки",
-          icon: Settings2,
-          url: ROUTES.GENERAL,
-        },
+        // {
+        //   id: "general_settings",
+        //   name: "Основные настройки",
+        //   icon: Settings2,
+        //   url: ROUTES.GENERAL,
+        // },
         {
           id: "personal_data_settings",
           name: "Персональные данные",
@@ -148,12 +148,12 @@ export const navigationConfig = {
       url: ROUTES.SETTINGS,
       section: "other",
       items: [
-        {
-          id: "general_settings",
-          name: "Основные настройки",
-          icon: Settings2,
-          url: ROUTES.GENERAL,
-        },
+        // {
+        //   id: "general_settings",
+        //   name: "Основные настройки",
+        //   icon: Settings2,
+        //   url: ROUTES.GENERAL,
+        // },
         {
           id: "personal_data_settings",
           name: "Персональные данные",
@@ -220,12 +220,12 @@ export const navigationConfig = {
       url: ROUTES.SETTINGS,
       section: "other",
       items: [
-        {
-          id: "general_settings",
-          name: "Основные настройки",
-          icon: Settings2,
-          url: ROUTES.GENERAL,
-        },
+        // {
+        //   id: "general_settings",
+        //   name: "Основные настройки",
+        //   icon: Settings2,
+        //   url: ROUTES.GENERAL,
+        // },
         {
           id: "personal_data_settings",
           name: "Персональные данные",
