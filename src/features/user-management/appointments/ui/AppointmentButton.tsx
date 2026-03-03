@@ -7,12 +7,13 @@
 import { useState } from "react"
 import { Button } from "@/shared/ui/button"
 import { AppointmentModal } from "@/widgets/appointments/AppointmentModal"
+import type { User } from "@/entities/user/types/user.types"
 
 interface AppointmentButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    targetId?: string
+    target: User
 }
 
-export const AppointmentButton = ({ targetId, className }: AppointmentButtonProps) => {
+export const AppointmentButton = ({ target, className }: AppointmentButtonProps) => {
     const [isFormOpen, setIsFormOpen] = useState(false)
 
     return (
@@ -31,7 +32,7 @@ export const AppointmentButton = ({ targetId, className }: AppointmentButtonProp
             <AppointmentModal
                 open={isFormOpen}
                 onOpenChange={setIsFormOpen}
-                targetId={targetId!}
+                target={target}
             />
         </>
     )

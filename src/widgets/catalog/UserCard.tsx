@@ -74,7 +74,7 @@ export const UserCard = <T extends BaseUser>({ user, role, className }: UserCard
         <CardFooter className="space-child grid">
           {USER_ROLE.PATIENT && !clinic &&
             <AppointmentButton
-              targetId={doctor?.user.id}
+              target={user.user}
             />
           }
           <Button variant="secondary" className="flex-1">

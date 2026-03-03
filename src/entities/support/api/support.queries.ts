@@ -4,13 +4,13 @@ import type { CreateTicketDto, ReplyTicketDto } from "../model/support.schema"
 
 export const supportKeys = {
   all: ["tickets"] as const,
-  lists: () => [...supportKeys.all, "list"] as const,
+  list: () => [...supportKeys.all, "list"] as const,
   detail: (id: string) => [...supportKeys.all, "detail", id] as const,
 }
 
 export const useTickets = () => {
   return useQuery({
-    queryKey: supportKeys.lists(),
+    queryKey: supportKeys.list(),
     queryFn: supportApi.getTickets,
   })
 }
@@ -29,7 +29,7 @@ export const useCreateTicket = () => {
   return useMutation({
     mutationFn: (dto: CreateTicketDto) => supportApi.createTicket(dto),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: supportKeys.lists() })
+      queryClient.invalidateQueries({ queryKey: supportKeys.list() })
     },
   })
 }
@@ -41,7 +41,7 @@ export const useReplyTicket = (id: string) => {
     mutationFn: (dto: ReplyTicketDto) => supportApi.replyTicket(id, dto),
     onSuccess: (updatedTicket) => {
       queryClient.setQueryData(supportKeys.detail(id), updatedTicket)
-      queryClient.invalidateQueries({ queryKey: supportKeys.lists() })
+      queryClient.invalidateQueries({ queryKey: supportKeys.list() })
     },
   })
 }
@@ -53,7 +53,7 @@ export const useCloseTicket = () => {
     mutationFn: (id: string) => supportApi.closeTicket(id),
     onSuccess: (_, id) => {
       queryClient.invalidateQueries({ queryKey: supportKeys.detail(id) })
-      queryClient.invalidateQueries({ queryKey: supportKeys.lists() })
+      queryClient.invalidateQueries({ queryKey: supportKeys.list() })
     },
   })
 }

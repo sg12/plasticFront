@@ -39,17 +39,18 @@ import { AppointmentCalendarWithTime } from "@/features/user-management/appointm
 import { toast } from "sonner"
 import { formatInTimeZone } from "date-fns-tz"
 import { useTimeSlots } from "@/entities/schedule/api/schedule.queries"
+import type { User } from "@/entities/user/types/user.types"
 
 interface AppointmentFormProps {
   open: boolean
   onOpenChange: (open: boolean) => void
-  targetId: string
+  target: User
 }
 
 export const AppointmentModal = ({
   open,
   onOpenChange,
-  targetId
+  target
 }: AppointmentFormProps) => {
   const { data: user } = useMe()
   const { mutateAsync: createAppointment, isPending } = useCreateAppointment()
@@ -57,7 +58,7 @@ export const AppointmentModal = ({
   const [currentStep, setCurrentStep] = useState(0)
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
 
-  const { data: slots = [], isLoading } = useTimeSlots(targetId, formatDate(selectedDate!, "yyyy-MM-dd"), open)
+  const { data: slots = [], isLoading } = useTimeSlots(target.doctor?.id, formatDate(selectedDate!, "yyyy-MM-dd"), open)
 
   const isMobile = useIsMobile()
 
@@ -65,7 +66,7 @@ export const AppointmentModal = ({
     resolver: zodResolver(CreateAppointmentSchema),
     defaultValues: {
       reason: "",
-      doctorId: "",
+      doctorId: target.doctor?.id,
       timeSlotId: ""
     }
   })
@@ -77,10 +78,11 @@ export const AppointmentModal = ({
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setCurrentStep(0)
       form.reset({
-        doctorId: ""
+        doctorId: target.doctor?.id,
       })
     }
-  }, [open, form])
+  }, [open, form, target.doctor?.id])
+
 
   const steps = [
     { id: "dateTime", label: "Дата и время", description: "Выберите свободный слот" },
@@ -108,7 +110,7 @@ export const AppointmentModal = ({
   const onSubmit = async (data: CreateAppointmentDto) => {
     await createAppointment({
       ...data,
-      doctorId: targetId,
+      doctorId: target.doctor.id,
     })
 
     onOpenChange(false)
@@ -146,7 +148,7 @@ export const AppointmentModal = ({
                       <FormControl>
                         <AppointmentCalendarWithTime
                           slots={slots}
-                          targetId={targetId}
+                          targetId={target.doctor.id}
                           isLoading={isLoading}
                           selectedDate={selectedDate!}
                           onSelectDate={setSelectedDate}
@@ -211,6 +213,10 @@ export const AppointmentModal = ({
                     <div className="flex justify-between border-t pt-2 mt-2">
                       <span className="text-muted-foreground">Пациент:</span>
                       <span className="font-medium">{user?.fullName || "Не указано"}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Доктор:</span>
+                      <span className="font-medium">{target?.fullName || "Не указано"}</span>
                     </div>
                     {form.getValues("reason") && (
                       <div className="flex flex-col gap-1 border-t pt-2">

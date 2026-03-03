@@ -14,7 +14,6 @@ export const useNotifications = () => {
   return useQuery({
     queryKey: notificationKeys.all,
     queryFn: getNotifications,
-    staleTime: 30 * 1000,
   })
 }
 
