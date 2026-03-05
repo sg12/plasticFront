@@ -3,7 +3,6 @@
  *
  * Многошаговая форма для создания записи на приём
  *
- * @module features/appointments/ui/AppointmentForm
  */
 
 import { useState, useEffect } from "react"
@@ -136,8 +135,6 @@ export const AppointmentModal = ({
                 <DialogTitle>{steps[currentStep].label}</DialogTitle>
                 <DialogDescription>{steps[currentStep].description}</DialogDescription>
               </DialogHeader>
-
-              {/* <StepIndicator steps={steps} currentStep={currentStep} /> */}
 
               {currentStep === 0 && (
                 <FormField

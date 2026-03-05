@@ -41,10 +41,14 @@ import { InviteDoctorButton } from "@/features/data-processing/relationships/inv
 import type { Relationship } from "@/entities/relationship/types/relationship.types"
 import { SPECIALIZATION_LOCALES } from "@/entities/doctor/model/doctor.constants"
 import { Badge } from "@/shared/ui/badge"
+import { useNavigate } from "react-router"
+import { ROUTES } from "@/shared/model/routes"
+import { RELATIONSHIP_STATUS_LOCALES } from "@/entities/relationship/model/relationship.constants"
 
 export const ClinicDoctorsList = () => {
   const { data: relationships, isLoading, error, refetch } = useRelationships()
   const archive = useArchiveRelationship()
+  const navigate = useNavigate()
 
   if (isLoading) {
     return (
@@ -103,6 +107,7 @@ export const ClinicDoctorsList = () => {
                   <TableHead>Специализация</TableHead>
                   <TableHead>Опыт</TableHead>
                   <TableHead>Дата добавления</TableHead>
+                  <TableHead>Статус</TableHead>
                   <TableHead className="text-right">Действия</TableHead>
                 </TableRow>
               </TableHeader>
@@ -114,9 +119,9 @@ export const ClinicDoctorsList = () => {
                     <TableRow key={doctor.id} className="group transition-colors">
                       <TableCell>
                         <div className="flex flex-col">
-                          <span className="font-medium">{doctor.fullName}</span>
+                          <span className="font-medium">{doctor.user.fullName}</span>
                           <span className="text-xs text-muted-foreground flex items-center gap-1">
-                            {doctor.user.fullName || "Нет почты"}
+                            {doctor.user.email || "Нет почты"}
                           </span>
                         </div>
                       </TableCell>
@@ -142,14 +147,13 @@ export const ClinicDoctorsList = () => {
                       </TableCell>
                       <TableCell>
                         <span className="text-sm">
-                          {typeof doctor.experience === 'number'
-                            ? pluralRu(doctor.experience, "год", "года", "лет")
-                            : "—"}
+                          {pluralRu(doctor.experience, "год", "года", "лет")}
                         </span>
                       </TableCell>
                       <TableCell className="text-sm text-muted-foreground">
                         {format(new Date(doctor.createdAt), "d MMM yyyy", { locale: ru })}
                       </TableCell>
+                      <TableCell>{RELATIONSHIP_STATUS_LOCALES[relationship.status].ru}</TableCell>
                       <TableCell className="text-right">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
@@ -159,9 +163,12 @@ export const ClinicDoctorsList = () => {
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Действия</DropdownMenuLabel>
+                            <DropdownMenuItem onClick={() => navigate(ROUTES.PROFILE_SOME_USER.replace(":userId", doctor.id))}>
+                              Перейти в профиль
+                            </DropdownMenuItem>
                             <DropdownMenuItem
-                              onClick={() => window.location.href = `mailto:${doctor.email}`}
-                              disabled={!doctor.email}
+                              onClick={() => window.location.href = `mailto:${doctor.user.email}`}
+                              disabled={!doctor.user.email}
                             >
                               Написать письмо
                             </DropdownMenuItem>
@@ -203,11 +210,11 @@ export const ClinicDoctorsList = () => {
                     </TableRow>
                   )
                 })}
-              </TableBody>
+              </TableBody >
             </Table>
           </div>
         )}
       </CardContent>
-    </Card>
+    </Card >
   )
 }
